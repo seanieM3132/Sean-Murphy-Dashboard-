@@ -713,11 +713,61 @@ body::after {
   .day-ring-pct { font-size: 32px; }
   .day-ring-status { font-size: 13px; }
 }
+
+/* ── TAB BAR ── */
+.dash-tabbar {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+.dash-tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.dash-tab:hover { color: var(--text-secondary); }
+.dash-tab.active {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.dash-tab-icon { margin-right: 6px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.gym-frame {
+  width: 100%;
+  border: none;
+  min-height: calc(100vh - 120px);
+  border-radius: 12px;
+}
 </style>
 </head>
 <body>
 
 <h1 class="dash-title">My Dashboard</h1>
+
+<!-- Tab Bar -->
+<div class="dash-tabbar">
+  <button class="dash-tab active" data-tab="main"><span class="dash-tab-icon">&#9776;</span>Main</button>
+  <button class="dash-tab" data-tab="health"><span class="dash-tab-icon">&#128138;</span>Health</button>
+  <button class="dash-tab" data-tab="gym"><span class="dash-tab-icon">&#127947;</span>Gym</button>
+</div>
+
+<!-- MAIN TAB -->
+<div class="tab-panel active" id="tab-main">
 
 <!-- Goal Ticker -->
 <div class="ticker-row">
@@ -812,8 +862,41 @@ body::after {
     <div class="gm-status" id="tomorrowStatus"></div>
   </div>
 </div>
+</div><!-- /tab-main -->
+
+<!-- HEALTH TAB -->
+<div class="tab-panel" id="tab-health">
+  <iframe class="gym-frame" id="healthFrame" title="Health Tracker"></iframe>
+</div>
+
+<!-- GYM TAB -->
+<div class="tab-panel" id="tab-gym">
+  <iframe class="gym-frame" id="gymFrame" title="Gym Tracker"></iframe>
+</div>
 
 <script>
+// ── Tab switching ──
+(function() {
+  const tabs = document.querySelectorAll('.dash-tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  const lazyFrames = { gym: 'gymFrame', health: 'healthFrame' };
+  const lazySrc = { gym: 'gym.html', health: 'health.html' };
+  const loaded = {};
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+      document.getElementById('tab-' + target).classList.add('active');
+      if (lazyFrames[target] && !loaded[target]) {
+        document.getElementById(lazyFrames[target]).src = lazySrc[target];
+        loaded[target] = true;
+      }
+    });
+  });
+})();
+
 const ANTHROPIC_API_KEY = '';
 const WAKE_HOUR = 8;
 const SLEEP_HOUR = 24;
