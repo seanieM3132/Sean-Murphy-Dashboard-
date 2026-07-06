@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<title>Garmin — Body Battery · Sleep · Training</title>
+<style>
+:root {
+  --bg: #050506;
+  --bg-card: rgba(255,255,255,0.04);
+  --glass-shadow: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 12px 40px rgba(0,0,0,0.45), 0 1px 2px rgba(0,0,0,0.25);
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --text-quaternary: #4D4B47;
+  --border-soft: rgba(255,255,255,0.04);
+  --font: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 28px 16px 60px;
+  background: var(--bg); color: var(--text-primary);
+  font-family: var(--font); -webkit-font-smoothing: antialiased;
+  min-height: 100vh; overflow-x: hidden;
+}
+.section { max-width: 720px; margin: 0 auto 28px; }
+.section-title {
+  font-size: 28px; font-weight: 700;
+  letter-spacing: -0.02em; margin-bottom: 16px;
+  color: var(--text-primary);
+}
+.card {
+  border-radius: 22px; box-shadow: var(--glass-shadow);
+  background: var(--bg-card); padding: 22px;
+}
+
+/* ===== Brand ===== */
+.garmin-brand { display: inline-flex; align-items: center; gap: 8px; }
+.garmin-brand-mark {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #007CC3; color: #FFFFFF;
+  font-weight: 900; font-size: 11px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 12px rgba(0,124,195,0.35);
+}
+.garmin-brand-text {
+  font-weight: 800; font-size: 13px;
+  letter-spacing: 0.14em; color: var(--text-primary);
+}
+
+/* ===== Disconnected ===== */
+.garmin-disconnected {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 18px 8px 8px; gap: 6px;
+}
+.garmin-disconnected .garmin-brand { margin-bottom: 14px; }
+.garmin-disconnected-title {
+  font-size: 22px; font-weight: 700; color: var(--text-primary);
+  letter-spacing: -0.02em; margin-top: 2px;
+}
+.garmin-disconnected-sub {
+  font-size: 13px; color: var(--text-tertiary);
+  max-width: 300px; line-height: 1.5; margin-bottom: 18px;
+}
+.garmin-connect-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 12px 22px; border-radius: 999px;
+  border: 1px solid rgba(0,124,195,0.5);
+  background: linear-gradient(180deg, #007CC3 0%, #005F99 100%);
+  color: #FFFFFF; font-family: inherit; font-size: 13.5px; font-weight: 700;
+  cursor: pointer; transition: transform 0.12s, box-shadow 0.18s;
+  box-shadow: 0 6px 20px rgba(0,124,195,0.35);
+}
+.garmin-connect-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,124,195,0.45); }
+.garmin-connect-btn:active { transform: translateY(0) scale(0.98); }
+.garmin-status-msg {
+  font-size: 11px; color: var(--text-tertiary);
+  margin-top: 12px; min-height: 14px; font-style: italic;
+}
+.garmin-form { width: 100%; max-width: 300px; margin-top: 6px; }
+.garmin-form label {
+  display: block; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-tertiary); margin: 12px 0 5px;
+}
+.garmin-form input {
+  width: 100%; padding: 10px 12px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; color: var(--text-primary); font: inherit; font-size: 13px;
+  font-family: var(--font-mono); outline: none;
+}
+.garmin-form input:focus { border-color: #007CC3; }
+
+/* ===== Connected header ===== */
+.garmin-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.garmin-live-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #6BE3A4; margin-left: 4px;
+}
+.garmin-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #6BE3A4; box-shadow: 0 0 8px rgba(107,227,164,0.65);
+  animation: garmin-pulse 1.6s ease-in-out infinite;
+}
+@keyframes garmin-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.85); }
+}
+.garmin-header-right { display: flex; align-items: center; gap: 10px; }
+.garmin-updated {
+  font-size: 11px; color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums; font-family: var(--font-mono);
+}
+.garmin-refresh-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.04);
+  color: var(--text-secondary); cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s, color 0.18s, transform 0.12s; flex-shrink: 0;
+}
+.garmin-refresh-btn:hover { background: rgba(255,255,255,0.10); color: var(--text-primary); }
+.garmin-refresh-btn:active { transform: rotate(180deg); }
+.garmin-refresh-btn svg { display: block; }
+
+/* ===== Body Battery ring ===== */
+.garmin-ring-wrap {
+  position: relative; width: 240px; max-width: 78%;
+  margin: 0 auto 24px; aspect-ratio: 1;
+}
+.garmin-ring { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 24px rgba(255,255,255,0.05)); }
+.garmin-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 12; }
+.garmin-ring-fill {
+  fill: none; stroke: #007CC3; stroke-width: 12; stroke-linecap: round;
+  stroke-dasharray: 603.19; stroke-dashoffset: 603.19;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22,1,0.36,1), stroke 0.4s, filter 0.4s;
+}
+.garmin-ring-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; pointer-events: none;
+}
+.garmin-ring-num {
+  font-size: 60px; font-weight: 700; letter-spacing: -0.04em;
+  color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.garmin-ring-unit {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--text-tertiary); margin-top: 10px;
+}
+.garmin-ring-label {
+  font-size: 12.5px; font-weight: 600; margin-top: 6px; letter-spacing: -0.005em;
+}
+
+/* ===== Sleep stages ===== */
+.garmin-stages {
+  margin-bottom: 22px; padding-top: 22px;
+  border-top: 1px solid var(--border-soft);
+}
+.garmin-stages-head {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;
+}
+.garmin-stages-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-tertiary);
+}
+.garmin-stages-meta {
+  font-size: 11px; color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums; font-family: var(--font-mono);
+}
+.garmin-stages-bar {
+  display: flex; height: 10px;
+  background: rgba(255,255,255,0.04); border-radius: 999px;
+  overflow: hidden; margin-bottom: 12px; border: 1px solid var(--border-soft);
+}
+.garmin-stage { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
+.garmin-stage-rem   { background: #7DD3FC; }
+.garmin-stage-deep  { background: #3B82F6; }
+.garmin-stage-light { background: #93C5FD; }
+.garmin-stage-awake { background: #38362F; }
+.garmin-stages-legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.garmin-stages-leg {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text-secondary); font-weight: 500;
+}
+.garmin-stages-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.garmin-stages-dot.d-rem   { background: #7DD3FC; }
+.garmin-stages-dot.d-deep  { background: #3B82F6; }
+.garmin-stages-dot.d-light { background: #93C5FD; }
+.garmin-stages-dot.d-awake { background: #38362F; border: 1px solid rgba(255,255,255,0.06); }
+.garmin-stages-num {
+  margin-left: auto; color: var(--text-primary); font-weight: 700;
+  font-variant-numeric: tabular-nums; font-family: var(--font-mono); font-size: 11px;
+}
+@media (max-width: 480px) { .garmin-stages-legend { grid-template-columns: repeat(2, 1fr); } }
+
+/* ===== Stats grid ===== */
+.garmin-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  padding-top: 22px; border-top: 1px solid var(--border-soft);
+}
+.garmin-stat {
+  position: relative; background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border-soft); border-radius: 12px;
+  padding: 12px 10px; text-align: center;
+  transition: background 0.18s;
+}
+.garmin-stat:hover { background: rgba(255,255,255,0.05); }
+.garmin-stat-label {
+  font-size: 10px; color: var(--text-tertiary); text-transform: uppercase;
+  letter-spacing: 0.14em; font-weight: 700; margin-bottom: 8px;
+}
+.garmin-stat-value {
+  font-size: 22px; font-weight: 700; color: var(--text-primary);
+  line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+}
+.garmin-stat-sub {
+  font-size: 10px; color: var(--text-tertiary); margin-top: 5px;
+  font-variant-numeric: tabular-nums; font-family: var(--font-mono);
+}
+@media (max-width: 480px) {
+  .garmin-stats { grid-template-columns: repeat(2, 1fr); }
+  .garmin-stat-value { font-size: 20px; }
+}
+
+/* ===== Zone dots ===== */
+.garmin-zone {
+  position: absolute; top: 9px; right: 9px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); transition: background 0.3s, box-shadow 0.3s;
+}
+.garmin-zone.z-good { background: #6BE3A4; box-shadow: 0 0 7px rgba(107,227,164,0.55); }
+.garmin-zone.z-norm { background: rgba(255,255,255,0.30); }
+.garmin-zone.z-warn { background: #F2C063; box-shadow: 0 0 7px rgba(242,192,99,0.55); }
+.garmin-zone.z-bad  { background: #FF8A8A; box-shadow: 0 0 7px rgba(255,138,138,0.55); }
+
+/* ===== Biomarker strip ===== */
+.garmin-bio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.garmin-bio-item {
+  position: relative; display: flex; flex-direction: column; gap: 4px;
+  padding: 11px 12px; background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border-soft); border-radius: 12px; text-align: center;
+}
+.garmin-bio-item:hover { background: rgba(255,255,255,0.05); }
+.garmin-bio-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-tertiary);
+}
+.garmin-bio-val {
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 380px) { .garmin-bio { grid-template-columns: 1fr; } }
+
+/* ===== Legend ===== */
+.garmin-legend {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 14px;
+  margin-top: 14px; padding: 10px 12px; background: rgba(255,255,255,0.02);
+  border-radius: 999px; border: 1px solid var(--border-soft);
+}
+.garmin-legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10.5px; font-weight: 600; color: var(--text-tertiary);
+}
+.garmin-legend-item .garmin-zone { position: static; display: inline-block; }
+
+/* ===== Verdict ===== */
+.garmin-verdict {
+  margin-top: 18px; padding: 16px 18px;
+  background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
+  border-left: 2px solid rgba(0,124,195,0.6); border-radius: 0 12px 12px 0;
+}
+.garmin-verdict-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.garmin-verdict-eyebrow {
+  font-size: 10px; color: var(--text-tertiary); text-transform: uppercase;
+  letter-spacing: 0.18em; font-weight: 700;
+}
+.garmin-verdict-badge {
+  font-size: 9.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
+  letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid;
+}
+.garmin-verdict-headline {
+  font-size: 15px; font-weight: 600; color: var(--text-primary);
+  line-height: 1.4; margin-bottom: 12px;
+}
+.garmin-verdict-reasons { font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; }
+
+/* ===== Disconnect ===== */
+.garmin-disconnect-btn {
+  display: block; margin: 16px auto 0; padding: 7px 14px;
+  background: transparent; border: 1px solid transparent;
+  color: var(--text-tertiary); font-size: 11px; font-family: inherit;
+  border-radius: 999px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+}
+.garmin-disconnect-btn:hover { color: var(--text-secondary); border-color: rgba(255,255,255,0.06); }
+
+/* ===== Error ===== */
+.garmin-err {
+  background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.28);
+  color: #FF8A8A; padding: 10px 12px; border-radius: 10px;
+  font-size: 11.5px; font-family: var(--font-mono); margin-bottom: 14px; display: none;
+}
+
+/* ===== Manual entry note ===== */
+.garmin-manual-note {
+  font-size: 11px; color: var(--text-quaternary); text-align: center;
+  margin-top: 14px; font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<div class="section">
+  <div class="section-title">Garmin</div>
+  <div class="card garmin-card">
+
+    <!-- DISCONNECTED -->
+    <div id="garminDisconnected" class="garmin-disconnected">
+      <div class="garmin-brand">
+        <span class="garmin-brand-mark">G</span>
+        <span class="garmin-brand-text">GARMIN</span>
+      </div>
+      <div class="garmin-disconnected-title">Not connected</div>
+      <div class="garmin-disconnected-sub">Enter your Garmin Connect credentials to see live Body Battery, sleep, and training data from your Forerunner 265.</div>
+      <div class="garmin-form" id="garminForm">
+        <label>Garmin Connect Email</label>
+        <input id="garminEmail" type="email" placeholder="you@example.com" autocomplete="email">
+        <label>Password</label>
+        <input id="garminPassword" type="password" placeholder="Your Garmin password" autocomplete="current-password">
+        <label>Proxy URL (your Vercel/Netlify backend)</label>
+        <input id="garminProxy" type="url" placeholder="https://your-app.vercel.app">
+      </div>
+      <button id="garminConnectBtn" class="garmin-connect-btn" type="button" style="margin-top:18px">
+        Connect Garmin
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 20 12 13 19"/></svg>
+      </button>
+      <div id="garminAuthStatus" class="garmin-status-msg"></div>
+    </div>
+
+    <!-- CONNECTED -->
+    <div id="garminConnected" style="display:none">
+      <div class="garmin-header">
+        <div class="garmin-brand">
+          <span class="garmin-brand-mark">G</span>
+          <span class="garmin-brand-text">GARMIN</span>
+          <span class="garmin-live-tag"><span class="garmin-live-dot"></span>live</span>
+        </div>
+        <div class="garmin-header-right">
+          <span id="garminUpdated" class="garmin-updated">loading...</span>
+          <button id="garminRefreshBtn" class="garmin-refresh-btn" title="Refresh" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 4v6h-6"/><path d="M20.49 15A9 9 0 1 1 5.64 5.64L23 10"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="garminErr" class="garmin-err"></div>
+
+      <!-- Body Battery ring -->
+      <div class="garmin-ring-wrap">
+        <svg class="garmin-ring" viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="garmin-ring-track" cx="110" cy="110" r="96"/>
+          <circle class="garmin-ring-fill" cx="110" cy="110" r="96" id="garminRingFill"/>
+        </svg>
+        <div class="garmin-ring-center">
+          <div id="garminBatteryScore" class="garmin-ring-num">--</div>
+          <div class="garmin-ring-unit">body battery</div>
+          <div id="garminBatteryLabel" class="garmin-ring-label">--</div>
+        </div>
+      </div>
+
+      <!-- Sleep stages -->
+      <div id="garminStages" class="garmin-stages" style="display:none">
+        <div class="garmin-stages-head">
+          <span class="garmin-stages-eyebrow">Sleep stages</span>
+          <span class="garmin-stages-meta" id="garminStagesMeta"></span>
+        </div>
+        <div class="garmin-stages-bar">
+          <div class="garmin-stage garmin-stage-rem"   id="garminStageRem"   style="width:0%"></div>
+          <div class="garmin-stage garmin-stage-deep"  id="garminStageDeep"  style="width:0%"></div>
+          <div class="garmin-stage garmin-stage-light" id="garminStageLight" style="width:0%"></div>
+          <div class="garmin-stage garmin-stage-awake" id="garminStageAwake" style="width:0%"></div>
+        </div>
+        <div class="garmin-stages-legend">
+          <div class="garmin-stages-leg"><span class="garmin-stages-dot d-rem"></span>REM <span id="garminStageRemTxt" class="garmin-stages-num">--</span></div>
+          <div class="garmin-stages-leg"><span class="garmin-stages-dot d-deep"></span>Deep <span id="garminStageDeepTxt" class="garmin-stages-num">--</span></div>
+          <div class="garmin-stages-leg"><span class="garmin-stages-dot d-light"></span>Light <span id="garminStageLightTxt" class="garmin-stages-num">--</span></div>
+          <div class="garmin-stages-leg"><span class="garmin-stages-dot d-awake"></span>Awake <span id="garminStageAwakeTxt" class="garmin-stages-num">--</span></div>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="garmin-stats">
+        <div class="garmin-stat">
+          <span class="garmin-zone" id="garminZoneSleep"></span>
+          <div class="garmin-stat-label">Sleep</div>
+          <div class="garmin-stat-value" id="garminSleepScore">--</div>
+          <div class="garmin-stat-sub" id="garminSleepDuration">--</div>
+        </div>
+        <div class="garmin-stat">
+          <span class="garmin-zone" id="garminZoneStress"></span>
+          <div class="garmin-stat-label">Stress</div>
+          <div class="garmin-stat-value" id="garminStress">--</div>
+          <div class="garmin-stat-sub">avg today</div>
+        </div>
+        <div class="garmin-stat">
+          <span class="garmin-zone" id="garminZoneHrv"></span>
+          <div class="garmin-stat-label">HRV</div>
+          <div class="garmin-stat-value" id="garminHrv">--</div>
+          <div class="garmin-stat-sub">ms</div>
+        </div>
+        <div class="garmin-stat">
+          <span class="garmin-zone" id="garminZoneRhr"></span>
+          <div class="garmin-stat-label">RHR</div>
+          <div class="garmin-stat-value" id="garminRhr">--</div>
+          <div class="garmin-stat-sub">bpm</div>
+        </div>
+      </div>
+
+      <!-- Biomarkers -->
+      <div id="garminBio" class="garmin-bio" style="display:none">
+        <div class="garmin-bio-item">
+          <span class="garmin-zone" id="garminZoneSpo2"></span>
+          <span class="garmin-bio-label">Blood O2</span>
+          <span class="garmin-bio-val" id="garminSpo2">--</span>
+        </div>
+        <div class="garmin-bio-item">
+          <span class="garmin-zone" id="garminZoneResp"></span>
+          <span class="garmin-bio-label">Resp rate</span>
+          <span class="garmin-bio-val" id="garminResp">--</span>
+        </div>
+        <div class="garmin-bio-item">
+          <span class="garmin-zone" id="garminZoneSteps"></span>
+          <span class="garmin-bio-label">Steps</span>
+          <span class="garmin-bio-val" id="garminSteps">--</span>
+        </div>
+      </div>
+
+      <!-- Zone legend -->
+      <div class="garmin-legend">
+        <span class="garmin-legend-item"><span class="garmin-zone z-good"></span>Good</span>
+        <span class="garmin-legend-item"><span class="garmin-zone z-norm"></span>Normal</span>
+        <span class="garmin-legend-item"><span class="garmin-zone z-warn"></span>Watch</span>
+        <span class="garmin-legend-item"><span class="garmin-zone z-bad"></span>High / Low</span>
+      </div>
+
+      <!-- Today's verdict -->
+      <div id="garminVerdict" class="garmin-verdict" style="display:none">
+        <div class="garmin-verdict-head">
+          <span class="garmin-verdict-eyebrow">Today's call</span>
+          <span id="garminVerdictBadge" class="garmin-verdict-badge"></span>
+        </div>
+        <div id="garminVerdictHeadline" class="garmin-verdict-headline"></div>
+        <div id="garminVerdictReasons" class="garmin-verdict-reasons"></div>
+      </div>
+
+      <button id="garminDisconnectBtn" class="garmin-disconnect-btn" type="button">Disconnect</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const CIRC = 2 * Math.PI * 96; // ring circumference
+  const STORE_KEY = 'garmin_session_v1';
+  const CACHE_KEY = 'garmin_data_cache_v1';
+
+  // ===== Storage =====
+  function loadSession() { try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch { return null; } }
+  function saveSession(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+  function clearSession() { localStorage.removeItem(STORE_KEY); localStorage.removeItem(CACHE_KEY); }
+  function loadCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+  function saveCache(d) { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: d })); }
+
+  // ===== Elements =====
+  const discEl = document.getElementById('garminDisconnected');
+  const connEl = document.getElementById('garminConnected');
+  const errEl = document.getElementById('garminErr');
+  const statusEl = document.getElementById('garminAuthStatus');
+
+  // ===== Connect =====
+  document.getElementById('garminConnectBtn').addEventListener('click', async () => {
+    const email = document.getElementById('garminEmail').value.trim();
+    const password = document.getElementById('garminPassword').value.trim();
+    const proxy = document.getElementById('garminProxy').value.trim().replace(/\/+$/, '');
+    if (!email || !password || !proxy) {
+      statusEl.textContent = 'All fields are required.';
+      return;
+    }
+    statusEl.textContent = 'Authenticating with Garmin Connect...';
+    try {
+      const res = await fetch(proxy + '/api/garmin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || 'Auth failed');
+      saveSession({ proxy, token: json.token, email });
+      document.getElementById('garminPassword').value = '';
+      render();
+    } catch (e) {
+      statusEl.textContent = 'Error: ' + (e.message || String(e));
+    }
+  });
+
+  // ===== Disconnect =====
+  document.getElementById('garminDisconnectBtn').addEventListener('click', () => {
+    clearSession();
+    render();
+  });
+
+  // ===== Refresh =====
+  document.getElementById('garminRefreshBtn').addEventListener('click', async (e) => {
+    e.currentTarget.style.transform = 'rotate(360deg)';
+    try { await loadData(true); } finally {
+      setTimeout(() => { e.currentTarget.style.transform = ''; }, 600);
+    }
+  });
+
+  // ===== Load data from proxy =====
+  async function loadData(force) {
+    const session = loadSession();
+    if (!session) return;
+
+    // Use cache if fresh (< 5 min) and not forced
+    if (!force) {
+      const cache = loadCache();
+      if (cache && (Date.now() - cache.ts) < 300000) {
+        renderData(cache.data);
+        return;
+      }
+    }
+
+    showErr('');
+    try {
+      const res = await fetch(session.proxy + '/api/garmin-data', {
+        headers: { 'Authorization': 'Bearer ' + session.token }
+      });
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || 'Failed to fetch data');
+      saveCache(json);
+      renderData(json);
+    } catch (e) {
+      showErr(e.message || String(e));
+      // Still show cached data if available
+      const cache = loadCache();
+      if (cache) renderData(cache.data);
+    }
+  }
+
+  function showErr(msg) {
+    errEl.textContent = msg || '';
+    errEl.style.display = msg ? 'block' : 'none';
+  }
+
+  // ===== Render data =====
+  function fmtMins(mins) {
+    if (!mins && mins !== 0) return '--';
+    const h = Math.floor(mins / 60);
+    const m = Math.round(mins % 60);
+    return h + 'h ' + String(m).padStart(2, '0') + 'm';
+  }
+
+  function setZone(id, zone) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'garmin-zone' + (zone ? ' z-' + zone : '');
+  }
+
+  function batteryZone(val) {
+    if (val >= 76) return { zone: 'good', label: 'High', color: '#6BE3A4' };
+    if (val >= 26) return { zone: 'norm', label: 'Medium', color: '#7DD3FC' };
+    if (val >= 6)  return { zone: 'warn', label: 'Low', color: '#F2C063' };
+    return { zone: 'bad', label: 'Critical', color: '#FF8A8A' };
+  }
+
+  function renderData(d) {
+    const updatedEl = document.getElementById('garminUpdated');
+    const cache = loadCache();
+    if (cache) {
+      const ago = Math.round((Date.now() - cache.ts) / 60000);
+      updatedEl.textContent = ago < 1 ? 'just now' : ago + 'm ago';
+    }
+
+    // Body Battery ring
+    const bb = d.bodyBattery != null ? d.bodyBattery : null;
+    const ringFill = document.getElementById('garminRingFill');
+    const scoreEl = document.getElementById('garminBatteryScore');
+    const labelEl = document.getElementById('garminBatteryLabel');
+    if (bb != null) {
+      const pct = Math.max(0, Math.min(100, bb));
+      ringFill.style.strokeDashoffset = CIRC * (1 - pct / 100);
+      const z = batteryZone(pct);
+      ringFill.style.stroke = z.color;
+      ringFill.style.filter = 'drop-shadow(0 0 12px ' + z.color + '40)';
+      scoreEl.textContent = Math.round(pct);
+      labelEl.textContent = z.label;
+      labelEl.style.color = z.color;
+    }
+
+    // Sleep
+    const sleepScore = d.sleepScore;
+    const sleepDur = d.sleepDurationMins;
+    document.getElementById('garminSleepScore').textContent = sleepScore != null ? sleepScore : '--';
+    document.getElementById('garminSleepDuration').textContent = sleepDur != null ? fmtMins(sleepDur) : '--';
+    setZone('garminZoneSleep', sleepScore >= 80 ? 'good' : sleepScore >= 50 ? 'norm' : sleepScore != null ? 'warn' : '');
+
+    // Sleep stages
+    if (d.sleepRem != null || d.sleepDeep != null) {
+      document.getElementById('garminStages').style.display = '';
+      const rem = d.sleepRem || 0, deep = d.sleepDeep || 0, light = d.sleepLight || 0, awake = d.sleepAwake || 0;
+      const total = rem + deep + light + awake || 1;
+      document.getElementById('garminStageRem').style.width = (rem / total * 100) + '%';
+      document.getElementById('garminStageDeep').style.width = (deep / total * 100) + '%';
+      document.getElementById('garminStageLight').style.width = (light / total * 100) + '%';
+      document.getElementById('garminStageAwake').style.width = (awake / total * 100) + '%';
+      document.getElementById('garminStageRemTxt').textContent = fmtMins(rem);
+      document.getElementById('garminStageDeepTxt').textContent = fmtMins(deep);
+      document.getElementById('garminStageLightTxt').textContent = fmtMins(light);
+      document.getElementById('garminStageAwakeTxt').textContent = fmtMins(awake);
+      document.getElementById('garminStagesMeta').textContent = fmtMins(total) + ' total';
+    }
+
+    // Stress
+    const stress = d.avgStress;
+    document.getElementById('garminStress').textContent = stress != null ? Math.round(stress) : '--';
+    setZone('garminZoneStress', stress != null ? (stress <= 25 ? 'good' : stress <= 50 ? 'norm' : stress <= 75 ? 'warn' : 'bad') : '');
+
+    // HRV
+    const hrv = d.hrv;
+    document.getElementById('garminHrv').textContent = hrv != null ? Math.round(hrv) : '--';
+    setZone('garminZoneHrv', hrv != null ? (hrv >= 50 ? 'good' : hrv >= 30 ? 'norm' : 'warn') : '');
+
+    // RHR
+    const rhr = d.restingHR;
+    document.getElementById('garminRhr').textContent = rhr != null ? Math.round(rhr) : '--';
+    setZone('garminZoneRhr', rhr != null ? (rhr <= 60 ? 'good' : rhr <= 75 ? 'norm' : 'warn') : '');
+
+    // Biomarkers
+    if (d.spo2 != null || d.respRate != null || d.steps != null) {
+      document.getElementById('garminBio').style.display = '';
+    }
+    if (d.spo2 != null) {
+      document.getElementById('garminSpo2').textContent = d.spo2 + '%';
+      setZone('garminZoneSpo2', d.spo2 >= 95 ? 'good' : d.spo2 >= 90 ? 'warn' : 'bad');
+    }
+    if (d.respRate != null) {
+      document.getElementById('garminResp').textContent = d.respRate.toFixed(1) + ' rpm';
+      setZone('garminZoneResp', d.respRate >= 12 && d.respRate <= 20 ? 'good' : 'warn');
+    }
+    if (d.steps != null) {
+      document.getElementById('garminSteps').textContent = d.steps.toLocaleString();
+      const stepGoal = d.stepGoal || 10000;
+      setZone('garminZoneSteps', d.steps >= stepGoal ? 'good' : d.steps >= stepGoal * 0.5 ? 'norm' : 'warn');
+    }
+
+    // Verdict
+    renderVerdict(d);
+  }
+
+  function renderVerdict(d) {
+    const el = document.getElementById('garminVerdict');
+    const bb = d.bodyBattery, sleep = d.sleepScore, stress = d.avgStress, hrv = d.hrv;
+    if (bb == null && sleep == null) return;
+
+    el.style.display = '';
+    const badge = document.getElementById('garminVerdictBadge');
+    const headline = document.getElementById('garminVerdictHeadline');
+    const reasons = document.getElementById('garminVerdictReasons');
+
+    let score = 0, hints = [];
+
+    if (bb != null) {
+      if (bb >= 76) { score += 3; hints.push('Body Battery is high (' + bb + ') — you have energy to push hard.'); }
+      else if (bb >= 40) { score += 2; hints.push('Body Battery is moderate (' + bb + ') — a solid session is doable.'); }
+      else { score += 0; hints.push('Body Battery is low (' + bb + ') — consider lighter work or rest.'); }
+    }
+    if (sleep != null) {
+      if (sleep >= 80) { score += 2; hints.push('Sleep score is great (' + sleep + ').'); }
+      else if (sleep >= 50) { score += 1; hints.push('Sleep was fair (' + sleep + ').'); }
+      else { hints.push('Sleep was poor (' + sleep + ') — recovery may be compromised.'); }
+    }
+    if (hrv != null) {
+      if (hrv >= 50) { score += 1; hints.push('HRV is solid at ' + Math.round(hrv) + ' ms.'); }
+      else if (hrv < 30) { hints.push('HRV is low (' + Math.round(hrv) + ' ms) — your body may need rest.'); }
+    }
+    if (stress != null && stress > 50) {
+      score -= 1;
+      hints.push('Stress is elevated at ' + Math.round(stress) + ' — take it easier today.');
+    }
+
+    let verdict, badgeText, badgeColor;
+    if (score >= 5) {
+      verdict = 'Full send. You are recovered and ready.';
+      badgeText = 'GO HARD'; badgeColor = '#6BE3A4';
+    } else if (score >= 3) {
+      verdict = 'Good to train. Normal intensity is fine.';
+      badgeText = 'TRAIN'; badgeColor = '#7DD3FC';
+    } else if (score >= 1) {
+      verdict = 'Easy day. Keep it light and focus on form.';
+      badgeText = 'EASY'; badgeColor = '#F2C063';
+    } else {
+      verdict = 'Rest recommended. Recovery takes priority today.';
+      badgeText = 'REST'; badgeColor = '#FF8A8A';
+    }
+
+    badge.textContent = badgeText;
+    badge.style.color = badgeColor;
+    badge.style.background = badgeColor + '18';
+    badge.style.borderColor = badgeColor + '40';
+    headline.textContent = verdict;
+    reasons.innerHTML = hints.map(h => '<div style="margin-bottom:4px">' + h + '</div>').join('');
+  }
+
+  // ===== Main render =====
+  function render() {
+    const session = loadSession();
+    if (session && session.token) {
+      discEl.style.display = 'none';
+      connEl.style.display = '';
+      // Pre-fill proxy for convenience
+      document.getElementById('garminProxy').value = session.proxy || '';
+      document.getElementById('garminEmail').value = session.email || '';
+      loadData();
+    } else {
+      discEl.style.display = '';
+      connEl.style.display = 'none';
+    }
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>

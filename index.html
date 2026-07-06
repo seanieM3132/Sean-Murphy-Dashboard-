@@ -766,6 +766,7 @@ body::after {
   <button class="dash-tab" data-tab="health"><span class="dash-tab-icon">&#128138;</span>Health</button>
   <button class="dash-tab" data-tab="water"><span class="dash-tab-icon">&#128167;</span>Water</button>
   <button class="dash-tab" data-tab="finance"><span class="dash-tab-icon">&#128176;</span>Finance</button>
+  <button class="dash-tab" data-tab="garmin"><span class="dash-tab-icon">&#9201;</span>Garmin</button>
   <button class="dash-tab" data-tab="gym"><span class="dash-tab-icon">&#127947;</span>Gym</button>
 </div>
 
@@ -882,6 +883,11 @@ body::after {
   <iframe class="gym-frame" id="financeFrame" title="Finance Tracker"></iframe>
 </div>
 
+<!-- GARMIN TAB -->
+<div class="tab-panel" id="tab-garmin">
+  <iframe class="gym-frame" id="garminFrame" title="Garmin Tracker"></iframe>
+</div>
+
 <!-- GYM TAB -->
 <div class="tab-panel" id="tab-gym">
   <iframe class="gym-frame" id="gymFrame" title="Gym Tracker"></iframe>
@@ -892,8 +898,8 @@ body::after {
 (function() {
   const tabs = document.querySelectorAll('.dash-tab');
   const panels = document.querySelectorAll('.tab-panel');
-  const lazyFrames = { gym: 'gymFrame', health: 'healthFrame', water: 'waterFrame', finance: 'financeFrame' };
-  const lazySrc = { gym: 'gym.html', health: 'health.html', water: 'water.html', finance: 'finance.html' };
+  const lazyFrames = { gym: 'gymFrame', health: 'healthFrame', water: 'waterFrame', finance: 'financeFrame', garmin: 'garminFrame' };
+  const lazySrc = { gym: 'gym.html', health: 'health.html', water: 'water.html', finance: 'finance.html', garmin: 'garmin.html' };
   const loaded = {};
 
   function switchTab(target) {
