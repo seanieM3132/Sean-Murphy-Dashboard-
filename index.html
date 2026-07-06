@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root {
   --text-primary: #FAFAFA;
@@ -818,17 +819,27 @@ const WAKE_HOUR = 8;
 const SLEEP_HOUR = 24;
 const CIRC = 2 * Math.PI * 52;
 
-// ── Storage helpers ──
+// ── Supabase ──
+const SUPABASE_URL = 'https://lpbtgoyollrmawarnivr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZhAu1Wce3RybWRMCeCnVcg_yoxHFrzl';
+const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── Storage helpers (localStorage + Supabase sync) ──
 function storeGet(key) {
   try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch { return null; }
 }
 function storeSet(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+  // Fire sync to Supabase (non-blocking)
+  _sb.from('kv_store').upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' }).then();
   if (key.startsWith('goals:')) {
     window.dispatchEvent(new CustomEvent('goals-changed'));
   }
 }
-function storeDelete(key) { localStorage.removeItem(key); }
+function storeDelete(key) {
+  localStorage.removeItem(key);
+  _sb.from('kv_store').delete().eq('key', key).then();
+}
 function storeListKeys(prefix) {
   const keys = [];
   for (let i = 0; i < localStorage.length; i++) {
@@ -836,6 +847,22 @@ function storeListKeys(prefix) {
     if (k.startsWith(prefix)) keys.push(k);
   }
   return keys;
+}
+
+// Pull all data from Supabase into localStorage on load
+async function syncFromSupabase() {
+  try {
+    const { data, error } = await _sb.from('kv_store').select('key, value');
+    if (error || !data) return;
+    data.forEach(row => {
+      localStorage.setItem(row.key, JSON.stringify(row.value));
+    });
+    // Re-render after sync
+    loadToday();
+    loadTomorrow();
+    renderStreak();
+    tickerStart();
+  } catch (e) { /* offline — localStorage still works */ }
 }
 
 // ── Date helpers ──
@@ -1436,6 +1463,9 @@ updateDayBar();
 setInterval(updateDayBar, 60000);
 
 tickerStart();
+
+// Sync from Supabase (pulls cloud data into localStorage, then re-renders)
+syncFromSupabase();
 </script>
 </body>
 </html>
