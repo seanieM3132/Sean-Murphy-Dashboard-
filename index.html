@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="topbar.js" defer></script>
 <style>
 :root {
   --text-primary: #FAFAFA;
@@ -888,18 +889,31 @@ body::after {
   const lazyFrames = { gym: 'gymFrame', health: 'healthFrame', water: 'waterFrame' };
   const lazySrc = { gym: 'gym.html', health: 'health.html', water: 'water.html' };
   const loaded = {};
+
+  function switchTab(target) {
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    const btn = document.querySelector('.dash-tab[data-tab="' + target + '"]');
+    if (btn) btn.classList.add('active');
+    document.getElementById('tab-' + target).classList.add('active');
+    if (lazyFrames[target] && !loaded[target]) {
+      document.getElementById(lazyFrames[target]).src = lazySrc[target];
+      loaded[target] = true;
+    }
+  }
+
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      const target = tab.dataset.tab;
-      document.getElementById('tab-' + target).classList.add('active');
-      if (lazyFrames[target] && !loaded[target]) {
-        document.getElementById(lazyFrames[target]).src = lazySrc[target];
-        loaded[target] = true;
-      }
-    });
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  // Wire topbar links to switch tabs instead of navigating
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('#topbarGoals, #topbarStack, #topbarWater');
+    if (!link) return;
+    e.preventDefault();
+    const map = { topbarGoals: 'main', topbarStack: 'health', topbarWater: 'water' };
+    const target = map[link.id];
+    if (target) switchTab(target);
   });
 })();
 
