@@ -763,6 +763,7 @@ body::after {
 <div class="dash-tabbar">
   <button class="dash-tab active" data-tab="main"><span class="dash-tab-icon">&#9776;</span>Main</button>
   <button class="dash-tab" data-tab="health"><span class="dash-tab-icon">&#128138;</span>Health</button>
+  <button class="dash-tab" data-tab="water"><span class="dash-tab-icon">&#128167;</span>Water</button>
   <button class="dash-tab" data-tab="gym"><span class="dash-tab-icon">&#127947;</span>Gym</button>
 </div>
 
@@ -869,6 +870,11 @@ body::after {
   <iframe class="gym-frame" id="healthFrame" title="Health Tracker"></iframe>
 </div>
 
+<!-- WATER TAB -->
+<div class="tab-panel" id="tab-water">
+  <iframe class="gym-frame" id="waterFrame" title="Water Tracker"></iframe>
+</div>
+
 <!-- GYM TAB -->
 <div class="tab-panel" id="tab-gym">
   <iframe class="gym-frame" id="gymFrame" title="Gym Tracker"></iframe>
@@ -879,8 +885,8 @@ body::after {
 (function() {
   const tabs = document.querySelectorAll('.dash-tab');
   const panels = document.querySelectorAll('.tab-panel');
-  const lazyFrames = { gym: 'gymFrame', health: 'healthFrame' };
-  const lazySrc = { gym: 'gym.html', health: 'health.html' };
+  const lazyFrames = { gym: 'gymFrame', health: 'healthFrame', water: 'waterFrame' };
+  const lazySrc = { gym: 'gym.html', health: 'health.html', water: 'water.html' };
   const loaded = {};
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
