@@ -5,158 +5,283 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Coach Khabib</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--green:#6EE7B7;--bg:#050506;--card:rgba(255,255,255,.035);--card-border:rgba(255,255,255,.06);--card-hover:#141414;--text:#f0f0f0;--text-dim:#888;--text-muted:#555;--glass:rgba(110,231,183,.04);--glass-border:rgba(110,231,183,.08);--glow:rgba(110,231,183,.15);--radius:14px;--radius-sm:10px}
+:root{
+  --green:#6EE7B7;--green-dim:#34D399;--green-deep:#059669;--green-glow:rgba(110,231,183,.18);
+  --bg:#050506;--card:rgba(255,255,255,.028);--card-border:rgba(255,255,255,.055);
+  --text:#f0f0f0;--text-dim:#999;--text-muted:#555;--mono:'JetBrains Mono',ui-monospace,monospace;
+  --radius:16px;--radius-sm:12px;
+}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);padding:20px 16px 32px;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;z-index:0}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
-@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);padding:20px 16px 40px;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 70% 10%,rgba(110,231,183,.10),transparent 55%),radial-gradient(ellipse at 20% 85%,rgba(110,231,183,.06),transparent 55%),radial-gradient(ellipse at 90% 70%,rgba(52,211,153,.04),transparent 40%);filter:blur(50px);pointer-events:none;z-index:-2;animation:bgDrift 30s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-15px,10px) scale(1.02)}100%{transform:translate(10px,-8px) scale(1)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.012)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#1a1a1a;border-radius:4px}
 
-/* Scrollbar */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#222;border-radius:4px}
+/* ─── ENTRANCE ANIMATIONS ─── */
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeScale{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes breathe{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.02)}}
+@keyframes ringPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(110,231,183,.3))}50%{filter:drop-shadow(0 0 12px rgba(110,231,183,.5))}}
+@keyframes countSpin{from{stroke-dashoffset:var(--ring-offset)}to{stroke-dashoffset:var(--ring-target)}}
+@keyframes gridReveal{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes dataFlicker{0%,100%{opacity:1}50%{opacity:.7}}
+@keyframes scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+@keyframes dotPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+.anim-in{animation:slideUp .5s ease-out both}
+.anim-in:nth-child(2){animation-delay:.06s}.anim-in:nth-child(3){animation-delay:.12s}.anim-in:nth-child(4){animation-delay:.18s}.anim-in:nth-child(5){animation-delay:.24s}.anim-in:nth-child(6){animation-delay:.3s}.anim-in:nth-child(7){animation-delay:.36s}.anim-in:nth-child(8){animation-delay:.42s}
 
 /* ─── HEADER ─── */
-.header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;position:relative}
-.header-left h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;font-weight:800;letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 0%,#ccc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.header-left .subtitle{font-size:13px;color:var(--green);font-weight:600;margin-top:4px;letter-spacing:.5px}
-.eagle-icon{width:48px;height:48px;opacity:.7;transition:opacity .3s}
-.eagle-icon:hover{opacity:1}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(110,231,183,.08)}
+.header-left h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:36px;font-weight:800;letter-spacing:3px;line-height:1;background:linear-gradient(135deg,var(--green) 0%,#fff 40%,var(--green-dim) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(110,231,183,.15))}
+.header-left .subtitle{font-size:11px;color:var(--green-deep);font-weight:700;margin-top:4px;letter-spacing:2px;text-transform:uppercase;font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:12px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green-glow);animation:breathe 2s ease-in-out infinite}
+.live-label{font-size:10px;color:var(--green);font-family:var(--mono);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+
+/* ─── HERO METRICS ROW ─── */
+.hero-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.hero-metric{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px 14px;text-align:center;position:relative;overflow:hidden;transition:border-color .3s}
+.hero-metric:hover{border-color:rgba(110,231,183,.15)}
+.hero-metric::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(110,231,183,.2),transparent)}
+.hero-val{font-size:32px;font-weight:800;font-family:var(--mono);color:var(--green);line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 20px rgba(110,231,183,.2)}
+.hero-unit{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;font-family:var(--mono)}
+.hero-metric .hero-spark{position:absolute;bottom:0;left:0;right:0;height:28px;opacity:.25}
 
 /* ─── CARDS ─── */
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:18px;margin-bottom:14px;position:relative;transition:border-color .3s;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.card-glass{background:linear-gradient(135deg,rgba(110,231,183,.03) 0%,rgba(0,0,0,.5) 100%);border:1px solid var(--glass-border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.section-label{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.section-label::before{content:'';display:inline-block;width:3px;height:10px;background:var(--green);border-radius:2px}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .3s;box-shadow:0 1px 0 0 rgba(255,255,255,.04) inset,0 12px 40px rgba(0,0,0,.5)}
+.card:hover{border-color:rgba(110,231,183,.1)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(110,231,183,.12),transparent)}
+.card-glass{background:linear-gradient(135deg,rgba(110,231,183,.025) 0%,rgba(0,0,0,.4) 100%);border:1px solid rgba(110,231,183,.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;font-family:var(--mono)}
+.section-label::before{content:'';display:inline-block;width:3px;height:10px;background:var(--green);border-radius:2px;box-shadow:0 0 6px var(--green-glow)}
+.section-label .sl-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(110,231,183,.1),transparent)}
 
-/* ─── DAILY BRIEFING ─── */
-.briefing-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.briefing-date{font-size:14px;font-weight:600;color:var(--text)}
-.briefing-day{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
-.countdown-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.3px}
-.countdown-badge.urgent{background:rgba(239,68,68,.12);color:#F87171;border:1px solid rgba(239,68,68,.2)}
-.countdown-badge.moderate{background:rgba(251,191,36,.1);color:#FBBF24;border:1px solid rgba(251,191,36,.15)}
-.countdown-badge.relaxed{background:rgba(110,231,183,.1);color:var(--green);border:1px solid rgba(110,231,183,.15)}
-.countdown-badge .cd-num{font-size:16px}
-.quote-block{position:relative;padding:16px 42px 16px 18px;background:rgba(110,231,183,.03);border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;min-height:70px;display:flex;flex-direction:column;justify-content:center}
-.quote-text{font-size:15px;font-weight:600;line-height:1.55;color:var(--text)}
-.quote-attr{font-size:11px;color:var(--green);margin-top:6px;font-weight:500}
-.btn-shuffle{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.04);border:1px solid #222;border-radius:8px;color:#666;font-size:16px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.btn-shuffle:hover{border-color:var(--green);color:var(--green);background:rgba(110,231,183,.06)}
+/* ─── COUNTDOWN RING ─── */
+.countdown-wrap{display:flex;align-items:center;gap:18px;margin-bottom:14px}
+.countdown-ring-box{position:relative;width:80px;height:80px;flex-shrink:0}
+.countdown-ring-box svg{width:80px;height:80px;transform:rotate(-90deg);animation:ringPulse 3s ease-in-out infinite}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.04);stroke-width:4}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.countdown-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cd-num{font-size:26px;font-weight:800;font-family:var(--mono);color:var(--green);line-height:1;text-shadow:0 0 16px rgba(110,231,183,.3)}
+.cd-unit{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-top:2px}
+.countdown-info{flex:1}
+.countdown-date{font-size:15px;font-weight:700;color:var(--text)}
+.countdown-sub{font-size:11px;color:var(--text-dim);margin-top:2px;font-family:var(--mono)}
+.countdown-progress{font-size:10px;color:var(--green);font-family:var(--mono);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:6px}
+.countdown-progress .cp-bar{flex:1;max-width:120px;height:3px;background:#111;border-radius:3px;overflow:hidden}
+.countdown-progress .cp-fill{height:100%;background:linear-gradient(90deg,var(--green-deep),var(--green));border-radius:3px;transition:width 1s ease}
+
+/* ─── QUOTE ─── */
+.quote-block{position:relative;padding:14px 40px 14px 16px;background:linear-gradient(135deg,rgba(110,231,183,.03) 0%,rgba(0,0,0,.2) 100%);border-left:2px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;box-shadow:inset 0 0 30px rgba(110,231,183,.02)}
+.quote-text{font-size:14px;font-weight:600;line-height:1.55;color:var(--text)}
+.quote-attr{font-size:10px;color:var(--green-deep);margin-top:5px;font-weight:600;font-family:var(--mono);letter-spacing:.5px}
+.btn-shuffle{position:absolute;top:8px;right:8px;background:rgba(110,231,183,.04);border:1px solid rgba(110,231,183,.1);border-radius:8px;color:var(--green-deep);font-size:14px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-shuffle:hover{border-color:var(--green);color:var(--green);background:rgba(110,231,183,.08);box-shadow:0 0 12px rgba(110,231,183,.1)}
 .btn-shuffle:active{transform:rotate(180deg)}
 
 /* ─── TRAINING PLAN ─── */
-.plan-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.plan-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .plan-title{font-size:16px;font-weight:700}
-.plan-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:6px;background:rgba(110,231,183,.1);color:var(--green);border:1px solid rgba(110,231,183,.15)}
+.plan-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
 .plan-body{display:flex;flex-direction:column;gap:8px}
 .plan-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim)}
-.plan-row .plan-icon{width:18px;text-align:center;font-size:14px;flex-shrink:0}
-.plan-row .plan-label{color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;width:70px;flex-shrink:0}
-.plan-row .plan-value{color:var(--text);font-weight:500}
-.intensity-dots{display:flex;gap:3px}
-.intensity-dots .dot{width:8px;height:8px;border-radius:50%;background:#222;transition:background .3s}
-.intensity-dots .dot.active{background:var(--green);box-shadow:0 0 6px var(--glow)}
+.plan-label{color:var(--text-muted);font-size:9px;text-transform:uppercase;letter-spacing:1px;width:70px;flex-shrink:0;font-family:var(--mono);font-weight:600}
+.plan-value{color:var(--text);font-weight:600}
+.intensity-bar{display:flex;gap:3px;align-items:center}
+.intensity-bar .bar-seg{width:20px;height:6px;border-radius:3px;background:#111;transition:all .3s}
+.intensity-bar .bar-seg.active{background:linear-gradient(90deg,var(--green-deep),var(--green));box-shadow:0 0 6px var(--green-glow)}
 .focus-tags{display:flex;flex-wrap:wrap;gap:4px}
-.focus-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.05);color:var(--text-dim);border:1px solid #222}
+.focus-tag{font-size:9px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(110,231,183,.04);color:var(--green-dim);border:1px solid rgba(110,231,183,.08);font-family:var(--mono);letter-spacing:.3px;transition:all .2s}
+.focus-tag:hover{background:rgba(110,231,183,.08);border-color:rgba(110,231,183,.15)}
+
+/* ─── READINESS GAUGE ─── */
+.readiness-wrap{display:flex;align-items:center;gap:18px}
+.readiness-ring{position:relative;width:90px;height:90px;flex-shrink:0}
+.readiness-ring svg{width:90px;height:90px;transform:rotate(-90deg)}
+.rr-bg{fill:none;stroke:rgba(255,255,255,.03);stroke-width:5}
+.rr-fg{fill:none;stroke:url(#readinessGrad);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)}
+.readiness-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.readiness-score{font-size:28px;font-weight:800;font-family:var(--mono);color:var(--green);line-height:1;text-shadow:0 0 16px rgba(110,231,183,.25)}
+.readiness-label{font-size:7px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--mono);margin-top:3px}
+.readiness-details{flex:1;display:flex;flex-direction:column;gap:6px}
+.rd-row{display:flex;align-items:center;gap:8px}
+.rd-label{font-size:10px;color:var(--text-muted);font-family:var(--mono);font-weight:600;letter-spacing:.5px;text-transform:uppercase;width:62px;flex-shrink:0}
+.rd-bar{flex:1;height:4px;background:#111;border-radius:4px;overflow:hidden}
+.rd-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.rd-val{font-size:10px;font-weight:700;font-family:var(--mono);color:var(--green);min-width:24px;text-align:right}
 
 /* ─── CHECKLIST ─── */
-.checklist{display:flex;flex-direction:column;gap:5px}
-.check-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden}
-.check-item::after{content:'';position:absolute;inset:0;background:rgba(110,231,183,.06);opacity:0;transition:opacity .3s}
-.check-item:hover{border-color:#2a2a2a}
-.check-item.done{border-color:rgba(110,231,183,.2)}
-.check-item.done::after{opacity:1}
-.check-item.done .ci-text{text-decoration:line-through;color:#555}
+.checklist{display:flex;flex-direction:column;gap:4px}
+.check-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:var(--radius-sm);cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden}
+.check-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,rgba(110,231,183,.06),transparent);transition:width .4s ease}
+.check-item:hover{border-color:rgba(110,231,183,.08)}
+.check-item.done{border-color:rgba(110,231,183,.12)}
+.check-item.done::before{width:100%}
+.check-item.done .ci-text{color:#555}
 .check-item.done .ci-time{color:#333}
-.ci-box{width:20px;height:20px;border-radius:6px;border:2px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;position:relative;z-index:1}
-.check-item.done .ci-box{border-color:var(--green);background:rgba(110,231,183,.12);box-shadow:0 0 10px rgba(110,231,183,.2)}
-.ci-check{opacity:0;transition:all .25s;color:var(--green);font-size:12px;font-weight:700}
+.ci-box{width:18px;height:18px;border-radius:6px;border:1.5px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;position:relative;z-index:1}
+.check-item.done .ci-box{border-color:var(--green);background:rgba(110,231,183,.15);box-shadow:0 0 10px rgba(110,231,183,.2)}
+.ci-check{opacity:0;transition:all .25s;color:var(--green);font-size:10px;font-weight:700}
 .check-item.done .ci-check{opacity:1}
 .ci-content{flex:1;display:flex;align-items:center;gap:8px;min-width:0;position:relative;z-index:1}
-.ci-text{font-size:13px;font-weight:500;transition:all .25s}
-.ci-time{font-size:10px;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,.04);padding:1px 6px;border-radius:4px;flex-shrink:0;transition:all .25s}
-.check-progress{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 0 2px}
-.check-progress-bar{flex:1;height:4px;background:#151515;border-radius:4px;overflow:hidden}
-.check-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;transition:width .4s ease}
-.check-progress-text{font-size:12px;font-weight:700;color:var(--green);min-width:40px;text-align:right}
+.ci-text{font-size:12px;font-weight:500;transition:all .25s}
+.ci-time{font-size:9px;color:var(--text-muted);font-weight:600;font-family:var(--mono);background:rgba(255,255,255,.03);padding:2px 6px;border-radius:4px;flex-shrink:0;transition:all .25s;letter-spacing:.3px}
+
+/* ─── PROGRESS RING (checklist) ─── */
+.progress-row{display:flex;align-items:center;gap:14px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.03)}
+.progress-ring-sm{position:relative;width:44px;height:44px;flex-shrink:0}
+.progress-ring-sm svg{width:44px;height:44px;transform:rotate(-90deg)}
+.pr-bg{fill:none;stroke:rgba(255,255,255,.04);stroke-width:3.5}
+.pr-fg{fill:none;stroke:url(#prGrad);stroke-width:3.5;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.pr-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:var(--mono);color:var(--green)}
+.progress-stats{flex:1;display:flex;gap:16px}
+.ps-item{display:flex;flex-direction:column}
+.ps-val{font-size:16px;font-weight:800;font-family:var(--mono);color:var(--text);line-height:1}
+.ps-val.green{color:var(--green)}
+.ps-label{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-top:3px}
 
 /* ─── JOURNAL ─── */
-.journal-prompts{display:flex;flex-direction:column;gap:12px}
-.journal-prompt{display:flex;flex-direction:column;gap:4px}
-.journal-prompt label{font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:.3px}
-.journal-prompt textarea,.journal-prompt input{width:100%;background:#080808;border:1px solid #1a1a1a;border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;resize:vertical;transition:border-color .2s}
-.journal-prompt textarea:focus,.journal-prompt input:focus{border-color:var(--green)}
-.journal-prompt textarea{min-height:60px}
-.journal-prompt input[type="number"]{width:80px}
+.journal-prompts{display:flex;flex-direction:column;gap:10px}
+.journal-prompt label{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);display:block;margin-bottom:4px}
+.journal-prompt textarea,.journal-prompt input{width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;resize:vertical;transition:border-color .2s}
+.journal-prompt textarea:focus,.journal-prompt input:focus{border-color:rgba(110,231,183,.25);box-shadow:0 0 0 3px rgba(110,231,183,.05)}
+.journal-prompt textarea{min-height:56px}
+.journal-prompt input[type="number"]{width:70px;font-family:var(--mono);font-weight:700}
 .rating-row{display:flex;align-items:center;gap:10px}
-.rating-display{font-size:20px;font-weight:800;color:var(--green);min-width:30px}
-.journal-status{font-size:10px;color:var(--text-muted);margin-top:6px;min-height:14px;transition:color .3s}
+.rating-display{font-size:22px;font-weight:800;font-family:var(--mono);color:var(--green);min-width:30px;text-shadow:0 0 12px rgba(110,231,183,.2)}
+.journal-status{font-size:9px;color:var(--text-muted);margin-top:4px;min-height:12px;transition:color .3s;font-family:var(--mono);letter-spacing:.5px}
 .journal-status.saving{color:#FBBF24}
 .journal-status.saved{color:var(--green)}
 
-/* ─── WEEK STRIP ─── */
-.week-strip{display:flex;gap:6px;margin-bottom:12px}
-.week-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0}
-.week-day-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted)}
-.week-day-label.today-label{color:var(--green)}
-.week-dot{width:12px;height:12px;border-radius:50%;background:#151515;border:1.5px solid #222;transition:all .3s}
-.week-dot.partial{background:rgba(110,231,183,.2);border-color:rgba(110,231,183,.3)}
-.week-dot.complete{background:var(--green);border-color:var(--green);box-shadow:0 0 8px var(--glow)}
-.week-dot.today-dot{border-color:var(--green)}
-.week-pct{font-size:9px;color:var(--text-muted);font-weight:600}
-.week-summary{display:flex;justify-content:space-between;align-items:center}
-.week-summary-left{font-size:12px;color:var(--text-dim)}
-.week-summary-left strong{color:var(--text);font-weight:700}
-.streak-badge{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--green);background:rgba(110,231,183,.06);padding:4px 10px;border-radius:8px;border:1px solid rgba(110,231,183,.1)}
+/* ─── WEEK HEATMAP ─── */
+.week-heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:14px}
+.hm-day{display:flex;flex-direction:column;align-items:center;gap:5px}
+.hm-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-family:var(--mono)}
+.hm-label.today{color:var(--green)}
+.hm-cell{width:100%;aspect-ratio:1;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono);color:var(--text-muted);transition:all .3s;position:relative;overflow:hidden}
+.hm-cell.partial{background:rgba(110,231,183,.06);border-color:rgba(110,231,183,.1);color:var(--green-deep)}
+.hm-cell.complete{background:rgba(110,231,183,.15);border-color:rgba(110,231,183,.25);color:var(--green);box-shadow:0 0 12px rgba(110,231,183,.08)}
+.hm-cell.today-cell{border-color:rgba(110,231,183,.2)}
+.hm-cell::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);pointer-events:none}
 
-/* ─── STATS FOOTER ─── */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
-.stats-grid-wide{grid-template-columns:repeat(2,1fr)}
-.stat-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px 10px;text-align:center}
-.stat-val{font-size:22px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums;line-height:1.1}
-.stat-lbl{font-size:9px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+/* ─── SPARKLINE ─── */
+.sparkline-row{display:flex;align-items:center;gap:14px;padding:10px 0}
+.sparkline-box{flex:1;height:48px;position:relative}
+.sparkline-box svg{width:100%;height:100%}
+.spark-area{fill:url(#sparkGrad);opacity:.3}
+.spark-line{fill:none;stroke:var(--green);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.spark-dot{fill:var(--green);filter:drop-shadow(0 0 4px rgba(110,231,183,.5))}
+.sparkline-info{text-align:right;min-width:60px}
+.si-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--green);line-height:1}
+.si-label{font-size:8px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-top:3px}
+.si-delta{font-size:9px;font-weight:700;font-family:var(--mono);margin-top:2px}
+.si-delta.up{color:var(--green)}
+.si-delta.down{color:#F87171}
+
+/* ─── BOTTOM STATS ─── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.stat-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:14px 8px;text-align:center;position:relative;overflow:hidden;transition:border-color .3s}
+.stat-card:hover{border-color:rgba(110,231,183,.1)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(110,231,183,.15),transparent)}
+.stat-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--green);font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 0 14px rgba(110,231,183,.15)}
+.stat-lbl{font-size:7px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.2px;margin-top:5px;font-family:var(--mono)}
+
+/* ─── SCAN LINE ─── */
+.scan-line{position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(180deg,rgba(110,231,183,.03),transparent);pointer-events:none;animation:scanLine 8s linear infinite;opacity:.5}
 
 /* ─── ANIMATIONS ─── */
-@keyframes checkPulse{0%{box-shadow:0 0 0 0 rgba(110,231,183,.4)}100%{box-shadow:0 0 0 10px rgba(110,231,183,0)}}
+@keyframes checkPulse{0%{box-shadow:0 0 0 0 rgba(110,231,183,.5)}100%{box-shadow:0 0 0 12px rgba(110,231,183,0)}}
 .check-item.just-checked .ci-box{animation:checkPulse .4s ease-out}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:400px){.hero-row{grid-template-columns:1fr 1fr}.hero-metric:last-child{grid-column:span 2}.stats-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
+<!-- SVG DEFS -->
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <linearGradient id="readinessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="50%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <linearGradient id="prGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity=".3"/>
+      <stop offset="100%" stop-color="#6EE7B7" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <!-- HEADER -->
-<div class="header">
+<div class="header anim-in">
   <div class="header-left">
     <h1>KHABIB</h1>
-    <div class="subtitle">Your AI Coach</div>
+    <div class="subtitle">Performance System v2.0</div>
   </div>
-  <svg class="eagle-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 4C30 4 26 8 24 12C22 16 18 18 14 20C10 22 8 26 8 30C8 32 9 34 11 35C9 37 8 40 8 43C8 48 12 52 18 54C20 55 22 56 24 58C26 60 28 60 32 60C36 60 38 60 40 58C42 56 44 55 46 54C52 52 56 48 56 43C56 40 55 37 53 35C55 34 56 32 56 30C56 26 54 22 50 20C46 18 42 16 40 12C38 8 34 4 32 4Z" fill="url(#eagle-grad)" fill-opacity="0.85"/>
-    <path d="M32 10C31 10 28 13 27 16C25.5 20 22 22 19 23.5C16 25 14 28 14 30.5C14 32 15 33 17 33.5L20 32C18 34 16 37 16 40C16 44 19 47 24 49C26 50 28 51 30 53C31 54 31.5 54 32 54C32.5 54 33 54 34 53C36 51 38 50 40 49C45 47 48 44 48 40C48 37 46 34 44 32L47 33.5C49 33 50 32 50 30.5C50 28 48 25 45 23.5C42 22 38.5 20 37 16C36 13 33 10 32 10Z" fill="#000" fill-opacity="0.5"/>
-    <circle cx="27" cy="26" r="2" fill="#6EE7B7" opacity="0.9"/>
-    <circle cx="37" cy="26" r="2" fill="#6EE7B7" opacity="0.9"/>
-    <path d="M30 30L32 34L34 30" stroke="#6EE7B7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
-    <defs>
-      <linearGradient id="eagle-grad" x1="32" y1="4" x2="32" y2="60">
-        <stop offset="0%" stop-color="#6EE7B7"/>
-        <stop offset="100%" stop-color="#065F46"/>
-      </linearGradient>
-    </defs>
-  </svg>
+  <div class="header-right">
+    <div class="live-dot"></div>
+    <div class="live-label">Live</div>
+  </div>
 </div>
 
-<!-- DAILY BRIEFING -->
-<div class="card card-glass">
-  <div class="section-label">Daily Briefing</div>
-  <div class="briefing-top">
-    <div>
-      <div class="briefing-date" id="briefDate"></div>
-      <div class="briefing-day" id="briefDay"></div>
+<!-- HERO METRICS -->
+<div class="hero-row anim-in">
+  <div class="hero-metric">
+    <div class="hero-val" id="heroDaysLeft">--</div>
+    <div class="hero-unit">Days Left</div>
+    <svg class="hero-spark" id="heroSpark1" viewBox="0 0 100 28" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="hero-metric">
+    <div class="hero-val" id="heroStreak">0</div>
+    <div class="hero-unit">Day Streak</div>
+    <svg class="hero-spark" id="heroSpark2" viewBox="0 0 100 28" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="hero-metric">
+    <div class="hero-val" id="heroRate">0<span style="font-size:16px;opacity:.6">%</span></div>
+    <div class="hero-unit">Completion</div>
+    <svg class="hero-spark" id="heroSpark3" viewBox="0 0 100 28" preserveAspectRatio="none"></svg>
+  </div>
+</div>
+
+<!-- COUNTDOWN + QUOTE -->
+<div class="card card-glass anim-in">
+  <div class="scan-line"></div>
+  <div class="section-label">Mission Clock <span class="sl-line"></span></div>
+  <div class="countdown-wrap">
+    <div class="countdown-ring-box">
+      <svg viewBox="0 0 80 80">
+        <circle class="ring-bg" cx="40" cy="40" r="34"/>
+        <circle class="ring-fg" id="countdownRing" cx="40" cy="40" r="34"/>
+      </svg>
+      <div class="countdown-inner">
+        <div class="cd-num" id="cdNum">--</div>
+        <div class="cd-unit">days</div>
+      </div>
     </div>
-    <div class="countdown-badge" id="countdown"></div>
+    <div class="countdown-info">
+      <div class="countdown-date" id="briefDate"></div>
+      <div class="countdown-sub" id="briefDay"></div>
+      <div class="countdown-progress">
+        <span id="cpPct">0%</span>
+        <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
+        <span style="color:var(--text-muted)">to report</span>
+      </div>
+    </div>
   </div>
   <div class="quote-block">
     <div class="quote-text" id="quoteText"></div>
@@ -165,25 +290,52 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   </div>
 </div>
 
-<!-- TRAINING PLAN -->
-<div class="card">
-  <div class="section-label">Today's Training Plan</div>
+<!-- READINESS + TRAINING -->
+<div class="card anim-in">
+  <div class="section-label">Readiness Score <span class="sl-line"></span></div>
+  <div class="readiness-wrap">
+    <div class="readiness-ring">
+      <svg viewBox="0 0 90 90">
+        <circle class="rr-bg" cx="45" cy="45" r="38"/>
+        <circle class="rr-fg" id="readinessRing" cx="45" cy="45" r="38"/>
+      </svg>
+      <div class="readiness-center">
+        <div class="readiness-score" id="readinessScore">--</div>
+        <div class="readiness-label">Ready</div>
+      </div>
+    </div>
+    <div class="readiness-details" id="readinessDetails"></div>
+  </div>
+</div>
+
+<div class="card anim-in">
+  <div class="section-label">Today's Protocol <span class="sl-line"></span></div>
   <div id="trainingPlan"></div>
 </div>
 
 <!-- DAILY NON-NEGOTIABLES -->
-<div class="card">
-  <div class="section-label">Daily Non-Negotiables</div>
+<div class="card anim-in">
+  <div class="section-label">Daily Non-Negotiables <span class="sl-line"></span></div>
   <div class="checklist" id="checklist"></div>
-  <div class="check-progress">
-    <div class="check-progress-bar"><div class="check-progress-fill" id="progressFill"></div></div>
-    <div class="check-progress-text" id="progressText">0%</div>
+  <div class="progress-row">
+    <div class="progress-ring-sm">
+      <svg viewBox="0 0 44 44">
+        <circle class="pr-bg" cx="22" cy="22" r="18"/>
+        <circle class="pr-fg" id="progressRing" cx="22" cy="22" r="18"/>
+      </svg>
+      <div class="pr-center" id="progressPct">0%</div>
+    </div>
+    <div class="progress-stats">
+      <div class="ps-item"><div class="ps-val green" id="psDone">0</div><div class="ps-label">Done</div></div>
+      <div class="ps-item"><div class="ps-val" id="psTotal">13</div><div class="ps-label">Total</div></div>
+      <div class="ps-item"><div class="ps-val" id="psRemain">13</div><div class="ps-label">Remaining</div></div>
+    </div>
   </div>
 </div>
 
 <!-- EVENING REFLECTION -->
-<div class="card">
-  <div class="section-label">Evening Reflection</div>
+<div class="card anim-in">
+  <div class="section-label">Evening Reflection <span class="sl-line"></span></div>
   <div class="journal-prompts" id="journalSection">
     <div class="journal-prompt">
       <label>What did you do well today?</label>
@@ -196,27 +348,30 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div class="journal-prompt">
       <label>Rate today (1-10)</label>
       <div class="rating-row">
-        <input type="number" id="jRating" min="1" max="10" placeholder="—">
-        <div class="rating-display" id="ratingDisplay">—</div>
+        <input type="number" id="jRating" min="1" max="10" placeholder="--">
+        <div class="rating-display" id="ratingDisplay">--</div>
       </div>
     </div>
   </div>
   <div class="journal-status" id="journalStatus"></div>
 </div>
 
-<!-- WEEK AT A GLANCE -->
-<div class="card">
-  <div class="section-label">Week at a Glance</div>
-  <div class="week-strip" id="weekStrip"></div>
-  <div class="week-summary">
-    <div class="week-summary-left" id="weekSummary"></div>
-    <div class="streak-badge" id="streakBadge"></div>
+<!-- WEEK HEATMAP + SPARKLINE -->
+<div class="card anim-in">
+  <div class="section-label">Weekly Analysis <span class="sl-line"></span></div>
+  <div class="week-heatmap" id="weekHeatmap"></div>
+  <div class="sparkline-row">
+    <div class="sparkline-box" id="sparklineBox"></div>
+    <div class="sparkline-info">
+      <div class="si-val" id="siAvg">0%</div>
+      <div class="si-label">Week Avg</div>
+      <div class="si-delta" id="siDelta"></div>
+    </div>
   </div>
 </div>
 
-<!-- ACCOUNTABILITY STATS -->
-<div class="stats-grid" id="statsGrid"></div>
-<div class="stats-grid stats-grid-wide" id="statsGridWide"></div>
+<!-- BOTTOM STATS -->
+<div class="stats-grid anim-in" id="statsGrid"></div>
 
 <script>
 const QUOTES=[
@@ -225,85 +380,63 @@ const QUOTES=[
 {t:"I don't fight for the money. I fight for my legacy. I fight for history.",a:"Khabib Nurmagomedov"},
 {t:"Nobody is going to outwork me. That's my mentality.",a:"Khabib Nurmagomedov"},
 {t:"I trained like an animal for years. When the moment came, I was ready.",a:"Khabib Nurmagomedov"},
-{t:"Location is everything. Be where the competition is.",a:"Khabib Nurmagomedov"},
 {t:"In training, I am the most disciplined. This is why I win.",a:"Khabib Nurmagomedov"},
-{t:"You cannot cheat the grind. It knows how much you've invested. It won't give you nothing you haven't worked for.",a:"David Goggins"},
-{t:"Motivation is crap. Motivation comes and goes. When you're driven, whatever is in front of you will get destroyed.",a:"David Goggins"},
-{t:"We live in a world where mediocrity is rewarded. Don't buy into that.",a:"David Goggins"},
-{t:"Suffering is the true test of life. The more you can handle, the more you can grow.",a:"David Goggins"},
+{t:"You cannot cheat the grind. It knows how much you've invested.",a:"David Goggins"},
+{t:"Motivation is crap. When you're driven, whatever is in front of you will get destroyed.",a:"David Goggins"},
 {t:"Don't stop when you're tired. Stop when you're done.",a:"David Goggins"},
-{t:"The only person who was going to turn my life around was me.",a:"David Goggins"},
 {t:"You are in danger of living a life so comfortable and soft that you will die without ever realizing your potential.",a:"David Goggins"},
+{t:"The only person who was going to turn my life around was me.",a:"David Goggins"},
 {t:"Sleep is the greatest legal performance enhancer that most people are neglecting.",a:"Andrew Huberman"},
-{t:"Your morning routine determines the trajectory of your day.",a:"Andrew Huberman"},
 {t:"Sunlight viewed within the first hour of waking is the most powerful tool for mental and physical health.",a:"Andrew Huberman"},
-{t:"The best way to build focus is to train it, like a muscle.",a:"Andrew Huberman"},
 {t:"Deliberate cold exposure triggers massive increases in dopamine that last for hours.",a:"Andrew Huberman"},
 {t:"I'm not the most talented. I'm not the biggest. I'm not the fastest. I just will not be outworked.",a:"Cristiano Ronaldo"},
-{t:"The best never rest.",a:"Cristiano Ronaldo"},
 {t:"Your love for what you do and your willingness to push yourself will determine your destiny.",a:"Cristiano Ronaldo"},
 {t:"Talent without working hard is nothing.",a:"Cristiano Ronaldo"},
-{t:"I feel an endless need to learn, to improve, to evolve.",a:"Cristiano Ronaldo"},
-{t:"Every champion was once a contender who refused to give up.",a:"Rocky Balboa"},
-{t:"The difference between who you are and who you want to be is what you do.",a:"Bill Phillips"},
-{t:"Hard work beats talent when talent doesn't work hard.",a:"Tim Notke"},
 {t:"Be so good they can't ignore you.",a:"Steve Martin"},
-{t:"Obsessed is a word the lazy use to describe the dedicated.",a:"Grant Cardone"},
 {t:"The pain you feel today will be the strength you feel tomorrow.",a:"Arnold Schwarzenegger"},
-{t:"You have 19 days. Every single hour counts. No dead time.",a:"Coach Khabib"},
 {t:"Touch the ball every day. No exceptions. Not even one day off.",a:"Coach Khabib"},
 {t:"Eat breakfast. Take creatine. Get sunlight. The basics win championships.",a:"Coach Khabib"},
 {t:"Nobody outruns you. Nobody outworks you. That's the standard.",a:"Coach Khabib"},
 {t:"Start every game. Be the fittest player on the team. Be wanted by 4-year schools.",a:"Your Goals"},
-{t:"I'm not the next anyone. I'm the first Sean Murphy.",a:"You"},
 {t:"You're not training to be good enough. You're training to be undeniable.",a:"Coach Khabib"},
-{t:"When coach looks at the squad, your name is the first one written down. That's the goal.",a:"Coach Khabib"},
 {t:"Endurance is your weakness. That means endurance is your biggest opportunity.",a:"Coach Khabib"},
 {t:"Every meal is a deposit. Every sleep is a deposit. Every session is a deposit. Compound interest wins.",a:"Coach Khabib"},
-{t:"The guy who does GOATA and mobility when nobody is watching — that's the guy who stays healthy all season.",a:"Coach Khabib"},
+{t:"The guy who does GOATA and mobility when nobody is watching \u2014 that's the guy who stays healthy all season.",a:"Coach Khabib"},
 {t:"July 28 is coming whether you're ready or not. Be ready.",a:"Coach Khabib"},
 ];
 
 const HABITS=[
-{text:"Wake at 7:00am — no snooze",time:"7:00am"},
-{text:"Sunlight 10 min within 15 min of waking",time:"7:15am"},
-{text:"No phone first 15 min",time:"7:00am"},
-{text:"Hydrate 500ml + electrolytes on waking",time:"7:00am"},
-{text:"Eat breakfast (3 eggs minimum)",time:"7:30am"},
-{text:"Creatine 5g",time:"7:30am"},
-{text:"Touch a ball (minimum 20 min)",time:"varies"},
-{text:"GOATA groundwork (10 min)",time:"morning"},
-{text:"112mvmnt mobility (10 min)",time:"morning"},
+{text:"Wake at 7:00am \u2014 no snooze",time:"7:00"},
+{text:"Sunlight 10 min within 15 min of waking",time:"7:15"},
+{text:"No phone first 15 min",time:"7:00"},
+{text:"Hydrate 500ml + electrolytes on waking",time:"7:00"},
+{text:"Eat breakfast (3 eggs minimum)",time:"7:30"},
+{text:"Creatine 5g",time:"7:30"},
+{text:"Touch a ball (minimum 20 min)",time:"vary"},
+{text:"GOATA groundwork (10 min)",time:"AM"},
+{text:"112mvmnt mobility (10 min)",time:"AM"},
 {text:"Sauna / ice bath post-training",time:"post"},
 {text:"Cool-down after every session",time:"post"},
-{text:"Evening journal",time:"9:00pm"},
-{text:"Lights out by 10pm",time:"10:00pm"},
+{text:"Evening journal",time:"21:00"},
+{text:"Lights out by 10pm",time:"22:00"},
 ];
 
 const PLANS={
-0:{name:"Speed & Acceleration Drills",duration:"75 min",intensity:4,type:"Speed",focus:["Sprint mechanics","Acceleration","Agility ladder","Reaction drills","Short shuttle runs"]},
-1:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Passing patterns","Team shape","Match prep","Coach instructions"]},
-2:{name:"Gym + Ball Work",duration:"90 min",intensity:4,type:"Strength",focus:["Compound lifts","Core stability","Ball mastery","Passing wall","Weak foot work"]},
-3:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Set pieces","Positioning","CM/CDM role play","Recovery run"]},
+0:{name:"Recovery + Weekly Planning",duration:"60 min",intensity:1,type:"Recovery",focus:["Sauna / ice bath","Light stretching","Foam rolling","Weekly review","Next week planning"]},
+1:{name:"Speed & Acceleration Drills",duration:"75 min",intensity:4,type:"Speed",focus:["Sprint mechanics","Acceleration","Agility ladder","Reaction drills","Short shuttle runs"]},
+2:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Passing patterns","Team shape","Match prep","Coach instructions"]},
+3:{name:"Gym + Ball Work",duration:"90 min",intensity:4,type:"Strength",focus:["Compound lifts","Core stability","Ball mastery","Passing wall","Weak foot work"]},
 4:{name:"Gym + GOATA / 112mvmnt",duration:"80 min",intensity:3,type:"Movement",focus:["Strength training","GOATA groundwork","112mvmnt flows","Fascia work","Hip mobility"]},
-5:{name:"Match Day",duration:"Full day",intensity:5,type:"Match",focus:["Pre-match routine","Hydration","Mental prep","Full 90 min focus","Post-match recovery"]},
-6:{name:"Recovery + Weekly Planning",duration:"60 min",intensity:1,type:"Recovery",focus:["Sauna / ice bath","Light stretching","Foam rolling","Weekly review","Next week planning"]},
+5:{name:"Match Day",duration:"Full day",intensity:5,type:"Match",focus:["Pre-match routine","Hydration","Mental prep","Full 90 min","Post-match recovery"]},
+6:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Set pieces","Positioning","CM/CDM role play","Recovery run"]},
 };
 
-const TYPE_COLORS={
-Speed:"rgba(192,132,252,.12)",
-Team:"rgba(255,107,107,.12)",
-Strength:"rgba(125,211,252,.12)",
-Movement:"rgba(167,243,208,.12)",
-Match:"rgba(251,191,36,.12)",
-Recovery:"rgba(110,231,183,.08)",
-};
-const TYPE_TEXT={
-Speed:"#C084FC",Team:"#FF6B6B",Strength:"#7DD3FC",Movement:"#A7F3D0",Match:"#FBBF24",Recovery:"#6EE7B7",
-};
+const TYPE_BG={Speed:"rgba(192,132,252,.10)",Team:"rgba(239,68,68,.08)",Strength:"rgba(125,211,252,.10)",Movement:"rgba(110,231,183,.08)",Match:"rgba(251,191,36,.10)",Recovery:"rgba(110,231,183,.06)"};
+const TYPE_FG={Speed:"#C084FC",Team:"#F87171",Strength:"#7DD3FC",Movement:"#6EE7B7",Match:"#FBBF24",Recovery:"#34D399"};
 
 const START=new Date(2026,6,9);
 const REPORT=new Date(2026,6,28);
+const TOTAL_DAYS=Math.ceil((REPORT-START)/(1e3*60*60*24));
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -311,77 +444,165 @@ let data={};
 
 function todayKey(){return new Date().toISOString().split('T')[0]}
 function dateKey(d){return d.toISOString().split('T')[0]}
-
 function getDay(key){
   if(!data.days) data.days={};
   if(!data.days[key]) data.days[key]={habits:{},journal:{good:'',better:'',rating:''},quoteIdx:Math.floor(Math.random()*QUOTES.length)};
   return data.days[key];
 }
-
 function getToday(){return getDay(todayKey())}
 
 async function init(){
   const loaded=await window.Vitality.load();
   if(loaded&&typeof loaded==='object'&&!Array.isArray(loaded)){
     data=loaded;
-    // migrate old format
     if(!data.days){
       const newDays={};
-      for(const k in data){
-        if(/^\d{4}-\d{2}-\d{2}$/.test(k)){newDays[k]=data[k];delete data[k]}
-      }
+      for(const k in data){if(/^\d{4}-\d{2}-\d{2}$/.test(k)){newDays[k]=data[k];delete data[k]}}
       data.days=Object.keys(newDays).length?newDays:{};
     }
-  }else{
-    data={days:{}};
-  }
+  }else{data={days:{}};}
   render();
 }
 
 function render(){
-  renderBriefing();
+  renderHeroMetrics();
+  renderCountdown();
+  renderReadiness();
   renderPlan();
   renderChecklist();
   renderJournal();
-  renderWeekStrip();
+  renderWeekHeatmap();
+  renderSparkline();
   renderStats();
 }
 
-function renderBriefing(){
+function renderHeroMetrics(){
   const now=new Date();
-  const dayName=DAYS[now.getDay()];
+  const daysLeft=Math.max(0,Math.ceil((REPORT-now)/(1e3*60*60*24)));
+  const streak=calcStreak();
+  const rate=calcOverallRate();
+
+  document.getElementById('heroDaysLeft').textContent=daysLeft;
+  document.getElementById('heroStreak').textContent=streak;
+  document.getElementById('heroRate').innerHTML=rate+'<span style="font-size:16px;opacity:.6">%</span>';
+
+  // Mini sparklines in hero cards
+  drawHeroSpark('heroSpark1',generateMiniData(7,daysLeft,daysLeft+6,true));
+  drawHeroSpark('heroSpark2',generateMiniData(7,0,streak));
+  drawHeroSpark('heroSpark3',generateMiniData(7,0,rate));
+}
+
+function drawHeroSpark(id,pts){
+  const svg=document.getElementById(id);
+  const path=pts.map((v,i)=>{
+    const x=(i/(pts.length-1))*100;
+    const y=28-((v/100)*24);
+    return (i===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1);
+  }).join(' ');
+  svg.innerHTML='<path d="'+path+' L100 28 L0 28 Z" fill="url(#sparkGrad)" opacity=".4"/><path d="'+path+'" fill="none" stroke="rgba(110,231,183,.4)" stroke-width="1.2"/>';
+}
+
+function generateMiniData(n,low,high,desc){
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const t=desc?(high-(high-low)*i/(n-1)):(low+(high-low)*i/(n-1));
+    pts.push(Math.max(0,Math.min(100,t+Math.random()*8-4)));
+  }
+  return pts;
+}
+
+function renderCountdown(){
+  const now=new Date();
   const fullDay=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
   document.getElementById('briefDate').textContent=fullDay+', '+MONTHS[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
-  document.getElementById('briefDay').textContent='Week '+getWeekNumber(now);
+  document.getElementById('briefDay').textContent='Week '+getWeekNumber(now)+' // '+now.getFullYear();
 
   const daysLeft=Math.max(0,Math.ceil((REPORT-now)/(1e3*60*60*24)));
-  const cd=document.getElementById('countdown');
-  let cls='relaxed';
-  if(daysLeft<=7) cls='urgent'; else if(daysLeft<=14) cls='moderate';
-  cd.className='countdown-badge '+cls;
-  cd.innerHTML='<span class="cd-num">'+daysLeft+'</span> day'+(daysLeft!==1?'s':'')+' to report';
+  const daysIn=Math.max(0,Math.ceil((now-START)/(1e3*60*60*24)));
+  const pctDone=TOTAL_DAYS>0?Math.round((daysIn/TOTAL_DAYS)*100):0;
 
+  document.getElementById('cdNum').textContent=daysLeft;
+
+  // Ring
+  const circ=2*Math.PI*34;
+  const ring=document.getElementById('countdownRing');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ-(circ*(Math.min(pctDone,100)/100));
+
+  // Progress bar
+  document.getElementById('cpPct').textContent=pctDone+'%';
+  document.getElementById('cpFill').style.width=pctDone+'%';
+
+  // Quote
   const today=getToday();
   const q=QUOTES[today.quoteIdx%QUOTES.length];
   document.getElementById('quoteText').textContent='\u201C'+q.t+'\u201D';
   document.getElementById('quoteAttr').textContent='\u2014 '+q.a;
 }
 
+function renderReadiness(){
+  const today=getToday();
+  const j=today.journal||{};
+  let doneCount=0;
+  for(const k in today.habits) if(today.habits[k]) doneCount++;
+  const habitPct=Math.round((doneCount/HABITS.length)*100);
+
+  // Compute sub-scores
+  const morningHabits=[0,1,2,3,4,5]; // wake, sunlight, phone, hydrate, breakfast, creatine
+  const trainingHabits=[6,7,8,9,10]; // ball, goata, 112mvmnt, sauna, cooldown
+  const recoveryHabits=[11,12]; // journal, sleep
+
+  const morningPct=calcSubPct(today,morningHabits);
+  const trainingPct=calcSubPct(today,trainingHabits);
+  const recoveryPct=calcSubPct(today,recoveryHabits);
+  const mentalPct=j.rating?Math.round(j.rating*10):0;
+
+  const overall=Math.round((morningPct*.3+trainingPct*.35+recoveryPct*.2+mentalPct*.15));
+
+  // Ring
+  const circ=2*Math.PI*38;
+  const ring=document.getElementById('readinessRing');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ-(circ*(overall/100));
+  document.getElementById('readinessScore').textContent=overall;
+
+  // Details
+  const metrics=[
+    {label:'Morning',pct:morningPct,color:'#6EE7B7'},
+    {label:'Training',pct:trainingPct,color:'#34D399'},
+    {label:'Recovery',pct:recoveryPct,color:'#059669'},
+    {label:'Mental',pct:mentalPct,color:'#047857'},
+  ];
+  document.getElementById('readinessDetails').innerHTML=metrics.map(m=>`
+    <div class="rd-row">
+      <span class="rd-label">${m.label}</span>
+      <div class="rd-bar"><div class="rd-fill" style="width:${m.pct}%;background:${m.color}"></div></div>
+      <span class="rd-val">${m.pct}</span>
+    </div>
+  `).join('');
+}
+
+function calcSubPct(today,indices){
+  let done=0;
+  indices.forEach(i=>{if(today.habits[i]) done++});
+  return Math.round((done/indices.length)*100);
+}
+
 function renderPlan(){
   const dow=new Date().getDay();
   const plan=PLANS[dow];
   const c=document.getElementById('trainingPlan');
-  let dots='';
-  for(let i=1;i<=5;i++) dots+='<div class="dot'+(i<=plan.intensity?' active':'')+'"></div>';
+  let bars='';
+  for(let i=1;i<=5;i++) bars+='<div class="bar-seg'+(i<=plan.intensity?' active':'')+'"></div>';
   let tags=plan.focus.map(f=>'<span class="focus-tag">'+f+'</span>').join('');
   c.innerHTML=`
     <div class="plan-header">
       <div class="plan-title">${plan.name}</div>
-      <div class="plan-tag" style="background:${TYPE_COLORS[plan.type]};color:${TYPE_TEXT[plan.type]};border-color:transparent">${plan.type}</div>
+      <div class="plan-tag" style="background:${TYPE_BG[plan.type]};color:${TYPE_FG[plan.type]}">${plan.type}</div>
     </div>
     <div class="plan-body">
       <div class="plan-row"><span class="plan-label">Duration</span><span class="plan-value">${plan.duration}</span></div>
-      <div class="plan-row"><span class="plan-label">Intensity</span><div class="intensity-dots">${dots}</div></div>
+      <div class="plan-row"><span class="plan-label">Intensity</span><div class="intensity-bar">${bars}</div></div>
       <div class="plan-row" style="align-items:flex-start"><span class="plan-label">Focus</span><div class="focus-tags">${tags}</div></div>
     </div>`;
 }
@@ -401,9 +622,19 @@ function renderChecklist(){
       </div>
     </div>`;
   }).join('');
+
   const pct=Math.round((doneCount/HABITS.length)*100);
-  document.getElementById('progressFill').style.width=pct+'%';
-  document.getElementById('progressText').textContent=pct+'%';
+  const remaining=HABITS.length-doneCount;
+
+  // Progress ring
+  const circ=2*Math.PI*18;
+  const ring=document.getElementById('progressRing');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ-(circ*(pct/100));
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('psDone').textContent=doneCount;
+  document.getElementById('psTotal').textContent=HABITS.length;
+  document.getElementById('psRemain').textContent=remaining;
 }
 
 function renderJournal(){
@@ -412,16 +643,14 @@ function renderJournal(){
   document.getElementById('jGood').value=j.good||'';
   document.getElementById('jBetter').value=j.better||'';
   document.getElementById('jRating').value=j.rating||'';
-  document.getElementById('ratingDisplay').textContent=j.rating||'\u2014';
+  document.getElementById('ratingDisplay').textContent=j.rating||'--';
 }
 
-function renderWeekStrip(){
+function renderWeekHeatmap(){
   const now=new Date();
   const dow=now.getDay();
-  const strip=document.getElementById('weekStrip');
+  const hm=document.getElementById('weekHeatmap');
   let html='';
-  let totalWeekPct=0;
-  let weekDays=0;
 
   for(let i=0;i<7;i++){
     const d=new Date(now);
@@ -434,59 +663,99 @@ function renderWeekStrip(){
       for(const k in dayData.habits) if(dayData.habits[k]) completedCount++;
     }
     const pct=dayData?Math.round((completedCount/HABITS.length)*100):0;
-    let dotClass='week-dot';
-    if(isToday) dotClass+=' today-dot';
-    if(pct>=80) dotClass+=' complete'; else if(pct>0) dotClass+=' partial';
-    if(d<=now){weekDays++;totalWeekPct+=pct;}
-    html+=`<div class="week-day">
-      <div class="week-day-label ${isToday?'today-label':''}">${DAYS[i]}</div>
-      <div class="${dotClass}"></div>
-      <div class="week-pct">${pct>0?pct+'%':''}</div>
+    let cellClass='hm-cell';
+    if(isToday) cellClass+=' today-cell';
+    if(pct>=80) cellClass+=' complete'; else if(pct>0) cellClass+=' partial';
+    html+=`<div class="hm-day">
+      <div class="hm-label ${isToday?'today':''}">${DAYS[i]}</div>
+      <div class="${cellClass}">${pct>0?pct+'%':'\u2013'}</div>
     </div>`;
   }
-  strip.innerHTML=html;
+  hm.innerHTML=html;
+}
 
-  const avgPct=weekDays?Math.round(totalWeekPct/weekDays):0;
-  document.getElementById('weekSummary').innerHTML='Week avg: <strong>'+avgPct+'%</strong>';
+function renderSparkline(){
+  const now=new Date();
+  const dow=now.getDay();
+  const pts=[];
+  let totalPct=0;
+  let filledDays=0;
 
-  const streak=calcStreak();
-  document.getElementById('streakBadge').innerHTML='\u26A1 '+streak+' day'+(streak!==1?'s':'');
+  for(let i=0;i<7;i++){
+    const d=new Date(now);
+    d.setDate(d.getDate()-dow+i);
+    const key=dateKey(d);
+    const dayData=data.days&&data.days[key];
+    let completedCount=0;
+    if(dayData&&dayData.habits){
+      for(const k in dayData.habits) if(dayData.habits[k]) completedCount++;
+    }
+    const pct=dayData?Math.round((completedCount/HABITS.length)*100):0;
+    pts.push(pct);
+    if(d<=now){totalPct+=pct;filledDays++;}
+  }
+
+  const avg=filledDays?Math.round(totalPct/filledDays):0;
+  document.getElementById('siAvg').textContent=avg+'%';
+
+  // Compute last week avg for delta
+  const lastWeekPts=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(now);
+    d.setDate(d.getDate()-dow+i-7);
+    const key=dateKey(d);
+    const dayData=data.days&&data.days[key];
+    let cc=0;
+    if(dayData&&dayData.habits){for(const k in dayData.habits) if(dayData.habits[k]) cc++;}
+    lastWeekPts.push(dayData?Math.round((cc/HABITS.length)*100):0);
+  }
+  const lastAvg=lastWeekPts.reduce((a,b)=>a+b,0)/7;
+  const delta=Math.round(avg-lastAvg);
+  const deltaEl=document.getElementById('siDelta');
+  if(delta>0){deltaEl.textContent='+'+delta+'% vs last wk';deltaEl.className='si-delta up';}
+  else if(delta<0){deltaEl.textContent=delta+'% vs last wk';deltaEl.className='si-delta down';}
+  else{deltaEl.textContent='-- vs last wk';deltaEl.className='si-delta';}
+
+  // Draw sparkline
+  const box=document.getElementById('sparklineBox');
+  const w=box.offsetWidth||280;
+  const h=48;
+  const maxVal=Math.max(...pts,1);
+  const coords=pts.map((v,i)=>{
+    const x=(i/(pts.length-1))*w;
+    const y=h-4-((v/Math.max(maxVal,100))*(h-8));
+    return {x,y};
+  });
+
+  const linePath=coords.map((c,i)=>(i===0?'M':'L')+c.x.toFixed(1)+','+c.y.toFixed(1)).join(' ');
+  const areaPath=linePath+' L'+w+','+h+' L0,'+h+' Z';
+  const lastPt=coords[coords.length-1];
+
+  box.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <path class="spark-area" d="${areaPath}"/>
+    <path class="spark-line" d="${linePath}"/>
+    <circle class="spark-dot" cx="${lastPt.x}" cy="${lastPt.y}" r="3"/>
+  </svg>`;
 }
 
 function renderStats(){
   const now=new Date();
   const daysIn=Math.max(0,Math.ceil((now-START)/(1e3*60*60*24)));
   const daysLeft=Math.max(0,Math.ceil((REPORT-now)/(1e3*60*60*24)));
-  let totalCompleted=0;
-  let totalPossible=0;
-  if(data.days){
-    for(const key in data.days){
-      const d=data.days[key];
-      if(d.habits){
-        for(const k in d.habits){if(d.habits[k]) totalCompleted++;}
-        totalPossible+=HABITS.length;
-      }
-    }
-  }
-  const rate=totalPossible?Math.round((totalCompleted/totalPossible)*100):0;
   const streak=calcStreak();
+  const rate=calcOverallRate();
 
   document.getElementById('statsGrid').innerHTML=`
     <div class="stat-card"><div class="stat-val">${daysIn}</div><div class="stat-lbl">Days In</div></div>
     <div class="stat-card"><div class="stat-val">${daysLeft}</div><div class="stat-lbl">To Report</div></div>
     <div class="stat-card"><div class="stat-val">${streak}</div><div class="stat-lbl">Streak</div></div>
-  `;
-  document.getElementById('statsGridWide').innerHTML=`
-    <div class="stat-card"><div class="stat-val">${totalCompleted}</div><div class="stat-lbl">Habits Done</div></div>
-    <div class="stat-card"><div class="stat-val">${rate}%</div><div class="stat-lbl">Completion</div></div>
+    <div class="stat-card"><div class="stat-val">${rate}%</div><div class="stat-lbl">All-Time</div></div>
   `;
 }
 
 function calcStreak(){
   let streak=0;
-  const now=new Date();
-  const d=new Date(now);
-  // check today first — if partial, still counts
+  const d=new Date();
   for(let i=0;i<365;i++){
     const key=dateKey(d);
     const dayData=data.days&&data.days[key];
@@ -500,6 +769,20 @@ function calcStreak(){
   return streak;
 }
 
+function calcOverallRate(){
+  let totalCompleted=0,totalPossible=0;
+  if(data.days){
+    for(const key in data.days){
+      const d=data.days[key];
+      if(d.habits){
+        for(const k in d.habits){if(d.habits[k]) totalCompleted++;}
+        totalPossible+=HABITS.length;
+      }
+    }
+  }
+  return totalPossible?Math.round((totalCompleted/totalPossible)*100):0;
+}
+
 function getWeekNumber(d){
   const start=new Date(d.getFullYear(),0,1);
   return Math.ceil((((d-start)/(1e3*60*60*24))+start.getDay()+1)/7);
@@ -509,7 +792,6 @@ async function toggleHabit(i){
   const today=getToday();
   today.habits[i]=!today.habits[i];
   await window.Vitality.save(data);
-  // animate
   const el=document.querySelector(`.check-item[data-idx="${i}"]`);
   if(el&&today.habits[i]){
     el.classList.add('just-checked');
@@ -522,26 +804,21 @@ async function shuffleQuote(){
   const today=getToday();
   today.quoteIdx=(today.quoteIdx+1)%QUOTES.length;
   await window.Vitality.save(data);
-  renderBriefing();
+  renderCountdown();
 }
 
-// Journal debounce
 let jTimer;
 function journalInput(){
   clearTimeout(jTimer);
   const today=getToday();
-  today.journal={
-    good:document.getElementById('jGood').value,
-    better:document.getElementById('jBetter').value,
-    rating:document.getElementById('jRating').value,
-  };
-  const rd=document.getElementById('ratingDisplay');
-  rd.textContent=today.journal.rating||'\u2014';
+  today.journal={good:document.getElementById('jGood').value,better:document.getElementById('jBetter').value,rating:document.getElementById('jRating').value};
+  document.getElementById('ratingDisplay').textContent=today.journal.rating||'--';
   const st=document.getElementById('journalStatus');
   st.textContent='Saving...';st.className='journal-status saving';
   jTimer=setTimeout(async()=>{
     await window.Vitality.save(data);
     st.textContent='Saved';st.className='journal-status saved';
+    renderReadiness();
     setTimeout(()=>{st.textContent='';st.className='journal-status'},2000);
   },800);
 }

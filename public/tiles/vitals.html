@@ -16,14 +16,15 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .page-title{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400;margin-bottom:2px}
 .page-sub{font-size:12px;color:#6EE7B7;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .status-dot{width:7px;height:7px;border-radius:50%;background:#6EE7B7;flex-shrink:0}
-.status-dot.live{animation:pulse 2s ease-in-out infinite}
+.status-dot.live{animation:pulseDot 2s ease-in-out infinite}
 .status-dot.off{background:#ef4444}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(110,231,183,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(110,231,183,0)}}
+@keyframes pulseDot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(110,231,183,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(110,231,183,0)}}
 .label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#555}
 .big-num{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
 .mid-num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
 .sm-num{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
 .unit{font-size:11px;font-weight:500;color:#888;margin-left:2px}
+.sub-text{font-size:10px;color:#555;margin-top:2px}
 
 /* Layout */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -31,16 +32,22 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .card{background:rgba(255,255,255,.035);border-radius:18px;border:1px solid rgba(255,255,255,.06);padding:16px;position:relative;overflow:hidden;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.25)}
 .card::before{content:'';position:absolute;inset:0;border-radius:18px;border:1px solid rgba(255,255,255,.04);pointer-events:none}
 
+/* Section headers */
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#444;margin:18px 0 8px;display:flex;align-items:center;gap:6px}
+.section-icon{font-size:12px}
+
 /* Hero ring */
 .hero{display:flex;flex-direction:column;align-items:center;padding:20px 16px 16px}
-.ring-wrap{position:relative;width:150px;height:150px;margin-bottom:12px}
+.ring-wrap{position:relative;width:140px;height:140px;margin-bottom:10px}
 .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:10}
 .ring-fg{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-val{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.ring-val{font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
 .ring-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
 .hero-subtitle{font-size:11px;color:#666;text-align:center}
+.bb-range{display:flex;justify-content:center;gap:16px;margin-top:8px;font-size:10px;color:#555}
+.bb-range span{display:flex;align-items:center;gap:4px}
 
 /* Sleep bar */
 .sleep-bar-wrap{margin:10px 0 6px;height:14px;border-radius:7px;overflow:hidden;display:flex;background:rgba(255,255,255,.04)}
@@ -52,6 +59,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .clr-deep{background:#6366f1}
 .clr-light{background:#a5b4fc}
 .clr-awake{background:#f87171}
+.sleep-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:10px;color:#555}
 
 /* Heart pair */
 .heart-pair{display:flex;gap:10px}
@@ -62,13 +70,44 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 /* Vitals mini grid */
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-grid.triple{grid-template-columns:1fr 1fr 1fr}
 .mini-card{background:rgba(255,255,255,.02);border-radius:10px;padding:10px;text-align:center}
 .mini-card .sm-num{margin:6px 0 2px}
 .steps-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;overflow:hidden}
-.steps-fill{height:100%;background:#6EE7B7;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.steps-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.fill-green{background:#6EE7B7}
+.fill-blue{background:#60a5fa}
+.fill-purple{background:#818cf8}
+.fill-amber{background:#fbbf24}
+
+/* HRV status badge */
+.hrv-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:6px;margin-top:4px}
+.hrv-badge.balanced{background:rgba(110,231,183,.15);color:#6EE7B7}
+.hrv-badge.low{background:rgba(248,113,113,.15);color:#f87171}
+.hrv-badge.high{background:rgba(96,165,250,.15);color:#60a5fa}
+
+/* Coach insights */
+.coach-card{background:rgba(110,231,183,.04);border:1px solid rgba(110,231,183,.12);border-radius:14px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.coach-card.warning{background:rgba(251,191,36,.04);border-color:rgba(251,191,36,.12)}
+.coach-card.recover{background:rgba(248,113,113,.04);border-color:rgba(248,113,113,.12)}
+.coach-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.coach-card .coach-icon{background:rgba(110,231,183,.1)}
+.coach-card.warning .coach-icon{background:rgba(251,191,36,.1)}
+.coach-card.recover .coach-icon{background:rgba(248,113,113,.1)}
+.coach-text{font-size:12px;line-height:1.45;color:#ccc}
+
+/* Activity list */
+.activity-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:32px;height:32px;border-radius:8px;background:rgba(110,231,183,.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.activity-info{flex:1;min-width:0}
+.activity-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.activity-meta{font-size:10px;color:#555;margin-top:2px}
+.activity-stats{text-align:right;font-size:11px;color:#888}
+.activity-stats .sm-num{font-size:12px;color:#6EE7B7}
 
 /* Refresh */
-.refresh-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.refresh-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
 .refresh-btn{background:rgba(110,231,183,.1);border:none;border-radius:8px;padding:6px 14px;color:#6EE7B7;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s}
 .refresh-btn:active{background:rgba(110,231,183,.2)}
 .refresh-btn.spinning .r-icon{animation:spin .8s linear infinite}
@@ -84,8 +123,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .skel-line{height:12px;background:rgba(255,255,255,.06);border-radius:4px;margin:4px 0}
-.skel-ring{width:150px;height:150px;border-radius:50%;border:10px solid rgba(255,255,255,.04);margin:0 auto 12px}
+.skel-ring{width:140px;height:140px;border-radius:50%;border:10px solid rgba(255,255,255,.04);margin:0 auto 12px}
 .skel-bar{height:14px;background:rgba(255,255,255,.04);border-radius:7px;margin:10px 0}
+
+/* Fade in */
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .3s ease-out both}
 </style>
 </head>
 <body>
@@ -93,13 +136,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 <h1 class="page-title">Vitals</h1>
 <p class="page-sub">
   <span class="status-dot" id="statusDot"></span>
-  <span id="statusText">Connecting...</span>
+  <span id="statusText">Connecting to Forerunner...</span>
 </p>
 
 <div class="error-banner" id="errorBanner"></div>
 
 <div id="content">
-  <!-- Skeleton shown on initial load -->
+  <!-- Skeleton -->
   <div id="skeletonView">
     <div class="card full skeleton" style="padding:24px;text-align:center">
       <div class="skel-ring"></div>
@@ -109,100 +152,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <div class="card skeleton" style="height:100px"></div>
       <div class="card skeleton" style="height:100px"></div>
       <div class="card full skeleton" style="height:80px"></div>
+      <div class="card full skeleton" style="height:120px"></div>
     </div>
   </div>
 
-  <!-- Real content, hidden until data loads -->
-  <div id="dataView" style="display:none">
-    <div class="grid">
-      <!-- Hero: Body Battery -->
-      <div class="card full hero" id="heroCard">
-        <div class="ring-wrap">
-          <svg viewBox="0 0 160 160">
-            <circle class="ring-bg" cx="80" cy="80" r="65"/>
-            <circle class="ring-fg" id="ringFg" cx="80" cy="80" r="65"
-              stroke-dasharray="408.4" stroke-dashoffset="408.4"/>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-val" id="bbVal">--</div>
-            <div class="ring-label">Body Battery</div>
-          </div>
-        </div>
-        <div class="hero-subtitle" id="bbContext"></div>
-      </div>
-
-      <!-- Sleep -->
-      <div class="card full">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
-          <div class="label">Sleep</div>
-          <div class="mid-num" id="sleepScore" style="color:#6EE7B7">--</div>
-        </div>
-        <div style="font-size:13px;color:#aaa" id="sleepDuration">--</div>
-        <div class="sleep-bar-wrap" id="sleepBar"></div>
-        <div class="sleep-legend">
-          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-rem"></div><span id="legendRem">REM</span></div>
-          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-deep"></div><span id="legendDeep">Deep</span></div>
-          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-light"></div><span id="legendLight">Light</span></div>
-          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-awake"></div><span id="legendAwake">Awake</span></div>
-        </div>
-      </div>
-
-      <!-- Heart -->
-      <div class="card full">
-        <div class="label" style="margin-bottom:8px">Heart</div>
-        <div class="heart-pair">
-          <div class="heart-half">
-            <div class="label">HRV</div>
-            <div class="mid-num" id="hrvVal" style="color:#6EE7B7">--</div>
-            <span class="unit">ms</span>
-            <div class="heart-ctx" id="hrvCtx">Higher is better</div>
-          </div>
-          <div class="heart-divider"></div>
-          <div class="heart-half">
-            <div class="label">Resting HR</div>
-            <div class="mid-num" id="rhrVal" style="color:#6EE7B7">--</div>
-            <span class="unit">bpm</span>
-            <div class="heart-ctx" id="rhrCtx">Lower is better</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Vitals mini grid -->
-      <div class="card full">
-        <div class="label" style="margin-bottom:8px">Vitals</div>
-        <div class="mini-grid">
-          <div class="mini-card">
-            <div class="label">SpO2</div>
-            <div class="sm-num" id="spo2Val">--</div>
-            <span class="unit">%</span>
-          </div>
-          <div class="mini-card">
-            <div class="label">Resp Rate</div>
-            <div class="sm-num" id="rrVal">--</div>
-            <span class="unit">rpm</span>
-          </div>
-          <div class="mini-card">
-            <div class="label">Stress</div>
-            <div class="sm-num" id="stressVal">--</div>
-            <div class="heart-ctx" id="stressCtx"></div>
-          </div>
-          <div class="mini-card">
-            <div class="label">Steps</div>
-            <div class="sm-num" id="stepsVal">--</div>
-            <div class="steps-bar"><div class="steps-fill" id="stepsFill" style="width:0%"></div></div>
-            <div class="heart-ctx" id="stepsCtx"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="refresh-row">
-      <span class="last-update" id="lastUpdate"></span>
-      <button class="refresh-btn" id="refreshBtn" onclick="refresh()">
-        <span class="r-icon" style="display:inline-block">&#x21bb;</span> Refresh
-      </button>
-    </div>
-  </div>
+  <!-- Real content -->
+  <div id="dataView" style="display:none"></div>
 </div>
 
 <script>
@@ -210,10 +165,18 @@ const CACHE_KEY = 'vitals_garmin';
 let cachedData = null;
 
 function fmtMins(m) {
-  if (!m && m !== 0) return '--';
+  if (m == null) return '--';
   const h = Math.floor(m / 60);
   const mm = Math.round(m % 60);
   return h + 'h ' + String(mm).padStart(2, '0') + 'm';
+}
+
+function fmtTime(ts) {
+  if (!ts) return '--';
+  try {
+    const d = new Date(ts);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch { return '--'; }
 }
 
 function bbColor(v) {
@@ -223,11 +186,11 @@ function bbColor(v) {
 }
 
 function bbContext(v) {
-  if (v >= 80) return 'Excellent — fully charged';
-  if (v >= 60) return 'Good — ready to perform';
-  if (v >= 40) return 'Moderate — pace yourself';
-  if (v >= 20) return 'Low — consider rest';
-  return 'Depleted — recovery needed';
+  if (v >= 80) return 'Fully charged — ready for max effort';
+  if (v >= 60) return 'Good energy — ready to perform';
+  if (v >= 40) return 'Moderate — pace yourself today';
+  if (v >= 20) return 'Low — prioritize recovery';
+  return 'Depleted — rest day recommended';
 }
 
 function stressLabel(v) {
@@ -237,16 +200,31 @@ function stressLabel(v) {
   return 'High';
 }
 
+function stressColor(v) {
+  if (v <= 25) return '#6EE7B7';
+  if (v <= 50) return '#6EE7B7';
+  if (v <= 75) return '#fbbf24';
+  return '#ef4444';
+}
+
+function activityIcon(type) {
+  const icons = {
+    running: '\u{1F3C3}', cycling: '\u{1F6B4}', swimming: '\u{1F3CA}',
+    strength_training: '\u{1F4AA}', soccer: '\u26BD', walking: '\u{1F6B6}',
+    yoga: '\u{1F9D8}', hiit: '\u{1F525}'
+  };
+  return icons[type] || '\u{1F3CB}';
+}
+
 function animateNumber(el, target, duration) {
   if (target == null || isNaN(target)) { el.textContent = '--'; return; }
-  const start = 0;
   const startTime = performance.now();
   const isFloat = !Number.isInteger(target);
   function tick(now) {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    const current = start + (target - start) * eased;
+    const current = target * eased;
     el.textContent = isFloat ? current.toFixed(1) : Math.round(current);
     if (progress < 1) requestAnimationFrame(tick);
   }
@@ -254,72 +232,268 @@ function animateNumber(el, target, duration) {
 }
 
 function renderData(d) {
-  const dv = document.getElementById('dataView');
   const sk = document.getElementById('skeletonView');
+  const dv = document.getElementById('dataView');
   sk.style.display = 'none';
   dv.style.display = 'block';
 
-  // Body Battery ring
   const bb = d.bodyBattery ?? 0;
-  const ring = document.getElementById('ringFg');
-  const circumference = 2 * Math.PI * 65; // ~408.4
-  const offset = circumference - (bb / 100) * circumference;
-  ring.style.stroke = bbColor(bb);
-  // Trigger reflow for animation
-  ring.style.transition = 'none';
-  ring.setAttribute('stroke-dashoffset', circumference);
-  ring.getBoundingClientRect();
-  ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
-  ring.setAttribute('stroke-dashoffset', offset);
-  animateNumber(document.getElementById('bbVal'), bb, 1000);
-  document.getElementById('bbContext').textContent = bbContext(bb);
+  const bbClr = bbColor(bb);
 
-  // Sleep
-  animateNumber(document.getElementById('sleepScore'), d.sleepScore, 800);
-  document.getElementById('sleepDuration').textContent = fmtMins(d.sleepDurationMins);
+  // Coach insights HTML
+  let coachHTML = '';
+  if (d.coachInsights && d.coachInsights.length > 0) {
+    const iconMap = {
+      zap: '\u26A1', activity: '\u{1F3C3}', moon: '\u{1F319}', alert: '\u26A0\uFE0F',
+      clock: '\u23F0', 'trending-up': '\u2197\uFE0F', 'trending-down': '\u2198\uFE0F',
+      wind: '\u{1F32C}\uFE0F', heart: '\u2764\uFE0F', droplet: '\u{1F4A7}',
+      footprints: '\u{1F463}', flame: '\u{1F525}', target: '\u{1F3AF}', check: '\u2705'
+    };
+    const classMap = { peak: '', moderate: '', warning: 'warning', recover: 'recover', info: '' };
+    coachHTML = d.coachInsights.map(c =>
+      '<div class="coach-card ' + (classMap[c.type] || '') + ' fade-in">' +
+        '<div class="coach-icon">' + (iconMap[c.icon] || '\u{1F4A1}') + '</div>' +
+        '<div class="coach-text">' + c.text + '</div>' +
+      '</div>'
+    ).join('');
+  }
 
+  // Sleep stages
   const total = (d.sleepRem || 0) + (d.sleepDeep || 0) + (d.sleepLight || 0) + (d.sleepAwake || 0);
-  const bar = document.getElementById('sleepBar');
+  let sleepBarHTML = '<div style="width:100%;background:rgba(255,255,255,.04)"></div>';
+  let legendHTML = '';
   if (total > 0) {
     const pct = v => ((v / total) * 100).toFixed(1) + '%';
-    bar.innerHTML =
+    sleepBarHTML =
       '<div class="clr-rem" style="width:' + pct(d.sleepRem || 0) + '"></div>' +
       '<div class="clr-deep" style="width:' + pct(d.sleepDeep || 0) + '"></div>' +
       '<div class="clr-light" style="width:' + pct(d.sleepLight || 0) + '"></div>' +
       '<div class="clr-awake" style="width:' + pct(d.sleepAwake || 0) + '"></div>';
-    document.getElementById('legendRem').textContent = 'REM ' + fmtMins(d.sleepRem);
-    document.getElementById('legendDeep').textContent = 'Deep ' + fmtMins(d.sleepDeep);
-    document.getElementById('legendLight').textContent = 'Light ' + fmtMins(d.sleepLight);
-    document.getElementById('legendAwake').textContent = 'Awake ' + fmtMins(d.sleepAwake);
-  } else {
-    bar.innerHTML = '<div style="width:100%;background:rgba(255,255,255,.04)"></div>';
+    legendHTML =
+      '<div class="sleep-legend-item"><div class="sleep-legend-dot clr-rem"></div>REM ' + fmtMins(d.sleepRem) + '</div>' +
+      '<div class="sleep-legend-item"><div class="sleep-legend-dot clr-deep"></div>Deep ' + fmtMins(d.sleepDeep) + '</div>' +
+      '<div class="sleep-legend-item"><div class="sleep-legend-dot clr-light"></div>Light ' + fmtMins(d.sleepLight) + '</div>' +
+      '<div class="sleep-legend-item"><div class="sleep-legend-dot clr-awake"></div>Awake ' + fmtMins(d.sleepAwake) + '</div>';
   }
 
-  // Heart
-  animateNumber(document.getElementById('hrvVal'), d.hrv, 800);
-  animateNumber(document.getElementById('rhrVal'), d.restingHR, 800);
-  if (d.hrv != null) {
-    document.getElementById('hrvCtx').textContent = d.hrv >= 50 ? 'Good recovery' : 'Below baseline';
-  }
-  if (d.restingHR != null) {
-    document.getElementById('rhrCtx').textContent = d.restingHR <= 55 ? 'Athletic range' : d.restingHR <= 65 ? 'Normal' : 'Elevated';
-  }
-
-  // Vitals
-  animateNumber(document.getElementById('spo2Val'), d.spo2, 600);
-  animateNumber(document.getElementById('rrVal'), d.respRate, 600);
-  animateNumber(document.getElementById('stressVal'), d.avgStress, 600);
-  if (d.avgStress != null) {
-    document.getElementById('stressCtx').textContent = stressLabel(d.avgStress);
+  // HRV badge
+  let hrvBadgeClass = 'balanced';
+  let hrvBadgeText = 'Balanced';
+  if (d.hrvStatus) {
+    const s = String(d.hrvStatus).toLowerCase();
+    if (s.includes('low') || s.includes('poor')) { hrvBadgeClass = 'low'; hrvBadgeText = 'Below Baseline'; }
+    else if (s.includes('high') || s.includes('above')) { hrvBadgeClass = 'high'; hrvBadgeText = 'Above Baseline'; }
+    else { hrvBadgeText = d.hrvStatus; }
+  } else if (d.hrv != null && d.hrvWeeklyAvg != null) {
+    if (d.hrv > d.hrvWeeklyAvg * 1.1) { hrvBadgeClass = 'high'; hrvBadgeText = 'Above Avg'; }
+    else if (d.hrv < d.hrvWeeklyAvg * 0.85) { hrvBadgeClass = 'low'; hrvBadgeText = 'Below Avg'; }
   }
 
-  // Steps
-  const steps = d.steps || 0;
-  const goal = d.stepGoal || 10000;
-  document.getElementById('stepsVal').textContent = steps.toLocaleString();
-  const stepPct = Math.min((steps / goal) * 100, 100);
-  document.getElementById('stepsFill').style.width = stepPct + '%';
-  document.getElementById('stepsCtx').textContent = steps.toLocaleString() + ' / ' + goal.toLocaleString();
+  // Recent activities
+  let activitiesHTML = '';
+  if (d.recentActivities && d.recentActivities.length > 0) {
+    activitiesHTML = d.recentActivities.map(a => {
+      const date = a.date ? new Date(a.date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) : '';
+      const dur = a.duration ? fmtMins(a.duration) : '';
+      const dist = a.distance ? (a.distance / 1000).toFixed(1) + ' km' : '';
+      return '<div class="activity-item">' +
+        '<div class="activity-icon">' + activityIcon(a.type) + '</div>' +
+        '<div class="activity-info"><div class="activity-name">' + a.name + '</div>' +
+        '<div class="activity-meta">' + [date, dur, dist].filter(Boolean).join(' \u00B7 ') + '</div></div>' +
+        '<div class="activity-stats">' +
+          (a.avgHR ? '<div><span class="sm-num">' + a.avgHR + '</span> <span class="unit">bpm</span></div>' : '') +
+          (a.trainingEffect ? '<div class="sub-text">TE ' + a.trainingEffect.toFixed(1) + '</div>' : '') +
+        '</div></div>';
+    }).join('');
+  }
+
+  // Steps progress
+  const stepPct = d.stepGoal ? Math.min((d.steps || 0) / d.stepGoal * 100, 100) : 0;
+
+  // Calories
+  const calActive = d.activeCalories || 0;
+  const calTotal = d.totalCalories || 0;
+
+  // Floors
+  const floorPct = d.floorsGoal ? Math.min((d.floorsClimbed || 0) / d.floorsGoal * 100, 100) : 0;
+
+  // Intensity minutes
+  const modMins = d.moderateIntensityMins || 0;
+  const vigMins = d.vigorousIntensityMins || 0;
+  const totalIntensity = modMins + vigMins * 2; // vigorous counts double
+
+  dv.innerHTML = `
+    <div class="grid">
+      <!-- Hero: Body Battery -->
+      <div class="card full hero fade-in">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 160 160">
+            <circle class="ring-bg" cx="80" cy="80" r="65"/>
+            <circle class="ring-fg" id="ringFg" cx="80" cy="80" r="65"
+              stroke="${bbClr}" stroke-dasharray="408.4" stroke-dashoffset="${408.4 - (bb / 100) * 408.4}"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" style="color:${bbClr}" id="bbVal">${bb}</div>
+            <div class="ring-label">Body Battery</div>
+          </div>
+        </div>
+        <div class="hero-subtitle">${bbContext(bb)}</div>
+        <div class="bb-range">
+          ${d.bodyBatteryLow != null ? '<span>\u2193 Low ' + d.bodyBatteryLow + '</span>' : ''}
+          ${d.bodyBatteryHigh != null ? '<span>\u2191 High ' + d.bodyBatteryHigh + '</span>' : ''}
+          ${d.bodyBatteryCharged != null ? '<span>\u26A1 +' + d.bodyBatteryCharged + ' charged</span>' : ''}
+        </div>
+      </div>
+
+      <!-- AI Coach -->
+      ${coachHTML ? `
+      <div class="full">
+        <div class="section-title"><span class="section-icon">\u{1F9E0}</span> AI Coach</div>
+        ${coachHTML}
+      </div>` : ''}
+
+      <!-- Sleep -->
+      <div class="card full fade-in">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+          <div class="label">Sleep</div>
+          <div class="mid-num" style="color:${d.sleepScore >= 75 ? '#6EE7B7' : d.sleepScore >= 50 ? '#fbbf24' : '#ef4444'}">${d.sleepScore ?? '--'}</div>
+        </div>
+        <div style="font-size:13px;color:#aaa">${fmtMins(d.sleepDurationMins)}</div>
+        <div class="sleep-bar-wrap">${sleepBarHTML}</div>
+        <div class="sleep-legend">${legendHTML}</div>
+        <div class="sleep-meta">
+          <span>${fmtTime(d.sleepStart)} \u2192 ${fmtTime(d.sleepEnd)}</span>
+          ${d.sleepNeedMins ? '<span>Need: ' + fmtMins(d.sleepNeedMins) + '</span>' : ''}
+        </div>
+      </div>
+
+      <!-- Heart -->
+      <div class="card full fade-in">
+        <div class="label" style="margin-bottom:8px">Heart Rate</div>
+        <div class="heart-pair">
+          <div class="heart-half">
+            <div class="label">HRV</div>
+            <div class="mid-num" style="color:#6EE7B7" id="hrvVal">${d.hrv ?? '--'}</div>
+            <span class="unit">ms</span>
+            <div><span class="hrv-badge ${hrvBadgeClass}">${hrvBadgeText}</span></div>
+            ${d.hrvWeeklyAvg ? '<div class="heart-ctx">7d avg: ' + d.hrvWeeklyAvg + ' ms</div>' : ''}
+          </div>
+          <div class="heart-divider"></div>
+          <div class="heart-half">
+            <div class="label">Resting HR</div>
+            <div class="mid-num" style="color:${d.restingHR <= 55 ? '#6EE7B7' : d.restingHR <= 65 ? '#fbbf24' : '#ef4444'}" id="rhrVal">${d.restingHR ?? '--'}</div>
+            <span class="unit">bpm</span>
+            <div class="heart-ctx">${d.restingHR ? (d.restingHR <= 50 ? 'Elite range' : d.restingHR <= 55 ? 'Athletic' : d.restingHR <= 65 ? 'Normal' : 'Elevated') : ''}</div>
+            ${d.hr7DayAvg ? '<div class="heart-ctx">7d avg: ' + d.hr7DayAvg + ' bpm</div>' : ''}
+          </div>
+        </div>
+        ${d.hrMin || d.hrMax ? '<div style="display:flex;justify-content:center;gap:16px;margin-top:10px;font-size:10px;color:#555"><span>Min ' + (d.hrMin || '--') + '</span><span>Max ' + (d.hrMax || '--') + '</span></div>' : ''}
+      </div>
+
+      <!-- Core Vitals -->
+      <div class="full">
+        <div class="section-title"><span class="section-icon">\u{1FA7A}</span> Core Vitals</div>
+      </div>
+      <div class="card full fade-in">
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="label">SpO2</div>
+            <div class="sm-num" style="color:${d.spo2 >= 95 ? '#6EE7B7' : '#fbbf24'}">${d.spo2 ?? '--'}<span class="unit">%</span></div>
+            ${d.spo2Low ? '<div class="sub-text">Low: ' + d.spo2Low + '%</div>' : ''}
+          </div>
+          <div class="mini-card">
+            <div class="label">Respiration</div>
+            <div class="sm-num">${d.respRate ?? '--'}<span class="unit">rpm</span></div>
+            ${d.respLow || d.respHigh ? '<div class="sub-text">' + (d.respLow || '--') + '-' + (d.respHigh || '--') + ' range</div>' : ''}
+          </div>
+          <div class="mini-card">
+            <div class="label">Stress</div>
+            <div class="sm-num" style="color:${stressColor(d.avgStress || 0)}">${d.avgStress ?? '--'}</div>
+            <div class="sub-text">${d.avgStress ? stressLabel(d.avgStress) : ''}</div>
+            ${d.maxStress ? '<div class="sub-text">Peak: ' + d.maxStress + '</div>' : ''}
+          </div>
+          <div class="mini-card">
+            <div class="label">VO2 Max</div>
+            <div class="sm-num" style="color:${d.vo2Max >= 55 ? '#6EE7B7' : d.vo2Max >= 45 ? '#fbbf24' : '#ef4444'}">${d.vo2Max ?? '--'}</div>
+            ${d.vo2MaxRunning ? '<div class="sub-text">Run: ' + d.vo2MaxRunning + '</div>' : ''}
+            ${d.vo2Max ? '<div class="sub-text">' + (d.vo2Max >= 55 ? 'Excellent' : d.vo2Max >= 50 ? 'Good' : d.vo2Max >= 45 ? 'Fair' : 'Build it up') + '</div>' : ''}
+          </div>
+        </div>
+      </div>
+
+      <!-- Training Status -->
+      ${d.trainingLoad || d.trainingStatus ? `
+      <div class="full">
+        <div class="section-title"><span class="section-icon">\u{1F4CA}</span> Training</div>
+      </div>
+      <div class="card full fade-in">
+        <div class="mini-grid">
+          ${d.trainingLoad ? '<div class="mini-card"><div class="label">Training Load</div><div class="sm-num">' + d.trainingLoad + '</div></div>' : ''}
+          ${d.trainingStatus ? '<div class="mini-card"><div class="label">Status</div><div class="sm-num" style="font-size:13px;color:#6EE7B7">' + d.trainingStatus + '</div></div>' : ''}
+        </div>
+      </div>` : ''}
+
+      <!-- Activity & Movement -->
+      <div class="full">
+        <div class="section-title"><span class="section-icon">\u{1F3C3}</span> Daily Activity</div>
+      </div>
+      <div class="card full fade-in">
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="label">Steps</div>
+            <div class="sm-num">${(d.steps || 0).toLocaleString()}</div>
+            <div class="steps-bar"><div class="steps-fill fill-green" style="width:${stepPct}%"></div></div>
+            <div class="sub-text">${(d.steps || 0).toLocaleString()} / ${(d.stepGoal || 10000).toLocaleString()}</div>
+          </div>
+          <div class="mini-card">
+            <div class="label">Calories</div>
+            <div class="sm-num">${calTotal ? calTotal.toLocaleString() : '--'}</div>
+            ${calActive ? '<div class="sub-text">' + calActive + ' active</div>' : ''}
+          </div>
+          <div class="mini-card">
+            <div class="label">Floors</div>
+            <div class="sm-num">${d.floorsClimbed ?? '--'}</div>
+            ${d.floorsGoal ? `<div class="steps-bar"><div class="steps-fill fill-blue" style="width:${floorPct}%"></div></div><div class="sub-text">Goal: ${d.floorsGoal}</div>` : ''}
+          </div>
+          <div class="mini-card">
+            <div class="label">Intensity Min</div>
+            <div class="sm-num">${totalIntensity || '--'}</div>
+            ${modMins || vigMins ? '<div class="sub-text">' + modMins + ' mod + ' + vigMins + ' vig</div>' : ''}
+          </div>
+        </div>
+        ${d.totalDistanceMeters ? '<div style="text-align:center;margin-top:8px;font-size:11px;color:#555">Total distance: ' + (d.totalDistanceMeters / 1000).toFixed(1) + ' km</div>' : ''}
+        ${d.activeMinutes ? '<div style="text-align:center;margin-top:4px;font-size:11px;color:#555">Active time: ' + fmtMins(d.activeMinutes) + '</div>' : ''}
+      </div>
+
+      <!-- Hydration -->
+      ${d.hydrationMl != null ? `
+      <div class="card full fade-in">
+        <div class="label" style="margin-bottom:6px">Hydration</div>
+        <div style="display:flex;align-items:baseline;gap:4px">
+          <div class="mid-num" style="color:#60a5fa">${Math.round(d.hydrationMl / 1000 * 10) / 10}</div>
+          <span class="unit">L</span>
+          ${d.hydrationGoal ? '<span class="sub-text" style="margin-left:8px">/ ' + (d.hydrationGoal / 1000).toFixed(1) + ' L goal</span>' : ''}
+        </div>
+        ${d.hydrationGoal ? `<div class="steps-bar" style="margin-top:8px"><div class="steps-fill fill-blue" style="width:${Math.min(d.hydrationMl / d.hydrationGoal * 100, 100)}%"></div></div>` : ''}
+      </div>` : ''}
+
+      <!-- Recent Activities -->
+      ${activitiesHTML ? `
+      <div class="full">
+        <div class="section-title"><span class="section-icon">\u{1F3C6}</span> Recent Activities</div>
+      </div>
+      <div class="card full fade-in">
+        ${activitiesHTML}
+      </div>` : ''}
+    </div>
+
+    <div class="refresh-row">
+      <span class="last-update" id="lastUpdate"></span>
+      <button class="refresh-btn" id="refreshBtn" onclick="refresh()">
+        <span class="r-icon" style="display:inline-block">&#x21bb;</span> Refresh
+      </button>
+    </div>
+  `;
 }
 
 function setStatus(connected) {
@@ -327,7 +501,7 @@ function setStatus(connected) {
   const txt = document.getElementById('statusText');
   if (connected) {
     dot.className = 'status-dot live';
-    txt.textContent = 'Connected';
+    txt.textContent = 'Forerunner 265 synced';
   } else {
     dot.className = 'status-dot off';
     txt.textContent = 'Disconnected';
@@ -346,44 +520,60 @@ function hideError() {
 
 async function fetchData() {
   const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
+  if (btn) btn.classList.add('spinning');
 
   try {
     const res = await fetch('/api/garmin-data');
-    if (!res.ok) throw new Error('API returned ' + res.status);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'API returned ' + res.status);
+    }
     const d = await res.json();
 
     cachedData = { data: d, ts: Date.now() };
-    await window.Vitality.save(cachedData);
+    if (window.Vitality && window.Vitality.save) {
+      await window.Vitality.save(cachedData);
+    }
 
     hideError();
     setStatus(true);
     renderData(d);
-    document.getElementById('lastUpdate').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    updateTimestamp('Updated');
   } catch (err) {
     setStatus(false);
-    showError('Could not reach Garmin — showing last cached data');
-    // If we have cached data, render it
+    showError('Could not reach Garmin \u2014 ' + (err.message || 'showing cached data'));
     if (cachedData && cachedData.data) {
       renderData(cachedData.data);
-      document.getElementById('lastUpdate').textContent = 'Cached ' + new Date(cachedData.ts).toLocaleTimeString();
+      updateTimestamp('Cached');
     }
   } finally {
-    btn.classList.remove('spinning');
+    if (btn) btn.classList.remove('spinning');
+  }
+}
+
+function updateTimestamp(prefix) {
+  const el = document.getElementById('lastUpdate');
+  if (el) {
+    const ts = cachedData ? cachedData.ts : Date.now();
+    el.textContent = prefix + ' ' + new Date(ts).toLocaleTimeString();
   }
 }
 
 function refresh() { fetchData(); }
 
 async function init() {
-  // Load cached data first for instant display
-  const loaded = await window.Vitality.load();
-  if (loaded && loaded.data) {
-    cachedData = loaded;
-    renderData(loaded.data);
-    document.getElementById('lastUpdate').textContent = 'Cached ' + new Date(loaded.ts).toLocaleTimeString();
-    setStatus(true);
-  }
+  // Load cached data first
+  try {
+    if (window.Vitality && window.Vitality.load) {
+      const loaded = await window.Vitality.load();
+      if (loaded && loaded.data) {
+        cachedData = loaded;
+        renderData(loaded.data);
+        updateTimestamp('Cached');
+        setStatus(true);
+      }
+    }
+  } catch (e) {}
   // Then fetch fresh
   await fetchData();
 }

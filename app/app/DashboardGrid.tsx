@@ -155,7 +155,8 @@ function OpenTileOverlay({
             }}
             className="openFrame"
             srcDoc={withBridge(slot.html)}
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-same-origin"
+            allow="camera"
             title={slot.name}
           />
         </div>
