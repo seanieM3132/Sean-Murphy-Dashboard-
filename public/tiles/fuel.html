@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fuel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;background:#050506;color:#f5f5f5;padding:16px;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+
+/* ── Typography ── */
+.page-title{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400;margin-bottom:2px}
+.page-sub{font-size:12px;color:#6EE7B7;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#888;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section-title .icon{font-size:15px}
+.label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#555}
+
+/* ── Cards ── */
+.card{background:rgba(255,255,255,.035);border-radius:18px;padding:14px;position:relative;overflow:hidden;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 4px 24px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.06);margin-bottom:12px}
+.card::before{content:'';position:absolute;inset:0;border-radius:18px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+
+/* ── Stats Row ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat{background:rgba(255,255,255,.035);backdrop-filter:blur(12px);border-radius:18px;padding:10px 6px;text-align:center;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.06)}
+.stat::before{content:'';position:absolute;inset:0;border-radius:18px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+.stat-val{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;color:#6EE7B7;line-height:1.2}
+.stat-lbl{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+/* ── Meals ── */
+.meals{display:flex;flex-direction:column;gap:6px}
+.meal{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:11px 13px;cursor:pointer;transition:all .25s;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.meal:hover{border-color:rgba(255,255,255,.1)}
+.meal.done{border-color:rgba(110,231,183,.2);background:rgba(110,231,183,.03)}
+.meal-head{display:flex;justify-content:space-between;align-items:center}
+.meal-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.meal-check{width:22px;height:22px;border-radius:50%;border:2px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;cursor:pointer;position:relative}
+.meal-check svg{width:13px;height:13px;opacity:0;transform:scale(.5);transition:all .3s}
+.meal.done .meal-check{border-color:#6EE7B7;background:rgba(110,231,183,.15)}
+.meal.done .meal-check svg{opacity:1;transform:scale(1)}
+@keyframes checkPop{0%{transform:scale(.5)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.meal.just-checked .meal-check svg{animation:checkPop .35s ease}
+.meal-info{flex:1;min-width:0}
+.meal-name{font-size:13px;font-weight:600}
+.meal-time{font-size:10px;color:#555;margin-top:1px}
+.meal-what-preview{font-size:10px;color:#6EE7B7;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.meal-expand{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#444;transition:transform .2s;flex-shrink:0}
+.meal.open .meal-expand{transform:rotate(180deg)}
+.meal-detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.meal.open .meal-detail{max-height:120px}
+.meal-detail-inner{padding-top:8px}
+.meal-hint{font-size:10px;color:#555;margin-bottom:6px;font-style:italic}
+.meal-input{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:7px 10px;color:#f5f5f5;font-size:12px;font-family:inherit;outline:none;transition:border-color .2s}
+.meal-input:focus{border-color:#6EE7B7}
+.meal-input::placeholder{color:#444}
+
+/* ── Water ── */
+.water-hero{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.water-ring-wrap{position:relative;width:80px;height:80px;flex-shrink:0}
+.water-ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.water-ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:7}
+.water-ring-fg{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)}
+.water-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.water-ring-val{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.water-ring-unit{font-size:8px;color:#888;text-transform:uppercase;letter-spacing:.08em}
+.water-info{flex:1}
+.water-target{font-size:12px;color:#888;margin-bottom:6px}
+.water-target span{color:#6EE7B7;font-weight:700}
+.water-bar{height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden;margin-bottom:4px}
+.water-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#3B82F6,#6EE7B7);transition:width .6s cubic-bezier(.4,0,.2,1)}
+.water-status{font-size:10px;font-weight:600;margin-top:2px}
+.water-status.ahead{color:#6EE7B7}
+.water-status.behind{color:#F59E0B}
+.water-status.critical{color:#EF4444}
+
+.bottles{display:flex;gap:4px;margin-bottom:10px;justify-content:center;flex-wrap:wrap}
+.bottle{width:28px;height:38px;border-radius:4px 4px 8px 8px;border:1.5px solid rgba(255,255,255,.08);position:relative;overflow:hidden;transition:all .3s}
+.bottle::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:12px;height:4px;background:rgba(255,255,255,.08);border-radius:0 0 2px 2px}
+.bottle.filled{border-color:rgba(110,231,183,.3)}
+.bottle-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(59,130,246,.4),rgba(110,231,183,.4));transition:height .4s cubic-bezier(.4,0,.2,1);border-radius:0 0 6px 6px}
+.bottle.filled .bottle-fill{height:100%}
+.bottle.partial .bottle-fill{border-color:rgba(59,130,246,.2)}
+
+.water-btns{display:flex;gap:6px}
+.water-btn{flex:1;padding:9px 4px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;color:#f5f5f5;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;transition:all .15s;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.water-btn:active{background:rgba(110,231,183,.1);border-color:rgba(110,231,183,.2);transform:scale(.97)}
+.water-btn.undo{color:#888;font-weight:500}
+
+/* ── Supplements ── */
+.supp-windows{display:flex;flex-direction:column;gap:8px}
+.supp-window{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:10px 12px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.supp-window-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.supp-window-name{font-size:12px;font-weight:700;color:#ccc}
+.supp-window-count{font-size:10px;color:#555;font-variant-numeric:tabular-nums}
+.supp-list{display:flex;flex-direction:column;gap:4px}
+.supp-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;transition:all .2s;position:relative}
+.supp-item:hover{background:rgba(255,255,255,.03)}
+.supp-item.taken{opacity:.6}
+.supp-check{width:18px;height:18px;border-radius:50%;border:1.5px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.supp-check svg{width:10px;height:10px;opacity:0;transition:all .25s}
+.supp-item.taken .supp-check{border-color:#6EE7B7;background:rgba(110,231,183,.15)}
+.supp-item.taken .supp-check svg{opacity:1}
+.supp-name{font-size:12px;font-weight:500;flex:1;min-width:0}
+.supp-dose{font-size:10px;color:#888;flex-shrink:0}
+.supp-low{font-size:8px;color:#F59E0B;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-left:4px;flex-shrink:0}
+.supp-bar{height:4px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden;margin-top:8px}
+.supp-bar-fill{height:100%;background:linear-gradient(90deg,#6EE7B7,#34D399);border-radius:2px;transition:width .5s}
+
+/* ── Add Supplement ── */
+.add-supp-trigger{width:100%;padding:8px;background:none;border:1px dashed rgba(255,255,255,.08);border-radius:8px;color:#555;font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:6px}
+.add-supp-trigger:hover{border-color:rgba(110,231,183,.2);color:#6EE7B7}
+.add-supp-form{display:none;margin-top:8px;padding:10px;background:rgba(255,255,255,.035);border-radius:18px;border:1px solid rgba(255,255,255,.06);box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.add-supp-form.show{display:block}
+.add-supp-form label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px;margin-top:8px}
+.add-supp-form label:first-child{margin-top:0}
+.add-supp-form input,.add-supp-form select{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 9px;color:#f5f5f5;font-size:12px;font-family:inherit;outline:none}
+.add-supp-form input:focus,.add-supp-form select:focus{border-color:#6EE7B7}
+.add-supp-row{display:flex;gap:6px;margin-top:10px}
+.add-supp-row button{flex:1;padding:8px;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.add-supp-save{background:#6EE7B7;color:#000}
+.add-supp-cancel{background:rgba(255,255,255,.06);color:#888}
+.autocomplete-wrap{position:relative}
+.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:rgba(255,255,255,.035);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);border-radius:18px;max-height:150px;overflow-y:auto;z-index:10;display:none;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.autocomplete-list.show{display:block}
+.autocomplete-item{padding:7px 10px;font-size:11px;cursor:pointer;transition:background .1s;color:#ccc}
+.autocomplete-item:hover,.autocomplete-item.active{background:rgba(110,231,183,.1);color:#6EE7B7}
+.autocomplete-item .ac-dose{color:#666;margin-left:6px;font-size:10px}
+
+/* ── Missed Ticker ── */
+.ticker-wrap{overflow:hidden;height:22px;position:relative;margin-top:8px}
+.ticker{display:flex;align-items:center;gap:20px;animation:tickerScroll 15s linear infinite;white-space:nowrap;height:22px}
+.ticker-item{font-size:10px;color:#F59E0B;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ticker-item .dot{width:4px;height:4px;border-radius:50%;background:#F59E0B;flex-shrink:0}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-wrap:empty,.ticker-wrap.hidden{display:none}
+
+/* ── Divider ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:14px 0}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Fuel</h1>
+<p class="page-sub">Nutrition, hydration & supplements</p>
+
+<!-- Stats Row -->
+<div class="stats">
+  <div class="stat"><div class="stat-val" id="sMeals">0/3</div><div class="stat-lbl">Meals</div></div>
+  <div class="stat"><div class="stat-val" id="sWater">0.0</div><div class="stat-lbl">Water (L)</div></div>
+  <div class="stat"><div class="stat-val" id="sStack">0/0</div><div class="stat-lbl">Stack</div></div>
+  <div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-lbl">Bkfst streak</div></div>
+</div>
+
+<!-- Meals Section -->
+<div class="card">
+  <div class="section-title"><span class="icon">&#127860;</span> Meals</div>
+  <div class="meals" id="mealsList"></div>
+</div>
+
+<!-- Water Section -->
+<div class="card">
+  <div class="section-title"><span class="icon">&#128167;</span> Water Coach</div>
+  <div class="water-hero">
+    <div class="water-ring-wrap">
+      <svg viewBox="0 0 80 80">
+        <circle class="water-ring-bg" cx="40" cy="40" r="33"/>
+        <circle class="water-ring-fg" id="waterRing" cx="40" cy="40" r="33" stroke="#6EE7B7" stroke-dasharray="207.35" stroke-dashoffset="207.35"/>
+      </svg>
+      <div class="water-ring-center">
+        <div class="water-ring-val" id="waterRingVal">0</div>
+        <div class="water-ring-unit">litres</div>
+      </div>
+    </div>
+    <div class="water-info">
+      <div class="water-target"><span id="waterCur">0.0</span> / <span id="waterGoal">4.0</span> L</div>
+      <div class="water-bar"><div class="water-bar-fill" id="waterBarFill" style="width:0%"></div></div>
+      <div class="water-status" id="waterStatus">Start drinking!</div>
+    </div>
+  </div>
+  <div class="bottles" id="bottleRow"></div>
+  <div class="water-btns">
+    <button class="water-btn" onclick="addWater(250)">+250ml</button>
+    <button class="water-btn" onclick="addWater(500)">+500ml</button>
+    <button class="water-btn" onclick="addWater(750)">+750ml</button>
+    <button class="water-btn undo" onclick="addWater(-250)">-250ml</button>
+  </div>
+</div>
+
+<!-- Supplements Section -->
+<div class="card">
+  <div class="section-title"><span class="icon">&#128138;</span> Supplement Stack</div>
+  <div class="supp-bar"><div class="supp-bar-fill" id="suppBarFill" style="width:0%"></div></div>
+  <div style="text-align:right;margin-top:2px;margin-bottom:8px"><span style="font-size:10px;color:#888" id="suppProgress">0 / 0 taken</span></div>
+  <div class="supp-windows" id="suppWindows"></div>
+  <div class="ticker-wrap" id="tickerWrap"><div class="ticker" id="ticker"></div></div>
+</div>
+
+<!-- Add Supplement Form (global overlay) -->
+<div class="add-supp-form" id="addSuppForm">
+  <label>Supplement Name</label>
+  <div class="autocomplete-wrap">
+    <input type="text" id="addSuppName" placeholder="e.g. Creatine" autocomplete="off">
+    <div class="autocomplete-list" id="acList"></div>
+  </div>
+  <label>Dose</label>
+  <input type="text" id="addSuppDose" placeholder="e.g. 5g">
+  <label>Timing Window</label>
+  <select id="addSuppTiming">
+    <option value="morning">Morning</option>
+    <option value="lunch">Lunch</option>
+    <option value="evening">Evening</option>
+  </select>
+  <label>Notes (optional)</label>
+  <input type="text" id="addSuppNotes" placeholder="e.g. Take with food">
+  <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+    <input type="checkbox" id="addSuppLow" style="accent-color:#6EE7B7">
+    <label for="addSuppLow" style="margin:0;font-size:11px;color:#888;text-transform:none;letter-spacing:0">Running low</label>
+  </div>
+  <div class="add-supp-row">
+    <button class="add-supp-save" onclick="saveNewSupp()">Add</button>
+    <button class="add-supp-cancel" onclick="closeAddSupp()">Cancel</button>
+  </div>
+</div>
+
+<script>
+/* ─── Constants ─── */
+const WATER_TARGET = 4000;
+const BOTTLES = 8;
+const BOTTLE_ML = WATER_TARGET / BOTTLES;
+
+const MEAL_DEFS = [
+  { id:'breakfast', name:'Breakfast', time:'7:25 AM', hint:'3 eggs + toast + fruit OR oats + banana + protein' },
+  { id:'lunch', name:'Lunch', time:'12:00 PM', hint:'Protein + carbs + veg' },
+  { id:'dinner', name:'Dinner', time:'5:00 PM', hint:'Protein + rice/pasta + veg' },
+];
+
+const DEFAULT_SUPPS = [
+  { id:'s1', name:'Creatine', dose:'5g', window:'morning', notes:'With water', low:false },
+  { id:'s2', name:'Vitamin D3', dose:'2000 IU', window:'morning', notes:'With fat', low:false },
+  { id:'s3', name:'B-Complex', dose:'1 cap', window:'morning', notes:'', low:false },
+  { id:'s4', name:'Omega-3', dose:'2 caps', window:'morning', notes:'With food', low:false },
+  { id:'s5', name:'Magnesium Glycinate', dose:'400mg', window:'evening', notes:'Before bed', low:false },
+  { id:'s6', name:'Zinc', dose:'30mg', window:'evening', notes:'Empty stomach', low:false },
+];
+
+const SUPP_DB = [
+  'Creatine Monohydrate:5g','Vitamin D3:2000 IU','B-Complex:1 cap','Omega-3 Fish Oil:2 caps',
+  'Magnesium Glycinate:400mg','Zinc Picolinate:30mg','Ashwagandha KSM-66:600mg','Rhodiola Rosea:400mg',
+  'L-Theanine:200mg','Caffeine:200mg','Vitamin C:1000mg','Vitamin E:400 IU','Vitamin K2:100mcg',
+  'Iron:18mg','Calcium:500mg','Potassium:99mg','Selenium:200mcg','Chromium:200mcg',
+  'CoQ10:100mg','Alpha Lipoic Acid:600mg','NAC:600mg','Glutamine:5g','Beta Alanine:3.2g',
+  'Citrulline Malate:6g','HMB:3g','Taurine:2g','Electrolytes:1 scoop','Whey Protein:25g',
+  'Casein Protein:25g','Collagen Peptides:10g','BCAA:5g','EAA:10g','Curcumin:500mg',
+  'Boswellia:400mg','Glucosamine:1500mg','Chondroitin:1200mg','MSM:1000mg','Melatonin:1mg',
+  'GABA:750mg','5-HTP:100mg','Phosphatidylserine:100mg','Lions Mane:1000mg','Cordyceps:1000mg',
+  'Reishi:1000mg','Elderberry:500mg','Echinacea:400mg','Probiotics:1 cap','Digestive Enzymes:1 cap',
+  'Berberine:500mg','Fenugreek:500mg','Tongkat Ali:400mg','Fadogia Agrestis:600mg','Boron:3mg',
+  'DIM:200mg','Saw Palmetto:320mg','Beetroot Extract:500mg','Spirulina:3g','Chlorella:3g',
+  'Maca Root:1500mg','Ginkgo Biloba:120mg','Bacopa Monnieri:300mg','Tyrosine:500mg',
+  'Acetyl L-Carnitine:1000mg','R-ALA:300mg','PQQ:20mg','Astaxanthin:12mg','Lutein:20mg',
+];
+
+const WINDOWS = [
+  { id:'morning', name:'Morning', icon:'\u2600' },
+  { id:'lunch', name:'Lunch', icon:'\u2600\uFE0E' },
+  { id:'evening', name:'Evening', icon:'\u263E' },
+];
+
+/* ─── Active date (resets at 6 AM) ─── */
+function activeDate() {
+  const now = new Date();
+  const d = new Date(now);
+  if (d.getHours() < 6) d.setDate(d.getDate() - 1);
+  return d.toISOString().split('T')[0];
+}
+
+/* ─── State ─── */
+let data = {};
+function today() {
+  const key = activeDate();
+  if (!data[key]) data[key] = { meals:{}, water:0, supps:{}, suppList:null };
+  return data[key];
+}
+
+/* ─── Init ─── */
+async function init() {
+  const loaded = await window.Vitality.load();
+  data = (loaded && typeof loaded === 'object' && !Array.isArray(loaded)) ? loaded : {};
+  const t = today();
+  if (!t.suppList) t.suppList = JSON.parse(JSON.stringify(DEFAULT_SUPPS));
+  render();
+  buildBottles();
+}
+
+async function save() { await window.Vitality.save(data); }
+
+/* ─── Render ─── */
+function render() {
+  renderMeals();
+  renderWater();
+  renderSupps();
+  renderStats();
+  renderTicker();
+}
+
+/* ── Meals ── */
+function renderMeals() {
+  const t = today();
+  const el = document.getElementById('mealsList');
+  el.innerHTML = MEAL_DEFS.map(m => {
+    const md = t.meals[m.id] || {};
+    const done = md.done || false;
+    const whatPreview = md.what ? md.what : '';
+    return `<div class="meal ${done?'done':''}" data-id="${m.id}">
+      <div class="meal-head">
+        <div class="meal-left">
+          <div class="meal-check" onclick="event.stopPropagation();toggleMeal('${m.id}')">
+            <svg viewBox="0 0 12 12" fill="none" stroke="#6EE7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg>
+          </div>
+          <div class="meal-info">
+            <div class="meal-name">${m.name} <span style="color:#444;font-weight:400;font-size:11px">${m.time}</span></div>
+            ${whatPreview && !done ? '' : whatPreview ? `<div class="meal-what-preview">${whatPreview}</div>` : ''}
+          </div>
+        </div>
+        <div class="meal-expand" onclick="event.stopPropagation();toggleMealExpand(this)">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5l3 3 3-3"/></svg>
+        </div>
+      </div>
+      <div class="meal-detail">
+        <div class="meal-detail-inner">
+          <div class="meal-hint">${m.hint}</div>
+          <input class="meal-input" placeholder="What did you eat?" value="${(md.what||'').replace(/"/g,'&quot;')}" oninput="saveMealNote('${m.id}',this.value)">
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleMealExpand(chevron) {
+  const meal = chevron.closest('.meal');
+  meal.classList.toggle('open');
+}
+
+async function toggleMeal(id) {
+  const t = today();
+  if (!t.meals[id]) t.meals[id] = {};
+  t.meals[id].done = !t.meals[id].done;
+  if (t.meals[id].done) {
+    // find the element and add animation class
+    const el = document.querySelector(`.meal[data-id="${id}"]`);
+    if (el) { el.classList.add('just-checked'); setTimeout(() => el.classList.remove('just-checked'), 400); }
+  }
+  await save();
+  render();
+}
+
+async function saveMealNote(id, val) {
+  const t = today();
+  if (!t.meals[id]) t.meals[id] = {};
+  t.meals[id].what = val;
+  await save();
+}
+
+/* ── Water ── */
+function buildBottles() {
+  const row = document.getElementById('bottleRow');
+  let html = '';
+  for (let i = 0; i < BOTTLES; i++) html += `<div class="bottle" id="bot${i}"><div class="bottle-fill"></div></div>`;
+  row.innerHTML = html;
+  updateBottles();
+}
+
+function updateBottles() {
+  const t = today();
+  const w = t.water || 0;
+  const fullBottles = Math.floor(w / BOTTLE_ML);
+  const partial = (w % BOTTLE_ML) / BOTTLE_ML;
+  for (let i = 0; i < BOTTLES; i++) {
+    const el = document.getElementById('bot' + i);
+    if (!el) continue;
+    const fill = el.querySelector('.bottle-fill');
+    el.classList.remove('filled','partial');
+    if (i < fullBottles) { el.classList.add('filled'); fill.style.height = '100%'; }
+    else if (i === fullBottles && partial > 0) { el.classList.add('partial'); fill.style.height = (partial * 100) + '%'; }
+    else { fill.style.height = '0%'; }
+  }
+}
+
+function renderWater() {
+  const t = today();
+  const w = Math.max(0, t.water || 0);
+  const pct = Math.min(100, (w / WATER_TARGET) * 100);
+  const litres = (w / 1000).toFixed(1);
+
+  document.getElementById('waterCur').textContent = litres;
+  document.getElementById('waterRingVal').textContent = litres;
+  document.getElementById('waterBarFill').style.width = pct + '%';
+
+  // Ring
+  const circ = 2 * Math.PI * 33;
+  const offset = circ - (circ * Math.min(1, w / WATER_TARGET));
+  const ring = document.getElementById('waterRing');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = pct >= 100 ? '#6EE7B7' : pct >= 50 ? '#6EE7B7' : '#3B82F6';
+
+  // Status message
+  const statusEl = document.getElementById('waterStatus');
+  const now = new Date();
+  const hour = now.getHours();
+  const dayProgress = Math.max(0, Math.min(1, (hour - 6) / 16)); // 6am to 10pm
+  const expectedMl = dayProgress * WATER_TARGET;
+  const diff = w - expectedMl;
+
+  if (w >= WATER_TARGET) {
+    statusEl.textContent = 'Target hit! Well done';
+    statusEl.className = 'water-status ahead';
+  } else if (diff >= 0) {
+    statusEl.textContent = 'On track - keep it up';
+    statusEl.className = 'water-status ahead';
+  } else if (diff > -500) {
+    statusEl.textContent = 'Slightly behind - drink up';
+    statusEl.className = 'water-status behind';
+  } else {
+    statusEl.textContent = 'Behind schedule - catch up now';
+    statusEl.className = 'water-status critical';
+  }
+
+  updateBottles();
+}
+
+async function addWater(ml) {
+  const t = today();
+  t.water = Math.max(0, (t.water || 0) + ml);
+  await save();
+  renderWater();
+  renderStats();
+}
+
+/* ── Supplements ── */
+function getSuppList() {
+  const t = today();
+  if (!t.suppList) t.suppList = JSON.parse(JSON.stringify(DEFAULT_SUPPS));
+  return t.suppList;
+}
+
+function renderSupps() {
+  const t = today();
+  const supps = getSuppList();
+  const taken = t.supps || {};
+  let totalCount = supps.length;
+  let takenCount = 0;
+
+  const wEl = document.getElementById('suppWindows');
+  let html = '';
+
+  WINDOWS.forEach(win => {
+    const items = supps.filter(s => s.window === win.id);
+    const winTaken = items.filter(s => taken[s.id]).length;
+    takenCount += winTaken;
+
+    html += `<div class="supp-window">
+      <div class="supp-window-head">
+        <div class="supp-window-name">${win.icon} ${win.name}</div>
+        <div class="supp-window-count">${winTaken}/${items.length}</div>
+      </div>
+      <div class="supp-list">`;
+
+    if (items.length === 0) {
+      html += `<div style="font-size:11px;color:#444;padding:4px 8px;font-style:italic">No supplements</div>`;
+    }
+
+    items.forEach(s => {
+      const isTaken = taken[s.id] || false;
+      html += `<div class="supp-item ${isTaken?'taken':''}" onclick="toggleSupp('${s.id}')">
+        <div class="supp-check">
+          <svg viewBox="0 0 12 12" fill="none" stroke="#6EE7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg>
+        </div>
+        <div class="supp-name">${s.name}${s.notes ? ` <span style="color:#555;font-size:10px">(${s.notes})</span>` : ''}</div>
+        <div class="supp-dose">${s.dose}</div>
+        ${s.low ? '<div class="supp-low">Low</div>' : ''}
+        <div style="cursor:pointer;color:#444;font-size:14px;padding:0 2px" onclick="event.stopPropagation();toggleSuppLow('${s.id}')" title="Toggle running low">&#9679;</div>
+      </div>`;
+    });
+
+    html += `</div>
+      <button class="add-supp-trigger" onclick="openAddSupp('${win.id}')">+ Add supplement</button>
+    </div>`;
+  });
+
+  wEl.innerHTML = html;
+
+  // Progress bar
+  document.getElementById('suppBarFill').style.width = totalCount ? ((takenCount/totalCount)*100)+'%' : '0%';
+  document.getElementById('suppProgress').textContent = takenCount + ' / ' + totalCount + ' taken';
+}
+
+async function toggleSupp(id) {
+  const t = today();
+  if (!t.supps) t.supps = {};
+  t.supps[id] = !t.supps[id];
+  await save();
+  renderSupps();
+  renderStats();
+}
+
+async function toggleSuppLow(id) {
+  const supps = getSuppList();
+  const s = supps.find(x => x.id === id);
+  if (s) s.low = !s.low;
+  await save();
+  renderSupps();
+}
+
+/* ── Add Supplement ── */
+let addSuppWindow = 'morning';
+function openAddSupp(windowId) {
+  addSuppWindow = windowId;
+  document.getElementById('addSuppTiming').value = windowId;
+  document.getElementById('addSuppForm').classList.add('show');
+  document.getElementById('addSuppName').value = '';
+  document.getElementById('addSuppDose').value = '';
+  document.getElementById('addSuppNotes').value = '';
+  document.getElementById('addSuppLow').checked = false;
+  document.getElementById('addSuppName').focus();
+}
+
+function closeAddSupp() {
+  document.getElementById('addSuppForm').classList.remove('show');
+  document.getElementById('acList').classList.remove('show');
+}
+
+async function saveNewSupp() {
+  const name = document.getElementById('addSuppName').value.trim();
+  const dose = document.getElementById('addSuppDose').value.trim();
+  const timing = document.getElementById('addSuppTiming').value;
+  const notes = document.getElementById('addSuppNotes').value.trim();
+  const low = document.getElementById('addSuppLow').checked;
+  if (!name) return;
+  const supps = getSuppList();
+  const id = 's' + Date.now();
+  supps.push({ id, name, dose: dose || '', window: timing, notes, low });
+  closeAddSupp();
+  await save();
+  renderSupps();
+  renderStats();
+}
+
+/* Autocomplete */
+const acInput = document.getElementById('addSuppName');
+const acList = document.getElementById('acList');
+let acIdx = -1;
+
+acInput.addEventListener('input', () => {
+  const val = acInput.value.trim().toLowerCase();
+  if (val.length < 1) { acList.classList.remove('show'); return; }
+  const matches = SUPP_DB.filter(s => s.toLowerCase().includes(val)).slice(0, 8);
+  if (matches.length === 0) { acList.classList.remove('show'); return; }
+  acIdx = -1;
+  acList.innerHTML = matches.map((s, i) => {
+    const [n, d] = s.split(':');
+    return `<div class="autocomplete-item" data-idx="${i}" data-name="${n}" data-dose="${d||''}">${n}${d ? `<span class="ac-dose">${d}</span>` : ''}</div>`;
+  }).join('');
+  acList.classList.add('show');
+
+  acList.querySelectorAll('.autocomplete-item').forEach(item => {
+    item.addEventListener('click', () => {
+      acInput.value = item.dataset.name;
+      document.getElementById('addSuppDose').value = item.dataset.dose || '';
+      acList.classList.remove('show');
+    });
+  });
+});
+
+acInput.addEventListener('keydown', (e) => {
+  const items = acList.querySelectorAll('.autocomplete-item');
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); acIdx = Math.min(acIdx + 1, items.length - 1); updateAcActive(items); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); acIdx = Math.max(acIdx - 1, 0); updateAcActive(items); }
+  else if (e.key === 'Enter' && acIdx >= 0) { e.preventDefault(); items[acIdx].click(); }
+});
+
+function updateAcActive(items) {
+  items.forEach((it, i) => it.classList.toggle('active', i === acIdx));
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.autocomplete-wrap')) acList.classList.remove('show');
+});
+
+/* ── Ticker (missed doses) ── */
+function renderTicker() {
+  const t = today();
+  const supps = getSuppList();
+  const taken = t.supps || {};
+  const now = new Date();
+  const hour = now.getHours();
+
+  // Determine which windows have passed
+  const passedWindows = [];
+  if (hour >= 12) passedWindows.push('morning');
+  if (hour >= 17) passedWindows.push('lunch');
+  if (hour >= 22) passedWindows.push('evening');
+
+  const missed = supps.filter(s => passedWindows.includes(s.window) && !taken[s.id]);
+  const wrap = document.getElementById('tickerWrap');
+  const ticker = document.getElementById('ticker');
+
+  if (missed.length === 0) {
+    wrap.classList.add('hidden');
+    return;
+  }
+  wrap.classList.remove('hidden');
+
+  // Duplicate for infinite scroll
+  const items = missed.map(s => `<span class="ticker-item"><span class="dot"></span>Missed: ${s.name} ${s.dose}</span>`).join('');
+  ticker.innerHTML = items + items;
+}
+
+/* ── Stats ── */
+function renderStats() {
+  const t = today();
+  const meals = t.meals || {};
+  const mealCount = MEAL_DEFS.filter(m => meals[m.id]?.done).length;
+  document.getElementById('sMeals').textContent = mealCount + '/3';
+
+  const w = (t.water || 0) / 1000;
+  document.getElementById('sWater').textContent = w.toFixed(1);
+
+  const supps = getSuppList();
+  const taken = Object.values(t.supps || {}).filter(Boolean).length;
+  document.getElementById('sStack').textContent = taken + '/' + supps.length;
+
+  // Breakfast streak
+  let streak = 0;
+  const d = new Date();
+  if (d.getHours() < 6) d.setDate(d.getDate() - 1);
+  d.setHours(0,0,0,0);
+  // If today's breakfast not done, check from yesterday
+  if (!meals.breakfast?.done) d.setDate(d.getDate() - 1);
+  while (true) {
+    const key = d.toISOString().split('T')[0];
+    if (data[key]?.meals?.breakfast?.done) { streak++; d.setDate(d.getDate() - 1); }
+    else break;
+    if (streak > 365) break;
+  }
+  document.getElementById('sStreak').textContent = streak;
+}
+
+/* ─── Go ─── */
+init();
+// Refresh ticker every minute
+setInterval(() => renderTicker(), 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vitals</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;background:#050506;color:#f5f5f5;padding:16px;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+
+/* Typography */
+.page-title{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400;margin-bottom:2px}
+.page-sub{font-size:12px;color:#6EE7B7;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#6EE7B7;flex-shrink:0}
+.status-dot.live{animation:pulse 2s ease-in-out infinite}
+.status-dot.off{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(110,231,183,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(110,231,183,0)}}
+.label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#555}
+.big-num{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.mid-num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.sm-num{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.unit{font-size:11px;font-weight:500;color:#888;margin-left:2px}
+
+/* Layout */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.full{grid-column:1/-1}
+.card{background:rgba(255,255,255,.035);border-radius:18px;border:1px solid rgba(255,255,255,.06);padding:16px;position:relative;overflow:hidden;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.25)}
+.card::before{content:'';position:absolute;inset:0;border-radius:18px;border:1px solid rgba(255,255,255,.04);pointer-events:none}
+
+/* Hero ring */
+.hero{display:flex;flex-direction:column;align-items:center;padding:20px 16px 16px}
+.ring-wrap{position:relative;width:150px;height:150px;margin-bottom:12px}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:10}
+.ring-fg{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-val{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.ring-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.hero-subtitle{font-size:11px;color:#666;text-align:center}
+
+/* Sleep bar */
+.sleep-bar-wrap{margin:10px 0 6px;height:14px;border-radius:7px;overflow:hidden;display:flex;background:rgba(255,255,255,.04)}
+.sleep-bar-wrap>div{height:100%;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.sleep-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sleep-legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#888}
+.sleep-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.clr-rem{background:#818cf8}
+.clr-deep{background:#6366f1}
+.clr-light{background:#a5b4fc}
+.clr-awake{background:#f87171}
+
+/* Heart pair */
+.heart-pair{display:flex;gap:10px}
+.heart-half{flex:1;text-align:center}
+.heart-half .mid-num{margin:4px 0 2px}
+.heart-ctx{font-size:10px;color:#555}
+.heart-divider{width:1px;background:rgba(255,255,255,.06)}
+
+/* Vitals mini grid */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-card{background:rgba(255,255,255,.02);border-radius:10px;padding:10px;text-align:center}
+.mini-card .sm-num{margin:6px 0 2px}
+.steps-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;overflow:hidden}
+.steps-fill{height:100%;background:#6EE7B7;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+
+/* Refresh */
+.refresh-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.refresh-btn{background:rgba(110,231,183,.1);border:none;border-radius:8px;padding:6px 14px;color:#6EE7B7;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s}
+.refresh-btn:active{background:rgba(110,231,183,.2)}
+.refresh-btn.spinning .r-icon{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.last-update{font-size:10px;color:#444}
+
+/* Error banner */
+.error-banner{background:rgba(239,68,68,.1);border-radius:8px;padding:8px 12px;font-size:11px;color:#f87171;margin-bottom:10px;display:none}
+.error-banner.show{display:block}
+
+/* Skeleton */
+.skeleton{position:relative;overflow:hidden}
+.skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.skel-line{height:12px;background:rgba(255,255,255,.06);border-radius:4px;margin:4px 0}
+.skel-ring{width:150px;height:150px;border-radius:50%;border:10px solid rgba(255,255,255,.04);margin:0 auto 12px}
+.skel-bar{height:14px;background:rgba(255,255,255,.04);border-radius:7px;margin:10px 0}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Vitals</h1>
+<p class="page-sub">
+  <span class="status-dot" id="statusDot"></span>
+  <span id="statusText">Connecting...</span>
+</p>
+
+<div class="error-banner" id="errorBanner"></div>
+
+<div id="content">
+  <!-- Skeleton shown on initial load -->
+  <div id="skeletonView">
+    <div class="card full skeleton" style="padding:24px;text-align:center">
+      <div class="skel-ring"></div>
+      <div class="skel-line" style="width:50%;margin:0 auto"></div>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <div class="card skeleton" style="height:100px"></div>
+      <div class="card skeleton" style="height:100px"></div>
+      <div class="card full skeleton" style="height:80px"></div>
+    </div>
+  </div>
+
+  <!-- Real content, hidden until data loads -->
+  <div id="dataView" style="display:none">
+    <div class="grid">
+      <!-- Hero: Body Battery -->
+      <div class="card full hero" id="heroCard">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 160 160">
+            <circle class="ring-bg" cx="80" cy="80" r="65"/>
+            <circle class="ring-fg" id="ringFg" cx="80" cy="80" r="65"
+              stroke-dasharray="408.4" stroke-dashoffset="408.4"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-val" id="bbVal">--</div>
+            <div class="ring-label">Body Battery</div>
+          </div>
+        </div>
+        <div class="hero-subtitle" id="bbContext"></div>
+      </div>
+
+      <!-- Sleep -->
+      <div class="card full">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+          <div class="label">Sleep</div>
+          <div class="mid-num" id="sleepScore" style="color:#6EE7B7">--</div>
+        </div>
+        <div style="font-size:13px;color:#aaa" id="sleepDuration">--</div>
+        <div class="sleep-bar-wrap" id="sleepBar"></div>
+        <div class="sleep-legend">
+          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-rem"></div><span id="legendRem">REM</span></div>
+          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-deep"></div><span id="legendDeep">Deep</span></div>
+          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-light"></div><span id="legendLight">Light</span></div>
+          <div class="sleep-legend-item"><div class="sleep-legend-dot clr-awake"></div><span id="legendAwake">Awake</span></div>
+        </div>
+      </div>
+
+      <!-- Heart -->
+      <div class="card full">
+        <div class="label" style="margin-bottom:8px">Heart</div>
+        <div class="heart-pair">
+          <div class="heart-half">
+            <div class="label">HRV</div>
+            <div class="mid-num" id="hrvVal" style="color:#6EE7B7">--</div>
+            <span class="unit">ms</span>
+            <div class="heart-ctx" id="hrvCtx">Higher is better</div>
+          </div>
+          <div class="heart-divider"></div>
+          <div class="heart-half">
+            <div class="label">Resting HR</div>
+            <div class="mid-num" id="rhrVal" style="color:#6EE7B7">--</div>
+            <span class="unit">bpm</span>
+            <div class="heart-ctx" id="rhrCtx">Lower is better</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vitals mini grid -->
+      <div class="card full">
+        <div class="label" style="margin-bottom:8px">Vitals</div>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="label">SpO2</div>
+            <div class="sm-num" id="spo2Val">--</div>
+            <span class="unit">%</span>
+          </div>
+          <div class="mini-card">
+            <div class="label">Resp Rate</div>
+            <div class="sm-num" id="rrVal">--</div>
+            <span class="unit">rpm</span>
+          </div>
+          <div class="mini-card">
+            <div class="label">Stress</div>
+            <div class="sm-num" id="stressVal">--</div>
+            <div class="heart-ctx" id="stressCtx"></div>
+          </div>
+          <div class="mini-card">
+            <div class="label">Steps</div>
+            <div class="sm-num" id="stepsVal">--</div>
+            <div class="steps-bar"><div class="steps-fill" id="stepsFill" style="width:0%"></div></div>
+            <div class="heart-ctx" id="stepsCtx"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="refresh-row">
+      <span class="last-update" id="lastUpdate"></span>
+      <button class="refresh-btn" id="refreshBtn" onclick="refresh()">
+        <span class="r-icon" style="display:inline-block">&#x21bb;</span> Refresh
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CACHE_KEY = 'vitals_garmin';
+let cachedData = null;
+
+function fmtMins(m) {
+  if (!m && m !== 0) return '--';
+  const h = Math.floor(m / 60);
+  const mm = Math.round(m % 60);
+  return h + 'h ' + String(mm).padStart(2, '0') + 'm';
+}
+
+function bbColor(v) {
+  if (v >= 70) return '#6EE7B7';
+  if (v >= 40) return '#fbbf24';
+  return '#ef4444';
+}
+
+function bbContext(v) {
+  if (v >= 80) return 'Excellent — fully charged';
+  if (v >= 60) return 'Good — ready to perform';
+  if (v >= 40) return 'Moderate — pace yourself';
+  if (v >= 20) return 'Low — consider rest';
+  return 'Depleted — recovery needed';
+}
+
+function stressLabel(v) {
+  if (v <= 25) return 'Rest';
+  if (v <= 50) return 'Low';
+  if (v <= 75) return 'Medium';
+  return 'High';
+}
+
+function animateNumber(el, target, duration) {
+  if (target == null || isNaN(target)) { el.textContent = '--'; return; }
+  const start = 0;
+  const startTime = performance.now();
+  const isFloat = !Number.isInteger(target);
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = start + (target - start) * eased;
+    el.textContent = isFloat ? current.toFixed(1) : Math.round(current);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function renderData(d) {
+  const dv = document.getElementById('dataView');
+  const sk = document.getElementById('skeletonView');
+  sk.style.display = 'none';
+  dv.style.display = 'block';
+
+  // Body Battery ring
+  const bb = d.bodyBattery ?? 0;
+  const ring = document.getElementById('ringFg');
+  const circumference = 2 * Math.PI * 65; // ~408.4
+  const offset = circumference - (bb / 100) * circumference;
+  ring.style.stroke = bbColor(bb);
+  // Trigger reflow for animation
+  ring.style.transition = 'none';
+  ring.setAttribute('stroke-dashoffset', circumference);
+  ring.getBoundingClientRect();
+  ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
+  ring.setAttribute('stroke-dashoffset', offset);
+  animateNumber(document.getElementById('bbVal'), bb, 1000);
+  document.getElementById('bbContext').textContent = bbContext(bb);
+
+  // Sleep
+  animateNumber(document.getElementById('sleepScore'), d.sleepScore, 800);
+  document.getElementById('sleepDuration').textContent = fmtMins(d.sleepDurationMins);
+
+  const total = (d.sleepRem || 0) + (d.sleepDeep || 0) + (d.sleepLight || 0) + (d.sleepAwake || 0);
+  const bar = document.getElementById('sleepBar');
+  if (total > 0) {
+    const pct = v => ((v / total) * 100).toFixed(1) + '%';
+    bar.innerHTML =
+      '<div class="clr-rem" style="width:' + pct(d.sleepRem || 0) + '"></div>' +
+      '<div class="clr-deep" style="width:' + pct(d.sleepDeep || 0) + '"></div>' +
+      '<div class="clr-light" style="width:' + pct(d.sleepLight || 0) + '"></div>' +
+      '<div class="clr-awake" style="width:' + pct(d.sleepAwake || 0) + '"></div>';
+    document.getElementById('legendRem').textContent = 'REM ' + fmtMins(d.sleepRem);
+    document.getElementById('legendDeep').textContent = 'Deep ' + fmtMins(d.sleepDeep);
+    document.getElementById('legendLight').textContent = 'Light ' + fmtMins(d.sleepLight);
+    document.getElementById('legendAwake').textContent = 'Awake ' + fmtMins(d.sleepAwake);
+  } else {
+    bar.innerHTML = '<div style="width:100%;background:rgba(255,255,255,.04)"></div>';
+  }
+
+  // Heart
+  animateNumber(document.getElementById('hrvVal'), d.hrv, 800);
+  animateNumber(document.getElementById('rhrVal'), d.restingHR, 800);
+  if (d.hrv != null) {
+    document.getElementById('hrvCtx').textContent = d.hrv >= 50 ? 'Good recovery' : 'Below baseline';
+  }
+  if (d.restingHR != null) {
+    document.getElementById('rhrCtx').textContent = d.restingHR <= 55 ? 'Athletic range' : d.restingHR <= 65 ? 'Normal' : 'Elevated';
+  }
+
+  // Vitals
+  animateNumber(document.getElementById('spo2Val'), d.spo2, 600);
+  animateNumber(document.getElementById('rrVal'), d.respRate, 600);
+  animateNumber(document.getElementById('stressVal'), d.avgStress, 600);
+  if (d.avgStress != null) {
+    document.getElementById('stressCtx').textContent = stressLabel(d.avgStress);
+  }
+
+  // Steps
+  const steps = d.steps || 0;
+  const goal = d.stepGoal || 10000;
+  document.getElementById('stepsVal').textContent = steps.toLocaleString();
+  const stepPct = Math.min((steps / goal) * 100, 100);
+  document.getElementById('stepsFill').style.width = stepPct + '%';
+  document.getElementById('stepsCtx').textContent = steps.toLocaleString() + ' / ' + goal.toLocaleString();
+}
+
+function setStatus(connected) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  if (connected) {
+    dot.className = 'status-dot live';
+    txt.textContent = 'Connected';
+  } else {
+    dot.className = 'status-dot off';
+    txt.textContent = 'Disconnected';
+  }
+}
+
+function showError(msg) {
+  const banner = document.getElementById('errorBanner');
+  banner.textContent = msg;
+  banner.classList.add('show');
+}
+
+function hideError() {
+  document.getElementById('errorBanner').classList.remove('show');
+}
+
+async function fetchData() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+
+  try {
+    const res = await fetch('/api/garmin-data');
+    if (!res.ok) throw new Error('API returned ' + res.status);
+    const d = await res.json();
+
+    cachedData = { data: d, ts: Date.now() };
+    await window.Vitality.save(cachedData);
+
+    hideError();
+    setStatus(true);
+    renderData(d);
+    document.getElementById('lastUpdate').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  } catch (err) {
+    setStatus(false);
+    showError('Could not reach Garmin — showing last cached data');
+    // If we have cached data, render it
+    if (cachedData && cachedData.data) {
+      renderData(cachedData.data);
+      document.getElementById('lastUpdate').textContent = 'Cached ' + new Date(cachedData.ts).toLocaleTimeString();
+    }
+  } finally {
+    btn.classList.remove('spinning');
+  }
+}
+
+function refresh() { fetchData(); }
+
+async function init() {
+  // Load cached data first for instant display
+  const loaded = await window.Vitality.load();
+  if (loaded && loaded.data) {
+    cachedData = loaded;
+    renderData(loaded.data);
+    document.getElementById('lastUpdate').textContent = 'Cached ' + new Date(loaded.ts).toLocaleTimeString();
+    setStatus(true);
+  }
+  // Then fetch fresh
+  await fetchData();
+}
+
+init();
+</script>
+</body>
+</html>

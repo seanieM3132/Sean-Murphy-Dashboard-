@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,sans-serif;background:#050506;color:#f5f5f5;padding:16px;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+
+/* --- H1 TITLE --- */
+h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400}
+
+/* --- VERDICT CARD --- */
+.verdict{border-radius:18px;padding:24px 20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.035);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45);transition:all .4s}
+.verdict.peak{background:radial-gradient(ellipse at 50% 0%,rgba(110,231,183,.12) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(110,231,183,.25);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45),0 0 40px rgba(110,231,183,.08)}
+.verdict.moderate{background:radial-gradient(ellipse at 50% 0%,rgba(250,204,21,.10) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(250,204,21,.2);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.verdict.recover{background:radial-gradient(ellipse at 50% 0%,rgba(248,113,113,.10) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(248,113,113,.2);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.verdict-score{font-size:56px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;transition:color .3s}
+.verdict.peak .verdict-score{color:#6EE7B7}
+.verdict.moderate .verdict-score{color:#FACC15}
+.verdict.recover .verdict-score{color:#F87171}
+.verdict-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-top:8px}
+.verdict.peak .verdict-label{color:#6EE7B7}
+.verdict.moderate .verdict-label{color:#FACC15}
+.verdict.recover .verdict-label{color:#F87171}
+.verdict-sub{font-size:12px;color:#666;margin-top:4px}
+
+/* --- SECTION LABELS --- */
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#444;margin:18px 0 8px}
+
+/* --- ENERGY TIMELINE --- */
+.timeline-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.timeline-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.timeline-title{font-size:13px;font-weight:700}
+.timeline-rec{font-size:11px;color:#6EE7B7;font-weight:600}
+.timeline-svg{width:100%;height:100px;display:block}
+.timeline-labels{display:flex;justify-content:space-between;font-size:9px;color:#444;margin-top:4px}
+
+/* --- RECOVERY GRID --- */
+.recovery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.r-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 12px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.r-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:6px}
+.r-val{font-size:26px;font-weight:800;color:#6EE7B7;line-height:1;font-variant-numeric:tabular-nums}
+.r-sub{font-size:11px;color:#666;margin-top:4px;display:flex;align-items:center;gap:5px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-green{background:#6EE7B7}
+.dot-yellow{background:#FACC15}
+.dot-red{background:#F87171}
+.dot-blue{background:#60A5FA}
+.r-gauge{height:4px;background:#1a1a1a;border-radius:2px;margin-top:8px;overflow:hidden}
+.r-gauge-fill{height:100%;border-radius:2px;transition:width .4s}
+
+/* --- COUNTDOWN --- */
+.countdown-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.cd-num{font-size:36px;font-weight:800;color:#6EE7B7;line-height:1;flex-shrink:0;font-variant-numeric:tabular-nums}
+.cd-right{flex:1;min-width:0}
+.cd-label{font-size:11px;color:#888;font-weight:600;margin-bottom:6px}
+.cd-bar{height:5px;background:#1a1a1a;border-radius:3px;overflow:hidden}
+.cd-bar-fill{height:100%;background:linear-gradient(90deg,#6EE7B7,#34D399);border-radius:3px;transition:width .4s}
+.cd-date{font-size:10px;color:#444;margin-top:4px}
+
+/* --- WEEK STATS --- */
+.week-row{display:flex;gap:8px;margin-bottom:14px}
+.week-card{flex:1;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px;text-align:center;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.week-val{font-size:22px;font-weight:800;color:#6EE7B7;font-variant-numeric:tabular-nums}
+.week-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+/* --- RECOMMENDATIONS --- */
+.recs{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.rec{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.45;color:#ccc;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+.rec-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* --- LOADING --- */
+.loading{text-align:center;color:#333;font-size:12px;padding:24px 0}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.loading span{animation:pulse 1.2s ease-in-out infinite}
+
+/* --- FADE IN --- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .35s ease-out both}
+.fade-in:nth-child(2){animation-delay:.05s}
+.fade-in:nth-child(3){animation-delay:.1s}
+.fade-in:nth-child(4){animation-delay:.15s}
+.fade-in:nth-child(5){animation-delay:.2s}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading"><span>Loading data...</span></div>
+</div>
+
+<script>
+const SEWARD_DATE = new Date(2026, 6, 28);
+const START_DATE  = new Date(2026, 6, 9);
+const HRV_BASELINE = 55; // reasonable baseline for 19yo athlete; adjusts with cached avg
+
+let state = {};
+let garmin = null;
+
+function todayKey() { return new Date().toISOString().split('T')[0]; }
+
+// ---- DATA FETCHING ----
+async function init() {
+  // Load cached data immediately
+  try {
+    const cached = await window.Vitality.load();
+    if (cached && typeof cached === 'object' && !Array.isArray(cached)) {
+      state = cached;
+    }
+  } catch(e) {}
+
+  // Render with cached data first
+  if (state.garmin) { garmin = state.garmin; }
+  render();
+
+  // Fetch fresh data
+  try {
+    const res = await fetch('/api/garmin-data');
+    if (res.ok) {
+      garmin = await res.json();
+      state.garmin = garmin;
+      state.lastFetch = Date.now();
+      // Cache HRV history for 7-day avg
+      if (!state.hrvHistory) state.hrvHistory = {};
+      if (garmin.hrv) state.hrvHistory[todayKey()] = garmin.hrv;
+      // Cache training log reference
+      await window.Vitality.save(state);
+      render();
+    }
+  } catch(e) {
+    // Keep showing cached data
+  }
+}
+
+// ---- COMPOSITE SCORE ----
+function computeScore(g) {
+  if (!g) return null;
+  const bb = g.bodyBattery != null ? Math.min(100, Math.max(0, g.bodyBattery)) : null;
+  const ss = g.sleepScore != null ? Math.min(100, Math.max(0, g.sleepScore)) : null;
+
+  // HRV relative to baseline
+  const hrvAvg = getHrvAvg();
+  const baseline = hrvAvg || HRV_BASELINE;
+  const hrvRatio = g.hrv != null ? Math.min(1.3, Math.max(0.3, g.hrv / baseline)) : null;
+  const hrvScore = hrvRatio != null ? hrvRatio * 76.9 : null; // normalise so 1.0 ratio = ~77
+
+  // Stress inverse (0=no stress=100 score, 100=max stress=0 score)
+  const stressScore = g.avgStress != null ? Math.max(0, 100 - g.avgStress) : null;
+
+  let total = 0, weight = 0;
+  if (bb != null)           { total += bb * 0.40; weight += 0.40; }
+  if (ss != null)           { total += ss * 0.25; weight += 0.25; }
+  if (hrvScore != null)     { total += hrvScore * 0.20; weight += 0.20; }
+  if (stressScore != null)  { total += stressScore * 0.15; weight += 0.15; }
+
+  if (weight === 0) return null;
+  return Math.round(total / weight);
+}
+
+function getHrvAvg() {
+  if (!state.hrvHistory) return null;
+  const keys = Object.keys(state.hrvHistory).sort().slice(-7);
+  if (keys.length === 0) return null;
+  const sum = keys.reduce((a, k) => a + (state.hrvHistory[k] || 0), 0);
+  return Math.round(sum / keys.length);
+}
+
+// ---- ENERGY CURVE ----
+function getEnergyCurve(g) {
+  // Simulated energy curve based on body battery
+  const bb = (g && g.bodyBattery != null) ? g.bodyBattery : 60;
+  const peak = bb / 100;
+  // Hours 6-22 (6am to 10pm), index 0-16
+  const curve = [];
+  for (let h = 6; h <= 22; h++) {
+    let e;
+    if (h <= 9)       e = peak * (0.7 + 0.3 * ((h - 6) / 3));          // morning rise
+    else if (h <= 11) e = peak;                                          // morning peak
+    else if (h <= 14) e = peak * (1 - 0.3 * ((h - 11) / 3));           // post-lunch dip
+    else if (h <= 17) e = peak * (0.75 + 0.15 * ((h - 14) / 3));       // afternoon rise
+    else              e = peak * (0.9 - 0.35 * ((h - 17) / 5));         // evening decline
+    curve.push({ hour: h, energy: Math.max(0.1, Math.min(1, e)) });
+  }
+  return curve;
+}
+
+function getBestTrainWindow(curve) {
+  // Find 2-hour block with highest avg energy
+  let bestIdx = 0, bestAvg = 0;
+  for (let i = 0; i < curve.length - 1; i++) {
+    const avg = (curve[i].energy + curve[i + 1].energy) / 2;
+    if (avg > bestAvg) { bestAvg = avg; bestIdx = i; }
+  }
+  return { start: curve[bestIdx].hour, end: curve[Math.min(bestIdx + 2, curve.length - 1)].hour };
+}
+
+// ---- RECOMMENDATIONS ----
+function getRecommendations(g) {
+  const recs = [];
+  if (!g) return [{ icon: 'i', text: 'Connect Garmin to get personalized recommendations.' }];
+
+  if (g.bodyBattery != null && g.bodyBattery < 30)
+    recs.push({ icon: '!', text: 'Take a rest day. Your body battery is depleted at ' + g.bodyBattery + '.' });
+  if (g.sleepScore != null && g.sleepScore < 60)
+    recs.push({ icon: '!', text: 'Poor sleep last night (' + g.sleepScore + '/100). Prioritize a nap today.' });
+
+  const hrvAvg = getHrvAvg();
+  if (g.hrv != null && hrvAvg && g.hrv > hrvAvg * 1.1)
+    recs.push({ icon: '+', text: 'HRV is above your average. Great day for high intensity work.' });
+  if (g.hrv != null && hrvAvg && g.hrv < hrvAvg * 0.8)
+    recs.push({ icon: '!', text: 'HRV is below baseline. Consider lighter training today.' });
+
+  if (g.avgStress != null && g.avgStress > 50)
+    recs.push({ icon: '~', text: 'Stress is elevated (' + g.avgStress + '). Consider breathwork before training.' });
+
+  if (g.bodyBattery != null && g.bodyBattery >= 70 && g.sleepScore != null && g.sleepScore >= 75)
+    recs.push({ icon: '+', text: 'Battery and sleep are both strong. Push hard in today\'s session.' });
+
+  if (g.restingHR != null && g.restingHR > 65)
+    recs.push({ icon: 'i', text: 'Resting HR is ' + g.restingHR + ' bpm. Ensure hydration and recovery.' });
+
+  if (g.steps != null && g.stepGoal != null && g.steps < g.stepGoal * 0.3) {
+    recs.push({ icon: 'i', text: 'Low movement so far today. Get a walk in before your session.' });
+  }
+
+  // Always return at least one
+  if (recs.length === 0) recs.push({ icon: '+', text: 'All systems nominal. Train as planned.' });
+  return recs.slice(0, 4);
+}
+
+// ---- TRAINING LOG STATS ----
+function getWeekStats() {
+  if (!state.sessions) state.sessions = [];
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  monday.setHours(0,0,0,0);
+  const weekSessions = state.sessions.filter(s => s.ts >= monday.getTime());
+
+  // Streak: consecutive days with at least 1 session
+  let streak = 0;
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  while (true) {
+    const dayKey = d.toISOString().split('T')[0];
+    const has = state.sessions.some(s => {
+      const sd = new Date(s.ts).toISOString().split('T')[0];
+      return sd === dayKey;
+    });
+    if (has) { streak++; d.setDate(d.getDate() - 1); }
+    else break;
+  }
+  return { week: weekSessions.length, streak };
+}
+
+// ---- RENDER ----
+function render() {
+  const g = garmin;
+  const score = computeScore(g);
+  const curve = getEnergyCurve(g);
+  const trainWindow = getBestTrainWindow(curve);
+  const recs = getRecommendations(g);
+  const weekStats = getWeekStats();
+  const hrvAvg = getHrvAvg();
+
+  // Verdict
+  let verdictClass = 'moderate', verdictLabel = 'MODERATE', verdictSub = 'Light session recommended';
+  if (score != null) {
+    if (score > 70) { verdictClass = 'peak'; verdictLabel = 'PEAK WINDOW'; verdictSub = 'Train hard now'; }
+    else if (score < 40) { verdictClass = 'recover'; verdictLabel = 'RECOVER'; verdictSub = 'Rest or mobility only'; }
+  }
+
+  // Sleep quality label
+  let sleepLabel = '--', sleepDot = 'dot-yellow';
+  if (g && g.sleepScore != null) {
+    if (g.sleepScore >= 85) { sleepLabel = 'Excellent'; sleepDot = 'dot-green'; }
+    else if (g.sleepScore >= 70) { sleepLabel = 'Good'; sleepDot = 'dot-green'; }
+    else if (g.sleepScore >= 50) { sleepLabel = 'OK'; sleepDot = 'dot-yellow'; }
+    else { sleepLabel = 'Poor'; sleepDot = 'dot-red'; }
+  }
+
+  // Stress label
+  let stressLabel = '--', stressDot = 'dot-yellow';
+  if (g && g.avgStress != null) {
+    if (g.avgStress <= 25) { stressLabel = 'Low'; stressDot = 'dot-green'; }
+    else if (g.avgStress <= 50) { stressLabel = 'Moderate'; stressDot = 'dot-yellow'; }
+    else { stressLabel = 'High'; stressDot = 'dot-red'; }
+  }
+
+  // HRV status
+  let hrvStatus = '--';
+  if (g && g.hrv != null && hrvAvg) {
+    const diff = g.hrv - hrvAvg;
+    hrvStatus = (diff >= 0 ? '+' : '') + diff + ' vs avg';
+  } else if (g && g.hrv != null) {
+    hrvStatus = 'Tracking';
+  }
+
+  // Countdown
+  const now = new Date();
+  const daysLeft = Math.max(0, Math.ceil((SEWARD_DATE - now) / (1000*60*60*24)));
+  const totalDays = Math.ceil((SEWARD_DATE - START_DATE) / (1000*60*60*24));
+  const elapsed = Math.max(0, Math.ceil((now - START_DATE) / (1000*60*60*24)));
+  const cdPct = Math.max(0, Math.min(100, (elapsed / totalDays) * 100));
+
+  // Current hour for timeline
+  const currentHour = now.getHours() + now.getMinutes() / 60;
+
+  // Build timeline SVG
+  const svgW = 320, svgH = 90, padL = 0, padR = 0, padT = 8, padB = 18;
+  const plotW = svgW - padL - padR;
+  const plotH = svgH - padT - padB;
+
+  function hToX(h) { return padL + ((h - 6) / 16) * plotW; }
+  function eToY(e) { return padT + plotH * (1 - e); }
+
+  // Curve path
+  let pathD = '';
+  curve.forEach((p, i) => {
+    const x = hToX(p.hour), y = eToY(p.energy);
+    pathD += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  });
+
+  // Fill path (close to bottom)
+  let fillD = pathD + ' L' + hToX(22).toFixed(1) + ',' + (padT + plotH) + ' L' + hToX(6).toFixed(1) + ',' + (padT + plotH) + ' Z';
+
+  // Training window highlight
+  const twX1 = hToX(trainWindow.start), twX2 = hToX(trainWindow.end);
+
+  // Current time marker
+  const ctX = hToX(Math.max(6, Math.min(22, currentHour)));
+  const showMarker = currentHour >= 6 && currentHour <= 22;
+
+  // Train-before recommendation
+  const trainBefore = trainWindow.end > 12 ? trainWindow.end : trainWindow.end;
+  const tbHour = Math.floor(trainBefore);
+  const tbMin = Math.round((trainBefore - tbHour) * 60);
+  const tbStr = tbHour > 12 ? (tbHour - 12) + ':' + String(tbMin).padStart(2, '0') + ' PM'
+    : tbHour + ':' + String(tbMin).padStart(2, '0') + ' AM';
+
+  // Rec icons
+  const iconMap = { '!': '\u26A0', '+': '\u2714', 'i': '\u2139', '~': '\u223C' };
+
+  const html = `
+    <div class="verdict ${verdictClass} fade-in">
+      <div class="verdict-score">${score != null ? score : '--'}</div>
+      <div class="verdict-label">${verdictLabel}</div>
+      <div class="verdict-sub">${verdictSub}</div>
+    </div>
+
+    <div class="section-title">Energy Timeline</div>
+    <div class="timeline-card fade-in">
+      <div class="timeline-header">
+        <div class="timeline-title">Predicted Energy</div>
+        <div class="timeline-rec">Train before ${tbStr}</div>
+      </div>
+      <svg class="timeline-svg" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none">
+        <!-- Training window -->
+        <rect x="${twX1.toFixed(1)}" y="${padT}" width="${(twX2 - twX1).toFixed(1)}" height="${plotH}" rx="4"
+              fill="rgba(110,231,183,0.08)" />
+        <!-- Fill under curve -->
+        <path d="${fillD}" fill="url(#energyGrad)" opacity="0.3" />
+        <!-- Curve line -->
+        <path d="${pathD}" fill="none" stroke="#6EE7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- Current time -->
+        ${showMarker ? `<line x1="${ctX.toFixed(1)}" y1="${padT}" x2="${ctX.toFixed(1)}" y2="${padT + plotH}" stroke="#fff" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />
+        <circle cx="${ctX.toFixed(1)}" cy="${eToY(curve.find(c => c.hour === Math.round(Math.max(6, Math.min(22, currentHour))))?.energy || 0.5).toFixed(1)}" r="4" fill="#fff" />` : ''}
+        <!-- Gradient def -->
+        <defs>
+          <linearGradient id="energyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#6EE7B7" />
+            <stop offset="100%" stop-color="transparent" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="timeline-labels">
+        <span>6AM</span><span>9AM</span><span>12PM</span><span>3PM</span><span>6PM</span><span>9PM</span>
+      </div>
+    </div>
+
+    <div class="section-title">Recovery Readiness</div>
+    <div class="recovery-grid fade-in">
+      <div class="r-card">
+        <div class="r-label">Sleep Quality</div>
+        <div class="r-val">${g && g.sleepScore != null ? g.sleepScore : '--'}</div>
+        <div class="r-sub"><span class="dot ${sleepDot}"></span>${sleepLabel}</div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">Body Battery</div>
+        <div class="r-val">${g && g.bodyBattery != null ? g.bodyBattery : '--'}</div>
+        <div class="r-gauge"><div class="r-gauge-fill" style="width:${g && g.bodyBattery != null ? g.bodyBattery : 0}%;background:${g && g.bodyBattery != null ? (g.bodyBattery >= 60 ? '#6EE7B7' : g.bodyBattery >= 30 ? '#FACC15' : '#F87171') : '#333'}"></div></div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">HRV Status</div>
+        <div class="r-val">${g && g.hrv != null ? g.hrv : '--'}</div>
+        <div class="r-sub"><span class="dot ${g && g.hrv != null && hrvAvg ? (g.hrv >= hrvAvg ? 'dot-green' : 'dot-yellow') : 'dot-blue'}"></span>${hrvStatus}</div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">Stress Load</div>
+        <div class="r-val">${g && g.avgStress != null ? g.avgStress : '--'}</div>
+        <div class="r-sub"><span class="dot ${stressDot}"></span>${stressLabel}</div>
+      </div>
+    </div>
+
+    <div class="section-title">Countdown to Seward</div>
+    <div class="countdown-card fade-in">
+      <div class="cd-num">${daysLeft}</div>
+      <div class="cd-right">
+        <div class="cd-label">days until July 28 report</div>
+        <div class="cd-bar"><div class="cd-bar-fill" style="width:${cdPct.toFixed(1)}%"></div></div>
+        <div class="cd-date">${Math.round(cdPct)}% of prep complete</div>
+      </div>
+    </div>
+
+    <div class="section-title">This Week</div>
+    <div class="week-row fade-in">
+      <div class="week-card">
+        <div class="week-val">${weekStats.week}</div>
+        <div class="week-lbl">Sessions</div>
+      </div>
+      <div class="week-card">
+        <div class="week-val">${weekStats.streak}</div>
+        <div class="week-lbl">Day Streak</div>
+      </div>
+    </div>
+
+    <div class="section-title">Smart Recommendations</div>
+    <div class="recs fade-in">
+      ${recs.map(r => `<div class="rec"><span class="rec-icon">${iconMap[r.icon] || r.icon}</span><span>${r.text}</span></div>`).join('')}
+    </div>
+  `;
+
+  document.getElementById('app').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>
