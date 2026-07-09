@@ -5,91 +5,143 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peak</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,sans-serif;background:#050506;color:#f5f5f5;padding:16px;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;z-index:0}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
-@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
+:root{
+  --green:#6EE7B7;--green-dim:#34D399;--green-glow:rgba(110,231,183,.18);
+  --yellow:#FACC15;--red:#F87171;--blue:#60A5FA;
+  --bg:#050506;--card:rgba(255,255,255,.028);--card-border:rgba(255,255,255,.055);
+  --text:#f0f0f0;--text-dim:#999;--text-muted:#555;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --serif:'Instrument Serif',Georgia,serif;
+  --radius:20px;
+}
 
-/* --- H1 TITLE --- */
-h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--text);padding:16px 14px 40px;min-height:100vh;
+  -webkit-font-smoothing:antialiased;position:relative;z-index:0;overflow-x:hidden}
 
-/* --- VERDICT CARD --- */
-.verdict{border-radius:18px;padding:24px 20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.035);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45);transition:all .4s}
-.verdict.peak{background:radial-gradient(ellipse at 50% 0%,rgba(110,231,183,.12) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(110,231,183,.25);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45),0 0 40px rgba(110,231,183,.08)}
-.verdict.moderate{background:radial-gradient(ellipse at 50% 0%,rgba(250,204,21,.10) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(250,204,21,.2);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.verdict.recover{background:radial-gradient(ellipse at 50% 0%,rgba(248,113,113,.10) 0%,rgba(255,255,255,.035) 70%);border-color:rgba(248,113,113,.2);box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.verdict-score{font-size:56px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;transition:color .3s}
-.verdict.peak .verdict-score{color:#6EE7B7}
-.verdict.moderate .verdict-score{color:#FACC15}
-.verdict.recover .verdict-score{color:#F87171}
-.verdict-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-top:8px}
-.verdict.peak .verdict-label{color:#6EE7B7}
-.verdict.moderate .verdict-label{color:#FACC15}
-.verdict.recover .verdict-label{color:#F87171}
-.verdict-sub{font-size:12px;color:#666;margin-top:4px}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 75% 10%,rgba(110,231,183,.10),transparent 55%),
+    radial-gradient(ellipse at 20% 85%,rgba(180,180,200,.06),transparent 55%);
+  filter:blur(50px);pointer-events:none;z-index:-2;animation:bgDrift 30s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-15px,10px) scale(1.02)}100%{transform:translate(10px,-8px) scale(1)}}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.012)'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:-1}
 
-/* --- SECTION LABELS --- */
-.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#444;margin:18px 0 8px}
+/* Background canvas */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0.4}
 
-/* --- ENERGY TIMELINE --- */
-.timeline-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
+h1{font-family:var(--serif);font-style:italic;font-size:36px;letter-spacing:-0.02em;font-weight:400;line-height:1.1}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px;
+  margin-bottom:12px;position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 0 rgba(255,255,255,.04) inset,0 8px 32px rgba(0,0,0,.3);
+  transition:transform .25s cubic-bezier(.4,0,.2,1),border-color .3s}
+.card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.09)}
+.card::before{content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:radial-gradient(ellipse at 50% -40%,rgba(255,255,255,.03),transparent 70%);pointer-events:none}
+
+/* Section labels */
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--text-muted);margin:20px 0 10px;display:flex;align-items:center;gap:8px;font-family:var(--mono)}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.04)}
+
+/* ═══ VERDICT — the big score ═══ */
+.verdict{text-align:center;padding:28px 20px;position:relative}
+.verdict-score-wrap{position:relative;width:140px;height:140px;margin:0 auto 14px}
+.verdict-score-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.verdict-ring-bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:8}
+.verdict-ring-fg{fill:none;stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .5s}
+.verdict-score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.verdict-num{font-size:48px;font-weight:800;line-height:1;font-family:var(--mono);letter-spacing:-0.04em;
+  font-variant-numeric:tabular-nums}
+.verdict-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-top:6px;
+  font-family:var(--mono)}
+.verdict-sub{font-size:12px;color:var(--text-dim);margin-top:6px}
+
+/* Score states */
+.verdict.peak .verdict-num{color:var(--green)}
+.verdict.peak .verdict-label{color:var(--green)}
+.verdict.moderate .verdict-num{color:var(--yellow)}
+.verdict.moderate .verdict-label{color:var(--yellow)}
+.verdict.recover .verdict-num{color:var(--red)}
+.verdict.recover .verdict-label{color:var(--red)}
+
+/* ═══ ENERGY TIMELINE — canvas powered ═══ */
+.timeline-card{padding:16px}
 .timeline-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .timeline-title{font-size:13px;font-weight:700}
-.timeline-rec{font-size:11px;color:#6EE7B7;font-weight:600}
-.timeline-svg{width:100%;height:100px;display:block}
-.timeline-labels{display:flex;justify-content:space-between;font-size:9px;color:#444;margin-top:4px}
+.timeline-rec{font-size:11px;color:var(--green);font-weight:600;font-family:var(--mono)}
+#energyCanvas{width:100%;height:110px;display:block}
+.timeline-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);
+  margin-top:6px;font-family:var(--mono)}
 
-/* --- RECOVERY GRID --- */
-.recovery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.r-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 12px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.r-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:6px}
-.r-val{font-size:26px;font-weight:800;color:#6EE7B7;line-height:1;font-variant-numeric:tabular-nums}
-.r-sub{font-size:11px;color:#666;margin-top:4px;display:flex;align-items:center;gap:5px}
+/* ═══ RECOVERY GRID ═══ */
+.recovery-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.r-card{padding:14px 12px}
+.r-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--text-muted);margin-bottom:6px;font-family:var(--mono)}
+.r-val{font-size:28px;font-weight:800;color:var(--green);line-height:1;font-family:var(--mono);
+  font-variant-numeric:tabular-nums;letter-spacing:-0.03em}
+.r-sub{font-size:10px;color:var(--text-muted);margin-top:5px;display:flex;align-items:center;gap:5px;
+  font-family:var(--mono)}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
-.dot-green{background:#6EE7B7}
-.dot-yellow{background:#FACC15}
-.dot-red{background:#F87171}
-.dot-blue{background:#60A5FA}
-.r-gauge{height:4px;background:#1a1a1a;border-radius:2px;margin-top:8px;overflow:hidden}
-.r-gauge-fill{height:100%;border-radius:2px;transition:width .4s}
+.dot-green{background:var(--green);box-shadow:0 0 6px rgba(110,231,183,.4)}
+.dot-yellow{background:var(--yellow);box-shadow:0 0 6px rgba(250,204,21,.3)}
+.dot-red{background:var(--red);box-shadow:0 0 6px rgba(248,113,113,.3)}
+.dot-blue{background:var(--blue);box-shadow:0 0 6px rgba(96,165,250,.3)}
+.r-gauge{height:4px;background:rgba(255,255,255,.04);border-radius:2px;margin-top:8px;overflow:hidden}
+.r-gauge-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
-/* --- COUNTDOWN --- */
-.countdown-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.cd-num{font-size:36px;font-weight:800;color:#6EE7B7;line-height:1;flex-shrink:0;font-variant-numeric:tabular-nums}
+/* ═══ COUNTDOWN ═══ */
+.countdown-card{padding:18px;display:flex;align-items:center;gap:18px}
+.cd-num{font-size:44px;font-weight:800;color:var(--green);line-height:1;flex-shrink:0;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-0.04em}
 .cd-right{flex:1;min-width:0}
-.cd-label{font-size:11px;color:#888;font-weight:600;margin-bottom:6px}
-.cd-bar{height:5px;background:#1a1a1a;border-radius:3px;overflow:hidden}
-.cd-bar-fill{height:100%;background:linear-gradient(90deg,#6EE7B7,#34D399);border-radius:3px;transition:width .4s}
-.cd-date{font-size:10px;color:#444;margin-top:4px}
+.cd-label{font-size:11px;color:var(--text-dim);font-weight:600;margin-bottom:8px;font-family:var(--mono)}
+.cd-bar{height:5px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.cd-bar-fill{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));border-radius:3px;
+  transition:width .8s cubic-bezier(.4,0,.2,1)}
+.cd-date{font-size:10px;color:var(--text-muted);margin-top:5px;font-family:var(--mono)}
 
-/* --- WEEK STATS --- */
-.week-row{display:flex;gap:8px;margin-bottom:14px}
-.week-card{flex:1;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px;text-align:center;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.week-val{font-size:22px;font-weight:800;color:#6EE7B7;font-variant-numeric:tabular-nums}
-.week-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+/* ═══ WEEK STATS ═══ */
+.week-row{display:flex;gap:10px;margin-bottom:12px}
+.week-card{flex:1;text-align:center;padding:14px}
+.week-val{font-size:26px;font-weight:800;color:var(--green);font-family:var(--mono);
+  font-variant-numeric:tabular-nums;letter-spacing:-0.03em}
+.week-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;
+  margin-top:4px;font-family:var(--mono)}
 
-/* --- RECOMMENDATIONS --- */
-.recs{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.rec{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.45;color:#ccc;box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 12px 40px rgba(0,0,0,.45)}
-.rec-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+/* ═══ RECOMMENDATIONS ═══ */
+.recs{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.rec{padding:12px 14px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;color:#ccc}
+.rec-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;background:rgba(110,231,183,.06);border:1px solid rgba(110,231,183,.1)}
+.rec.warn .rec-icon{background:rgba(250,204,21,.06);border-color:rgba(250,204,21,.1)}
+.rec.bad .rec-icon{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.1)}
 
-/* --- LOADING --- */
-.loading{text-align:center;color:#333;font-size:12px;padding:24px 0}
+/* Loading */
+.loading{text-align:center;color:var(--text-muted);font-size:12px;padding:24px 0;font-family:var(--mono)}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
 .loading span{animation:pulse 1.2s ease-in-out infinite}
 
-/* --- FADE IN --- */
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.fade-in{animation:fadeUp .35s ease-out both}
-.fade-in:nth-child(2){animation-delay:.05s}
-.fade-in:nth-child(3){animation-delay:.1s}
-.fade-in:nth-child(4){animation-delay:.15s}
-.fade-in:nth-child(5){animation-delay:.2s}
+/* Fade in */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .4s cubic-bezier(.4,0,.2,1) both}
+.fade-in:nth-child(2){animation-delay:.06s}
+.fade-in:nth-child(3){animation-delay:.12s}
+.fade-in:nth-child(4){animation-delay:.18s}
+.fade-in:nth-child(5){animation-delay:.24s}
+.fade-in:nth-child(6){animation-delay:.30s}
 </style>
 </head>
 <body>
+<canvas id="bgCanvas"></canvas>
 
 <div id="app">
   <div class="loading"><span>Loading data...</span></div>
@@ -98,59 +150,101 @@ h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px
 <script>
 const SEWARD_DATE = new Date(2026, 6, 28);
 const START_DATE  = new Date(2026, 6, 9);
-const HRV_BASELINE = 55; // reasonable baseline for 19yo athlete; adjusts with cached avg
+const HRV_BASELINE = 55;
 
 let state = {};
 let garmin = null;
 
 function todayKey() { return new Date().toISOString().split('T')[0]; }
 
-// ---- DATA FETCHING ----
+/* ═══ BACKGROUND CANVAS: Sine wave field ═══ */
+(function() {
+  const cv = document.getElementById('bgCanvas');
+  const ctx = cv.getContext('2d');
+
+  function resize() {
+    cv.width = window.innerWidth;
+    cv.height = window.innerHeight;
+  }
+
+  function draw(t) {
+    const w = cv.width, h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Layered sine waves
+    for (let layer = 0; layer < 3; layer++) {
+      ctx.beginPath();
+      const baseY = h * (0.3 + layer * 0.2);
+      const amp = 30 + layer * 15;
+      const freq = 0.003 + layer * 0.001;
+      const speed = t * (0.0003 + layer * 0.0001);
+      const alpha = 0.03 - layer * 0.008;
+
+      for (let x = 0; x <= w; x += 2) {
+        const y = baseY + Math.sin(x * freq + speed) * amp
+                        + Math.sin(x * freq * 2.5 + speed * 1.3) * (amp * 0.3);
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+
+      ctx.strokeStyle = `rgba(110, 231, 183, ${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', resize);
+})();
+
+/* ═══ ANIMATED NUMBER ═══ */
+function animateNum(el, target, duration = 700) {
+  if (target == null || isNaN(target)) { el.textContent = '--'; return; }
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * e);
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ═══ DATA ═══ */
 async function init() {
-  // Load cached data immediately
   try {
     const cached = await window.Vitality.load();
-    if (cached && typeof cached === 'object' && !Array.isArray(cached)) {
-      state = cached;
-    }
+    if (cached && typeof cached === 'object' && !Array.isArray(cached)) state = cached;
   } catch(e) {}
 
-  // Render with cached data first
   if (state.garmin) { garmin = state.garmin; }
   render();
 
-  // Fetch fresh data
   try {
     const res = await fetch('/api/garmin-data');
     if (res.ok) {
       garmin = await res.json();
       state.garmin = garmin;
       state.lastFetch = Date.now();
-      // Cache HRV history for 7-day avg
       if (!state.hrvHistory) state.hrvHistory = {};
       if (garmin.hrv) state.hrvHistory[todayKey()] = garmin.hrv;
-      // Cache training log reference
       await window.Vitality.save(state);
       render();
     }
-  } catch(e) {
-    // Keep showing cached data
-  }
+  } catch(e) {}
 }
 
-// ---- COMPOSITE SCORE ----
+/* ═══ COMPUTE SCORE ═══ */
 function computeScore(g) {
   if (!g) return null;
   const bb = g.bodyBattery != null ? Math.min(100, Math.max(0, g.bodyBattery)) : null;
   const ss = g.sleepScore != null ? Math.min(100, Math.max(0, g.sleepScore)) : null;
-
-  // HRV relative to baseline
   const hrvAvg = getHrvAvg();
   const baseline = hrvAvg || HRV_BASELINE;
   const hrvRatio = g.hrv != null ? Math.min(1.3, Math.max(0.3, g.hrv / baseline)) : null;
-  const hrvScore = hrvRatio != null ? hrvRatio * 76.9 : null; // normalise so 1.0 ratio = ~77
-
-  // Stress inverse (0=no stress=100 score, 100=max stress=0 score)
+  const hrvScore = hrvRatio != null ? hrvRatio * 76.9 : null;
   const stressScore = g.avgStress != null ? Math.max(0, 100 - g.avgStress) : null;
 
   let total = 0, weight = 0;
@@ -167,31 +261,27 @@ function getHrvAvg() {
   if (!state.hrvHistory) return null;
   const keys = Object.keys(state.hrvHistory).sort().slice(-7);
   if (keys.length === 0) return null;
-  const sum = keys.reduce((a, k) => a + (state.hrvHistory[k] || 0), 0);
-  return Math.round(sum / keys.length);
+  return Math.round(keys.reduce((a, k) => a + (state.hrvHistory[k] || 0), 0) / keys.length);
 }
 
-// ---- ENERGY CURVE ----
+/* ═══ ENERGY CURVE ═══ */
 function getEnergyCurve(g) {
-  // Simulated energy curve based on body battery
   const bb = (g && g.bodyBattery != null) ? g.bodyBattery : 60;
   const peak = bb / 100;
-  // Hours 6-22 (6am to 10pm), index 0-16
   const curve = [];
   for (let h = 6; h <= 22; h++) {
     let e;
-    if (h <= 9)       e = peak * (0.7 + 0.3 * ((h - 6) / 3));          // morning rise
-    else if (h <= 11) e = peak;                                          // morning peak
-    else if (h <= 14) e = peak * (1 - 0.3 * ((h - 11) / 3));           // post-lunch dip
-    else if (h <= 17) e = peak * (0.75 + 0.15 * ((h - 14) / 3));       // afternoon rise
-    else              e = peak * (0.9 - 0.35 * ((h - 17) / 5));         // evening decline
+    if (h <= 9)       e = peak * (0.7 + 0.3 * ((h - 6) / 3));
+    else if (h <= 11) e = peak;
+    else if (h <= 14) e = peak * (1 - 0.3 * ((h - 11) / 3));
+    else if (h <= 17) e = peak * (0.75 + 0.15 * ((h - 14) / 3));
+    else              e = peak * (0.9 - 0.35 * ((h - 17) / 5));
     curve.push({ hour: h, energy: Math.max(0.1, Math.min(1, e)) });
   }
   return curve;
 }
 
 function getBestTrainWindow(curve) {
-  // Find 2-hour block with highest avg energy
   let bestIdx = 0, bestAvg = 0;
   for (let i = 0; i < curve.length - 1; i++) {
     const avg = (curve[i].energy + curve[i + 1].energy) / 2;
@@ -200,41 +290,39 @@ function getBestTrainWindow(curve) {
   return { start: curve[bestIdx].hour, end: curve[Math.min(bestIdx + 2, curve.length - 1)].hour };
 }
 
-// ---- RECOMMENDATIONS ----
+/* ═══ RECOMMENDATIONS ═══ */
 function getRecommendations(g) {
   const recs = [];
-  if (!g) return [{ icon: 'i', text: 'Connect Garmin to get personalized recommendations.' }];
+  if (!g) return [{ icon: 'i', cls: '', text: 'Connect Garmin to get personalized recommendations.' }];
 
   if (g.bodyBattery != null && g.bodyBattery < 30)
-    recs.push({ icon: '!', text: 'Take a rest day. Your body battery is depleted at ' + g.bodyBattery + '.' });
+    recs.push({ icon: '!', cls: 'bad', text: 'Take a rest day. Your body battery is depleted at ' + g.bodyBattery + '.' });
   if (g.sleepScore != null && g.sleepScore < 60)
-    recs.push({ icon: '!', text: 'Poor sleep last night (' + g.sleepScore + '/100). Prioritize a nap today.' });
+    recs.push({ icon: '!', cls: 'warn', text: 'Poor sleep last night (' + g.sleepScore + '/100). Prioritize a nap today.' });
 
   const hrvAvg = getHrvAvg();
   if (g.hrv != null && hrvAvg && g.hrv > hrvAvg * 1.1)
-    recs.push({ icon: '+', text: 'HRV is above your average. Great day for high intensity work.' });
+    recs.push({ icon: '+', cls: '', text: 'HRV is above your average. Great day for high intensity work.' });
   if (g.hrv != null && hrvAvg && g.hrv < hrvAvg * 0.8)
-    recs.push({ icon: '!', text: 'HRV is below baseline. Consider lighter training today.' });
+    recs.push({ icon: '!', cls: 'warn', text: 'HRV is below baseline. Consider lighter training today.' });
 
   if (g.avgStress != null && g.avgStress > 50)
-    recs.push({ icon: '~', text: 'Stress is elevated (' + g.avgStress + '). Consider breathwork before training.' });
+    recs.push({ icon: '~', cls: 'warn', text: 'Stress is elevated (' + g.avgStress + '). Consider breathwork before training.' });
 
   if (g.bodyBattery != null && g.bodyBattery >= 70 && g.sleepScore != null && g.sleepScore >= 75)
-    recs.push({ icon: '+', text: 'Battery and sleep are both strong. Push hard in today\'s session.' });
+    recs.push({ icon: '+', cls: '', text: 'Battery and sleep are both strong. Push hard in today\'s session.' });
 
   if (g.restingHR != null && g.restingHR > 65)
-    recs.push({ icon: 'i', text: 'Resting HR is ' + g.restingHR + ' bpm. Ensure hydration and recovery.' });
+    recs.push({ icon: 'i', cls: 'warn', text: 'Resting HR is ' + g.restingHR + ' bpm. Ensure hydration and recovery.' });
 
-  if (g.steps != null && g.stepGoal != null && g.steps < g.stepGoal * 0.3) {
-    recs.push({ icon: 'i', text: 'Low movement so far today. Get a walk in before your session.' });
-  }
+  if (g.steps != null && g.stepGoal != null && g.steps < g.stepGoal * 0.3)
+    recs.push({ icon: 'i', cls: '', text: 'Low movement so far today. Get a walk in before your session.' });
 
-  // Always return at least one
-  if (recs.length === 0) recs.push({ icon: '+', text: 'All systems nominal. Train as planned.' });
+  if (recs.length === 0) recs.push({ icon: '+', cls: '', text: 'All systems nominal. Train as planned.' });
   return recs.slice(0, 4);
 }
 
-// ---- TRAINING LOG STATS ----
+/* ═══ WEEK STATS ═══ */
 function getWeekStats() {
   if (!state.sessions) state.sessions = [];
   const now = new Date();
@@ -243,23 +331,133 @@ function getWeekStats() {
   monday.setHours(0,0,0,0);
   const weekSessions = state.sessions.filter(s => s.ts >= monday.getTime());
 
-  // Streak: consecutive days with at least 1 session
   let streak = 0;
   const d = new Date();
   d.setHours(0,0,0,0);
   while (true) {
     const dayKey = d.toISOString().split('T')[0];
-    const has = state.sessions.some(s => {
-      const sd = new Date(s.ts).toISOString().split('T')[0];
-      return sd === dayKey;
-    });
+    const has = state.sessions.some(s => new Date(s.ts).toISOString().split('T')[0] === dayKey);
     if (has) { streak++; d.setDate(d.getDate() - 1); }
     else break;
   }
   return { week: weekSessions.length, streak };
 }
 
-// ---- RENDER ----
+/* ═══ RENDER ENERGY CANVAS ═══ */
+function renderEnergyCanvas(curve, trainWindow) {
+  const cv = document.getElementById('energyCanvas');
+  if (!cv) return;
+  const rect = cv.parentElement.getBoundingClientRect();
+  const dpr = devicePixelRatio || 1;
+  cv.width = rect.width * dpr;
+  cv.height = 110 * dpr;
+  cv.style.width = rect.width + 'px';
+  cv.style.height = '110px';
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = rect.width, h = 110;
+  const padT = 10, padB = 6;
+  const plotH = h - padT - padB;
+
+  function hToX(hr) { return ((hr - 6) / 16) * w; }
+  function eToY(e) { return padT + plotH * (1 - e); }
+
+  // Animate drawing
+  let progress = 0;
+  const animStart = performance.now();
+
+  function draw(now) {
+    progress = Math.min((now - animStart) / 900, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const drawTo = Math.floor(curve.length * ease);
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Training window highlight
+    const twX1 = hToX(trainWindow.start), twX2 = hToX(trainWindow.end);
+    ctx.fillStyle = 'rgba(110, 231, 183, 0.05)';
+    ctx.fillRect(twX1, padT, twX2 - twX1, plotH);
+    ctx.strokeStyle = 'rgba(110, 231, 183, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeRect(twX1, padT, twX2 - twX1, plotH);
+    ctx.setLineDash([]);
+
+    // Fill under curve
+    if (drawTo > 1) {
+      ctx.beginPath();
+      ctx.moveTo(hToX(curve[0].hour), eToY(curve[0].energy));
+      for (let i = 1; i <= drawTo && i < curve.length; i++) {
+        const x = hToX(curve[i].hour), y = eToY(curve[i].energy);
+        ctx.lineTo(x, y);
+      }
+      const lastX = hToX(curve[Math.min(drawTo, curve.length - 1)].hour);
+      ctx.lineTo(lastX, padT + plotH);
+      ctx.lineTo(hToX(curve[0].hour), padT + plotH);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+      grad.addColorStop(0, 'rgba(110, 231, 183, 0.12)');
+      grad.addColorStop(1, 'rgba(110, 231, 183, 0.01)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Curve line
+    if (drawTo > 0) {
+      ctx.beginPath();
+      ctx.moveTo(hToX(curve[0].hour), eToY(curve[0].energy));
+      for (let i = 1; i <= drawTo && i < curve.length; i++) {
+        const x = hToX(curve[i].hour), y = eToY(curve[i].energy);
+        ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = '#6EE7B7';
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // Current time marker
+    const currentHour = new Date().getHours() + new Date().getMinutes() / 60;
+    if (currentHour >= 6 && currentHour <= 22 && progress > 0.5) {
+      const ctX = hToX(currentHour);
+      const markerAlpha = Math.min((progress - 0.5) / 0.3, 1);
+
+      ctx.beginPath();
+      ctx.moveTo(ctX, padT);
+      ctx.lineTo(ctX, padT + plotH);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.25 * markerAlpha})`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Find energy at current hour
+      const nearestPt = curve.reduce((best, p) =>
+        Math.abs(p.hour - currentHour) < Math.abs(best.hour - currentHour) ? p : best
+      );
+      const cy = eToY(nearestPt.energy);
+
+      // Glowing dot
+      const grad = ctx.createRadialGradient(ctX, cy, 0, ctX, cy, 12);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${0.6 * markerAlpha})`);
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(ctX - 12, cy - 12, 24, 24);
+
+      ctx.beginPath();
+      ctx.arc(ctX, cy, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${markerAlpha})`;
+      ctx.fill();
+    }
+
+    if (progress < 1) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+/* ═══ RENDER ═══ */
 function render() {
   const g = garmin;
   const score = computeScore(g);
@@ -269,14 +467,19 @@ function render() {
   const weekStats = getWeekStats();
   const hrvAvg = getHrvAvg();
 
-  // Verdict
+  // Verdict class
   let verdictClass = 'moderate', verdictLabel = 'MODERATE', verdictSub = 'Light session recommended';
   if (score != null) {
     if (score > 70) { verdictClass = 'peak'; verdictLabel = 'PEAK WINDOW'; verdictSub = 'Train hard now'; }
     else if (score < 40) { verdictClass = 'recover'; verdictLabel = 'RECOVER'; verdictSub = 'Rest or mobility only'; }
   }
 
-  // Sleep quality label
+  const scoreColor = verdictClass === 'peak' ? '#6EE7B7' : verdictClass === 'recover' ? '#F87171' : '#FACC15';
+  const scorePct = score != null ? score / 100 : 0;
+  const circumference = 2 * Math.PI * 58;
+  const dashOffset = circumference - (scorePct * circumference);
+
+  // Sleep
   let sleepLabel = '--', sleepDot = 'dot-yellow';
   if (g && g.sleepScore != null) {
     if (g.sleepScore >= 85) { sleepLabel = 'Excellent'; sleepDot = 'dot-green'; }
@@ -285,7 +488,7 @@ function render() {
     else { sleepLabel = 'Poor'; sleepDot = 'dot-red'; }
   }
 
-  // Stress label
+  // Stress
   let stressLabel = '--', stressDot = 'dot-yellow';
   if (g && g.avgStress != null) {
     if (g.avgStress <= 25) { stressLabel = 'Low'; stressDot = 'dot-green'; }
@@ -293,7 +496,7 @@ function render() {
     else { stressLabel = 'High'; stressDot = 'dot-red'; }
   }
 
-  // HRV status
+  // HRV
   let hrvStatus = '--';
   if (g && g.hrv != null && hrvAvg) {
     const diff = g.hrv - hrvAvg;
@@ -309,108 +512,75 @@ function render() {
   const elapsed = Math.max(0, Math.ceil((now - START_DATE) / (1000*60*60*24)));
   const cdPct = Math.max(0, Math.min(100, (elapsed / totalDays) * 100));
 
-  // Current hour for timeline
-  const currentHour = now.getHours() + now.getMinutes() / 60;
-
-  // Build timeline SVG
-  const svgW = 320, svgH = 90, padL = 0, padR = 0, padT = 8, padB = 18;
-  const plotW = svgW - padL - padR;
-  const plotH = svgH - padT - padB;
-
-  function hToX(h) { return padL + ((h - 6) / 16) * plotW; }
-  function eToY(e) { return padT + plotH * (1 - e); }
-
-  // Curve path
-  let pathD = '';
-  curve.forEach((p, i) => {
-    const x = hToX(p.hour), y = eToY(p.energy);
-    pathD += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
-  });
-
-  // Fill path (close to bottom)
-  let fillD = pathD + ' L' + hToX(22).toFixed(1) + ',' + (padT + plotH) + ' L' + hToX(6).toFixed(1) + ',' + (padT + plotH) + ' Z';
-
-  // Training window highlight
-  const twX1 = hToX(trainWindow.start), twX2 = hToX(trainWindow.end);
-
-  // Current time marker
-  const ctX = hToX(Math.max(6, Math.min(22, currentHour)));
-  const showMarker = currentHour >= 6 && currentHour <= 22;
-
-  // Train-before recommendation
-  const trainBefore = trainWindow.end > 12 ? trainWindow.end : trainWindow.end;
-  const tbHour = Math.floor(trainBefore);
-  const tbMin = Math.round((trainBefore - tbHour) * 60);
+  // Train window
+  const tbHour = Math.floor(trainWindow.end);
+  const tbMin = Math.round((trainWindow.end - tbHour) * 60);
   const tbStr = tbHour > 12 ? (tbHour - 12) + ':' + String(tbMin).padStart(2, '0') + ' PM'
     : tbHour + ':' + String(tbMin).padStart(2, '0') + ' AM';
 
-  // Rec icons
   const iconMap = { '!': '\u26A0', '+': '\u2714', 'i': '\u2139', '~': '\u223C' };
 
-  const html = `
-    <div class="verdict ${verdictClass} fade-in">
-      <div class="verdict-score">${score != null ? score : '--'}</div>
-      <div class="verdict-label">${verdictLabel}</div>
+  document.getElementById('app').innerHTML = `
+    <h1 class="fade-in">Peak</h1>
+    <p style="font-size:12px;color:var(--green);margin-bottom:16px;font-family:var(--mono)" class="fade-in">
+      Recovery readiness engine
+    </p>
+
+    <div class="card verdict ${verdictClass} fade-in">
+      <div class="verdict-score-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="verdict-ring-bg" cx="70" cy="70" r="58"/>
+          <circle class="verdict-ring-fg" cx="70" cy="70" r="58"
+            stroke="${scoreColor}" stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}"
+            transform="rotate(-90 70 70)"/>
+        </svg>
+        <div class="verdict-score">
+          <div class="verdict-num" id="scoreNum">${score != null ? score : '--'}</div>
+          <div class="verdict-label">${verdictLabel}</div>
+        </div>
+      </div>
       <div class="verdict-sub">${verdictSub}</div>
     </div>
 
-    <div class="section-title">Energy Timeline</div>
-    <div class="timeline-card fade-in">
+    <div class="section-title fade-in">Energy Timeline</div>
+    <div class="card timeline-card fade-in">
       <div class="timeline-header">
         <div class="timeline-title">Predicted Energy</div>
         <div class="timeline-rec">Train before ${tbStr}</div>
       </div>
-      <svg class="timeline-svg" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none">
-        <!-- Training window -->
-        <rect x="${twX1.toFixed(1)}" y="${padT}" width="${(twX2 - twX1).toFixed(1)}" height="${plotH}" rx="4"
-              fill="rgba(110,231,183,0.08)" />
-        <!-- Fill under curve -->
-        <path d="${fillD}" fill="url(#energyGrad)" opacity="0.3" />
-        <!-- Curve line -->
-        <path d="${pathD}" fill="none" stroke="#6EE7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        <!-- Current time -->
-        ${showMarker ? `<line x1="${ctX.toFixed(1)}" y1="${padT}" x2="${ctX.toFixed(1)}" y2="${padT + plotH}" stroke="#fff" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />
-        <circle cx="${ctX.toFixed(1)}" cy="${eToY(curve.find(c => c.hour === Math.round(Math.max(6, Math.min(22, currentHour))))?.energy || 0.5).toFixed(1)}" r="4" fill="#fff" />` : ''}
-        <!-- Gradient def -->
-        <defs>
-          <linearGradient id="energyGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#6EE7B7" />
-            <stop offset="100%" stop-color="transparent" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <canvas id="energyCanvas"></canvas>
       <div class="timeline-labels">
         <span>6AM</span><span>9AM</span><span>12PM</span><span>3PM</span><span>6PM</span><span>9PM</span>
       </div>
     </div>
 
-    <div class="section-title">Recovery Readiness</div>
+    <div class="section-title fade-in">Recovery Readiness</div>
     <div class="recovery-grid fade-in">
-      <div class="r-card">
+      <div class="card r-card">
         <div class="r-label">Sleep Quality</div>
-        <div class="r-val">${g && g.sleepScore != null ? g.sleepScore : '--'}</div>
+        <div class="r-val" id="sleepVal">${g && g.sleepScore != null ? g.sleepScore : '--'}</div>
         <div class="r-sub"><span class="dot ${sleepDot}"></span>${sleepLabel}</div>
       </div>
-      <div class="r-card">
+      <div class="card r-card">
         <div class="r-label">Body Battery</div>
-        <div class="r-val">${g && g.bodyBattery != null ? g.bodyBattery : '--'}</div>
-        <div class="r-gauge"><div class="r-gauge-fill" style="width:${g && g.bodyBattery != null ? g.bodyBattery : 0}%;background:${g && g.bodyBattery != null ? (g.bodyBattery >= 60 ? '#6EE7B7' : g.bodyBattery >= 30 ? '#FACC15' : '#F87171') : '#333'}"></div></div>
+        <div class="r-val" id="bbVal">${g && g.bodyBattery != null ? g.bodyBattery : '--'}</div>
+        <div class="r-gauge"><div class="r-gauge-fill" style="width:${g && g.bodyBattery != null ? g.bodyBattery : 0}%;background:${g && g.bodyBattery != null ? (g.bodyBattery >= 60 ? 'var(--green)' : g.bodyBattery >= 30 ? 'var(--yellow)' : 'var(--red)') : '#333'}"></div></div>
       </div>
-      <div class="r-card">
+      <div class="card r-card">
         <div class="r-label">HRV Status</div>
-        <div class="r-val">${g && g.hrv != null ? g.hrv : '--'}</div>
+        <div class="r-val" id="hrvVal">${g && g.hrv != null ? g.hrv : '--'}</div>
         <div class="r-sub"><span class="dot ${g && g.hrv != null && hrvAvg ? (g.hrv >= hrvAvg ? 'dot-green' : 'dot-yellow') : 'dot-blue'}"></span>${hrvStatus}</div>
       </div>
-      <div class="r-card">
+      <div class="card r-card">
         <div class="r-label">Stress Load</div>
-        <div class="r-val">${g && g.avgStress != null ? g.avgStress : '--'}</div>
+        <div class="r-val" id="stressVal">${g && g.avgStress != null ? g.avgStress : '--'}</div>
         <div class="r-sub"><span class="dot ${stressDot}"></span>${stressLabel}</div>
       </div>
     </div>
 
-    <div class="section-title">Countdown to Seward</div>
-    <div class="countdown-card fade-in">
-      <div class="cd-num">${daysLeft}</div>
+    <div class="section-title fade-in">Countdown to Seward</div>
+    <div class="card countdown-card fade-in">
+      <div class="cd-num" id="cdNum">${daysLeft}</div>
       <div class="cd-right">
         <div class="cd-label">days until July 28 report</div>
         <div class="cd-bar"><div class="cd-bar-fill" style="width:${cdPct.toFixed(1)}%"></div></div>
@@ -418,25 +588,31 @@ function render() {
       </div>
     </div>
 
-    <div class="section-title">This Week</div>
+    <div class="section-title fade-in">This Week</div>
     <div class="week-row fade-in">
-      <div class="week-card">
-        <div class="week-val">${weekStats.week}</div>
+      <div class="card week-card">
+        <div class="week-val" id="weekSessions">${weekStats.week}</div>
         <div class="week-lbl">Sessions</div>
       </div>
-      <div class="week-card">
-        <div class="week-val">${weekStats.streak}</div>
+      <div class="card week-card">
+        <div class="week-val" id="weekStreak">${weekStats.streak}</div>
         <div class="week-lbl">Day Streak</div>
       </div>
     </div>
 
-    <div class="section-title">Smart Recommendations</div>
+    <div class="section-title fade-in">Smart Recommendations</div>
     <div class="recs fade-in">
-      ${recs.map(r => `<div class="rec"><span class="rec-icon">${iconMap[r.icon] || r.icon}</span><span>${r.text}</span></div>`).join('')}
+      ${recs.map(r => `<div class="card rec ${r.cls || ''}"><span class="rec-icon">${iconMap[r.icon] || r.icon}</span><span>${r.text}</span></div>`).join('')}
     </div>
   `;
 
-  document.getElementById('app').innerHTML = html;
+  // Render energy canvas after DOM update
+  requestAnimationFrame(() => renderEnergyCanvas(curve, trainWindow));
+
+  // Animate numbers
+  setTimeout(() => {
+    if (score != null) animateNum(document.getElementById('scoreNum'), score);
+  }, 300);
 }
 
 init();

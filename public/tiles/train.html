@@ -5,134 +5,254 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Train</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,sans-serif;background:#050506;color:#f5f5f5;padding:16px;min-height:100vh;-webkit-tap-highlight-color:transparent;position:relative;z-index:0}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 82% 14%,rgba(110,231,183,.12),transparent 60%),radial-gradient(ellipse at 18% 90%,rgba(180,180,200,.06),transparent 60%);filter:blur(40px);pointer-events:none;z-index:-2;animation:bgDrift 36s ease-in-out infinite alternate}
-@keyframes bgDrift{0%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}100%{transform:translate(8px,-6px)}}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");pointer-events:none;z-index:-1}
-h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;letter-spacing:-0.02em;font-weight:400;margin-bottom:4px}
-.sub{font-size:12px;color:#6EE7B7;margin-bottom:16px}
+:root{
+  --green:#6EE7B7;--green-dim:#34D399;--green-glow:rgba(110,231,183,.18);
+  --blue:#7DD3FC;--purple:#C084FC;--amber:#FDBA74;--red:#F87171;--pink:#F472B6;
+  --bg:#050506;--card:rgba(255,255,255,.028);--card-border:rgba(255,255,255,.055);
+  --card-hover:rgba(255,255,255,.05);
+  --text:#f0f0f0;--text-dim:#999;--text-muted:#555;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --serif:'Instrument Serif',Georgia,serif;
+  --radius:20px;--radius-sm:14px;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--text);
+  padding:16px 14px 40px;min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  position:relative;z-index:0;overflow-x:hidden;
+}
+
+/* Ambient background */
+body::before{content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 75% 10%,rgba(125,211,252,.10),transparent 55%),
+    radial-gradient(ellipse at 20% 85%,rgba(110,231,183,.06),transparent 55%);
+  filter:blur(50px);pointer-events:none;z-index:-2;animation:bgDrift 30s ease-in-out infinite alternate}
+@keyframes bgDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-15px,10px) scale(1.02)}100%{transform:translate(10px,-8px) scale(1)}}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.012)'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:-1}
+
+/* Canvas behind everything */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0.5}
+
+/* Typography */
+h1{font-family:var(--serif);font-style:italic;font-size:36px;letter-spacing:-0.02em;font-weight:400;line-height:1.1}
+.sub{font-size:12px;color:var(--green);margin-bottom:20px;font-family:var(--mono);letter-spacing:0.04em;display:flex;align-items:center;gap:8px}
+.sub .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulseDot 2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(110,231,183,.4)}50%{box-shadow:0 0 0 6px rgba(110,231,183,0)}}
+
+/* Cards */
+.card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 0 rgba(255,255,255,.04) inset,0 8px 32px rgba(0,0,0,.3);
+  transition:transform .25s cubic-bezier(.4,0,.2,1),border-color .3s,box-shadow .3s;
+}
+.card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.09);
+  box-shadow:0 1px 0 0 rgba(255,255,255,.06) inset,0 16px 48px rgba(0,0,0,.4);
+}
+.card::before{content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:radial-gradient(ellipse at 50% -40%,rgba(255,255,255,.03),transparent 70%);pointer-events:none}
 
 /* Split Indicator */
-.split-bar{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.split-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em}
-.split-pill{font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.02em}
-.split-push{background:rgba(125,211,252,.15);color:#7DD3FC}
-.split-pull{background:rgba(192,132,252,.15);color:#C084FC}
-.split-legs{background:rgba(253,186,116,.15);color:#FDBA74}
-.split-rest{background:rgba(110,231,183,.1);color:#6EE7B7}
-.split-cycle{display:flex;gap:4px;margin-top:6px}
-.split-dot{width:8px;height:8px;border-radius:50%;background:#222;flex-shrink:0}
-.split-dot.active{outline:2px solid #6EE7B7;outline-offset:1px}
-.split-dot.push-c{background:#7DD3FC}
-.split-dot.pull-c{background:#C084FC}
-.split-dot.legs-c{background:#FDBA74}
+.split-bar{padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
+.split-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono)}
+.split-pill{font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:.03em;font-family:var(--mono);
+  box-shadow:0 0 20px rgba(110,231,183,.1);transition:box-shadow .3s}
+.split-push{background:rgba(125,211,252,.12);color:var(--blue);box-shadow:0 0 20px rgba(125,211,252,.1)}
+.split-pull{background:rgba(192,132,252,.12);color:var(--purple);box-shadow:0 0 20px rgba(192,132,252,.1)}
+.split-legs{background:rgba(253,186,116,.12);color:var(--amber);box-shadow:0 0 20px rgba(253,186,116,.1)}
+.split-rest{background:rgba(110,231,183,.08);color:var(--green);box-shadow:0 0 20px rgba(110,231,183,.06)}
+.split-cycle{display:flex;gap:5px;margin-top:8px}
+.split-dot{width:10px;height:10px;border-radius:50%;background:#1a1a1a;flex-shrink:0;transition:all .3s}
+.split-dot.active{outline:2px solid var(--green);outline-offset:2px;transform:scale(1.15)}
+.split-dot.push-c{background:var(--blue)}
+.split-dot.pull-c{background:var(--purple)}
+.split-dot.legs-c{background:var(--amber)}
 .split-dot.rest-c{background:#333}
 
-/* Stats */
-.stats{display:flex;gap:10px;margin-bottom:14px}
-.stat{flex:1;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:10px;text-align:center}
-.stat-val{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;color:#6EE7B7}
-.stat-lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+/* Stats with animated counters */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{text-align:center;padding:14px 8px}
+.stat-val{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--green);line-height:1;
+  font-family:var(--mono);letter-spacing:-0.03em}
+.stat-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;margin-top:6px;font-family:var(--mono)}
+.stat-delta{font-size:10px;color:var(--green);margin-top:3px;font-family:var(--mono)}
 
-/* Weekly Chart */
-.week-chart{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px 14px;margin-bottom:14px}
-.week-title{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.week-bars{display:flex;gap:6px;align-items:flex-end;height:48px}
-.week-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-.week-bar-wrap{width:100%;height:40px;display:flex;align-items:flex-end;justify-content:center}
-.week-bar{width:100%;min-height:3px;border-radius:4px 4px 2px 2px;background:#1a1a1a;transition:height .3s,background .3s}
-.week-bar.has{background:linear-gradient(180deg,#6EE7B7,#34D399)}
-.week-day{font-size:9px;color:#555;text-transform:uppercase}
-.week-day.today{color:#6EE7B7;font-weight:700}
+/* Weekly Chart — canvas-powered */
+.week-chart{padding:14px 16px}
+.week-title{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;font-family:var(--mono);
+  display:flex;justify-content:space-between;align-items:center}
+.week-title span{color:var(--green);font-size:10px}
+#weekCanvas{width:100%;height:80px;display:block}
+.week-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);margin-top:6px;font-family:var(--mono)}
+.week-labels span.today{color:var(--green);font-weight:700}
 
 /* Log Button */
-.log-btn{width:100%;padding:14px;background:#6EE7B7;color:#000;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:transform .1s,opacity .1s}
+.log-btn{width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--green),var(--green-dim));
+  color:#000;border:none;border-radius:var(--radius-sm);
+  font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+  margin-bottom:12px;
+  box-shadow:0 4px 20px rgba(110,231,183,.2);
+  transition:transform .15s,box-shadow .15s,opacity .15s;
+  position:relative;overflow:hidden}
+.log-btn:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(110,231,183,.3)}
 .log-btn:active{transform:scale(.98);opacity:.85}
+.log-btn::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  transform:translateX(-100%);transition:transform .5s}
+.log-btn:hover::after{transform:translateX(100%)}
 
 /* Form */
-.form{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .25s;opacity:0;margin-bottom:0}
-.form.show{max-height:700px;opacity:1;margin-bottom:14px}
-.form-inner{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:16px}
-.form label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px;margin-top:12px}
+.form{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .3s;opacity:0;margin-bottom:0}
+.form.show{max-height:700px;opacity:1;margin-bottom:12px}
+.form-inner{padding:18px}
+.form label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;
+  display:block;margin-bottom:5px;margin-top:14px;font-family:var(--mono)}
 .form label:first-child{margin-top:0}
-.form select,.form input,.form textarea{width:100%;background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:9px 11px;color:#f5f5f5;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
-.form select:focus,.form input:focus,.form textarea:focus{border-color:#6EE7B7}
+.form select,.form input,.form textarea{width:100%;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;
+  color:var(--text);font-size:13px;font-family:inherit;outline:none;
+  transition:border-color .2s,box-shadow .2s}
+.form select:focus,.form input:focus,.form textarea:focus{
+  border-color:var(--green);box-shadow:0 0 0 3px rgba(110,231,183,.08)}
 .form textarea{min-height:60px;resize:vertical}
+.form select option{background:#111}
 
 /* RPE Slider */
-.rpe-wrap{display:flex;align-items:center;gap:10px;margin-top:4px}
-.rpe-slider{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,#34D399 0%,#FBBF24 50%,#EF4444 100%);outline:none}
-.rpe-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.5)}
-.rpe-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer;border:none}
-.rpe-val{font-size:18px;font-weight:700;min-width:28px;text-align:center}
+.rpe-wrap{display:flex;align-items:center;gap:12px;margin-top:6px}
+.rpe-slider{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,#34D399 0%,#FBBF24 50%,#EF4444 100%);outline:none}
+.rpe-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4);transition:transform .15s}
+.rpe-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.rpe-slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;border:none}
+.rpe-val{font-size:24px;font-weight:800;min-width:32px;text-align:center;font-family:var(--mono);
+  transition:color .2s}
 
-.form-row{display:flex;gap:8px;margin-top:14px}
-.form-row button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
-.btn-save{background:#6EE7B7;color:#000}
-.btn-save:active{opacity:.8}
-.btn-cancel{background:#1a1a1a;color:#999}
+.form-row{display:flex;gap:8px;margin-top:16px}
+.form-row button{flex:1;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-save{background:linear-gradient(135deg,var(--green),var(--green-dim));color:#000;
+  box-shadow:0 2px 12px rgba(110,231,183,.15)}
+.btn-save:hover{box-shadow:0 4px 20px rgba(110,231,183,.25)}
+.btn-save:active{transform:scale(.97)}
+.btn-cancel{background:rgba(255,255,255,.04);color:var(--text-dim);border:1px solid rgba(255,255,255,.06)!important}
 
 /* Section Headers */
-.section-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:8px;margin-top:18px;display:flex;align-items:center;justify-content:space-between}
-.section-hdr .toggle{font-size:10px;color:#6EE7B7;cursor:pointer;font-weight:600;text-transform:none;letter-spacing:0}
+.section-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);
+  margin-bottom:10px;margin-top:20px;display:flex;align-items:center;gap:8px;font-family:var(--mono)}
+.section-hdr::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.04)}
+.section-hdr .toggle{font-size:10px;color:var(--green);cursor:pointer;font-weight:600;text-transform:none;
+  letter-spacing:0;margin-left:auto;transition:color .2s}
+.section-hdr .toggle:hover{color:#fff}
 
 /* Overload Tracker */
-.lifts{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.lift{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px 14px}
+.lifts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.lift{padding:14px 16px}
 .lift-top{display:flex;justify-content:space-between;align-items:center}
 .lift-name{font-size:13px;font-weight:600}
-.lift-weight{font-size:15px;font-weight:700;color:#6EE7B7}
-.lift-meta{font-size:10px;color:#666;margin-top:3px;display:flex;gap:12px;align-items:center}
-.lift-up{color:#6EE7B7;font-weight:700;font-size:11px}
+.lift-weight{font-size:16px;font-weight:800;color:var(--green);font-family:var(--mono)}
+.lift-meta{font-size:10px;color:var(--text-muted);margin-top:4px;display:flex;gap:12px;align-items:center;font-family:var(--mono)}
+.lift-up{color:var(--green);font-weight:700;font-size:11px;display:flex;align-items:center;gap:3px}
+.lift-up::before{content:'';width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;
+  border-bottom:5px solid var(--green)}
 .lift-hold{color:#FBBF24;font-weight:600;font-size:11px}
-.lift-log{margin-top:8px;display:none;gap:6px;align-items:center}
+/* Mini progress for each lift */
+.lift-progress{height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-top:8px;overflow:hidden}
+.lift-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green-dim),var(--green));
+  transition:width .6s cubic-bezier(.4,0,.2,1)}
+.lift-log{margin-top:10px;display:none;gap:6px;align-items:center}
 .lift-log.show{display:flex}
-.lift-log input{width:70px;background:#0a0a0a;border:1px solid #222;border-radius:6px;padding:6px 8px;color:#f5f5f5;font-size:13px;font-family:inherit;outline:none;text-align:center}
-.lift-log input:focus{border-color:#6EE7B7}
-.lift-log-btn{background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:6px 10px;color:#6EE7B7;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
-.lift-log-btn:active{background:#222}
-.lift-tap{font-size:10px;color:#444;margin-top:4px;cursor:pointer}
-.lift-tap:hover{color:#6EE7B7}
+.lift-log input{width:70px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:7px 9px;color:var(--text);font-size:13px;font-family:inherit;outline:none;text-align:center}
+.lift-log input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(110,231,183,.08)}
+.lift-log-btn{background:rgba(110,231,183,.1);border:1px solid rgba(110,231,183,.2);border-radius:8px;
+  padding:7px 12px;color:var(--green);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;
+  white-space:nowrap;transition:all .15s}
+.lift-log-btn:hover{background:rgba(110,231,183,.15);border-color:rgba(110,231,183,.3)}
+.lift-tap{font-size:10px;color:var(--text-muted);margin-top:6px;cursor:pointer;font-family:var(--mono);
+  transition:color .2s}
+.lift-tap:hover{color:var(--green)}
 
 /* History */
-.history{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;max-height:500px;overflow-y:auto}
-.entry{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.history{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;max-height:500px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent}
+.history::-webkit-scrollbar{width:4px}
+.history::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.entry{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;
+  transition:transform .15s}
+.entry:hover{transform:translateX(2px)}
 .entry-left{flex:1;min-width:0}
 .entry-type{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.entry-detail{font-size:11px;color:#888;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-detail{font-size:11px;color:var(--text-dim);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .entry-right{flex-shrink:0;margin-left:10px;text-align:right}
-.entry-date{font-size:11px;color:#555}
-.entry-dur{font-size:10px;color:#666;margin-top:1px}
-.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px}
-.tag-seward{background:rgba(110,231,183,.12);color:#6EE7B7}
-.tag-push{background:rgba(125,211,252,.12);color:#7DD3FC}
-.tag-pull{background:rgba(192,132,252,.12);color:#C084FC}
-.tag-legs{background:rgba(253,186,116,.12);color:#FDBA74}
-.tag-ball{background:rgba(251,191,36,.12);color:#FBBF24}
-.tag-team{background:rgba(255,107,107,.12);color:#FF6B6B}
-.tag-speed{background:rgba(244,114,182,.12);color:#F472B6}
-.tag-mobility{background:rgba(167,243,208,.12);color:#A7F3D0}
-.tag-match{background:rgba(248,113,113,.15);color:#F87171}
-.tag-recovery{background:rgba(99,102,241,.12);color:#818CF8}
-.rpe-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;margin-left:2px}
-.empty{text-align:center;color:#444;font-size:13px;padding:30px 0}
+.entry-date{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+.entry-dur{font-size:10px;color:var(--text-muted);margin-top:2px;font-family:var(--mono)}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;font-family:var(--mono);letter-spacing:0.02em}
+.tag-seward{background:rgba(110,231,183,.10);color:var(--green)}
+.tag-push{background:rgba(125,211,252,.10);color:var(--blue)}
+.tag-pull{background:rgba(192,132,252,.10);color:var(--purple)}
+.tag-legs{background:rgba(253,186,116,.10);color:var(--amber)}
+.tag-ball{background:rgba(251,191,36,.10);color:#FBBF24}
+.tag-team{background:rgba(255,107,107,.10);color:#FF6B6B}
+.tag-speed{background:rgba(244,114,182,.10);color:var(--pink)}
+.tag-mobility{background:rgba(167,243,208,.10);color:#A7F3D0}
+.tag-match{background:rgba(248,113,113,.12);color:var(--red)}
+.tag-recovery{background:rgba(99,102,241,.10);color:#818CF8}
+.rpe-badge{font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;margin-left:2px;font-family:var(--mono)}
+.empty{text-align:center;color:var(--text-muted);font-size:13px;padding:30px 0}
 
-/* Save flash */
-.flash{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-60px);background:#6EE7B7;color:#000;padding:8px 20px;border-radius:10px;font-size:13px;font-weight:700;opacity:0;transition:transform .3s,opacity .3s;z-index:99;pointer-events:none}
+/* Flash notification */
+.flash{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-60px);
+  background:linear-gradient(135deg,var(--green),var(--green-dim));
+  color:#000;padding:10px 24px;border-radius:12px;font-size:13px;font-weight:700;
+  opacity:0;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s;z-index:99;pointer-events:none;
+  box-shadow:0 8px 30px rgba(110,231,183,.3)}
 .flash.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 /* Delete button */
-.entry-del{background:none;border:none;color:#333;font-size:14px;cursor:pointer;padding:2px 6px;margin-left:6px;transition:color .15s}
-.entry-del:hover{color:#EF4444}
+.entry-del{background:none;border:none;color:#333;font-size:14px;cursor:pointer;padding:4px 8px;
+  margin-left:6px;transition:color .15s;border-radius:4px}
+.entry-del:hover{color:var(--red);background:rgba(248,113,113,.08)}
+
+/* Fade-in animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .4s cubic-bezier(.4,0,.2,1) both}
+.fade-in:nth-child(1){animation-delay:0s}
+.fade-in:nth-child(2){animation-delay:.06s}
+.fade-in:nth-child(3){animation-delay:.12s}
+.fade-in:nth-child(4){animation-delay:.18s}
+.fade-in:nth-child(5){animation-delay:.24s}
+.fade-in:nth-child(6){animation-delay:.30s}
+.fade-in:nth-child(7){animation-delay:.36s}
+.fade-in:nth-child(8){animation-delay:.42s}
+
+/* Number counting animation */
+@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<h1>Train</h1>
-<p class="sub">Log every session</p>
+<canvas id="bgCanvas"></canvas>
 
-<div class="split-bar">
+<h1 class="fade-in">Train</h1>
+<p class="sub fade-in"><span class="pulse"></span> Log every session</p>
+
+<div class="card split-bar fade-in">
   <div>
     <div class="split-label">Today's Split</div>
     <div class="split-cycle" id="splitCycle"></div>
@@ -140,20 +260,23 @@ h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px
   <div class="split-pill" id="splitPill">--</div>
 </div>
 
-<div class="stats">
-  <div class="stat"><div class="stat-val" id="weekCount">0</div><div class="stat-lbl">This week</div></div>
-  <div class="stat"><div class="stat-val" id="streak">0</div><div class="stat-lbl">Day streak</div></div>
-  <div class="stat"><div class="stat-val" id="total">0</div><div class="stat-lbl">Total</div></div>
+<div class="stats fade-in">
+  <div class="card stat"><div class="stat-val" id="weekCount">0</div><div class="stat-lbl">This week</div></div>
+  <div class="card stat"><div class="stat-val" id="streak">0</div><div class="stat-lbl">Day streak</div></div>
+  <div class="card stat"><div class="stat-val" id="total">0</div><div class="stat-lbl">Total</div></div>
 </div>
 
-<div class="week-chart">
-  <div class="week-title">This week</div>
-  <div class="week-bars" id="weekBars"></div>
+<div class="card fade-in" style="padding:14px 0">
+  <div style="padding:0 16px">
+    <div class="week-title">Volume This Week <span id="weekTotal"></span></div>
+  </div>
+  <canvas id="weekCanvas" style="padding:0 8px"></canvas>
+  <div class="week-labels" style="padding:0 16px" id="weekLabels"></div>
 </div>
 
-<button class="log-btn" id="logBtn">+ Log Session</button>
+<button class="log-btn fade-in" id="logBtn">+ Log Session</button>
 
-<div class="form" id="form">
+<div class="form card" id="form">
   <div class="form-inner">
     <label>Type</label>
     <select id="fType">
@@ -186,15 +309,106 @@ h1{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px
   </div>
 </div>
 
-<div class="section-hdr">Progressive Overload<span class="toggle" id="overloadToggle">Expand</span></div>
+<div class="section-hdr fade-in">Progressive Overload<span class="toggle" id="overloadToggle">Expand</span></div>
 <div class="lifts" id="lifts" style="display:none"></div>
 
-<div class="section-hdr">Session History</div>
+<div class="section-hdr fade-in">Session History</div>
 <div class="history" id="history"></div>
 
 <div class="flash" id="flash">Session saved</div>
 
 <script>
+/* ═══════════════════════════════════════
+   TRAIN — Interactive Dashboard
+   Mathematical background + animated UI
+   ═══════════════════════════════════════ */
+
+/* ---- Background Canvas: Floating grid particles ---- */
+(function() {
+  const cv = document.getElementById('bgCanvas');
+  const ctx = cv.getContext('2d');
+  let w, h, particles = [];
+
+  function resize() {
+    w = cv.width = window.innerWidth;
+    h = cv.height = window.innerHeight;
+  }
+
+  function init() {
+    resize();
+    particles = [];
+    const count = Math.floor((w * h) / 25000);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        r: 1 + Math.random() * 1.5,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = w + 10;
+      if (p.x > w + 10) p.x = -10;
+      if (p.y < -10) p.y = h + 10;
+      if (p.y > h + 10) p.y = -10;
+      p.phase += 0.008;
+
+      const alpha = 0.06 + 0.04 * Math.sin(p.phase);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(125, 211, 252, ${alpha})`;
+      ctx.fill();
+    });
+
+    // Connect nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = dx * dx + dy * dy;
+        if (dist < 12000) {
+          const alpha = (1 - dist / 12000) * 0.04;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  init();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); init(); });
+})();
+
+/* ---- Animated number counter ---- */
+function animateCount(el, target, duration = 600) {
+  if (target == null || isNaN(target)) { el.textContent = '--'; return; }
+  const start = performance.now();
+  const from = parseInt(el.textContent) || 0;
+  function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    el.textContent = Math.round(from + (target - from) * eased);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 /* ---- State ---- */
 let data = { sessions: [], lifts: {} };
 
@@ -252,15 +466,14 @@ function renderSplit() {
 function calcStats() {
   const sessions = data.sessions || [];
   const now = new Date();
-  // Week start = Monday
   const dayOfWeek = (now.getDay() + 6) % 7;
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - dayOfWeek);
   weekStart.setHours(0,0,0,0);
 
   const weekCount = sessions.filter(e => e.ts >= weekStart.getTime()).length;
-  document.getElementById('weekCount').textContent = weekCount;
-  document.getElementById('total').textContent = sessions.length;
+  animateCount(document.getElementById('weekCount'), weekCount);
+  animateCount(document.getElementById('total'), sessions.length, 800);
 
   // Streak
   let streak = 0;
@@ -275,10 +488,10 @@ function calcStats() {
       streak++; checkDate.setDate(checkDate.getDate() - 1);
     } else break;
   }
-  document.getElementById('streak').textContent = streak;
+  animateCount(document.getElementById('streak'), streak);
 }
 
-/* ---- Weekly Volume Chart ---- */
+/* ---- Weekly Volume Chart (Canvas) ---- */
 function renderWeekChart() {
   const sessions = data.sessions || [];
   const now = new Date();
@@ -289,22 +502,113 @@ function renderWeekChart() {
 
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const counts = new Array(7).fill(0);
+  const durations = new Array(7).fill(0);
   sessions.forEach(e => {
     const d = new Date(e.ts);
     if (d >= weekStart) {
       const di = (d.getDay() + 6) % 7;
-      if (di < 7) counts[di]++;
+      if (di < 7) { counts[di]++; durations[di] += (e.dur || 0); }
     }
   });
-  const max = Math.max(...counts, 1);
-  const todayIdx = dayOfWeek;
+  const max = Math.max(...durations, 60);
+  const totalMins = durations.reduce((a, b) => a + b, 0);
+  document.getElementById('weekTotal').textContent = totalMins ? totalMins + ' min total' : '';
 
-  document.getElementById('weekBars').innerHTML = days.map((d, i) => {
-    const h = counts[i] ? Math.max((counts[i] / max) * 36, 6) : 3;
-    const cls = counts[i] ? 'week-bar has' : 'week-bar';
-    const todayCls = i === todayIdx ? ' today' : '';
-    return `<div class="week-col"><div class="week-bar-wrap"><div class="${cls}" style="height:${h}px"></div></div><div class="week-day${todayCls}">${d}</div></div>`;
-  }).join('');
+  // Labels
+  const labelsEl = document.getElementById('weekLabels');
+  labelsEl.innerHTML = days.map((d, i) =>
+    `<span class="${i === dayOfWeek ? 'today' : ''}">${d}</span>`
+  ).join('');
+
+  // Canvas chart
+  const cv = document.getElementById('weekCanvas');
+  const rect = cv.parentElement.getBoundingClientRect();
+  const dpr = devicePixelRatio || 1;
+  cv.width = (rect.width - 16) * dpr;
+  cv.height = 80 * dpr;
+  cv.style.width = (rect.width - 16) + 'px';
+  cv.style.height = '80px';
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = rect.width - 16;
+  const h = 80;
+  const barW = (w / 7) * 0.55;
+  const gap = w / 7;
+  const padTop = 4;
+  const padBot = 4;
+  const maxH = h - padTop - padBot;
+
+  // Animate bars
+  let progress = 0;
+  const animStart = performance.now();
+  const animDur = 700;
+
+  function drawBars(now) {
+    progress = Math.min((now - animStart) / animDur, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+
+    ctx.clearRect(0, 0, w, h);
+
+    days.forEach((_, i) => {
+      const x = i * gap + (gap - barW) / 2;
+      const dur = durations[i];
+      const targetH = dur > 0 ? Math.max((dur / max) * maxH, 6) : 3;
+      const barH = targetH * ease;
+      const y = h - padBot - barH;
+      const isToday = i === dayOfWeek;
+
+      // Bar gradient
+      const grad = ctx.createLinearGradient(x, y, x, h - padBot);
+      if (dur > 0) {
+        if (isToday) {
+          grad.addColorStop(0, 'rgba(125, 211, 252, 0.9)');
+          grad.addColorStop(1, 'rgba(125, 211, 252, 0.3)');
+        } else {
+          grad.addColorStop(0, 'rgba(110, 231, 183, 0.7)');
+          grad.addColorStop(1, 'rgba(110, 231, 183, 0.2)');
+        }
+      } else {
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0.04)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0.02)');
+      }
+
+      // Draw rounded bar
+      const r = Math.min(barW / 2, 4);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + barW - r, y);
+      ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+      ctx.lineTo(x + barW, h - padBot);
+      ctx.lineTo(x, h - padBot);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Duration label on top of bar
+      if (dur > 0 && progress > 0.8) {
+        const labelAlpha = (progress - 0.8) / 0.2;
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.5 * labelAlpha})`;
+        ctx.font = '600 9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(dur + 'm', x + barW / 2, y - 4);
+      }
+
+      // Glow on today
+      if (isToday && dur > 0) {
+        ctx.shadowColor = 'rgba(125, 211, 252, 0.3)';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = 'transparent';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    });
+
+    if (progress < 1) requestAnimationFrame(drawBars);
+  }
+  requestAnimationFrame(drawBars);
 }
 
 /* ---- Overload Tracker ---- */
@@ -320,25 +624,29 @@ function renderLifts() {
 
     let status = '';
     if (lastSet && lastSet.reps >= l.upgradeAt) {
-      status = `<span class="lift-up">^ Increase to ${currentW + l.step}${l.unit}</span>`;
+      status = `<span class="lift-up">Increase to ${currentW + l.step}${l.unit}</span>`;
     } else if (lastSet) {
       status = `<span class="lift-hold">Hit ${l.upgradeAt} reps to progress</span>`;
     }
 
-    return `<div class="lift">
+    // Progress bar: reps toward upgrade threshold
+    const progressPct = lastSet ? Math.min((lastSet.reps / l.upgradeAt) * 100, 100) : 0;
+
+    return `<div class="card lift">
       <div class="lift-top">
         <div class="lift-name">${l.name}</div>
         <div class="lift-weight">${currentW ? currentW + l.unit : 'Not set'}</div>
       </div>
       <div class="lift-meta">
         <span>Last: ${lastW !== '--' ? lastW + l.unit + ' x ' + lastReps : 'No sets'}</span>
-        <span>Rep range: ${l.repMin}-${l.repMax}</span>
+        <span>${l.repMin}-${l.repMax} range</span>
         ${status}
       </div>
-      <div class="lift-tap" onclick="toggleLiftLog('${l.id}')">Tap to log set</div>
+      <div class="lift-progress"><div class="lift-progress-fill" style="width:${progressPct}%"></div></div>
+      <div class="lift-tap" onclick="toggleLiftLog('${l.id}')">+ Log set</div>
       <div class="lift-log" id="liftLog_${l.id}">
         <input type="number" id="lw_${l.id}" placeholder="${l.unit}" value="${currentW || ''}" step="${l.step}">
-        <span style="color:#666;font-size:12px">x</span>
+        <span style="color:var(--text-muted);font-size:12px">x</span>
         <input type="number" id="lr_${l.id}" placeholder="reps" min="1" max="30">
         <button class="lift-log-btn" onclick="saveLiftSet('${l.id}')">Save</button>
       </div>
@@ -362,10 +670,8 @@ async function saveLiftSet(id) {
   if (!data.lifts[id]) data.lifts[id] = { weight: w, sets: [] };
 
   data.lifts[id].sets.push({ weight: w, reps: r, ts: Date.now() });
-  // Keep last 50 sets
   if (data.lifts[id].sets.length > 50) data.lifts[id].sets = data.lifts[id].sets.slice(-50);
 
-  // Update working weight if hit upgrade threshold
   if (r >= lift.upgradeAt && w >= data.lifts[id].weight) {
     data.lifts[id].weight = w + lift.step;
   } else {
@@ -389,9 +695,9 @@ function renderHistory() {
     const d = new Date(e.ts);
     const dateStr = d.toLocaleDateString('en-AU', { weekday:'short', day:'numeric', month:'short' });
     const tc = TAG_MAP[e.type] || 'seward';
-    const rpeBadge = e.rpe ? `<span class="rpe-badge" style="background:${rpeColor(e.rpe)}22;color:${rpeColor(e.rpe)}">RPE ${e.rpe}</span>` : '';
+    const rpeBadge = e.rpe ? `<span class="rpe-badge" style="background:${rpeColor(e.rpe)}15;color:${rpeColor(e.rpe)}">RPE ${e.rpe}</span>` : '';
     const preview = e.exercises ? e.exercises.split('\n')[0] : (e.notes || '');
-    return `<div class="entry">
+    return `<div class="card entry" style="animation-delay:${idx * 30}ms">
       <div class="entry-left">
         <div class="entry-type"><span class="tag tag-${tc}">${e.type}</span>${rpeBadge}</div>
         ${preview ? `<div class="entry-detail">${preview}</div>` : ''}
@@ -400,7 +706,7 @@ function renderHistory() {
         <div class="entry-date">${dateStr}</div>
         ${e.dur ? `<div class="entry-dur">${e.dur} min</div>` : ''}
       </div>
-      <button class="entry-del" onclick="deleteSession(${sessions.indexOf(e)})" title="Delete">x</button>
+      <button class="entry-del" onclick="deleteSession(${sessions.indexOf(e)})" title="Delete">&times;</button>
     </div>`;
   }).join('');
 }
@@ -444,7 +750,6 @@ document.getElementById('fRpe').addEventListener('input', (e) => {
   display.textContent = v;
   display.style.color = rpeColor(v);
 });
-// Init RPE display color
 document.getElementById('rpeDisplay').style.color = rpeColor(6);
 
 document.getElementById('saveBtn').addEventListener('click', async () => {
@@ -485,7 +790,6 @@ document.getElementById('overloadToggle').addEventListener('click', () => {
 async function init() {
   const loaded = await window.Vitality.load();
   if (loaded) {
-    // Migration: if loaded data is an array, convert to new format
     if (Array.isArray(loaded)) {
       data = { sessions: loaded, lifts: {} };
       await window.Vitality.save(data);
