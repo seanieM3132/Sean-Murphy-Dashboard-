@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<title>AI Coach — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="topbar.js" defer></script>
+<style>
+:root {
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --success: #6BE3A4;
+  --warning: #F2C063;
+  --danger: #FF6B6B;
+  --accent: #C084FC;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: #050506;
+  color: var(--text-primary);
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 24px) 20px 40px;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 82% 14%, rgba(192, 132, 252, 0.12), transparent 60%),
+    radial-gradient(ellipse at 18% 90%, rgba(180, 180, 200, 0.06), transparent 60%);
+  filter: blur(40px);
+  animation: bgDrift 36s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -2;
+}
+
+@keyframes bgDrift {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-12px, 8px); }
+  100% { transform: translate(8px, -6px); }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dash-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C7C4BC 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+
+.dash-sub {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+
+.dash-sub span { color: var(--accent); }
+
+/* -- Tabs -- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 0;
+}
+
+.tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: var(--font-sans);
+}
+
+.tab:hover { color: var(--text-secondary); }
+.tab.active { color: var(--text-primary); border-bottom-color: var(--accent); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* -- Glass Card -- */
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  margin-bottom: 14px;
+}
+
+/* -- Section Title -- */
+.section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.section-title::before { content: ''; width: 18px; height: 1px; background: var(--text-tertiary); opacity: 0.6; }
+.section-title::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent); }
+
+/* ============================================
+   CHAT TAB
+   ============================================ */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 240px);
+  min-height: 400px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.msg {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.msg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.msg-avatar.coach {
+  background: rgba(192, 132, 252, 0.15);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+}
+
+.msg-avatar.user {
+  background: rgba(107, 227, 164, 0.15);
+  border: 1px solid rgba(107, 227, 164, 0.3);
+}
+
+.msg-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.msg-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.msg-name.coach { color: var(--accent); }
+.msg-name.user { color: var(--success); }
+
+.msg-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.msg-text strong { color: var(--text-primary); font-weight: 600; }
+.msg-text code { font-family: var(--font-mono); font-size: 12px; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; }
+.msg-text a { color: var(--accent); text-decoration: none; }
+.msg-text a:hover { text-decoration: underline; }
+
+.msg-text ul, .msg-text ol { padding-left: 20px; margin: 8px 0; }
+.msg-text li { margin-bottom: 4px; }
+.msg-text p { margin-bottom: 8px; }
+.msg-text p:last-child { margin-bottom: 0; }
+
+.msg-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  background: rgba(192, 132, 252, 0.08);
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-top: 8px;
+  text-decoration: none;
+  border: 1px solid rgba(192, 132, 252, 0.15);
+  transition: background 0.2s;
+}
+.msg-ref:hover { background: rgba(192, 132, 252, 0.15); }
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 8px 0;
+}
+.typing-indicator span {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: typeBounce 1.4s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typeBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Chat input */
+.chat-input-wrap {
+  display: flex;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  outline: none;
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  transition: border-color 0.2s;
+}
+.chat-input:focus { border-color: rgba(192, 132, 252, 0.4); }
+.chat-input::placeholder { color: var(--text-tertiary); }
+
+.chat-send {
+  background: linear-gradient(180deg, var(--accent) 0%, #A855F7 100%);
+  color: #0A0A0B;
+  border: none;
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+.chat-send:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(192, 132, 252, 0.3); }
+.chat-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Quick prompts */
+.quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.qp {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.2s, border-color 0.2s;
+}
+.qp:hover { background: rgba(192, 132, 252, 0.1); border-color: rgba(192, 132, 252, 0.3); color: var(--text-primary); }
+
+/* ============================================
+   LIBRARY TAB
+   ============================================ */
+.library-stats {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 14px 18px;
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-num.purple { color: var(--accent); }
+.stat-num.green { color: var(--success); }
+.stat-num.gold { color: var(--warning); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/* Category filters */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: rgba(255,255,255,0.15); }
+.filter-btn.active { background: rgba(192, 132, 252, 0.12); border-color: rgba(192, 132, 252, 0.3); color: var(--accent); }
+
+/* Video grid */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.video-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.video-card:hover { transform: translateY(-2px); border-color: rgba(192, 132, 252, 0.3); }
+.video-card.watched { opacity: 0.6; }
+.video-card.watched .video-watched-badge { display: flex; }
+
+.video-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  background: rgba(255,255,255,0.02);
+}
+
+.video-info {
+  padding: 12px;
+}
+
+.video-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.video-channel {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.video-cat {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(192, 132, 252, 0.1);
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.video-watched-badge {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--success);
+  margin-top: 6px;
+}
+
+.video-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.video-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+.video-btn:hover { background: rgba(255,255,255,0.08); }
+.video-btn.watched-btn.is-watched { background: rgba(107, 227, 164, 0.1); border-color: rgba(107, 227, 164, 0.3); color: var(--success); }
+
+/* ============================================
+   PROFILE TAB
+   ============================================ */
+.profile-form { display: flex; flex-direction: column; gap: 14px; }
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color: rgba(192, 132, 252, 0.4); }
+
+.form-group textarea { min-height: 80px; resize: vertical; }
+
+.save-btn {
+  background: linear-gradient(180deg, var(--accent) 0%, #A855F7 100%);
+  color: #0A0A0B;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  align-self: flex-start;
+  transition: transform 0.15s;
+}
+.save-btn:hover { transform: translateY(-1px); }
+
+.save-status {
+  font-size: 12px;
+  color: var(--success);
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.save-status.show { opacity: 1; }
+
+/* -- API Key -- */
+.api-key-wrap {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.api-key-wrap input { font-family: var(--font-mono); font-size: 12px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .video-grid { grid-template-columns: 1fr; }
+  .chat-container { height: calc(100vh - 200px); }
+  .library-stats { gap: 8px; }
+  .stat-card { min-width: 90px; padding: 10px 12px; }
+  .stat-num { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<h1 class="dash-title">AI Coach</h1>
+<p class="dash-sub">Your personal brain — <span id="brainCount">49 videos</span> across football, health, movement & performance</p>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" data-tab="chat">Chat</button>
+  <button class="tab" data-tab="library">Library</button>
+  <button class="tab" data-tab="profile">My Profile</button>
+</div>
+
+<!-- ======== CHAT TAB ======== -->
+<div class="tab-panel active" id="tab-chat">
+  <div class="quick-prompts" id="quickPrompts">
+    <button class="qp">Build me a weekly training plan</button>
+    <button class="qp">What should I eat pre-match?</button>
+    <button class="qp">How do I improve my speed?</button>
+    <button class="qp">Give me a ball mastery routine</button>
+    <button class="qp">Recommend a Huberman protocol</button>
+    <button class="qp">Fix my sleep schedule</button>
+  </div>
+
+  <div class="card chat-container">
+    <div class="chat-messages" id="chatMessages">
+      <!-- Welcome message -->
+    </div>
+    <div class="chat-input-wrap">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask your coach anything..." rows="1"></textarea>
+      <button class="chat-send" id="chatSend">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== LIBRARY TAB ======== -->
+<div class="tab-panel" id="tab-library">
+  <div class="library-stats">
+    <div class="stat-card">
+      <div class="stat-num purple" id="statTotal">49</div>
+      <div class="stat-label">Videos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num green" id="statWatched">0</div>
+      <div class="stat-label">Watched</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num gold" id="statCategories">8</div>
+      <div class="stat-label">Categories</div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="video-grid" id="videoGrid"></div>
+</div>
+
+<!-- ======== PROFILE TAB ======== -->
+<div class="tab-panel" id="tab-profile">
+  <div class="section-title">Your Goals & Context</div>
+  <div class="card">
+    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+      Tell the coach about yourself. This info shapes every answer — the more detail, the better the coaching.
+    </p>
+    <div class="profile-form" id="profileForm">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="profName" placeholder="Sean">
+      </div>
+      <div class="form-group">
+        <label>Sport / Position</label>
+        <input type="text" id="profSport" placeholder="Football — Fullback / Wingback">
+      </div>
+      <div class="form-group">
+        <label>Primary Goals</label>
+        <textarea id="profGoals" placeholder="Get faster, improve 1v1 defending, better ball control, long throw-ins..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Current Level / Age</label>
+        <input type="text" id="profLevel" placeholder="Semi-pro, 24 years old">
+      </div>
+      <div class="form-group">
+        <label>Injuries / Limitations</label>
+        <textarea id="profInjuries" placeholder="Knee issues, tight hamstrings..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Training Schedule</label>
+        <textarea id="profSchedule" placeholder="Team training Tue/Thu, gym Mon/Wed/Fri, match Saturday..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Other Context</label>
+        <textarea id="profOther" placeholder="Sleep goals, nutrition preferences, supplements, anything else the coach should know..."></textarea>
+      </div>
+      <button class="save-btn" id="saveProfile">Save Profile</button>
+      <div class="save-status" id="saveStatus">Profile saved</div>
+    </div>
+  </div>
+
+  <div class="api-key-wrap">
+    <div class="section-title">API Key</div>
+    <div class="card">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+        Enter your Anthropic API key to power the coach. Stored locally only.
+      </p>
+      <div class="form-group">
+        <label>Anthropic API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-...">
+      </div>
+      <button class="save-btn" id="saveApiKey" style="margin-top:8px;">Save Key</button>
+      <div class="save-status" id="apiKeyStatus">Key saved</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   BRAIN DATA — Video knowledge base
+   ============================================ */
+const BRAIN_VIDEOS = [
+  { id: "agoD8Cvcz9E", title: "TRAIN UPPER BODY LIKE THE PROS TO BE FASTER, STRONGER, AND MORE AGILE ON THE PITCH", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "uCYWvl8Dftc", title: "HOW I GET MY ATHLETES FASTER THAN MBAPPE, DAVIES, AND DEMBELE", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "abyhMBRo1bM", title: "TRAIN YOUR CORE LIKE A PRO SOCCER/FOOTBALLER (FULL ROUTINE EXAMPLE AT END)", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "vJlExc2eJpI", title: "Jude Bellingham Level Athleticism", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "CqP9a-EMr14", title: "HOW TO MAKE WORKOUT PROGRAMS FOR SOCCER/FOOTBALLERS", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "qzvImHRTooI", title: "THE BEST PLYOMETRIC FOR SOCCER AND FOOTBALLERS", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "e_f97qwgcDo", title: "HOW TO BE AS FAST AND AGILE AS DOKU", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "V35DEKzZHKk", title: "HOW TO HAVE PEDRI LEVEL ATHLETICISM", channel: "Matt Stigler", cat: "Football Training" },
+  { id: "q37ARYnRDGc", title: "Dr. Andy Galpin: Optimal Nutrition & Supplementation for Fitness | Huberman Lab Guest Series", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "n28W4AmvMDE", title: "How Sugar & Processed Foods Impact Your Health | Dr. Robert Lustig", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "wTBSGgbIvsY", title: "How Meditation Works & Science-Based Effective Meditations", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "ddq8JIMhz7c", title: "Optimal Protocols for Studying & Learning", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "U6dnOVth7-I", title: "Understand & Improve Memory Using Science-Based Tools | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "RmwbNdyrilk", title: "Essentials: Tools to Boost Attention & Memory | Dr. Wendy Suzuki", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "K-TW2Chpz4k", title: "Leverage Dopamine to Overcome Procrastination & Optimize Effort", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "Pmd6knanPKw", title: "Maximize Productivity, Physical & Mental Health With Daily Tools | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "lIo9FcrljDk", title: "Master Your Sleep & Be More Alert When Awake | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "iw97uvIge7c", title: "Using Caffeine to Optimize Mental & Physical Performance", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "qUz93CyNIz0", title: "Tools for Managing Stress & Anxiety | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "OLQRAMZi--c", title: "How to Increase Motivation & Drive | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "zYuw-8pwnp8", title: "How to Set & Achieve Goals | Huberman Lab Essentials", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "KBkl3I645c8", title: "Improve Your Lymphatic System for Overall Health & Appearance", channel: "Andrew Huberman", cat: "Huberman Lab" },
+  { id: "vP-JD_IdoBY", title: "Unlock Longer Throw-Ins in Just 2 Weeks | Long Throw Coach Online Course", channel: "Long Throw Coach", cat: "Football Skills" },
+  { id: "-iQw0fSxZ58", title: "Introduction to Fascia Training Crash Course Part 1 of 4 | Hyperarch Fascia Training", channel: "Coach Chong Xie", cat: "Fascia & Movement" },
+  { id: "83704QVpqQU", title: "How Much Fascia Training Should I Do as a Beginner | Hyperarch Fascia Training", channel: "Coach Chong Xie", cat: "Fascia & Movement" },
+  { id: "rwYMq71l_2M", title: "Hyperarch Fascia Training Routine That Healed 15 Years of Back Pain", channel: "Coach Chong Xie", cat: "Fascia & Movement" },
+  { id: "HEsigW2ASvg", title: "'Ball and a Wall' by Dimitar Berbatov", channel: "Football Coaches Lyceum", cat: "Football Skills" },
+  { id: "_2JKRAQdR2Q", title: "25 Ball Mastery Skills | Joner Football", channel: "Joner Football", cat: "Football Skills" },
+  { id: "_sfTLMEoPNw", title: "Ball Mastery + Cognitive Drill for Soccer Players", channel: "Joner Football", cat: "Football Skills" },
+  { id: "LEh08JCnUmQ", title: "5 HARD BALL MASTERY DRILLS | JONER FOOTBALL", channel: "Joner Football", cat: "Football Skills" },
+  { id: "2EsLsxl5dtE", title: "MY DRILLS TO IMPROVE DRIBBLING", channel: "Takuya", cat: "Football Skills" },
+  { id: "hXeOcENzdNM", title: "How To Ping Long Passes | Improve Your Long Passing Technique", channel: "7mlc", cat: "Football Skills" },
+  { id: "RaYradx6JXg", title: "Complete Fullback Training Session | 1v1 Defending, Crossing, & Dribbling", channel: "Kreider Academy", cat: "Football Skills" },
+  { id: "OLBVF8rts0A", title: "LEARN 5 SOLE SKILLS to HELP YOU IN YOUR MATCH", channel: "Takuya", cat: "Football Skills" },
+  { id: "Xy7ccu44tl8", title: "LEARN 5 SKILLS to WIN WITHOUT TOUCHING THE BALL", channel: "Takuya", cat: "Football Skills" },
+  { id: "DZER3GNmEwo", title: "THE 5 BEST SKILLS for WINGBACKS", channel: "Takuya", cat: "Football Skills" },
+  { id: "IcQXkzMvvlQ", title: "5 Ball Mastery Drills Instagram Challenge | Joner Football", channel: "Joner Football", cat: "Football Skills" },
+  { id: "-hZJ1CADebQ", title: "Football Training Video", channel: "Unknown", cat: "Football Skills" },
+  { id: "qK6Rh_XODFw", title: "Eliminate Knee Pain & Become GOATA", channel: "Mark Bell", cat: "GOATA Movement" },
+  { id: "neOoDUAjX2o", title: "Fix Faulty Movement Patterns with These GOATA Exercises!", channel: "Mark Bell", cat: "GOATA Movement" },
+  { id: "UOXD_0ctRYs", title: "Humans Are Moving Wrong, GOATA is the Answer", channel: "Mark Bell's Power Project", cat: "GOATA Movement" },
+  { id: "LNZJgbVAEKI", title: "Art of Move Podcast 55 - GOATA Founder Jose Boesch aka Coach Gil", channel: "Anthony Manuele", cat: "GOATA Movement" },
+  { id: "59qFZsNhI8s", title: "GOATA Coaches Gil Boesch, Gary Scheffler & Ricky Stanzi: Reclaim Your Birthright", channel: "Mark Bell's Power Project", cat: "GOATA Movement" },
+  { id: "pK5jcQalrSs", title: "FIFA 11+ Complete Warm-up Program - Part I - Running Exercises", channel: "University of Iowa Health Care", cat: "Warm-up & Prehab" },
+  { id: "RSJIp7e7fyY", title: 'The "11+" Warm-up: Part 1', channel: "FIFA", cat: "Warm-up & Prehab" },
+  { id: "onv3QA6DC4Y", title: "Nutrition, Hydration & Health [Science of NFL Football]", channel: "National Science Foundation", cat: "Nutrition & Hydration" },
+  { id: "07NXgqFnnls", title: "Nutrition and hydration tips for young athletes", channel: "Stanford Medicine Children's Health", cat: "Nutrition & Hydration" },
+  { id: "uCZ1zyr_sqI", title: "Sweat Testing: The Secret To A Perfect Race?", channel: "Global Triathlon Network", cat: "Nutrition & Hydration" },
+  { id: "2hAWlREjqRk", title: "What to expect at your sweat test", channel: "Precision Fuel & Hydration", cat: "Nutrition & Hydration" },
+];
+
+/* ============================================
+   STORAGE HELPERS
+   ============================================ */
+const storeGet = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+const storeSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+/* ============================================
+   TABS
+   ============================================ */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ============================================
+   PROFILE
+   ============================================ */
+const PROFILE_FIELDS = ['profName', 'profSport', 'profGoals', 'profLevel', 'profInjuries', 'profSchedule', 'profOther'];
+
+function loadProfile() {
+  const p = storeGet('coach_profile') || {};
+  PROFILE_FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el && p[f]) el.value = p[f];
+  });
+  const key = storeGet('coach_api_key');
+  if (key) document.getElementById('apiKeyInput').value = key;
+}
+
+function saveProfile() {
+  const p = {};
+  PROFILE_FIELDS.forEach(f => { p[f] = document.getElementById(f).value; });
+  storeSet('coach_profile', p);
+  const status = document.getElementById('saveStatus');
+  status.classList.add('show');
+  setTimeout(() => status.classList.remove('show'), 2000);
+}
+
+document.getElementById('saveProfile').addEventListener('click', saveProfile);
+
+document.getElementById('saveApiKey').addEventListener('click', () => {
+  storeSet('coach_api_key', document.getElementById('apiKeyInput').value.trim());
+  const status = document.getElementById('apiKeyStatus');
+  status.classList.add('show');
+  setTimeout(() => status.classList.remove('show'), 2000);
+});
+
+loadProfile();
+
+/* ============================================
+   LIBRARY
+   ============================================ */
+const categories = [...new Set(BRAIN_VIDEOS.map(v => v.cat))];
+let activeFilter = 'All';
+let watchedSet = new Set(storeGet('coach_watched') || []);
+
+function renderStats() {
+  document.getElementById('statTotal').textContent = BRAIN_VIDEOS.length;
+  document.getElementById('statWatched').textContent = watchedSet.size;
+  document.getElementById('statCategories').textContent = categories.length;
+}
+
+function renderFilters() {
+  const el = document.getElementById('filters');
+  el.innerHTML = '';
+  ['All', ...categories].forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (cat === activeFilter ? ' active' : '');
+    btn.textContent = cat;
+    btn.addEventListener('click', () => { activeFilter = cat; renderFilters(); renderGrid(); });
+    el.appendChild(btn);
+  });
+}
+
+function renderGrid() {
+  const el = document.getElementById('videoGrid');
+  el.innerHTML = '';
+  const filtered = activeFilter === 'All' ? BRAIN_VIDEOS : BRAIN_VIDEOS.filter(v => v.cat === activeFilter);
+
+  filtered.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'video-card' + (watchedSet.has(v.id) ? ' watched' : '');
+    card.innerHTML = `
+      <img class="video-thumb" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy">
+      <div class="video-info">
+        <div class="video-title">${v.title}</div>
+        <div class="video-meta">
+          <span class="video-channel">${v.channel}</span>
+          <span class="video-cat">${v.cat}</span>
+        </div>
+        <div class="video-watched-badge">&#10003; Watched</div>
+        <div class="video-actions">
+          <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" class="video-btn" onclick="event.stopPropagation()">Watch</a>
+          <button class="video-btn watched-btn ${watchedSet.has(v.id) ? 'is-watched' : ''}" data-id="${v.id}">
+            ${watchedSet.has(v.id) ? '&#10003; Watched' : 'Mark watched'}
+          </button>
+          <button class="video-btn ask-btn" data-id="${v.id}">Ask coach</button>
+        </div>
+      </div>
+    `;
+    el.appendChild(card);
+  });
+
+  // Wire watched buttons
+  el.querySelectorAll('.watched-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      if (watchedSet.has(id)) watchedSet.delete(id);
+      else watchedSet.add(id);
+      storeSet('coach_watched', [...watchedSet]);
+      renderStats();
+      renderGrid();
+    });
+  });
+
+  // Wire ask coach buttons
+  el.querySelectorAll('.ask-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const v = BRAIN_VIDEOS.find(x => x.id === btn.dataset.id);
+      if (v) {
+        document.querySelector('[data-tab="chat"]').click();
+        const input = document.getElementById('chatInput');
+        input.value = `What are the key takeaways from "${v.title}" by ${v.channel}? How should I apply them to my training?`;
+        input.focus();
+      }
+    });
+  });
+}
+
+renderStats();
+renderFilters();
+renderGrid();
+
+/* ============================================
+   CHAT ENGINE
+   ============================================ */
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+let chatHistory = storeGet('coach_chat_history') || [];
+
+function getProfile() {
+  const p = storeGet('coach_profile') || {};
+  const parts = [];
+  if (p.profName) parts.push(`Name: ${p.profName}`);
+  if (p.profSport) parts.push(`Sport/Position: ${p.profSport}`);
+  if (p.profGoals) parts.push(`Goals: ${p.profGoals}`);
+  if (p.profLevel) parts.push(`Level: ${p.profLevel}`);
+  if (p.profInjuries) parts.push(`Injuries/Limitations: ${p.profInjuries}`);
+  if (p.profSchedule) parts.push(`Training Schedule: ${p.profSchedule}`);
+  if (p.profOther) parts.push(`Other Context: ${p.profOther}`);
+  return parts.join('\n');
+}
+
+function buildSystemPrompt() {
+  const profile = getProfile();
+  const videoList = BRAIN_VIDEOS.map(v =>
+    `- "${v.title}" by ${v.channel} [${v.cat}] (https://youtube.com/watch?v=${v.id})`
+  ).join('\n');
+
+  return `You are an elite AI performance coach. You have deep knowledge from the following ${BRAIN_VIDEOS.length} videos that your athlete has curated as their personal knowledge base:
+
+VIDEO LIBRARY:
+${videoList}
+
+${profile ? `\nATHLETE PROFILE:\n${profile}\n` : ''}
+YOUR COACHING RULES:
+1. Always ground advice in the specific videos from the library. When referencing knowledge from a video, cite it with the video title and link.
+2. Be specific and actionable — give exact exercises, sets, reps, timings, protocols.
+3. Consider the athlete's profile (position, goals, injuries, schedule) when giving advice.
+4. Cross-reference across categories: combine Huberman Lab science with football training, GOATA movement with injury prevention, nutrition with performance.
+5. When asked about training plans, structure them around the athlete's actual schedule.
+6. Be direct, motivating, and concise. No fluff.
+7. If a question falls outside your video library knowledge, say so honestly but still give your best advice.
+8. Format responses with markdown: use **bold** for key terms, bullet points for lists, and clear structure.
+9. When relevant, recommend specific videos from the library for the athlete to watch or rewatch.`;
+}
+
+function renderMessage(role, text) {
+  const isCoach = role === 'assistant';
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `
+    <div class="msg-avatar ${isCoach ? 'coach' : 'user'}">${isCoach ? '🧠' : '👤'}</div>
+    <div class="msg-body">
+      <div class="msg-name ${isCoach ? 'coach' : 'user'}">${isCoach ? 'Coach' : 'You'}</div>
+      <div class="msg-text">${formatMarkdown(text)}</div>
+    </div>
+  `;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function formatMarkdown(text) {
+  // Basic markdown rendering
+  let html = text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/^### (.+)$/gm, '<strong style="font-size:15px;">$1</strong>')
+    .replace(/^## (.+)$/gm, '<strong style="font-size:16px;">$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  // Wrap loose <li> in <ul>
+  html = html.replace(/((?:<li>.*?<\/li>\s*(?:<br>)?)+)/g, '<ul>$1</ul>');
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p><\/p>/g, '');
+
+  return html;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.id = 'typing';
+  div.innerHTML = `
+    <div class="msg-avatar coach">🧠</div>
+    <div class="msg-body">
+      <div class="msg-name coach">Coach</div>
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing');
+  if (el) el.remove();
+}
+
+// Load existing chat
+function renderFullChat() {
+  chatMessages.innerHTML = '';
+  if (chatHistory.length === 0) {
+    renderMessage('assistant', "Hey! I'm your AI performance coach. I've studied all **" + BRAIN_VIDEOS.length + " videos** in your library — from Matt Stigler's football training to Huberman Lab science to GOATA movement.\n\nFill out your **Profile** tab so I can personalize every answer to your goals, position, and schedule.\n\nAsk me anything — training plans, nutrition, recovery, skills, or mindset.");
+  } else {
+    chatHistory.forEach(m => renderMessage(m.role, m.content));
+  }
+}
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  const apiKey = storeGet('coach_api_key');
+  if (!apiKey) {
+    // Switch to profile tab
+    document.querySelector('[data-tab="profile"]').click();
+    document.getElementById('apiKeyInput').focus();
+    alert('Add your Anthropic API key in the Profile tab to chat with the coach.');
+    return;
+  }
+
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  renderMessage('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  chatSend.disabled = true;
+  showTyping();
+
+  try {
+    const messages = chatHistory.map(m => ({ role: m.role, content: m.content }));
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5-20250514',
+        max_tokens: 2048,
+        system: buildSystemPrompt(),
+        messages: messages,
+      }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.text();
+      throw new Error(`API error ${resp.status}: ${err}`);
+    }
+
+    const data = await resp.json();
+    const reply = data.content[0].text;
+
+    hideTyping();
+    renderMessage('assistant', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Keep last 20 messages to avoid huge localStorage
+    if (chatHistory.length > 40) chatHistory = chatHistory.slice(-40);
+    storeSet('coach_chat_history', chatHistory);
+
+  } catch (err) {
+    hideTyping();
+    renderMessage('assistant', `**Error:** ${err.message}\n\nCheck your API key in the Profile tab.`);
+  }
+
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+// Auto-resize textarea
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+});
+
+// Quick prompts
+document.querySelectorAll('.qp').forEach(btn => {
+  btn.addEventListener('click', () => {
+    chatInput.value = btn.textContent;
+    chatInput.focus();
+  });
+});
+
+// Init chat
+renderFullChat();
+
+/* ============================================
+   CLEAR CHAT (double-click title)
+   ============================================ */
+document.querySelector('.dash-title').addEventListener('dblclick', () => {
+  if (confirm('Clear chat history?')) {
+    chatHistory = [];
+    storeSet('coach_chat_history', []);
+    renderFullChat();
+  }
+});
+</script>
+</body>
+</html>

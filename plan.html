@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<title>Weekly Plan — Dashboard</title>
+<script src="topbar.js" defer></script>
+<style>
+:root {
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --success: #6BE3A4;
+  --warning: #F2C063;
+  --danger: #FF6B6B;
+  --accent: #C084FC;
+  --blue: #7DD3FC;
+  --orange: #FDBA74;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: #050506;
+  color: var(--text-primary);
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 24px) 20px 40px;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 82% 14%, rgba(192, 132, 252, 0.12), transparent 60%),
+    radial-gradient(ellipse at 18% 90%, rgba(107, 227, 164, 0.06), transparent 60%);
+  filter: blur(40px);
+  animation: bgDrift 36s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -2;
+}
+
+@keyframes bgDrift {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-12px, 8px); }
+  100% { transform: translate(8px, -6px); }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dash-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C7C4BC 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.dash-sub {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+.dash-sub span { color: var(--accent); }
+
+/* Day selector */
+.day-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.day-tab {
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.day-tab:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
+.day-tab.active { background: rgba(192, 132, 252, 0.12); border-color: rgba(192, 132, 252, 0.4); color: var(--accent); }
+.day-tab.today { box-shadow: 0 0 0 1px var(--success); }
+
+/* Cards */
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.section-title::before { content: ''; width: 18px; height: 1px; background: var(--text-tertiary); opacity: 0.6; }
+.section-title::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent); }
+
+/* Day panel */
+.day-panel { display: none; }
+.day-panel.active { display: block; }
+
+.day-header {
+  margin-bottom: 16px;
+}
+
+.day-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.day-theme {
+  font-size: 13px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* Schedule blocks */
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.block {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s, border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.block:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+
+.block.done { opacity: 0.45; }
+.block.done .block-check { color: var(--success); }
+.block.done .block-title { text-decoration: line-through; text-decoration-color: var(--text-tertiary); }
+
+.block-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  min-width: 48px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.block-content { flex: 1; min-width: 0; }
+
+.block-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.block-detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.block-detail .spec {
+  display: inline-block;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid rgba(192, 132, 252, 0.15);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  margin: 2px 2px 2px 0;
+}
+
+.block-detail .foot {
+  display: inline-block;
+  background: rgba(107, 227, 164, 0.08);
+  border: 1px solid rgba(107, 227, 164, 0.15);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--success);
+  margin: 2px 2px 2px 0;
+}
+
+.block-detail .warn {
+  display: inline-block;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.15);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--danger);
+  margin: 2px 2px 2px 0;
+}
+
+.block-check {
+  font-size: 16px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  padding-top: 1px;
+  transition: color 0.2s;
+}
+
+.block-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.tag-mobility { background: rgba(107, 227, 164, 0.1); color: var(--success); }
+.tag-gym { background: rgba(125, 211, 252, 0.1); color: var(--blue); }
+.tag-ball { background: rgba(253, 186, 116, 0.1); color: var(--orange); }
+.tag-seward { background: rgba(192, 132, 252, 0.1); color: var(--accent); }
+.tag-recovery { background: rgba(242, 192, 99, 0.1); color: var(--warning); }
+.tag-team { background: rgba(255, 107, 107, 0.1); color: var(--danger); }
+.tag-meal { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+.tag-routine { background: rgba(192, 132, 252, 0.06); color: var(--accent); }
+
+/* Expandable detail */
+.block-expand {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.block.expanded .block-expand { display: block; }
+
+.drill-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.drill-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  padding: 4px 8px 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.drill-table td {
+  padding: 5px 8px 5px 0;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: top;
+}
+
+.drill-table td:first-child { color: var(--text-primary); font-weight: 500; }
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.stat-icon { font-size: 18px; }
+.stat-info { display: flex; flex-direction: column; }
+.stat-val { font-family: var(--font-mono); font-size: 16px; font-weight: 700; }
+.stat-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; }
+
+.stat-val.purple { color: var(--accent); }
+.stat-val.green { color: var(--success); }
+.stat-val.blue { color: var(--blue); }
+.stat-val.orange { color: var(--orange); }
+
+/* Protocols reference (collapsible) */
+.protocol-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  width: 100%;
+  text-align: left;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.protocol-toggle:hover { background: rgba(255,255,255,0.06); }
+
+.protocol-toggle .arrow {
+  transition: transform 0.2s;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.protocol-toggle.open .arrow { transform: rotate(90deg); }
+
+.protocol-body {
+  display: none;
+  padding: 0 14px 14px;
+}
+
+.protocol-body.open { display: block; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .day-tabs { gap: 3px; }
+  .day-tab { padding: 8px 12px; font-size: 11px; }
+  .stats-bar { gap: 8px; }
+  .stat-pill { min-width: 80px; padding: 8px 12px; }
+  .stat-val { font-size: 14px; }
+  .block { gap: 10px; padding: 10px 12px; }
+  .block-time { min-width: 40px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<h1 class="dash-title">Weekly Plan</h1>
+<p class="dash-sub">Your full operating system — <span>tap any block for drill details</span></p>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat-pill">
+    <div class="stat-info">
+      <div class="stat-val green" id="statChecked">0/0</div>
+      <div class="stat-label">Completed</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-info">
+      <div class="stat-val purple" id="statSeward">Jul 9-23</div>
+      <div class="stat-label">Seward Program</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-info">
+      <div class="stat-val blue" id="statDaysLeft">19</div>
+      <div class="stat-label">Days to Fly Out</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-info">
+      <div class="stat-val orange" id="statReport">Jul 28</div>
+      <div class="stat-label">Report Date</div>
+    </div>
+  </div>
+</div>
+
+<div class="day-tabs" id="dayTabs"></div>
+
+<div id="dayPanels"></div>
+
+<!-- Protocol References -->
+<div style="margin-top: 20px;">
+  <div class="section-title">Quick Reference</div>
+
+  <button class="protocol-toggle" onclick="toggleProtocol(this)">
+    <span class="arrow">&#9654;</span> Morning Protocol (7:00-8:00)
+  </button>
+  <div class="protocol-body" id="proto-morning">
+    <div class="card">
+      <table class="drill-table">
+        <tr><th>Time</th><th>Activity</th><th>Detail</th></tr>
+        <tr><td>7:00</td><td>Wake — NO SNOOZE, no phone 15 min</td><td>Avoid reactive dopamine spike</td></tr>
+        <tr><td>7:00</td><td>Sunlight in eyes</td><td>10 min outside minimum. Cortisol pulse + melatonin timer</td></tr>
+        <tr><td>7:10</td><td>Hydrate</td><td>500ml water + pinch salt + electrolytes</td></tr>
+        <tr><td>7:15</td><td>Optic flow walk</td><td>10 min outside. Forward walking + panoramic vision</td></tr>
+        <tr><td>7:25</td><td>BREAKFAST</td><td>3 eggs + toast + fruit OR oats + banana + protein. Never skip</td></tr>
+        <tr><td>7:50</td><td>Creatine 5g</td><td>With breakfast. Every single day</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <button class="protocol-toggle" onclick="toggleProtocol(this)">
+    <span class="arrow">&#9654;</span> Evening Protocol (8:00-10:00)
+  </button>
+  <div class="protocol-body" id="proto-evening">
+    <div class="card">
+      <table class="drill-table">
+        <tr><th>Time</th><th>Activity</th><th>Detail</th></tr>
+        <tr><td>8:00</td><td>Dim lights</td><td>Reduce overhead lights. Bright light suppresses dopamine</td></tr>
+        <tr><td>8:30</td><td>No intense screens</td><td>Read, visualize, calm game film</td></tr>
+        <tr><td>9:00</td><td>Sauna 15-20 min</td><td>80-100C. Compensatory cooling helps sleep</td></tr>
+        <tr><td>9:30</td><td>Sleep stack</td><td>Mg Threonate 145mg + Apigenin 50mg + Theanine 100-400mg</td></tr>
+        <tr><td>9:45</td><td>Nose tape, side sleep</td><td>Side sleeping = glymphatic clearance</td></tr>
+        <tr><td>10:00</td><td>LIGHTS OUT</td><td>9 hours before 7am wake</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <button class="protocol-toggle" onclick="toggleProtocol(this)">
+    <span class="arrow">&#9654;</span> GOATA Groundwork (Before Every Session)
+  </button>
+  <div class="protocol-body" id="proto-goata">
+    <div class="card">
+      <table class="drill-table">
+        <tr><th>Exercise</th><th>Duration</th><th>Cues</th></tr>
+        <tr><td>Ground Hip Stretch</td><td>45-60s each side</td><td>All fours, cross leg, IABH, head up</td></tr>
+        <tr><td>Child Rocker</td><td>60s x 3 sets, 15s rest</td><td>Toes together, heels out, head up, ankle bone climbs</td></tr>
+        <tr><td>Toe Tuck Rocker</td><td>60s x 3 sets, 15s rest</td><td>Toes tucked, heels open during rock</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <button class="protocol-toggle" onclick="toggleProtocol(this)">
+    <span class="arrow">&#9654;</span> Supplement Stack
+  </button>
+  <div class="protocol-body" id="proto-supps">
+    <div class="card">
+      <table class="drill-table">
+        <tr><th>When</th><th>Supplement</th><th>Dose</th></tr>
+        <tr><td>Breakfast</td><td>Creatine</td><td>5g daily</td></tr>
+        <tr><td>Morning</td><td>Vitamin D3</td><td>1000-2000 IU</td></tr>
+        <tr><td>With meal</td><td>Omega-3 / Fish Oil</td><td>1-2g EPA</td></tr>
+        <tr><td>Morning + training</td><td>Electrolytes</td><td>In water</td></tr>
+        <tr><td>Pre-training</td><td>Caffeine</td><td>1-3mg/kg (delay 90min after wake)</td></tr>
+        <tr><td>Post-training</td><td>Protein</td><td>30-40g shake or meal</td></tr>
+        <tr><td>9:30pm</td><td>Mg Threonate</td><td>145mg</td></tr>
+        <tr><td>9:30pm</td><td>Apigenin</td><td>50mg</td></tr>
+        <tr><td>9:30pm</td><td>L-Theanine</td><td>100-400mg</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <button class="protocol-toggle" onclick="toggleProtocol(this)">
+    <span class="arrow">&#9654;</span> Progressive Overload Rules (Gym)
+  </button>
+  <div class="protocol-body" id="proto-gym">
+    <div class="card">
+      <table class="drill-table">
+        <tr><th>Rule</th><th>Detail</th></tr>
+        <tr><td>When to increase</td><td>Hit TOP of rep range for ALL sets with clean form</td></tr>
+        <tr><td>Upper body</td><td>+2.5kg per session</td></tr>
+        <tr><td>Lower body</td><td>+5kg per session</td></tr>
+        <tr><td>If you fail</td><td>Can't hit BOTTOM of rep range? Drop 10%, rebuild</td></tr>
+        <tr><td>Tempo</td><td>2 sec down, 1 sec pause, 1 sec up (unless stated)</td></tr>
+        <tr><td>Rest (compounds)</td><td>2-3 min</td></tr>
+        <tr><td>Rest (accessories)</td><td>60-90 sec</td></tr>
+        <tr><td>Log everything</td><td>Weight, reps, sets. Every session</td></tr>
+      </table>
+      <div style="margin-top:12px;">
+        <div class="section-title">Starting Weights</div>
+        <table class="drill-table">
+          <tr><th>Exercise</th><th>Start</th><th>Increase By</th></tr>
+          <tr><td>Back Squat</td><td>50kg</td><td>+5kg</td></tr>
+          <tr><td>Romanian Deadlift</td><td>45kg</td><td>+5kg</td></tr>
+          <tr><td>Trap Bar Deadlift</td><td>60kg</td><td>+5kg</td></tr>
+          <tr><td>Bench Press</td><td>45kg</td><td>+2.5kg</td></tr>
+          <tr><td>Barbell Row</td><td>40kg</td><td>+2.5kg</td></tr>
+          <tr><td>Push Press</td><td>30kg</td><td>+2.5kg</td></tr>
+          <tr><td>DB Shoulder Press</td><td>14kg ea</td><td>+2kg ea</td></tr>
+          <tr><td>Incline DB Press</td><td>16kg ea</td><td>+2kg ea</td></tr>
+          <tr><td>Single-Arm DB Row</td><td>18kg</td><td>+2kg</td></tr>
+          <tr><td>Bulgarian Split Squat</td><td>12kg ea</td><td>+2kg ea</td></tr>
+          <tr><td>Pull-ups</td><td>BW</td><td>+2.5kg at 3x8</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   WEEKLY PLAN DATA
+   ============================================ */
+const DAYS = [
+  {
+    name: 'Sunday',
+    theme: 'Recovery + Top-Up Training',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight 10 min, hydrate 500ml + electrolytes, optic flow walk 10 min, breakfast, creatine 5g' },
+      { time: '8:00', title: 'Recovery Walk / Foam Roll', tag: 'recovery', detail: '15-20 min light walk OR foam roll legs, back, glutes. Easy effort' },
+      { time: '8:20', title: '112mvmnt: Hips & Hammys', tag: 'mobility', detail: 'Hip Flexor Leg Lifts <span class="spec">3x3x5s</span> Banded Hamstring Stretch <span class="spec">3x3x5s</span> Hamstring Block Crush <span class="spec">1x3x10s</span> Hip 90/90 IR <span class="spec">3x3x5s</span> Butterfly CRAC <span class="spec">3x6x10s</span> Banded Hip Flexion <span class="spec">1x3x10s</span> Lateral Hip Flexion <span class="spec">3x3x5s</span> Wall Frog + Hip IR <span class="spec">3x4x5s</span> Couch Stretch <span class="spec">2x1 min each</span>',
+        expand: true },
+      { time: '8:45', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each side</span> Child Rocker <span class="spec">60s x 3, 15s rest</span> Toe Tuck Rocker <span class="spec">60s x 3, 15s rest</span>' },
+      { time: '8:55', title: 'Elevated Toe Curls (Fascia)', tag: 'mobility', detail: '<span class="spec">3 x 20 sec, 10 sec rest</span> Curl toes over edge of step' },
+      { time: '9:00', title: 'Sauna + Cold Plunge', tag: 'recovery', detail: 'Sauna <span class="spec">15-20 min @ 80-100C</span> then Cold Plunge <span class="spec">2-3 min @ 10-15C</span> Move limbs to break thermal layer' },
+      { time: '9:30', title: 'Post-Recovery Shake', tag: 'meal', detail: 'Protein shake <span class="spec">30-40g protein</span>' },
+      { time: '10:00', title: 'Game Film Session', tag: 'ball', detail: 'Review Saturday match <span class="spec">20-30 min</span> Note 3 things done well, 3 to fix. Watch body shape, positioning, first touch, off-ball movement' },
+      { time: '12:00', title: 'Lunch', tag: 'meal', detail: 'Protein + carbs + veg. Hydrate <span class="spec">300ml</span>' },
+      { time: '1:00', title: 'Ball Work Session', tag: 'ball', detail: 'Full session <span class="spec">30-45 min</span>: Warm-up touches <span class="spec">5 min</span> Ball Mastery Set A or B <span class="spec">10 min</span> First Touch & Receiving drills <span class="spec">5-8 min</span> <span class="foot">Both feet</span>',
+        expand: true },
+      { time: '2:00', title: 'Free Time', tag: 'routine', detail: 'Rest. If <60 min played Saturday: add 30-min tempo run 70% OR 6x100m sprints, 45s rest' },
+      { time: '5:00', title: 'Dinner', tag: 'meal', detail: 'Protein + rice/pasta + veg. Hydrate <span class="spec">300ml</span>' },
+      { time: '7:00', title: 'WEEKLY PLANNING SESSION', tag: 'routine', detail: 'Sit down with AI coach. Plan Mon-Sun. Review tracking metrics. Adjust weights, drills, schedule' },
+      { time: '8:00', title: 'Evening Protocol', tag: 'routine', detail: 'Dim lights, wind down, sauna if not done, sleep stack at 9:30, lights out 10:00' },
+    ]
+  },
+  {
+    name: 'Monday',
+    theme: 'Heavy Training Day (Seward + Gym)',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight 10 min, hydrate 500ml + electrolytes, optic flow walk, breakfast, creatine 5g' },
+      { time: '8:00', title: '112mvmnt: Shoulders & Spine', tag: 'mobility', detail: 'Banded T-Spine Rotations <span class="spec">3x5</span> Thoracic Rotation Stretch <span class="spec">45-60s</span> Inverted Cat <span class="spec">60s</span> End-Range Shoulder Lift-Offs <span class="spec">3x3x5s</span> Hands Behind Stretch <span class="spec">60s</span> Banded Shoulder Extension <span class="spec">1x5x10s</span> Shoulder Circles <span class="spec">3x5</span> BB+Roller T-Spine <span class="spec">3x45s</span> Shoulder Pullovers <span class="spec">3x5-8</span> Seal Stretch <span class="spec">60s</span> Active Cobra <span class="spec">3x3x5s</span> Thoracic Bridge <span class="spec">1-2x30s</span>',
+        expand: true },
+      { time: '8:20', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each side</span> Child Rocker <span class="spec">60s x 3</span> Toe Tuck Rocker <span class="spec">60s x 3</span>' },
+      { time: '8:30', title: 'Seward Workout of the Day', tag: 'seward', detail: 'Check Seward mapping for today\'s workout. See seward-summer-2026.md' },
+      { time: '9:15', title: 'Plyometrics (Do Fresh)', tag: 'gym', detail: 'Box Jumps <span class="spec">3x5, 60s rest</span> Land soft, step down. Broad Jumps <span class="spec">3x5, 60s rest</span> Measure distance. Single-Leg Bounds <span class="spec">3x5 each, 45s rest</span>',
+        expand: true },
+      { time: '9:30', title: 'Gym: Heavy Compounds', tag: 'gym', detail: 'Back Squat <span class="spec">4x6-8 @ 50kg, 2-3 min rest, 3-1-1 tempo</span> RDL <span class="spec">4x6-8 @ 45kg, 2-3 min rest, 3-1-1</span> Bench Press <span class="spec">3x6-8 @ 45kg, 2 min rest, 2-1-1</span> Barbell Row <span class="spec">3x8-10 @ 40kg, 90s rest, 2-1-1</span> Pull-ups <span class="spec">3xmax (aim 5-8), 90s rest</span> DB Shoulder Press <span class="spec">3x8-10 @ 14kg ea, 90s rest</span> Face Pulls <span class="spec">3x15, 60s rest</span>',
+        expand: true },
+      { time: '10:00', title: 'Core: Stiffness Focus', tag: 'gym', detail: 'Front Plank <span class="spec">3x45s, 30s rest</span> Pallof Press <span class="spec">3x10 each side, 30s rest</span> Dead Bugs <span class="spec">3x8 each side, 30s rest</span>' },
+      { time: '10:15', title: 'Fascia + Nordics', tag: 'mobility', detail: 'HFT Marble Swing <span class="spec">3x30s each foot, 15s rest</span> Gait Cycle Drills <span class="spec">5 min</span> Nordic Phase 1 <span class="spec">3-4 x 5-8 reps, 3-4s tempo, 90s rest</span>' },
+      { time: '10:40', title: 'Post-Training Shake', tag: 'meal', detail: 'Protein <span class="spec">30-40g</span> + creatine if not taken at breakfast' },
+      { time: '10:50', title: 'Sauna (NO Ice Bath)', tag: 'recovery', detail: 'Sauna <span class="spec">15 min @ 80-100C</span> <span class="warn">NO ICE BATH — heavy gym needs inflammation for adaptation. Cold kills gains within 6hrs</span>' },
+      { time: '12:00', title: 'Lunch', tag: 'meal', detail: 'Protein + carbs + veg. Hydrate <span class="spec">300-500ml</span>' },
+      { time: '1:00', title: 'Ball Work + Long Throws', tag: 'ball', detail: 'Ball Mastery Set A <span class="spec">10 min</span> <span class="foot">R then L</span> Passing & Switching <span class="spec">5-8 min</span> <span class="foot">Both feet</span> Long Throw Practice <span class="spec">5-10 min</span>: Warm-up throws 5x50%, Standing 3x5 <span class="spec">30s rest</span>, One-step 3x5 <span class="spec">30s rest</span>, Run-up 3x5 <span class="spec">45s rest</span>, Max attempts 5x1 <span class="spec">60s rest</span>',
+        expand: true },
+      { time: '2:00', title: 'Free Time', tag: 'routine', detail: 'Limit phone. Read, visualize, watch game film' },
+      { time: '5:00', title: 'Dinner', tag: 'meal', detail: 'Protein + carbs + veg. Hydrate <span class="spec">300ml</span>' },
+      { time: '8:00', title: 'Evening Protocol', tag: 'routine', detail: 'Dim lights, wind down, sauna if not done, sleep stack at 9:30, lights out 10:00' },
+    ]
+  },
+  {
+    name: 'Tuesday',
+    theme: 'Team Training Day',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight, hydrate, walk, breakfast, creatine 5g' },
+      { time: '8:00', title: '112mvmnt: Calves & Ankles', tag: 'mobility', detail: 'Slant Board Calf Raise <span class="spec">3x8-10 @ 20% BW</span> Bent-Leg Calf Raise <span class="spec">3x8-10 @ 20% BW</span> Tib Raises <span class="spec">3x8-10 @ 10% BW</span> Foot Stretch + Hack Squat superset <span class="spec">60s/40s/20s + 3x8</span> Banded Ankle Dorsiflexion <span class="spec">2 min</span> Deep Squat Heels Elevated <span class="spec">4 min</span> Elevated Seiza <span class="spec">1 min</span>',
+        expand: true },
+      { time: '8:20', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each</span> Child Rocker <span class="spec">60s x 3</span> Toe Tuck Rocker <span class="spec">60s x 3</span>' },
+      { time: '8:30', title: 'Gym: Activation Only', tag: 'gym', detail: 'Glute Bridges <span class="spec">3x12 BW, 30s rest</span> Banded Lateral Walks <span class="spec">3x10 each, 30s rest</span> Single-Leg RDL <span class="spec">3x8 each BW, 30s rest</span> Push-ups <span class="spec">3x10-15, 30s rest</span> Band Pull-Aparts <span class="spec">3x15, 30s rest</span> Bird Dogs <span class="spec">3x8 each, 30s rest</span>',
+        expand: true },
+      { time: '9:00', title: 'Fascia: Toe Curls', tag: 'mobility', detail: 'Elevated Toe Curls <span class="spec">3x20s, 10s rest</span>' },
+      { time: '9:05', title: 'Cold Plunge (Morning Dopamine)', tag: 'recovery', detail: '<span class="spec">1-3 min @ 10-15C</span> Doubles baseline dopamine for 4-6 hours. Move limbs' },
+      { time: '12:00', title: 'Lunch', tag: 'meal', detail: 'Protein + carbs + veg' },
+      { time: '1:00', title: 'Light Ball Touches', tag: 'ball', detail: 'Warm-up touches + juggling only <span class="spec">10-15 min</span> <span class="foot">Both feet</span> Save energy for team training' },
+      { time: '4:00', title: 'Pre-Training Meal', tag: 'meal', detail: 'Banana + toast + small shake. Light carbs + protein' },
+      { time: '4:15', title: 'Caffeine + Hydrate', tag: 'meal', detail: 'Caffeine <span class="spec">1-3mg/kg</span> Hydrate <span class="spec">300-500ml + electrolytes</span>' },
+      { time: '5:00', title: 'TEAM TRAINING', tag: 'team', detail: 'PEP/ACL warm-up if time before <span class="spec">15 min</span>' },
+      { time: 'Post', title: 'Cool-Down + Dinner', tag: 'recovery', detail: 'Light jog <span class="spec">5 min</span> Static stretch: glutes, hammys, quads, groin, calves <span class="spec">30s each, each side</span> Dinner within 1hr: <span class="spec">3:1 carb-to-protein</span> Hydrate <span class="spec">125-150% fluid lost</span>' },
+      { time: '8:00', title: 'Evening Protocol', tag: 'routine', detail: 'Sauna for recovery tonight. Sleep stack 9:30. Lights out 10:00' },
+    ]
+  },
+  {
+    name: 'Wednesday',
+    theme: 'Power Day (Seward + Gym)',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight, hydrate, walk, breakfast, creatine 5g' },
+      { time: '8:00', title: '112mvmnt: Glutes & Groins', tag: 'mobility', detail: 'Dynamic Leg Lifts <span class="spec">3x5 each angle</span> Tailor\'s Pose <span class="spec">3x8-10</span> Kneeling Tilt <span class="spec">3x8, 5s hold last rep</span> Elevated Pigeon <span class="spec">1 min</span> Standing Pancake <span class="spec">1 min</span> Wall Straddle <span class="spec">2 min</span> Side Split Iso <span class="spec">1 min</span> Pancake CRAC <span class="spec">3x30s</span> Horse Stance <span class="spec">3x30s</span>',
+        expand: true },
+      { time: '8:20', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each</span> Child Rocker <span class="spec">60s x 3</span> Toe Tuck Rocker <span class="spec">60s x 3</span>' },
+      { time: '8:30', title: 'Seward Workout of the Day', tag: 'seward', detail: 'Check Seward mapping. See seward-summer-2026.md' },
+      { time: '9:15', title: 'Gym: Power & Explosive', tag: 'gym', detail: 'Trap Bar DL <span class="spec">4x5-6 @ 60kg, 2-3 min, EXPLOSIVE up</span> Push Press <span class="spec">3x5-6 @ 30kg, 2 min</span> Bulgarian Split Squat <span class="spec">3x8 each @ 12kg ea, 90s, 3-1-1</span> Single-Arm DB Row <span class="spec">3x8-10 each @ 18kg, 60s</span> Incline DB Press <span class="spec">3x8-10 @ 16kg ea, 90s</span> Chin-ups <span class="spec">3xmax, 90s</span> Lateral Raises <span class="spec">3x12-15 @ 6kg ea, 60s</span>',
+        expand: true },
+      { time: '10:00', title: 'Core: Speed Focus', tag: 'gym', detail: 'Med Ball Slams <span class="spec">3x8, 45s rest</span> Med Ball Rotational Throws <span class="spec">3x8 each side, 45s rest</span> Russian Twists <span class="spec">3x15 each @ 5-8kg, 30s rest</span>' },
+      { time: '10:15', title: 'Fascia + Nordics', tag: 'mobility', detail: 'HFT Marble Swing <span class="spec">3x30s each foot</span> Lateral Pelvic Tilts <span class="spec">3 positions x 30s each side</span> Gait Cycles <span class="spec">5 min</span> Nordic Phase 1 <span class="spec">3-4 x 5-8, 90s rest</span>' },
+      { time: '10:35', title: 'Post-Training Shake', tag: 'meal', detail: 'Protein <span class="spec">30-40g</span>' },
+      { time: '10:45', title: 'Sauna', tag: 'recovery', detail: 'Standard <span class="spec">15-20 min @ 80-100C</span> OR GH Protocol <span class="spec">4x30 min @ 80C, 5 min breaks</span> (once/week max). <span class="warn">NO ICE BATH after heavy gym</span>' },
+      { time: '12:00', title: 'Lunch', tag: 'meal', detail: 'Protein + carbs + veg' },
+      { time: '1:00', title: 'Ball Work + Long Throws', tag: 'ball', detail: 'Ball Mastery Set B <span class="spec">10 min</span> <span class="foot">R then L</span> Weak Foot Block <span class="spec">5 min L foot only</span>: inside-outside rolls 1 min, wall passing 2 min, sole drag 1 min, driven pass 1 min. Long Throws <span class="spec">5-10 min</span>',
+        expand: true },
+      { time: '2:00', title: 'Free Time', tag: 'routine', detail: 'Rest, recover' },
+      { time: '5:00', title: 'Dinner', tag: 'meal', detail: 'Protein + carbs + veg' },
+      { time: '8:00', title: 'Evening Protocol', tag: 'routine', detail: 'Wind down, sleep stack 9:30, lights out 10:00' },
+    ]
+  },
+  {
+    name: 'Thursday',
+    theme: 'Team Training Day',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight, hydrate, walk, breakfast, creatine 5g' },
+      { time: '8:00', title: '112mvmnt: Stronger Knee', tag: 'mobility', detail: 'Banded Knee Extension <span class="spec">3x20, heavy band, 60s rest</span> Isometric Lunge Hold <span class="spec">3x30-45s, 90s rest</span> Reverse Step-Up <span class="spec">3x6 BW, 60-90s rest</span> Slant Board Squat <span class="spec">3x6-8 @ 25% BW, 60-90s rest</span> Reverse Nordic Curl <span class="spec">3x5 assisted, 90s rest</span> Knee IR/ER <span class="spec">2x5 each, 30s rest</span>',
+        expand: true },
+      { time: '8:20', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each</span> Child Rocker <span class="spec">60s x 3</span> Toe Tuck Rocker <span class="spec">60s x 3</span>' },
+      { time: '8:30', title: 'Gym: Activation Only', tag: 'gym', detail: 'Single-Leg Glute Bridges <span class="spec">3x8 each, 30s rest</span> Clamshells <span class="spec">3x12 each, banded, 30s rest</span> Pallof Press <span class="spec">3x10 each, 30s rest</span> Single-Leg RDL <span class="spec">3x8 each BW, 30s rest</span> Push-ups <span class="spec">3x10, 30s rest</span>',
+        expand: true },
+      { time: '9:00', title: 'Fascia: Toe Curls', tag: 'mobility', detail: 'Elevated Toe Curls <span class="spec">3x20s, 10s rest</span>' },
+      { time: '9:05', title: 'Cold Plunge (Dopamine)', tag: 'recovery', detail: '<span class="spec">1-3 min @ 10-15C</span> Doubles dopamine for 4-6 hours' },
+      { time: '12:00', title: 'Lunch', tag: 'meal', detail: 'Protein + carbs + veg' },
+      { time: '1:00', title: 'Light Ball Touches', tag: 'ball', detail: 'Warm-up touches + juggling <span class="spec">10-15 min</span> <span class="foot">Both feet</span>' },
+      { time: '4:00', title: 'Pre-Training Meal + Caffeine', tag: 'meal', detail: 'Light carbs + protein. Caffeine <span class="spec">1-3mg/kg</span> Hydrate <span class="spec">300-500ml + electrolytes</span>' },
+      { time: '5:00', title: 'TEAM TRAINING', tag: 'team', detail: 'Full effort' },
+      { time: 'Post', title: 'Cool-Down + Dinner', tag: 'recovery', detail: 'Jog <span class="spec">5 min</span> Stretch <span class="spec">5 min, 30s each muscle</span> Dinner <span class="spec">3:1 carb:protein within 1hr</span> Hydrate <span class="spec">125-150%</span>' },
+      { time: '8:00', title: 'Evening Protocol', tag: 'routine', detail: 'Sauna for recovery. Sleep stack 9:30. Lights out 10:00. Game film study <span class="spec">15-20 min</span> — watch a CM role model' },
+    ]
+  },
+  {
+    name: 'Friday',
+    theme: 'Speed & Skills Day',
+    blocks: [
+      { time: '7:00', title: 'Morning Protocol', tag: 'routine', detail: 'Wake, sunlight, hydrate, walk, breakfast, creatine 5g' },
+      { time: '8:00', title: '112mvmnt: Lower Back + Calves', tag: 'mobility', detail: 'Lower Back: Bent Knee Fold <span class="spec">1 min</span> Active Cobra <span class="spec">3x5x5s</span> Hamstring Extension <span class="spec">3x30s</span> World\'s Greatest Stretch <span class="spec">1 min each</span> Banded Rotation <span class="spec">1 min</span> Seated Good Mornings <span class="spec">3x6</span> Inner Thigh Lifts <span class="spec">3x3x5s</span> Big Twist <span class="spec">1 min</span> Then Calves: Calf Raises <span class="spec">3x8-10</span> Tib Raises <span class="spec">3x8-10</span> Ankle Dorsiflexion <span class="spec">2 min</span>',
+        expand: true },
+      { time: '8:25', title: 'GOATA Groundwork', tag: 'mobility', detail: 'Ground Hip Stretch <span class="spec">45-60s each</span> Child Rocker <span class="spec">60s x 3</span> Toe Tuck Rocker <span class="spec">60s x 3</span>' },
+      { time: '8:30', title: 'Seward Workout (if scheduled)', tag: 'seward', detail: 'Check Seward mapping. Do the workout' },
+      { time: '9:00', title: 'Speed & Acceleration Session', tag: 'gym', detail: '<strong>Warm-Up:</strong> A-skips <span class="spec">2x20m</span> B-skips <span class="spec">2x20m</span> High knees <span class="spec">2x20m</span> Wall drives <span class="spec">2x8 each</span> Falling starts <span class="spec">3x15m</span> <strong>Acceleration:</strong> Standing start 10m <span class="spec">5x1, 60s rest</span> 3-point start 15m <span class="spec">4x1, 60s rest</span> Reaction sprints 10m <span class="spec">4x1, 60s rest</span> <strong>Top Speed:</strong> Flying 20s <span class="spec">4x1, 90s rest</span> Tempo runs 100m <span class="spec">3x1, 60s rest @ 70-75%</span>',
+        expand: true },
+      { time: '9:35', title: 'Fascia Training', tag: 'mobility', detail: 'HFT Marble Swing <span class="spec">3x30s each foot</span> Gait Cycles <span class="spec">5 min</span> Elevated Toe Curls <span class="spec">3x20s</span>' },
+      { time: '9:50', title: 'Sauna (NO Ice Bath)', tag: 'recovery', detail: 'Sauna <span class="spec">15 min @ 80-100C</span> <span class="warn">NO ice bath — save stress response for game day</span>' },
+      { time: '12:00', title: 'Lunch (Carb Load)', tag: 'meal', detail: 'Pasta/rice heavy + protein + veg. Start glycogen loading' },
+      { time: '1:00', title: 'Ball Work + Long Throws', tag: 'ball', detail: 'Cognitive Set C <span class="spec">10 min</span> <span class="foot">Both feet</span> First Touch drills <span class="spec">5-8 min</span> Long Throw Practice <span class="spec">5-10 min</span>',
+        expand: true },
+      { time: '1:45', title: 'Free Time / Nap', tag: 'routine', detail: 'Nap if possible <span class="spec">20-30 min max</span> to avoid sleep inertia' },
+      { time: '5:00', title: 'Dinner (Carb Heavy)', tag: 'meal', detail: 'Pasta + protein + veg. Glycogen loading for game day' },
+      { time: '7:00', title: 'Match Prep', tag: 'routine', detail: 'Lay out kit, prepare boots, fill water bottles' },
+      { time: '7:30', title: 'Visualization', tag: 'routine', detail: '<span class="spec">10 min eyes-closed</span> Run through game scenarios: first touch, tackles, passing lanes, long throws, set pieces' },
+      { time: '9:00', title: 'Sauna + Sleep Stack', tag: 'recovery', detail: 'Sauna <span class="spec">15-20 min</span> for cooling response. Sleep stack at 9:30. <span class="warn">LIGHTS OUT 9:30 — extra 30 min before game day</span>' },
+    ]
+  },
+  {
+    name: 'Saturday',
+    theme: 'MATCH DAY — Everything serves the game',
+    blocks: [
+      { time: '7:30', title: 'Wake + Sunlight', tag: 'routine', detail: 'Sunlight <span class="spec">10 min</span> No phone 15 min. Hydrate <span class="spec">500ml + electrolytes</span>' },
+      { time: '8:00', title: 'Breakfast (Carb Focus)', tag: 'meal', detail: 'Oats + banana + honey OR toast + eggs. <span class="spec">30-60g carbs + 20g protein</span> Creatine 5g' },
+      { time: '9:00', title: 'Light Walk + Visualization', tag: 'routine', detail: 'Walk <span class="spec">15 min</span> Visualization <span class="spec">10 min</span>' },
+      { time: '12:00', title: 'Lunch (3-4hrs Pre-Game)', tag: 'meal', detail: 'Pasta/rice + chicken + veg. Hydrate <span class="spec">300ml</span>' },
+      { time: '3:30', title: 'Pre-Game Meal (Light)', tag: 'meal', detail: 'Banana + toast + honey OR energy bar' },
+      { time: '4:00', title: 'Caffeine', tag: 'meal', detail: '<span class="spec">1-3mg/kg BW</span> empty stomach. 60-90 min before kickoff' },
+      { time: '4:30', title: 'Hydrate', tag: 'meal', detail: '<span class="spec">300ml water + electrolytes</span>' },
+      { time: '5:15', title: 'PRE-GAME WARM-UP', tag: 'team', detail: '<strong>1. GOATA</strong> <span class="spec">5 min</span>: Ground Hip Stretch 45s each, Child Rocker 60s x 2, Toe Tuck 60s x 2. <strong>2. Pelvic Tilts</strong> <span class="spec">3 min</span>: side-lying 30s, half-kneeling 30s, split squat 30s, both sides. <strong>3. Aerobic</strong> <span class="spec">8 min</span>: jog 3 min, side-step 1 min each, backward 1 min. <strong>4. PEP/ACL</strong> <span class="spec">5 min</span>: lunges 1 min, bridge 30s/side, hip flexor 30s/side. <strong>5. Velocity</strong> <span class="spec">4 min</span>: 4x20m sprints + 2 direction changes, 30s rest. <strong>6. Ball</strong> <span class="spec">5 min</span>: passing, shooting, Coerver pull-push',
+        expand: true },
+      { time: '6:00', title: 'GAME', tag: 'team', detail: 'Leave everything on the pitch' },
+      { time: 'Post', title: 'Cool-Down', tag: 'recovery', detail: 'Jog <span class="spec">5 min</span> Stretch <span class="spec">5 min: glutes 30s, hammys 30s, quads 30s, groin 30s, calves 30s each side</span>' },
+      { time: 'Post', title: 'Refuel Immediately', tag: 'meal', detail: 'Protein shake + banana right away. Dinner within 1hr: <span class="spec">3:1 carb:protein</span> Hydrate <span class="spec">125-150% fluid lost</span>' },
+      { time: '10:00', title: 'LIGHTS OUT', tag: 'routine', detail: '<span class="warn">NO sauna or ice bath tonight</span> Just eat, hydrate, sleep. If subbed early (<60 min): 20-min tempo run 70% OR 6x100m sprints 45s rest' },
+    ]
+  },
+];
+
+/* ============================================
+   SEWARD DAILY SCHEDULE (July 9-23, 2026)
+   Each date maps to: original day, actual workout detail with full specs
+   Saturday workouts get moved to Sunday
+   ============================================ */
+const SEWARD = {
+  '2026-07-09': { day: 'Wed', title: 'Run + Abs 1 + Pushups + Squats', detail: '2 Mile Run <span class="spec">timed</span> then Abs 1: Slow Crunches <span class="spec">25 reps</span> Full Sit-Ups <span class="spec">25 reps</span> 6-Inch Scissors <span class="spec">25 reps (cross twice = 1)</span> Superman Hold <span class="spec">3 sets x 5s hold</span> Slow Crunches <span class="spec">25 reps</span> then Push-ups <span class="spec">25 reps</span> Squats <span class="spec">25 reps</span>' },
+  '2026-07-10': { day: 'Thu', title: 'Workout B + Abs 2', detail: '<strong>Workout B:</strong> Walking Pushups <span class="spec">4x7 reps (pushup, walk hands 90° R, pushup, walk L, pushup, back, pushup = 1 rep)</span> Lunges <span class="spec">5x10 each leg, knee behind toes</span> <strong>Abs 2:</strong> Front Plank <span class="spec">3x1 min</span> Left Side Plank <span class="spec">3x1 min</span> Right Side Plank <span class="spec">3x1 min</span>' },
+  '2026-07-11': { day: 'Fri', title: 'Workout C + Abs 1', detail: '<strong>Workout C:</strong> Clap Push-ups <span class="spec">5x15 (or max)</span> Calf Jumps in 1/4 Squat <span class="spec">5x30 (bounce on toes)</span> Calf Jumps Max Height <span class="spec">5x15 (straight up)</span> <strong>Abs 1:</strong> Slow Crunches <span class="spec">25</span> Full Sit-Ups <span class="spec">25</span> 6-Inch Scissors <span class="spec">25</span> Superman Hold <span class="spec">3 sets x 5s</span> Slow Crunches <span class="spec">25</span>' },
+  '2026-07-12': { day: 'Sat', moved: 'Sun', title: 'Workout D + Abs 2 (MOVED from Sat)', detail: '<span class="warn">MOVED FROM SATURDAY — match day</span> <strong>Workout D:</strong> Decline Push-ups (feet on chair) <span class="spec">5x10</span> Diamond Push-ups <span class="spec">5x11</span> Vertical Wall Jumps (slap wall high) <span class="spec">5x20</span> Single Leg Jumps (land same leg) <span class="spec">5x10 each</span> Calf Raises (hold 5s) <span class="spec">10x20</span> <strong>Abs 2:</strong> Front Plank <span class="spec">3x1 min</span> L Side Plank <span class="spec">3x1 min</span> R Side Plank <span class="spec">3x1 min</span>' },
+  '2026-07-13': { day: 'Sun', title: 'Sprint Pyramid + Abs 1 (+ moved Workout D)', detail: '<span class="warn">DOUBLE-STACKED DAY — Jul 12 Workout D moved here too</span> <strong>AM — Workout D (moved from Sat):</strong> Decline Push-ups <span class="spec">5x10</span> Diamond Push-ups <span class="spec">5x11</span> Wall Jumps <span class="spec">5x20</span> Single Leg Jumps <span class="spec">5x10 each</span> Calf Raises <span class="spec">10x20</span> + Abs 2 Planks <span class="spec">3x1 min each</span> <strong>PM — Sprint Pyramid (2 sets):</strong> 10m → 20m → 30m → 40m → 50m → 50m → 40m → 30m → 20m → 10m <span class="spec">Full speed, rest = distance in seconds</span> <span class="spec">5 min between sets</span> + Abs 1. Skip extra recovery top-up. Eat big between sessions' },
+  '2026-07-14': { day: 'Mon', title: 'Workout B + JR2 + Abs 1', detail: '<strong>Workout B:</strong> Walking Pushups <span class="spec">4x7</span> Lunges <span class="spec">5x10 each leg</span> <strong>Jump Rope 2:</strong> <span class="spec">3 sets x 100 jumps, 30s rest</span> <strong>Abs 1:</strong> Slow Crunches <span class="spec">25</span> Full Sit-Ups <span class="spec">25</span> 6-Inch Scissors <span class="spec">25</span> Superman <span class="spec">3x5s</span> Slow Crunches <span class="spec">25</span> <span class="warn">MFM appointment at 12pm — train early</span>' },
+  '2026-07-15': { day: 'Tue', title: 'Workout A + JR2 + Abs 2', detail: '<strong>Workout A:</strong> Wide Push-ups <span class="spec">4x10</span> Normal Push-ups <span class="spec">4x10</span> Burpees (pushup → squat → max jump) <span class="spec">5x10, full effort</span> Squats <span class="spec">5x10</span> Knees to Chest <span class="spec">3x15</span> <strong>Jump Rope 2:</strong> <span class="spec">3x100 jumps, 30s rest</span> <strong>Abs 2:</strong> Front Plank <span class="spec">3x1 min</span> L/R Side Planks <span class="spec">3x1 min each</span> Skip gym activation — Seward covers it. Team training is light' },
+  '2026-07-16': { day: 'Wed', title: '10x 100yd Sprints + Abs 1', detail: '100-Yard Sprints <span class="spec">10 reps, FULL SPEED, 30s-1 min rest between</span> <strong>Abs 1:</strong> Slow Crunches <span class="spec">25</span> Full Sit-Ups <span class="spec">25</span> 6-Inch Scissors <span class="spec">25</span> Superman <span class="spec">3x5s</span> Slow Crunches <span class="spec">25</span>' },
+  '2026-07-17': { day: 'Thu', title: '2x 1-Mile + Circuit', detail: '1 Mile Run <span class="spec">TIMED — go hard</span> then 1 min rest then Circuit: Crunches <span class="spec">25</span> Push-ups <span class="spec">25</span> Knees to Chest <span class="spec">25</span> then 30s rest then 1 Mile Run <span class="spec">TIMED — try to match first time</span> Skip gym activation — Seward covers it. Team training is light' },
+  '2026-07-18': { day: 'Fri', title: '2 Mile Run + Abs 1 + JR2', detail: '2 Mile Run <span class="spec">timed</span> <strong>Abs 1:</strong> Slow Crunches <span class="spec">25</span> Full Sit-Ups <span class="spec">25</span> 6-Inch Scissors <span class="spec">25</span> Superman <span class="spec">3x5s</span> Slow Crunches <span class="spec">25</span> <strong>Jump Rope 2:</strong> <span class="spec">3x100 jumps, 30s rest</span>' },
+  '2026-07-19': { day: 'Sat', moved: 'Sun', title: 'Workout A + Abs 2 + JR2 (MOVED from Sat)', detail: '<span class="warn">MOVED FROM SATURDAY — match day</span> <strong>Workout A:</strong> Wide Push-ups <span class="spec">4x10</span> Normal Push-ups <span class="spec">4x10</span> Burpees <span class="spec">5x10</span> Squats <span class="spec">5x10</span> Knees to Chest <span class="spec">3x15</span> <strong>Abs 2:</strong> Planks <span class="spec">3x1 min each (front/L/R)</span> <strong>Jump Rope 2:</strong> <span class="spec">3x100, 30s rest</span>' },
+  '2026-07-20': { day: 'Sun', title: '5x5x40yd Sprints + Abs 1 (+ moved Workout A)', detail: '<span class="warn">DOUBLE-STACKED DAY — Jul 19 Workout A moved here too</span> <strong>AM — Workout A (moved from Sat):</strong> Wide Push-ups <span class="spec">4x10</span> Normal Push-ups <span class="spec">4x10</span> Burpees <span class="spec">5x10</span> Squats <span class="spec">5x10</span> Knees to Chest <span class="spec">3x15</span> + Abs 2 Planks + JR2 <span class="spec">3x100</span> <strong>PM — 40-Yard Sprints:</strong> <span class="spec">5 sprints x 5 sets = 25 total, 30s rest between sprints, 5 min between sets</span> + Abs 1. Skip extra recovery top-up. Eat big between sessions' },
+  '2026-07-21': { day: 'Mon', title: 'Workout D + Abs 2', detail: '<strong>Workout D:</strong> Decline Push-ups <span class="spec">5x10</span> Diamond Push-ups <span class="spec">5x11</span> Vertical Wall Jumps <span class="spec">5x20</span> Single Leg Jumps <span class="spec">5x10 each</span> Calf Raises (hold 5s) <span class="spec">10x20</span> <strong>Abs 2:</strong> Front Plank <span class="spec">3x1 min</span> L/R Side Planks <span class="spec">3x1 min each</span>' },
+  '2026-07-22': { day: 'Tue', title: 'Workout B + Abs 1 + 1mi + 10x100yd (BIGGEST DAY)', detail: '<span class="warn">BIGGEST day in the program — 3 days before fly out. Full send but stay smart</span> <strong>Workout B:</strong> Walking Pushups <span class="spec">4x7</span> Lunges <span class="spec">5x10 each leg, knee behind toes</span> <strong>Abs 1:</strong> Crunches <span class="spec">25</span> Sit-Ups <span class="spec">25</span> Scissors <span class="spec">25</span> Superman <span class="spec">3x5s</span> Crunches <span class="spec">25</span> then 1 Mile Run <span class="spec">TIMED — full effort</span> then 10x 100yd Sprints <span class="spec">full speed, 30s-1 min rest</span> Skip gym activation — Seward is more than enough. Team training is light. Eat big at lunch, hydrate hard' },
+  '2026-07-23': { day: 'Wed', title: 'Abs 1 + Abs 2 + 1mi + JR1 + JR2', detail: '<strong>Abs 1:</strong> Crunches <span class="spec">25</span> Sit-Ups <span class="spec">25</span> Scissors <span class="spec">25</span> Superman <span class="spec">3x5s</span> Crunches <span class="spec">25</span> <strong>Abs 2:</strong> Planks <span class="spec">3x1 min each</span> then 1 Mile Run <span class="spec">timed</span> <strong>Jump Rope 1:</strong> <span class="spec">5x30 jumps, 30s rest</span> <strong>Jump Rope 2:</strong> <span class="spec">3x100 jumps, 30s rest</span>' },
+};
+
+// Get the Seward workout for a given date, accounting for Saturday→Sunday moves
+// On double-stacked Sundays, the Sunday workout already includes the moved Saturday workout in its detail
+function getSewardForDate(dateStr, dayOfWeek) {
+  // Direct match
+  const direct = SEWARD[dateStr];
+  if (direct && !direct.moved) return direct;
+
+  // Sunday: check if yesterday (Saturday) has a moved workout
+  if (dayOfWeek === 0) {
+    const sat = new Date(dateStr);
+    sat.setDate(sat.getDate() - 1);
+    const satStr = sat.toISOString().split('T')[0];
+    const moved = SEWARD[satStr];
+    // If Sunday has its own workout, it already includes the moved one in its detail
+    if (direct) return direct;
+    // If only a moved workout exists (no Sunday workout scheduled)
+    if (moved && moved.moved === 'Sun') return moved;
+  }
+
+  if (direct) return direct;
+  return null;
+}
+
+// Inject Seward workouts into day blocks based on current week
+function injectSewardWorkouts() {
+  const now = new Date();
+  // Get the start of this week (Sunday)
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - now.getDay());
+
+  DAYS.forEach((day, dayIndex) => {
+    const date = new Date(sunday);
+    date.setDate(sunday.getDate() + dayIndex);
+    const dateStr = date.toISOString().split('T')[0];
+
+    const seward = getSewardForDate(dateStr, dayIndex);
+
+    day.blocks.forEach(block => {
+      if (block.tag === 'seward') {
+        if (seward) {
+          block.title = 'SEWARD: ' + seward.title;
+          block.detail = seward.detail;
+          block.expand = true;
+        } else {
+          block.title = 'Seward: No workout scheduled';
+          block.detail = dateStr >= '2026-07-24' ? 'Program complete! Pack and prepare for travel' : dateStr < '2026-07-09' ? 'Program starts July 9' : 'Rest day from Seward program';
+          block.expand = false;
+        }
+      }
+    });
+  });
+}
+
+injectSewardWorkouts();
+
+/* ============================================
+   RENDER ENGINE
+   ============================================ */
+const storeGet = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+const storeSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+const todayIndex = new Date().getDay(); // 0=Sun
+const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+let checkedBlocks = storeGet('plan_checked') || {};
+
+function renderTabs() {
+  const el = document.getElementById('dayTabs');
+  el.innerHTML = '';
+  DAYS.forEach((day, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'day-tab' + (i === todayIndex ? ' today' : '');
+    btn.textContent = day.name.substring(0, 3);
+    btn.dataset.day = i;
+    btn.addEventListener('click', () => selectDay(i));
+    el.appendChild(btn);
+  });
+}
+
+function selectDay(index) {
+  document.querySelectorAll('.day-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.day-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === index);
+  });
+  updateStats(index);
+}
+
+function renderPanels() {
+  const container = document.getElementById('dayPanels');
+  container.innerHTML = '';
+
+  DAYS.forEach((day, dayIndex) => {
+    const panel = document.createElement('div');
+    panel.className = 'day-panel';
+    panel.id = `day-${dayIndex}`;
+
+    let html = `
+      <div class="day-header">
+        <div class="day-name">${day.name}</div>
+        <div class="day-theme">${day.theme}</div>
+      </div>
+      <div class="schedule">
+    `;
+
+    day.blocks.forEach((block, blockIndex) => {
+      const key = `${dayIndex}-${blockIndex}`;
+      const isDone = checkedBlocks[key] || false;
+      const tagClass = 'tag-' + block.tag;
+
+      html += `
+        <div class="block ${isDone ? 'done' : ''} ${block.expand ? 'expandable' : ''}" data-key="${key}" onclick="toggleBlock(this, event)">
+          <div class="block-time">${block.time}</div>
+          <div class="block-content">
+            <span class="block-tag ${tagClass}">${block.tag}</span>
+            <div class="block-title">${block.title}</div>
+            ${block.expand
+              ? `<div class="block-detail" style="display:none">${block.detail}</div>
+                 <div class="block-expand-hint" style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">tap for details</div>`
+              : `<div class="block-detail">${block.detail}</div>`
+            }
+          </div>
+          <div class="block-check" onclick="toggleCheck(event, '${key}')">${isDone ? '&#10003;' : '&#9675;'}</div>
+        </div>
+      `;
+    });
+
+    html += '</div>';
+    panel.innerHTML = html;
+    container.appendChild(panel);
+  });
+}
+
+function toggleBlock(el, event) {
+  if (event.target.closest('.block-check')) return;
+  if (!el.classList.contains('expandable')) return;
+
+  const detail = el.querySelector('.block-detail');
+  const hint = el.querySelector('.block-expand-hint');
+  if (detail.style.display === 'none') {
+    detail.style.display = 'block';
+    if (hint) hint.style.display = 'none';
+  } else {
+    detail.style.display = 'none';
+    if (hint) hint.style.display = 'block';
+  }
+}
+
+function toggleCheck(event, key) {
+  event.stopPropagation();
+  checkedBlocks[key] = !checkedBlocks[key];
+  storeSet('plan_checked', checkedBlocks);
+
+  const block = event.target.closest('.block');
+  block.classList.toggle('done', checkedBlocks[key]);
+  block.querySelector('.block-check').innerHTML = checkedBlocks[key] ? '&#10003;' : '&#9675;';
+
+  const activeDay = document.querySelector('.day-tab.active');
+  if (activeDay) updateStats(parseInt(activeDay.dataset.day));
+}
+
+function updateStats(dayIndex) {
+  const day = DAYS[dayIndex];
+  const total = day.blocks.length;
+  let done = 0;
+  day.blocks.forEach((_, i) => {
+    if (checkedBlocks[`${dayIndex}-${i}`]) done++;
+  });
+  document.getElementById('statChecked').textContent = `${done}/${total}`;
+
+  // Days until fly out (~July 24)
+  const flyOut = new Date(2026, 6, 24);
+  const now = new Date();
+  const daysLeft = Math.max(0, Math.ceil((flyOut - now) / (1000*60*60*24)));
+  document.getElementById('statDaysLeft').textContent = daysLeft;
+
+  // Show today's Seward workout in stat bar
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todaySeward = getSewardForDate(todayStr, new Date().getDay());
+  if (todaySeward) {
+    document.getElementById('statSeward').textContent = todaySeward.title.substring(0, 20) + (todaySeward.title.length > 20 ? '...' : '');
+  } else if (todayStr >= '2026-07-24') {
+    document.getElementById('statSeward').textContent = 'Complete';
+  } else if (todayStr < '2026-07-09') {
+    document.getElementById('statSeward').textContent = 'Starts Jul 9';
+  } else {
+    document.getElementById('statSeward').textContent = 'Rest day';
+  }
+}
+
+function toggleProtocol(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// Reset day checkmarks at midnight
+function checkDayReset() {
+  const lastReset = storeGet('plan_last_reset');
+  const today = new Date().toDateString();
+  if (lastReset !== today) {
+    checkedBlocks = {};
+    storeSet('plan_checked', checkedBlocks);
+    storeSet('plan_last_reset', today);
+  }
+}
+
+// Init
+checkDayReset();
+renderTabs();
+renderPanels();
+selectDay(todayIndex);
+</script>
+</body>
+</html>
