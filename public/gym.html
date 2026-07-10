@@ -211,10 +211,14 @@ ul{list-style:none;}
 .g-wnode em{font-style:normal;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--dimmer,#3B4E47);}
 .g-wnode.is-heavy .g-wbead{border-color:#D8B24A;}
 .g-wnode.is-power .g-wbead{border-color:#E8873A;}
+.g-wnode.is-act .g-wbead{border-color:#4ADE80;}
+.g-wnode.is-speed .g-wbead{border-color:#7DD3C0;}
 .g-wnode.is-off .g-wbead{border-color:var(--dimmer,#3B4E47);}
 .g-wnode.is-past .g-wbead{background:currentColor;}
 .g-wnode.is-past.is-heavy .g-wbead{background:#D8B24A;}
 .g-wnode.is-past.is-power .g-wbead{background:#E8873A;}
+.g-wnode.is-past.is-act .g-wbead{background:#4ADE80;}
+.g-wnode.is-past.is-speed .g-wbead{background:#7DD3C0;}
 .g-wnode.is-today em{color:#4ADE80;}
 .g-wnode.is-today .g-wbead{box-shadow:0 0 0 4px rgba(74,222,128,.12);}
 .g-wnode.is-sel .g-wbead{transform:scale(1.25);}
@@ -310,11 +314,11 @@ ul{list-style:none;}
 
   /* ── Week spine data ── */
   var GYM_WEEK = [
-    { d:'MON', kind:'heavy', label:'Heavy Compounds', mins:50 },
-    { d:'TUE', kind:'off',   label:'No gym' },
-    { d:'WED', kind:'power', label:'Power & Explosive', mins:50 },
-    { d:'THU', kind:'off',   label:'No gym' },
-    { d:'FRI', kind:'off',   label:'Speed day' },
+    { d:'MON', kind:'heavy', label:'Plyo + Heavy Compounds', mins:65 },
+    { d:'TUE', kind:'act',   label:'Activation', mins:25 },
+    { d:'WED', kind:'power', label:'Power & Explosive', mins:55 },
+    { d:'THU', kind:'act',   label:'Activation', mins:25 },
+    { d:'FRI', kind:'speed', label:'Speed & Accel', mins:35 },
     { d:'SAT', kind:'off',   label:'Match day' },
     { d:'SUN', kind:'off',   label:'Recovery' }
   ];
@@ -356,9 +360,15 @@ ul{list-style:none;}
           { sets:[st(40,9,7),st(40,9,7.5),st(40,8,8)] }
         ]},
         { name:'Pull-ups', repRange:[5,8], increment:0, rest:90, history:[] },
-        { name:'DB shoulder press', repRange:[8,10], increment:2, rest:90, history:[] }
+        { name:'DB shoulder press', repRange:[8,10], increment:2, rest:90, history:[] },
+        { name:'Face pulls (band)', repRange:[15,15], increment:0, rest:60, history:[] }
       ],
       extras: [
+        { label:'PLYOMETRICS (do BEFORE main lifts)', items:[
+          { n:'Box Jumps (50-60cm)', d:'3\u00D75, 60s rest' },
+          { n:'Broad Jumps', d:'3\u00D75, 60s rest' },
+          { n:'Single-Leg Bounds', d:'3\u00D75 each, 45s rest' }
+        ]},
         { label:'CORE \u2014 STIFFNESS', items:[
           { n:'Front Plank', d:'3\u00D745s' },
           { n:'Pallof Press', d:'3\u00D710 each' },
@@ -372,6 +382,26 @@ ul{list-style:none;}
         {team:180,gym:115,run:40,mobility:25},{},{},{},
         {},{},{},{}
       ]
+    },
+    1: {  // Tuesday — Activation (pre-team training)
+      session: { name:'Activation', at:'Before team' },
+      gate: { hold:false, reason:'' },
+      warmup: [],
+      cooldown: [
+        { n:'Light jog 3 min', m:3, done:false },
+        { n:'Hip flexor stretch 30s each', m:1, done:false }
+      ],
+      lifts: [
+        { name:'Glute bridges', repRange:[12,12], increment:0, rest:30, history:[] },
+        { name:'Banded lateral walks', repRange:[10,10], increment:0, rest:30, history:[] },
+        { name:'Single-leg RDL', repRange:[8,8], increment:0, rest:30, history:[] },
+        { name:'Push-ups', repRange:[10,15], increment:0, rest:30, history:[] },
+        { name:'Band pull-aparts', repRange:[15,15], increment:0, rest:30, history:[] },
+        { name:'Bird dogs', repRange:[8,8], increment:0, rest:30, history:[] },
+        { name:'Dead bugs', repRange:[8,8], increment:0, rest:30, history:[] }
+      ],
+      extras: [],
+      weeks: [{team:180,gym:25,run:0,mobility:25},{},{},{},{},{},{},{}]
     },
     2: {  // Wednesday — Power & Explosive
       session: { name:'Power & Explosive', at:'09:00' },
@@ -410,6 +440,62 @@ ul{list-style:none;}
         {team:180,gym:115,run:40,mobility:25},{},{},{},
         {},{},{},{}
       ]
+    },
+    3: {  // Thursday — Activation (pre-team training)
+      session: { name:'Activation', at:'Before team' },
+      gate: { hold:false, reason:'' },
+      warmup: [],
+      cooldown: [
+        { n:'Light jog 3 min', m:3, done:false },
+        { n:'Hip flexor stretch 30s each', m:1, done:false }
+      ],
+      lifts: [
+        { name:'Glute bridges', repRange:[12,12], increment:0, rest:30, history:[] },
+        { name:'Banded lateral walks', repRange:[10,10], increment:0, rest:30, history:[] },
+        { name:'Single-leg RDL', repRange:[8,8], increment:0, rest:30, history:[] },
+        { name:'Push-ups', repRange:[10,15], increment:0, rest:30, history:[] },
+        { name:'Band pull-aparts', repRange:[15,15], increment:0, rest:30, history:[] },
+        { name:'Bird dogs', repRange:[8,8], increment:0, rest:30, history:[] },
+        { name:'Dead bugs', repRange:[8,8], increment:0, rest:30, history:[] }
+      ],
+      extras: [],
+      weeks: [{team:180,gym:25,run:0,mobility:25},{},{},{},{},{},{},{}]
+    },
+    4: {  // Friday — Speed & Acceleration
+      session: { name:'Speed & Acceleration', at:'09:00' },
+      gate: { hold:false, reason:'' },
+      warmup: [
+        { n:'A-skips 2\u00D720m', m:1, done:false },
+        { n:'B-skips 2\u00D720m', m:1, done:false },
+        { n:'High knees 2\u00D720m', m:1, done:false },
+        { n:'Wall drives 2\u00D78 each', m:1, done:false },
+        { n:'Falling starts 3\u00D715m', m:1, done:false }
+      ],
+      cooldown: [
+        { n:'Light jog 5 min', m:5, done:false },
+        { n:'Quad stretch each side', m:1, done:false },
+        { n:'Hamstring stretch each side', m:1, done:false },
+        { n:'Hip flexor stretch each side', m:1, done:false }
+      ],
+      lifts: [
+        { name:'Standing start 10m', repRange:[5,5], increment:0, rest:60, history:[] },
+        { name:'3-point start 15m', repRange:[4,4], increment:0, rest:60, history:[] },
+        { name:'Reaction sprint 10m', repRange:[4,4], increment:0, rest:60, history:[] },
+        { name:'Flying 20s (10m build + 20m max)', repRange:[4,4], increment:0, rest:90, history:[] },
+        { name:'Tempo run 100m @70%', repRange:[3,3], increment:0, rest:60, history:[] },
+        { name:'5-10-5 shuttle', repRange:[4,4], increment:0, rest:90, history:[] },
+        { name:'T-drill', repRange:[3,3], increment:0, rest:90, history:[] },
+        { name:'Ball retrieval sprint 15m', repRange:[4,4], increment:0, rest:60, history:[] }
+      ],
+      extras: [
+        { label:'OPTIONAL LIGHT GYM', items:[
+          { n:'Goblet Squat', d:'2\u00D710 @16kg KB' },
+          { n:'Push-ups', d:'2\u00D712' },
+          { n:'TRX/Band Rows', d:'2\u00D712' },
+          { n:'Hip Flexor Stretch', d:'2\u00D730s each' }
+        ]}
+      ],
+      weeks: [{team:180,gym:0,run:40,mobility:25},{},{},{},{},{},{},{}]
     }
   };
 
