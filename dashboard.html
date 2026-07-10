@@ -88,21 +88,81 @@ button,a{font-family:inherit;}
 .d-sheet h2{font-family:var(--serif);font-weight:400;font-size:25px;margin-top:10px;}
 .d-sheet>ul>li{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.04);}
 .d-pl{flex:1;min-width:0;}
-.d-chip{display:inline-block;font:500 8px var(--mono);letter-spacing:.16em;color:var(--gold);border:1px solid rgba(216,178,74,.3);border-radius:4px;padding:4px 7px;}
+.d-sig-badge{display:inline-block;font:500 8px var(--mono);letter-spacing:.16em;color:var(--gold);border:1px solid rgba(216,178,74,.3);border-radius:4px;padding:4px 7px;}
 .d-pl b{display:block;font:400 15px 'Inter',sans-serif;color:var(--ink);margin:11px 0 7px;font-weight:400;}
 .d-pl p{font:400 12px/1.7 'Inter',sans-serif;color:var(--dim);max-width:74ch;}
 .d-pb{display:flex;gap:8px;flex:none;}
 .d-none{font:400 13px 'Inter',sans-serif;color:var(--dim);padding:22px 0;}
 .d-fine{font:400 10px/1.7 var(--mono);color:var(--dimmer);letter-spacing:.03em;margin-top:16px;}
 
-/* focus */
-.d-focus{display:flex;justify-content:space-between;align-items:center;gap:24px;max-width:var(--w);margin:0 auto 20px;
-  padding:24px 26px;border-radius:18px;border-left:3px solid var(--green);
-  border:1px solid rgba(74,222,128,.2);background:rgba(74,222,128,.03);}
-.d-focus h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.2vw,32px);margin-top:11px;}
-.d-fsub{font:400 12px var(--mono);color:var(--dim);margin-top:9px;letter-spacing:.03em;}
-.d-fright{display:flex;flex-direction:column;align-items:flex-end;gap:14px;}
-.d-fclock{font-family:var(--serif);font-size:34px;color:var(--green);line-height:1;}
+/* NOW card */
+.d-now{display:flex;justify-content:space-between;align-items:center;gap:32px;max-width:var(--w);margin:0 auto 20px;
+  padding:28px 30px;border-radius:20px;border:1px solid rgba(74,222,128,.32);
+  border-left:3px solid var(--green);background:rgba(74,222,128,.06);}
+.d-nl{flex:1;min-width:0;}
+.d-now h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.6vw,36px);margin-top:11px;}
+.d-nsub{font:400 12px var(--mono);color:var(--dim);margin-top:9px;letter-spacing:.03em;}
+.d-nsteps{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;padding:0;}
+.d-nsteps li{display:flex;align-items:center;gap:8px;font:400 11px 'Inter',sans-serif;color:var(--dim);
+  border:1px solid var(--line);border-radius:20px;padding:7px 13px 7px 8px;}
+.d-nsteps span{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.05);
+  display:grid;place-items:center;font:400 8px var(--mono);color:var(--dimmer);}
+.d-nr{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;flex:none;}
+.d-nring{width:96px;transform:rotate(-90deg);}
+.d-np{fill:none;stroke:var(--green);stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 7px rgba(74,222,128,.5));}
+.d-nclock{font:400 10px var(--mono);color:var(--dim);letter-spacing:.06em;}
+
+/* past collapse */
+.d-past{display:flex;align-items:center;gap:14px;width:100%;background:rgba(255,255,255,.014);
+  border:1px dashed var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;margin-bottom:8px;transition:all .18s;color:inherit;}
+.d-past:hover{border-color:rgba(255,255,255,.16);}
+.d-past:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.d-pl-bar{flex:1;text-align:left;}
+.d-pl-bar b{display:block;font:400 13px 'Inter',sans-serif;color:var(--dim);font-weight:400;}
+.d-pl-bar em{display:block;font-style:normal;font:400 10px var(--mono);color:var(--dimmer);margin-top:5px;}
+.d-pu{font:500 8px var(--mono);letter-spacing:.14em;color:var(--amber);border:1px solid rgba(232,135,58,.3);border-radius:4px;padding:5px 7px;}
+.d-pastlist{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 14px;}
+
+/* period label */
+.d-period{margin-top:20px;}
+.d-plabel{display:flex;align-items:center;gap:14px;font:500 8px var(--mono);letter-spacing:.26em;color:var(--dimmer);margin-bottom:12px;}
+.d-plabel i{flex:1;height:1px;background:var(--line);}
+
+/* major card */
+.d-card{border:1px solid var(--line);border-left:2px solid var(--green);border-radius:13px;margin-bottom:7px;
+  background:rgba(16,36,27,.35);transition:all .18s;}
+.d-card:hover{border-color:rgba(74,222,128,.2);border-left-color:var(--green);}
+.d-card.is-done{opacity:.42;}
+.d-card.is-open{background:rgba(16,36,27,.6);}
+.d-ch{display:flex;align-items:flex-start;gap:16px;width:100%;background:none;border:0;cursor:pointer;padding:15px 18px;text-align:left;color:inherit;}
+.d-ch:focus-visible{outline:2px solid var(--green);outline-offset:-2px;border-radius:13px;}
+.d-cbody{flex:1;min-width:0;}
+.d-dtitle{display:block;font:400 14px 'Inter',sans-serif;color:var(--ink);margin-top:6px;}
+.d-card.is-done .d-dtitle{text-decoration:line-through;text-decoration-color:var(--dimmer);}
+
+/* minor chips */
+.d-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;}
+.d-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.014);border:1px solid var(--line);
+  border-radius:22px;padding:9px 15px 9px 11px;cursor:pointer;transition:all .15s;color:inherit;}
+.d-chip:hover{border-color:rgba(74,222,128,.3);}
+.d-chip.is-done{opacity:.42;}
+.d-chip:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.d-cbox{width:15px;height:15px;border-radius:50%;border:1px solid var(--dimmer);flex:none;
+  display:grid;place-items:center;font-size:8px;color:var(--bg);}
+.d-chip.is-done .d-cbox{background:var(--green);border-color:var(--green);}
+.d-ct{font:400 12px 'Inter',sans-serif;color:var(--ink);}
+.d-chip.is-done .d-ct{text-decoration:line-through;text-decoration-color:var(--dimmer);}
+.d-cm{font:400 9px var(--mono);color:var(--dimmer);letter-spacing:.04em;}
+
+/* appointment */
+.d-appt{border-left:2px solid var(--amber);padding-left:14px;margin-top:16px;}
+.d-awhen{font:500 9px var(--mono);letter-spacing:.16em;color:var(--amber);}
+.d-appt h3{font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px;}
+.d-asub{font:400 11px/1.6 'Inter',sans-serif;color:var(--dim);}
+.d-alab{font:500 8px var(--mono);letter-spacing:.2em;color:var(--dimmer);margin:16px 0 9px;}
+.d-ask{padding:0;}
+.d-ask li{font:400 11px 'Inter',sans-serif;color:var(--dim);padding:6px 0 6px 14px;position:relative;list-style:none;}
+.d-ask li:before{content:"";position:absolute;left:0;top:12px;width:4px;height:4px;border-radius:50%;background:var(--dimmer);}
 
 .d-main{display:grid;grid-template-columns:1fr 300px;gap:18px;max-width:var(--w);margin:0 auto;align-items:start;}
 .d-side{display:flex;flex-direction:column;gap:18px;}
@@ -113,37 +173,13 @@ button,a{font-family:inherit;}
 .d-warn{font:500 9px var(--mono);letter-spacing:.14em;color:var(--amber);border:1px solid rgba(232,135,58,.3);border-radius:4px;padding:6px 9px;}
 .d-bt{font-family:var(--serif);font-style:italic;font-weight:400;font-size:19px;margin-top:16px;}
 
-/* timeline */
-.d-item{position:relative;padding-left:24px;}
-.d-item:before{content:"";position:absolute;left:4px;top:0;bottom:0;width:1px;background:var(--line);}
-.d-bead{position:absolute;left:0;top:18px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--dimmer);z-index:1;}
-.d-item.is-done .d-bead{background:var(--green);border-color:var(--green);}
-.d-item.is-now .d-bead{background:var(--green);border-color:var(--green);box-shadow:0 0 0 4px rgba(74,222,128,.15);}
-.d-item.is-missed .d-bead{border-color:var(--amber);}
-.d-item.is-done{opacity:.42;}
-.d-item.is-next{opacity:.74;}
-.d-item.is-added .d-head{background:rgba(74,222,128,.04);border-radius:11px;}
-
-.d-nowline{position:relative;display:flex;align-items:center;gap:10px;padding:6px 0 6px 24px;}
-.d-nowline span{flex:1;height:1px;background:linear-gradient(90deg,var(--green),transparent);}
-.d-nowline em{font-style:normal;font:500 8px var(--mono);letter-spacing:.2em;color:var(--green);}
-.d-nowline:before{content:"";position:absolute;left:1.5px;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 9px rgba(74,222,128,.9);}
-
-.d-head{display:flex;align-items:flex-start;gap:16px;width:100%;background:none;border:0;cursor:pointer;
-  padding:13px 12px;border-radius:11px;text-align:left;color:inherit;transition:background .15s;}
-.d-head:hover:not(:disabled){background:rgba(74,222,128,.03);}
-.d-head:disabled{cursor:default;opacity:.7;}
-.d-head:focus-visible{outline:2px solid var(--green);outline-offset:-2px;}
+/* cards + chips */
 .d-time{width:66px;flex:none;}
 .d-time b{display:block;font:400 13px var(--mono);color:var(--ink);font-weight:400;}
 .d-time em{display:block;font-style:normal;font:400 9px var(--mono);color:var(--dimmer);margin-top:4px;}
-.d-body{flex:1;min-width:0;}
 .d-kind{display:block;font:500 7px var(--mono);letter-spacing:.2em;opacity:.85;}
 .d-kind i{font-style:normal;color:var(--gold);margin-left:5px;}
-.d-dtitle{display:block;font:400 14px 'Inter',sans-serif;color:var(--ink);margin-top:6px;}
-.d-item.is-done .d-dtitle{text-decoration:line-through;text-decoration-color:var(--dimmer);}
 .d-sub{display:block;font:400 11px 'Inter',sans-serif;color:var(--dimmer);margin-top:4px;}
-.d-right{display:flex;align-items:center;gap:12px;}
 .d-prog{font:400 10px var(--mono);color:var(--dim);}
 .d-prog em{font-style:normal;color:var(--dimmer);}
 .d-chev{font:400 14px var(--mono);color:var(--dim);width:11px;text-align:center;}
@@ -211,8 +247,7 @@ button,a{font-family:inherit;}
   .d-say p{flex-direction:column;gap:5px;} .d-say i{width:auto;}
   .d-sheet>ul>li{flex-direction:column;align-items:stretch;gap:14px;}
   .d-pb{justify-content:flex-end;}
-  .d-focus{flex-direction:column;align-items:flex-start;gap:18px;}
-  .d-fright{flex-direction:row;align-items:center;width:100%;justify-content:space-between;}
+  .d-now{flex-direction:column;align-items:flex-start;gap:18px;}
   .d-side{flex-direction:column;}
   .d-guide{padding-left:34px;}
   .d-foot{flex-direction:column;gap:8px;}
@@ -561,8 +596,19 @@ var PROPOSALS = [
 var REMINDERS = [
   { id:"log", t:"Log Seward workout", at:550 },
   { id:"caff", t:"Caffeine cutoff \u2014 last dose before 4pm", at:960 },
-  { id:"kit", t:"Pack bag for team training", at:900 },
-  { id:"mfm", t:"MFM appointment MON JULY 14 @ 12pm \u2014 body assessment, blood work, labs. Ask: supplement protocol, deficiencies, body comp baseline", at:480 }
+  { id:"kit", t:"Pack bag for team training", at:900 }
+];
+
+var APPOINTMENTS = [
+  { id:"mfm", when:"MON 14 JUL \u00b7 12:00", t:"MFM \u2014 body assessment",
+    sub:"Blood work, labs, body comp baseline",
+    ask:["Supplement protocol","Deficiencies","Body comp baseline"] }
+];
+
+var PERIODS = [
+  { id:"morning",   label:"MORNING",   from:0,    to:720 },
+  { id:"afternoon", label:"AFTERNOON", from:720,  to:1020 },
+  { id:"evening",   label:"EVENING",   from:1020, to:1440 }
 ];
 
 /* ═══ STATE ══════════════════════════════════════════════════ */
@@ -575,7 +621,8 @@ var state = {
   open: null,
   steps: {},
   done: {},
-  rem: {}
+  rem: {},
+  showPast: false
 };
 
 function switchDate(key) {
@@ -589,40 +636,84 @@ function switchDate(key) {
 function pending() { return PROPOSALS.filter(function(p){return !state.handled[p.id];}); }
 
 /* ═══ RENDER ═════════════════════════════════════════════════ */
+function isMajor(it) { return it.mins >= 20 || it.kind === 'appt'; }
+
+function renderChip(it, isDone) {
+  var k = KIND[it.kind] || KIND.routine;
+  return '<button class="d-chip' + (isDone ? ' is-done' : '') + '" data-chipdone="' + it.id + '" aria-pressed="' + isDone + '">' +
+    '<span class="d-cbox">' + (isDone ? '\u2713' : '') + '</span>' +
+    '<span class="d-ct">' + esc(it.title) + '</span>' +
+    '<span class="d-cm">' + hhmm(it.at) + ' \u00b7 ' + dur(it.mins) + '</span>' +
+    '</button>';
+}
+
+function renderCard(it, isDone, isOpen, steps, stepState) {
+  var k = KIND[it.kind] || KIND.routine;
+  var stepsDone = it.steps ? it.steps.filter(function(_,j){return stepState[it.id+'|'+j];}).length : 0;
+  var h = '<article class="d-card' + (isDone ? ' is-done' : '') + (isOpen ? ' is-open' : '') + '" style="border-left-color:' + k.c + '">';
+  h += '<button class="d-ch" data-toggle="' + it.id + '" aria-expanded="' + isOpen + '">';
+  h += '<span class="d-time"><b>' + hhmm(it.at) + '</b><em>' + dur(it.mins) + '</em></span>';
+  h += '<span class="d-cbody"><span class="d-kind" style="color:' + k.c + '">' + k.label + (it.added ? '<i style="color:var(--gold);margin-left:5px">\u00b7 PLANNED</i>' : '') + '</span>';
+  h += '<span class="d-dtitle">' + esc(it.title) + '</span>';
+  h += '<span class="d-sub">' + esc(it.sub) + '</span></span>';
+  if (it.steps && it.steps.length) h += '<span class="d-prog" style="font:400 10px var(--mono);color:var(--dim)">' + stepsDone + '<em style="color:var(--dimmer)">/' + it.steps.length + '</em></span>';
+  h += '<span class="d-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
+  h += '</button>';
+  if (isOpen) {
+    h += '<div class="d-guide" style="padding:2px 18px 18px 82px">';
+    if (it.steps) {
+      h += '<ul style="display:flex;flex-direction:column;gap:2px;padding:0">';
+      it.steps.forEach(function(s, j) {
+        var sk = it.id + '|' + j;
+        var on = !!stepState[sk];
+        h += '<li><button class="d-step' + (on ? ' is-on' : '') + '" data-stepkey="' + sk + '" aria-pressed="' + on + '">';
+        h += '<span class="d-box">' + (on ? '\u2713' : '') + '</span>';
+        h += '<span class="d-st"><b>' + esc(s.t) + '</b>' + (s.d ? '<em>' + esc(s.d) + '</em>' : '') + '</span></button></li>';
+      });
+      h += '</ul>';
+    }
+    h += '<div class="d-actions" style="display:flex;align-items:center;gap:14px;margin-top:16px">';
+    h += '<button class="d-go" data-markdone="' + it.id + '">' + (isDone ? 'Undo' : 'Mark complete') + '</button>';
+    if (it.href) h += '<a class="d-link" href="' + it.href + '">Open ' + it.href.split('/').pop().replace('.html','').replace('#','/') + ' \u2192</a>';
+    h += '</div></div>';
+  }
+  h += '</article>';
+  return h;
+}
+
 function render() {
   var NOW = getNow();
   var pend = pending();
   var live = state.day.filter(function(i){return !i.passive;});
   var doneCount = live.filter(function(i){return state.done[i.id];}).length;
   var pct = live.length ? Math.round((doneCount / live.length) * 100) : 0;
-  var missed = state.selDate === TODAY_KEY ? live.filter(function(i){return i.at + i.mins < NOW && !state.done[i.id];}).length : 0;
   var C = 2 * Math.PI * 28;
-
-  // Focus item (only for today)
-  var doing = null, next = null;
-  if (state.selDate === TODAY_KEY) {
-    live.forEach(function(i) {
-      if (!doing && NOW >= i.at && NOW < i.at + i.mins && !state.done[i.id]) doing = i;
-      if (!next && i.at > NOW && !state.done[i.id]) next = i;
-    });
-  }
-  var focus = doing || next;
-
-  // Now line position
-  var nowAfter = -1;
-  state.day.forEach(function(it,i){ if(it.at<=NOW) nowAfter=i; });
-
-  // Date
-  var months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
-  var days = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
-  var now = new Date();
-  var dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' \u00b7 ' + hhmm(NOW);
-  var greeting = NOW < 720 ? 'Good morning' : NOW < 1080 ? 'Good afternoon' : 'Good evening';
-
-  var h = '';
 
   var isToday = state.selDate === TODAY_KEY;
   var selIdx = WEEK_DATES.indexOf(state.selDate);
+
+  // Classify items
+  var past = isToday ? state.day.filter(function(i){return i.at + i.mins <= NOW;}) : [];
+  var doing = null;
+  if (isToday) state.day.forEach(function(i){ if(!doing && NOW >= i.at && NOW < i.at + i.mins && !state.done[i.id]) doing = i; });
+  var ahead = isToday ? state.day.filter(function(i){return i.at + i.mins > NOW && i !== doing;}) : state.day;
+  var unlogged = past.filter(function(i){return !state.done[i.id];});
+  var pastMins = past.reduce(function(a,i){return a+i.mins;}, 0);
+  var next = null;
+  ahead.forEach(function(i){ if(!next && i.at > NOW && !state.done[i.id]) next = i; });
+  var focus = doing || next;
+
+  // Progress through current item
+  var through = doing ? (NOW - doing.at) / doing.mins : 0;
+
+  // Date
+  var months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+  var dayNames = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+  var now = new Date();
+  var dateStr = dayNames[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' \u00b7 ' + hhmm(NOW);
+  var greeting = NOW < 720 ? 'Good morning' : NOW < 1080 ? 'Good afternoon' : 'Good evening';
+
+  var h = '';
 
   // Back + Header
   h += '<a href="/" class="d-back">&#8592; Home</a>';
@@ -630,16 +721,18 @@ function render() {
   h += '<p class="d-eyebrow">' + dateStr + '</p>';
   h += '<h1 class="d-title">' + (isToday ? greeting + ', <em>Sean</em>' : '<em>' + (WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : state.selDate) + '</em>') + '</h1>';
   h += '</div><div class="d-tools">';
-  h += '<button class="d-plan' + (pend.length ? ' is-live' : '') + '" data-plantoggle>';
-  h += kmark(22, false) + (pend.length ? 'Plan my day \u00b7 ' + pend.length : 'Day planned');
-  h += '</button>';
+  if (isToday) {
+    h += '<button class="d-plan' + (pend.length ? ' is-live' : '') + '" data-plantoggle>';
+    h += kmark(22, false) + (pend.length ? 'Plan my day \u00b7 ' + pend.length : 'Day planned');
+    h += '</button>';
+  }
   h += '<div class="d-ring"><svg viewBox="0 0 68 68" aria-hidden="true">';
   h += '<circle cx="34" cy="34" r="28" class="d-rt"/>';
   h += '<circle cx="34" cy="34" r="28" class="d-rp" stroke-dasharray="' + (C * pct / 100) + ' ' + C + '"/>';
   h += '</svg><div><b>' + doneCount + '<em>/' + live.length + '</em></b></div></div>';
   h += '</div></header>';
 
-  // Day spine (always visible)
+  // Day spine
   h += '<nav class="d-spine" aria-label="Day selector">';
   WEEK_DATES.forEach(function(dk, i) {
     var wl = WEEK_LABELS[i];
@@ -652,7 +745,7 @@ function render() {
   h += '</nav>';
 
   if (isToday) {
-    // Signals (today only)
+    // Signals
     h += '<nav class="d-signals" aria-label="Signals">';
     SIGNALS.forEach(function(s) {
       h += '<a href="' + s.href + '" class="d-sig is-' + (s.tone || 'flat') + '">';
@@ -661,14 +754,14 @@ function render() {
     });
     h += '</nav>';
 
-    // Coach (today only)
+    // Coach
     h += '<section class="d-coach"><div class="d-badge">' + kmark(52, true) + '<span class="d-name">KHABIB</span></div>';
     h += '<div class="d-say">';
     h += '<p class="d-good"><i>WORKING</i>Protein hit six days running and the squat went up. That is what consistent looks like.</p>';
     h += '<p class="d-change"><i>CHANGE</i>48 g of protein short with five hours left, and you play tomorrow. Fix it at dinner, not at 10pm.</p>';
     h += '</div></section>';
 
-    // Plan sheet (today only)
+    // Plan sheet
     if (state.planOpen) {
       h += '<section class="d-sheet"><header><div><p class="d-eyebrow">KHABIB\u2019S PLAN</p>';
       h += '<h2>' + (pend.length ? pend.length + ' change' + (pend.length > 1 ? 's' : '') + ' to today' : 'Nothing left to change') + '</h2></div>';
@@ -677,7 +770,7 @@ function render() {
       if (!pend.length) h += '<p class="d-none">The day stands. Go and do it.</p>';
       h += '<ul>';
       pend.forEach(function(p) {
-        h += '<li><div class="d-pl"><span class="d-chip">' + esc(p.signal) + '</span>';
+        h += '<li><div class="d-pl"><span class="d-sig-badge">' + esc(p.signal) + '</span>';
         h += '<b>' + esc(p.title) + '</b><p>' + esc(p.why) + '</p></div>';
         h += '<div class="d-pb"><button class="d-ghost" data-skip="' + p.id + '">Skip</button>';
         h += '<button class="d-go" data-accept="' + p.id + '">Accept</button></div></li>';
@@ -696,73 +789,101 @@ function render() {
     }
   }
 
-  // Focus
-  if (focus) {
-    var fk = KIND[focus.kind];
-    h += '<section class="d-focus" style="border-left:3px solid ' + fk.c + '">';
-    h += '<div><p class="d-eyebrow">' + (doing ? 'HAPPENING NOW' : 'NEXT \u00b7 IN ' + dur(focus.at - NOW)) + '</p>';
+  // NOW card — a card, not a row
+  if (isToday && focus) {
+    var fk = KIND[focus.kind] || KIND.routine;
+    var R = 2 * Math.PI * 40;
+    h += '<section class="d-now" style="border-left-color:' + fk.c + ';border-color:' + fk.c + '32">';
+    h += '<div class="d-nl">';
+    h += '<p class="d-eyebrow">' + (doing ? 'HAPPENING NOW \u00b7 ' + dur(doing.at + doing.mins - NOW) + ' LEFT' : 'NEXT \u00b7 IN ' + dur(focus.at - NOW)) + '</p>';
     h += '<h2>' + esc(focus.title) + '</h2>';
-    h += '<p class="d-fsub">' + esc(focus.sub) + '</p></div>';
-    h += '<div class="d-fright"><span class="d-fclock" style="color:' + fk.c + '">' + hhmm(focus.at) + '</span>';
-    h += '<button class="d-go" data-openguide="' + focus.id + '">Open guide</button></div></section>';
+    h += '<p class="d-nsub">' + esc(focus.sub) + '</p>';
+    if (focus.steps && focus.steps.length) {
+      h += '<ul class="d-nsteps">';
+      focus.steps.forEach(function(s, i) {
+        h += '<li><span>' + (i+1) + '</span>' + esc(s.t) + '</li>';
+      });
+      h += '</ul>';
+    }
+    h += '</div>';
+    h += '<div class="d-nr">';
+    h += '<svg viewBox="0 0 96 96" class="d-nring" aria-hidden="true">';
+    h += '<circle cx="48" cy="48" r="40" class="d-rt"/>';
+    h += '<circle cx="48" cy="48" r="40" class="d-np" style="stroke:' + fk.c + '" stroke-dasharray="' + (R * through) + ' ' + R + '"/>';
+    h += '</svg>';
+    h += '<span class="d-nclock">' + hhmm(focus.at) + '\u2013' + hhmm(focus.at + focus.mins) + '</span>';
+    if (focus.href) h += '<a class="d-go" style="background:' + fk.c + '" href="' + focus.href + '">Open guide</a>';
+    h += '</div></section>';
   }
 
-  // Main + sidebar
+  // Main grid
   h += '<main class="d-main"><section class="d-block"><header class="d-bh"><div>';
   h += '<p class="d-eyebrow">01 \u00b7 ' + (isToday ? 'TODAY' : WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : 'DAY') + '</p><h2>The <em>day</em></h2></div>';
-  if (isToday && missed > 0) h += '<span class="d-warn">' + missed + ' unlogged</span>';
-  h += '</header><ol class="d-list">';
+  if (isToday && unlogged.length > 0) h += '<span class="d-warn">' + unlogged.length + ' unlogged</span>';
+  h += '</header>';
 
-  state.day.forEach(function(it, i) {
-    var st = state.done[it.id] ? 'done' : (!isToday ? 'next' : (NOW >= it.at && NOW < it.at + it.mins ? 'now' : (NOW >= it.at + it.mins ? 'missed' : 'next')));
-    var isOpen = state.open === it.id;
-    var k = KIND[it.kind];
-    var stepsDone = it.steps.filter(function(_,j){return state.steps[it.id+'|'+j];}).length;
+  // Past collapse bar (today only, when there are past items)
+  if (isToday && past.length > 0) {
+    h += '<button class="d-past" data-togglepast aria-expanded="' + !!state.showPast + '">';
+    h += '<span class="d-pl-bar"><b>' + past.length + ' earlier</b>';
+    h += '<em>' + dur(pastMins) + ' of work \u00b7 ' + (past.length - unlogged.length) + ' logged</em></span>';
+    if (unlogged.length > 0) h += '<span class="d-pu">' + unlogged.length + ' unlogged</span>';
+    h += '<span class="d-chev">' + (state.showPast ? '\u2212' : '+') + '</span></button>';
 
-    h += '<li class="d-item is-' + st + (it.added ? ' is-added' : '') + '">';
-    h += '<span class="d-bead"></span>';
-    h += '<button class="d-head" data-toggle="' + it.id + '" aria-expanded="' + isOpen + '"' + (it.passive ? ' disabled' : '') + '>';
-    h += '<span class="d-time"><b>' + hhmm(it.at) + '</b>' + (it.mins > 0 ? '<em>' + dur(it.mins) + '</em>' : '') + '</span>';
-    h += '<span class="d-body"><span class="d-kind" style="color:' + k.c + '">' + k.label + (it.added ? '<i>\u00b7 PLANNED</i>' : '') + '</span>';
-    h += '<span class="d-dtitle">' + esc(it.title) + '</span>';
-    h += '<span class="d-sub">' + esc(it.sub) + '</span></span>';
-    if (!it.passive) {
-      h += '<span class="d-right">';
-      if (it.steps.length) h += '<span class="d-prog">' + stepsDone + '<em>/' + it.steps.length + '</em></span>';
-      h += '<span class="d-chev">' + (isOpen ? '\u2212' : '+') + '</span></span>';
+    if (state.showPast) {
+      h += '<div class="d-pastlist">';
+      past.forEach(function(it) { h += renderChip(it, state.done[it.id]); });
+      h += '</div>';
     }
-    h += '</button>';
+  }
 
-    if (isOpen) {
-      h += '<div class="d-guide"><ol>';
-      it.steps.forEach(function(s, j) {
-        var sk = it.id + '|' + j;
-        var on = !!state.steps[sk];
-        h += '<li><button class="d-step' + (on ? ' is-on' : '') + '" data-stepkey="' + sk + '" aria-pressed="' + on + '">';
-        h += '<span class="d-box">' + (on ? '\u2713' : (j+1)) + '</span>';
-        h += '<span class="d-st"><b>' + esc(s.t) + '</b><em>' + esc(s.d) + '</em></span></button></li>';
-      });
-      h += '</ol><div class="d-actions">';
-      h += '<button class="d-go" data-markdone="' + it.id + '">' + (state.done[it.id] ? 'Undo' : 'Mark complete') + '</button>';
-      if (it.href) h += '<a class="d-link" href="' + it.href + '">Open ' + it.href.split('/').pop().replace('.html','').replace('#','/')  + ' \u2192</a>';
-      h += '</div></div>';
-    }
-    h += '</li>';
+  // Period-grouped future items
+  PERIODS.forEach(function(p) {
+    var items = ahead.filter(function(i){return i.at >= p.from && i.at < p.to;});
+    if (!items.length) return;
+    var majors = items.filter(isMajor);
+    var minors = items.filter(function(i){return !isMajor(i);});
 
-    // Now line (today only)
-    if (isToday && i === nowAfter) {
-      h += '<li class="d-nowline" aria-hidden="true"><span></span><em>' + hhmm(NOW) + '</em></li>';
+    h += '<section class="d-period"><p class="d-plabel">' + p.label + '<i></i></p>';
+
+    majors.forEach(function(it) {
+      h += renderCard(it, state.done[it.id], state.open === it.id, state.steps, state.steps);
+    });
+
+    if (minors.length) {
+      h += '<div class="d-chips">';
+      minors.forEach(function(it) { h += renderChip(it, state.done[it.id]); });
+      h += '</div>';
     }
+
+    h += '</section>';
   });
 
-  h += '</ol></section>';
+  h += '</section>';
 
   // Sidebar
   h += '<aside class="d-side">';
 
+  // Appointments
+  if (isToday && APPOINTMENTS.length) {
+    h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 APPOINTMENTS</p>';
+    APPOINTMENTS.forEach(function(a) {
+      h += '<article class="d-appt"><p class="d-awhen">' + esc(a.when) + '</p>';
+      h += '<h3 style="font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px">' + esc(a.t) + '</h3>';
+      h += '<p class="d-asub">' + esc(a.sub) + '</p>';
+      h += '<p class="d-alab">ASK ABOUT</p><ul class="d-ask">';
+      a.ask.forEach(function(x){ h += '<li>' + esc(x) + '</li>'; });
+      h += '</ul></article>';
+    });
+    h += '<h3 class="d-bt">Appointments</h3></section>';
+  }
+
   // Reminders (today only)
   if (isToday) {
-    h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 REMINDERS</p><ul class="d-rem">';
+    var overdue = REMINDERS.filter(function(r){return !state.rem[r.id] && r.at < NOW;}).length;
+    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">03 \u00b7 REMINDERS</p>';
+    if (overdue > 0) h += '<span class="d-warn">' + overdue + ' overdue</span>';
+    h += '</header><ul class="d-rem">';
     REMINDERS.forEach(function(r) {
       var on = !!state.rem[r.id];
       var late = !on && r.at < NOW;
@@ -775,7 +896,7 @@ function render() {
   }
 
   // Week
-  h += '<section class="d-block"><p class="d-eyebrow">03 \u00b7 THE WEEK</p><div class="d-week">';
+  h += '<section class="d-block"><p class="d-eyebrow">' + (isToday ? '04' : '02') + ' \u00b7 THE WEEK</p><div class="d-week">';
   WEEK_DATES.forEach(function(dk, i) {
     var wl = WEEK_LABELS[i];
     var isT = dk === TODAY_KEY;
@@ -856,6 +977,19 @@ function bindAll() {
   document.querySelectorAll('[data-markdone]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var id = this.dataset.markdone;
+      state.done[id] = !state.done[id];
+      render();
+    });
+  });
+
+  // Past collapse toggle
+  var pt2 = document.querySelector('[data-togglepast]');
+  if (pt2) pt2.addEventListener('click', function(){ state.showPast = !state.showPast; render(); });
+
+  // Chip done toggle
+  document.querySelectorAll('[data-chipdone]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = this.dataset.chipdone;
       state.done[id] = !state.done[id];
       render();
     });
