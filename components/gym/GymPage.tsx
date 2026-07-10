@@ -2,52 +2,24 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import type { Exercise, Phase, Block } from '@/types/gym'
-import { TEMPLATES, totalOf } from '@/lib/gym/templates'
+import { totalReps } from '@/types/gym'
+import { FRIDAY_SPEED, WEEKS, DISC } from '@/lib/gym/templates'
 import './gym.css'
-
-/* ── Constants ───────────────────────────────────────────────── */
 
 const TABS = [
   { n: '01', t: 'GYM', href: '/train/gym', on: true },
-  { n: '02', t: 'SEWARD', href: '/train/seward', on: false },
-  { n: '03', t: '112MVMNT', href: '/train/mvmnt', on: false },
-  { n: '04', t: 'SOCCER', href: '/train/soccer', on: false },
-  { n: '05', t: 'RECOVERY', href: '/train/recovery', on: false },
+  { n: '02', t: 'SEWARD', href: '/train/seward' },
+  { n: '03', t: '112MVMNT', href: '/train/mvmnt' },
+  { n: '04', t: 'SOCCER', href: '/train/soccer' },
+  { n: '05', t: 'RECOVERY', href: '/train/recovery' },
 ]
 
 const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
+const TODAY = 4
 const RPES = [4, 5, 6, 7, 8, 9, 10]
-
-const WEEKS = [
-  { team: 160, gym: 120, run: 40, mobility: 30 },
-  { team: 180, gym: 150, run: 58, mobility: 42 },
-  { team: 200, gym: 120, run: 76, mobility: 54 },
-  { team: 160, gym: 150, run: 94, mobility: 30 },
-  { team: 180, gym: 120, run: 40, mobility: 42 },
-  { team: 200, gym: 150, run: 58, mobility: 54 },
-  { team: 160, gym: 120, run: 76, mobility: 30 },
-  { team: 180, gym: 150, run: 94, mobility: 42 },
-]
-const DISC: Record<string, string> = {
-  team: '#4ADE80', gym: '#D8B24A', run: '#7DD3C0', mobility: '#2E7F5B',
-}
-
-/* ── Helpers ─────────────────────────────────────────────────── */
 
 function clock(s: number): string {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
-}
-
-function getTemplateForToday() {
-  const day = (new Date().getDay() + 6) % 7 // 0=Mon
-  for (const t of Object.values(TEMPLATES)) {
-    if (t.day === day) return t
-  }
-  return null
-}
-
-function getTodayIndex(): number {
-  return (new Date().getDay() + 6) % 7
 }
 
 /* ── Khabib mark ─────────────────────────────────────────────── */
@@ -72,7 +44,7 @@ function Dots({ n, done, onTick }: { n: number; done: number; onTick: (n: number
       {Array.from({ length: n }, (_, i) => (
         <button
           key={i}
-          className={`x-dot${i < done ? ' is-done' : ''}`}
+          className={`x-dot ${i < done ? 'is-done' : ''}`}
           onClick={() => onTick(i + 1 === done ? i : i + 1)}
           aria-label={`Rep ${i + 1} of ${n}`}
           aria-pressed={i < done}
@@ -94,7 +66,7 @@ function Row({
   onBest: (v: string) => void
   onRest: (s: number) => void
 }) {
-  const total = totalOf(ex)
+  const total = totalReps(ex)
 
   const meta =
     ex.type === 'sprint' ? `${ex.reps} \u00D7 ${ex.dist}m` :
@@ -114,7 +86,7 @@ function Row({
     return (
       <li className="x-row is-check">
         <button
-          className={`x-check${done ? ' is-done' : ''}`}
+          className={`x-check ${done ? 'is-done' : ''}`}
           onClick={() => onTick(done ? 0 : 1)}
           aria-pressed={!!done}
         >
@@ -127,12 +99,10 @@ function Row({
   }
 
   return (
-    <li className={`x-row is-${ex.type}${done >= total ? ' is-done' : ''}`}>
+    <li className={`x-row is-${ex.type} ${done >= total ? 'is-done' : ''}`}>
       <div className="x-main">
         <span className="x-n">{ex.name}</span>
-        {'cue' in ex && ex.cue && (
-          <span className="x-cue">{ex.cue}</span>
-        )}
+        {'cue' in ex && ex.cue && <span className="x-cue">{ex.cue}</span>}
       </div>
       <span className="x-meta">{meta}</span>
       {ex.type === 'sprint' && (
@@ -148,7 +118,7 @@ function Row({
         </label>
       )}
       {rest != null && (
-        <span className="x-rest">{rest >= 60 ? `${Math.floor(rest / 60)}\u2032` : `${rest}s`}</span>
+        <span className="x-rest">{rest >= 60 ? `${rest / 60}\u2032` : `${rest}s`}</span>
       )}
       <Dots n={total} done={done} onTick={tick} />
     </li>
@@ -158,12 +128,10 @@ function Row({
 /* ── Main component ──────────────────────────────────────────── */
 
 export default function GymPage() {
-  const template = getTemplateForToday()
-  const todayIdx = getTodayIndex()
+  const template = FRIDAY_SPEED
 
-  // ── State
   const [phase, setPhase] = useState(0)
-  const [openBlock, setOpenBlock] = useState<string | null>(template?.phases[0]?.blocks[0]?.code ?? null)
+  const [open, setOpen] = useState<string | null>('A')
   const [startTime] = useState(() => Date.now())
   const [elapsed, setElapsed] = useState(0)
   const [finished, setFinished] = useState(false)
@@ -213,52 +181,17 @@ export default function GymPage() {
     setRestLeft(null)
   }, [])
 
-  // ── No template for today
-  if (!template) {
-    return (
-      <div className="g-root">
-        <header className="g-top">
-          <div>
-            <h1 className="g-title">Gym, <em>Sean</em></h1>
-            <p className="g-sub">NO SESSION TODAY</p>
-          </div>
-        </header>
-        <nav className="g-tabs" role="tablist">
-          {TABS.map(t => (
-            <a key={t.n} href={t.href} className={t.on ? 'is-on' : ''} role="tab" aria-selected={t.on}>
-              <em>{t.n}</em>{t.t}
-            </a>
-          ))}
-        </nav>
-        <div className="g-weekbar">
-          {WEEKDAYS.map((d, i) => (
-            <span key={d} className={i === todayIdx ? 'is-on' : i < todayIdx ? 'is-past' : ''}>{d}</span>
-          ))}
-        </div>
-        <div className="g-empty">
-          <h2>No session template for today.</h2>
-          <p>Other day templates are coming soon. Check the week bar for active days.</p>
-        </div>
-        <footer className="g-foot">
-          <span>THREE PHASES &middot; ONE SESSION RPE</span>
-          <span>FASCIA BLOCK BELONGS TO COACH CHONG XIE</span>
-        </footer>
-      </div>
-    )
-  }
-
-  // ── Derived values
   const P = template.phases[phase]
   const doneOf = (ex: Exercise) => log[ex.id] ?? 0
 
   const exOf = (p: Phase) => p.blocks.flatMap(b => b.exercises)
   const pDone = (p: Phase) => exOf(p).reduce((a, e) => a + doneOf(e), 0)
-  const pTotal = (p: Phase) => exOf(p).reduce((a, e) => a + totalOf(e), 0)
-  const pMins = (p: Phase) => p.blocks.reduce((a, b) => a + b.mins, 0)
+  const pTotal = (p: Phase) => exOf(p).reduce((a, e) => a + totalReps(e), 0)
+  const pMins = (p: Phase) => p.blocks.reduce((a, b) => a + b.minutes, 0)
 
   const all = template.phases.flatMap(exOf)
   const repsDone = all.reduce((a, e) => a + doneOf(e), 0)
-  const repsTotal = all.reduce((a, e) => a + totalOf(e), 0)
+  const repsTotal = all.reduce((a, e) => a + totalReps(e), 0)
   const metres = all
     .filter((e): e is Extract<Exercise, { type: 'sprint' }> => e.type === 'sprint')
     .reduce((a, e) => a + doneOf(e) * e.dist, 0)
@@ -266,42 +199,37 @@ export default function GymPage() {
     .filter(e => e.type === 'sprint')
     .reduce((a, e) => a + doneOf(e), 0)
 
-  const mins = Math.max(1, Math.round(elapsed / 60))
-  const load = rpe ? Math.round(rpe * mins) : null
+  const mins = Math.round(elapsed / 60)
+  const load = rpe ? Math.round(rpe * Math.max(mins, 1)) : null
   const planned = template.phases.reduce((a, p) => a + pMins(p), 0)
 
   const phaseComplete = pDone(P) === pTotal(P)
   const nextPhase = phase < template.phases.length - 1
 
   // Load chart
-  const totals = WEEKS.map(w => Object.values(w).reduce((a, b) => a + b, 0))
+  const totals = WEEKS.map(w => w.team + w.gym + w.run + w.mobility)
   const max = Math.max(...totals)
-  const thisWeek = totals[totals.length - 1]
-  const prevWeek = totals[totals.length - 2]
-  const delta = prevWeek ? Math.round(((thisWeek - prevWeek) / prevWeek) * 100) : 0
+  const thisWeek = totals[totals.length - 1]!
+  const prevWeek = totals[totals.length - 2]!
+  const delta = Math.round(((thisWeek - prevWeek) / prevWeek) * 100)
 
-  const gotoPhase = (i: number) => {
+  const goto = (i: number) => {
     setPhase(i)
-    setOpenBlock(template.phases[i].blocks[0].code)
+    setOpen(template.phases[i].blocks[0].code)
   }
 
   const handleFinish = () => {
-    if (finishWritten) return // idempotent
+    if (finishWritten) return
     setFinished(true)
     setFinishWritten(true)
-    // TODO: write to Supabase daily_load and gym_sessions
   }
-
-  // ── Field phase = RECOVER FULLY, others = RESTING
-  const restLabel = phase === 0 ? 'RECOVER FULLY' : 'RESTING'
 
   return (
     <div className="g-root">
-      {/* Header */}
       <header className="g-top">
         <div>
           <h1 className="g-title">Gym, <em>Sean</em></h1>
-          <p className="g-sub">{template.name.toUpperCase()} &middot; {template.time} &middot; {template.dayLabel}</p>
+          <p className="g-sub">SPEED &amp; ACCELERATION &middot; 09:00 &middot; FRIDAY</p>
         </div>
         <div className="g-clock">
           <span className={finished ? 'g-dot' : 'g-dot is-live'} />
@@ -312,7 +240,6 @@ export default function GymPage() {
         </div>
       </header>
 
-      {/* Tabs */}
       <nav className="g-tabs" role="tablist">
         {TABS.map(t => (
           <a key={t.n} href={t.href} className={t.on ? 'is-on' : ''} role="tab" aria-selected={t.on}>
@@ -321,29 +248,25 @@ export default function GymPage() {
         ))}
       </nav>
 
-      {/* Week bar */}
       <div className="g-weekbar">
         {WEEKDAYS.map((d, i) => (
-          <span key={d} className={i === todayIdx ? 'is-on' : i < todayIdx ? 'is-past' : ''}>{d}</span>
+          <span key={d} className={i === TODAY ? 'is-on' : i < TODAY ? 'is-past' : ''}>{d}</span>
         ))}
       </div>
 
-      {/* Phase cards */}
+      {/* the three phases */}
       <nav className="g-phases" role="tablist" aria-label="Session phases">
         {template.phases.map((p, i) => {
-          const d = pDone(p)
-          const t = pTotal(p)
+          const d = pDone(p), t = pTotal(p)
           return (
             <button
               key={p.id}
               role="tab"
               aria-selected={i === phase}
-              className={`g-ph${i === phase ? ' is-on' : ''}${d === t ? ' is-complete' : ''}`}
-              onClick={() => gotoPhase(i)}
+              className={`g-ph ${i === phase ? 'is-on' : ''} ${d === t ? 'is-complete' : ''}`}
+              onClick={() => goto(i)}
             >
-              <span className="g-ph-h">
-                <em>{p.number}</em>{p.name}{d === t && <i>{'\u2713'}</i>}
-              </span>
+              <span className="g-ph-h"><em>{p.number}</em>{p.name}{d === t && <i>{'\u2713'}</i>}</span>
               <span className="g-ph-w">{p.where}</span>
               <span className="g-ph-bar"><span style={{ width: `${t ? (d / t) * 100 : 0}%` }} /></span>
               <span className="g-ph-m">{d}/{t} &middot; {pMins(p)}&prime;</span>
@@ -352,7 +275,6 @@ export default function GymPage() {
         })}
       </nav>
 
-      {/* Coach */}
       <section className="g-coach">
         <KhabibMark size={44} />
         <div>
@@ -362,7 +284,6 @@ export default function GymPage() {
         </div>
       </section>
 
-      {/* Rest timer — sticky */}
       {restLeft !== null && !finished && (
         <div className="g-rest" role="status" aria-live="polite">
           <svg viewBox="0 0 60 60" aria-hidden="true">
@@ -373,7 +294,7 @@ export default function GymPage() {
             />
           </svg>
           <b>{restLeft}<em>s</em></b>
-          <span>{restLabel}</span>
+          <span>{phase === 0 ? 'RECOVER FULLY' : 'RESTING'}</span>
           <div className="g-rb">
             <button onClick={() => addRest(30)}>+30s</button>
             <button onClick={skipRest}>Skip</button>
@@ -381,31 +302,24 @@ export default function GymPage() {
         </div>
       )}
 
-      {/* Main grid */}
       <main className="g-main">
         <div className="g-left">
           {P.blocks.map((b: Block) => {
-            const on = openBlock === b.code
+            const on = open === b.code
             const d = b.exercises.reduce((a, e) => a + doneOf(e), 0)
-            const t = b.exercises.reduce((a, e) => a + totalOf(e), 0)
+            const t = b.exercises.reduce((a, e) => a + totalReps(e), 0)
             return (
               <section
                 key={b.code}
-                className={`g-block is-${b.tone}${on ? ' is-open' : ''}${d === t ? ' is-complete' : ''}`}
+                className={`g-block is-${b.tone} ${on ? 'is-open' : ''} ${d === t ? 'is-complete' : ''}`}
               >
-                <button
-                  className="g-bh"
-                  onClick={() => setOpenBlock(on ? null : b.code)}
-                  aria-expanded={on}
-                >
+                <button className="g-bh" onClick={() => setOpen(on ? null : b.code)} aria-expanded={on}>
                   <span className="g-code">{b.code}</span>
                   <span className="g-bn">
                     {b.name}
-                    {b.tag && (
-                      <i className={b.tag === 'MANDATORY' ? 'is-req' : ''}>{b.tag}</i>
-                    )}
+                    {b.tag && <i className={b.tag === 'MANDATORY' ? 'is-req' : ''}>{b.tag}</i>}
                   </span>
-                  <span className="g-mins">{b.mins}&prime;</span>
+                  <span className="g-mins">{b.minutes}&prime;</span>
                   <span className="g-bar"><span style={{ width: `${t ? (d / t) * 100 : 0}%` }} /></span>
                   <span className="g-cnt">{d}/{t}</span>
                   <span className="g-chev">{on ? '\u2212' : '+'}</span>
@@ -432,42 +346,25 @@ export default function GymPage() {
             )
           })}
 
-          {/* Next phase button */}
           {phaseComplete && nextPhase && (
-            <button className="g-next" onClick={() => gotoPhase(phase + 1)}>
+            <button className="g-next" onClick={() => goto(phase + 1)}>
               {P.name} done &rarr; {template.phases[phase + 1].name}
               <em>{template.phases[phase + 1].where}</em>
             </button>
           )}
         </div>
 
-        {/* Right panel */}
         <aside className="g-right">
-          {/* Session panel */}
           <section className="g-panel">
             <div className="g-idx">01</div>
             <div className="g-grid2">
-              <div>
-                <b>{repsDone}<em>/{repsTotal}</em></b>
-                <span>Reps logged</span>
-              </div>
-              <div>
-                <b className="is-teal">{metres}<em>m</em></b>
-                <span>Distance sprinted</span>
-              </div>
-              <div>
-                <b>{sprintReps}</b>
-                <span>Sprint reps</span>
-              </div>
-              <div>
-                <b className="is-good">{load ?? '\u2014'}</b>
-                <span>Session load</span>
-              </div>
+              <div><b>{repsDone}<em>/{repsTotal}</em></b><span>Reps logged</span></div>
+              <div><b className="is-teal">{metres}<em>m</em></b><span>Distance sprinted</span></div>
+              <div><b>{sprintReps}</b><span>Sprint reps</span></div>
+              <div><b className="is-good">{load ?? '\u2014'}</b><span>Session load</span></div>
             </div>
 
-            <div className="g-prog">
-              <div style={{ width: `${repsTotal ? (repsDone / repsTotal) * 100 : 0}%` }} />
-            </div>
+            <div className="g-prog"><div style={{ width: `${repsTotal ? (repsDone / repsTotal) * 100 : 0}%` }} /></div>
 
             <p className="g-lab">SESSION RPE &middot; ASKED ONCE</p>
             <div className="g-rpe">
@@ -496,28 +393,21 @@ export default function GymPage() {
                 >
                   {rpe ? 'Finish session' : 'Rate the session first'}
                 </button>
-                <p className="g-note">
-                  Load = session RPE &times; minutes. No tonnage on a speed day &mdash; there isn&apos;t any.
-                </p>
+                <p className="g-note">Load = session RPE &times; minutes. No tonnage on a speed day &mdash; there isn&apos;t any.</p>
               </>
             )}
             <h2 className="g-pt">SESSION</h2>
           </section>
 
-          {/* Load panel */}
           <section className="g-panel">
             <div className="g-idx">02</div>
             <div className="g-grid2">
               <div>
-                <b className="is-good">
-                  {Math.floor(thisWeek / 60)}<em>h</em> {thisWeek % 60}<em>m</em>
-                </b>
+                <b className="is-good">{Math.floor(thisWeek / 60)}<em>h</em> {thisWeek % 60}<em>m</em></b>
                 <span>This week</span>
               </div>
               <div>
-                <b className={delta > 30 ? 'is-hot' : ''}>
-                  {delta > 0 ? '+' : ''}{delta}<em>%</em>
-                </b>
+                <b className={delta > 30 ? 'is-hot' : ''}>{delta > 0 ? '+' : ''}{delta}<em>%</em></b>
                 <span>Vs last week</span>
               </div>
             </div>
@@ -525,7 +415,7 @@ export default function GymPage() {
               {WEEKS.map((w, i) => (
                 <div key={i} className="g-col" style={{ height: `${max ? (totals[i] / max) * 100 : 0}%` }}>
                   {Object.entries(DISC).map(([k, c]) => (
-                    <div key={k} style={{ flex: (w as Record<string, number>)[k], background: c }} />
+                    <div key={k} style={{ flex: w[k as keyof typeof w], background: c }} />
                   ))}
                 </div>
               ))}
@@ -536,7 +426,7 @@ export default function GymPage() {
                 <li key={k}>
                   <i style={{ background: c }} />
                   {k.toUpperCase()}
-                  <b>{(WEEKS[WEEKS.length - 1] as Record<string, number>)[k]}&prime;</b>
+                  <b>{WEEKS[WEEKS.length - 1][k as keyof typeof WEEKS[number]]}&prime;</b>
                 </li>
               ))}
             </ul>
@@ -545,7 +435,6 @@ export default function GymPage() {
         </aside>
       </main>
 
-      {/* Footer */}
       <footer className="g-foot">
         <span>THREE PHASES &middot; ONE SESSION RPE</span>
         <span>FASCIA BLOCK BELONGS TO COACH CHONG XIE</span>
