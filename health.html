@@ -161,28 +161,11 @@ html,body{scrollbar-width:none;-ms-overflow-style:none;}
 function rng(seed){let s=seed>>>0;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
 
 function buildMock(){
-  const r=rng(20260710);
-  const hr=Array.from({length:288},(_,i)=>{
-    const min=i*5,h=min/60;let base;
-    if(h<6)base=49+Math.sin(h*1.1)*3;
-    else if(h<8)base=58+(h-6)*6;
-    else if(h<17)base=70+Math.sin(h*0.9)*6;
-    else if(h<18.2)base=96+Math.sin((h-17)*2.6)*62;
-    else if(h<20)base=78-(h-18.2)*7;
-    else base=60-(h-20)*1.5;
-    return{min,bpm:Math.round(base+(r()-0.5)*5)};
-  });
+  const hr=Array.from({length:288},(_,i)=>({min:i*5,bpm:0}));
   const hrvDays=["SAT","SUN","MON","TUE","WED","THU","FRI"];
-  const hrvVals=[54,58,47,51,60,64,62];
-  const hrv=hrvDays.map((d,i)=>({day:d,ms:hrvVals[i]}));
-  const stepPattern=[0,0,0,0,0,0,120,640,980,410,220,300,760,540,190,260,410,1480,920,380,240,120,40,0];
-  const steps=stepPattern.map((v,i)=>({hour:i,count:v}));
-  const battery=Array.from({length:96},(_,i)=>{
-    const h=(i*15)/60;let v;
-    if(h<6.5)v=34+h*9.2;else if(h<17)v=94-(h-6.5)*3.4;
-    else if(h<18.5)v=58-(h-17)*14;else v=37-(h-18.5)*1.1;
-    return{min:i*15,pct:Math.max(5,Math.min(100,Math.round(v)))};
-  });
+  const hrv=hrvDays.map((d)=>({day:d,ms:0}));
+  const steps=Array.from({length:24},(_,i)=>({hour:i,count:0}));
+  const battery=Array.from({length:96},(_,i)=>({min:i*15,pct:0}));
   return{
     device:"Not connected",synced:"—",battery:0,
     restingHr:0,hrvNow:0,hrvBaseline:[0,0],bodyBattery:0,
@@ -209,11 +192,11 @@ function buildMock(){
       {day:"SUN",type:"rest",name:"—",mins:0,load:0,state:"next"}
     ],
     zones:[
-      {z:1,label:"Warm up",min:22,color:"#2E5F4A"},
-      {z:2,label:"Easy",min:31,color:"#3A8A63"},
-      {z:3,label:"Aerobic",min:18,color:"#4ADE80"},
-      {z:4,label:"Threshold",min:11,color:"#D8B24A"},
-      {z:5,label:"Maximum",min:4,color:"#E8873A"}
+      {z:1,label:"Warm up",min:0,color:"#2E5F4A"},
+      {z:2,label:"Easy",min:0,color:"#3A8A63"},
+      {z:3,label:"Aerobic",min:0,color:"#4ADE80"},
+      {z:4,label:"Threshold",min:0,color:"#D8B24A"},
+      {z:5,label:"Maximum",min:0,color:"#E8873A"}
     ],
     hr,hrv,steps,batteryCurve:battery
   };

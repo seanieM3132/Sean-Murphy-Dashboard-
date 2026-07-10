@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050D0A">
 <title>Peak — Performance Model</title>
-<script src="/topbar.js" defer></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -46,6 +46,8 @@ body::before {
 }
 
 /* Header */
+.pk-back{display:block;font:500 11px/1 var(--font-mono);letter-spacing:.14em;color:var(--muted);text-decoration:none;margin-bottom:12px;}
+.pk-back:hover{color:var(--green);}
 .pk-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
 .pk-title { font-family: var(--font-serif); font-style: italic; font-size: 32px; color: var(--fg); }
 .pk-sub { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
@@ -168,6 +170,7 @@ body::before {
 </head>
 <body>
 
+<a href="/" class="pk-back">&#8592; Home</a>
 <div class="pk-header">
   <h1 class="pk-title">Peak</h1>
   <span class="pk-sub">Banister Impulse-Response</span>

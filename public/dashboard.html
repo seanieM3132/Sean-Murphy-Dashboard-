@@ -34,6 +34,10 @@ button,a{font-family:inherit;}
 .k-orb.is-live{animation:orbit 9s linear infinite;}
 @keyframes orbit{to{transform:rotate(360deg)}}
 
+/* back */
+.d-back{display:block;font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;max-width:var(--w);margin:0 auto 12px;}
+.d-back:hover{color:var(--green);}
+
 /* header */
 .d-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;max-width:var(--w);margin:0 auto 22px;}
 .d-eyebrow{font:500 9px var(--mono);letter-spacing:.24em;color:var(--dim);}
@@ -393,7 +397,8 @@ function render() {
 
   var h = '';
 
-  // Header
+  // Back + Header
+  h += '<a href="/" class="d-back">&#8592; Home</a>';
   h += '<header class="d-top"><div>';
   h += '<p class="d-eyebrow">' + dateStr + '</p>';
   h += '<h1 class="d-title">' + greeting + ', <em>Sean</em></h1>';

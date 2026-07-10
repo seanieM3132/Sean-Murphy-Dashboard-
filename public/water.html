@@ -82,6 +82,8 @@ html, body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
+.w-back{display:block;font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--text-3);text-decoration:none;margin-bottom:12px;}
+.w-back:hover{color:var(--accent);}
 .shell { max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
 
 /* ----- Top day pill + header ----- */
@@ -460,6 +462,7 @@ html, body {
 
 <div class="shell">
 
+  <a href="/" class="w-back">&#8592; Home</a>
   <button class="day-pill" id="dayPill" type="button">
     <span id="dayPillLabel">—</span>
   </button>

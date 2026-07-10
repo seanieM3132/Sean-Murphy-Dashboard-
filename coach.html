@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050506">
 <title>AI Coach — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="topbar.js" defer></script>
+
 <style>
 :root {
   --text-primary: #FAFAFA;
@@ -61,6 +61,8 @@ body::after {
   z-index: -1;
 }
 
+.co-back{display:block;font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5F786E;text-decoration:none;margin-bottom:12px;}
+.co-back:hover{color:#4ADE80;}
 .dash-title {
   font-size: 28px;
   font-weight: 700;
@@ -551,6 +553,7 @@ body::after {
 </head>
 <body>
 
+<a href="/" class="co-back">&#8592; Home</a>
 <h1 class="dash-title">AI Coach</h1>
 <p class="dash-sub">Your personal brain — <span id="brainCount">49 videos</span> across football, health, movement & performance</p>
 

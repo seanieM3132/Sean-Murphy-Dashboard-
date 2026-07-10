@@ -202,6 +202,38 @@ ul{list-style:none;}
   .g-ex-p{width:auto;font-size:10px;} .g-tag{width:70px;}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+/* week spine */
+.g-spine{position:relative;display:flex;justify-content:space-between;max-width:1240px;margin:0 auto 24px;padding:0 10px;}
+.g-spine-line{position:absolute;left:18px;right:18px;top:7px;height:1px;background:rgba(74,222,128,.10);}
+.g-wnode{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;background:none;border:0;cursor:pointer;padding:0;color:inherit;}
+.g-wbead{width:11px;height:11px;border-radius:50%;background:var(--bg,#050D0A);border:1px solid var(--dimmer,#3B4E47);transition:transform .2s;}
+.g-wnode em{font-style:normal;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--dimmer,#3B4E47);}
+.g-wnode.is-heavy .g-wbead{border-color:#D8B24A;}
+.g-wnode.is-power .g-wbead{border-color:#E8873A;}
+.g-wnode.is-off .g-wbead{border-color:var(--dimmer,#3B4E47);}
+.g-wnode.is-past .g-wbead{background:currentColor;}
+.g-wnode.is-past.is-heavy .g-wbead{background:#D8B24A;}
+.g-wnode.is-past.is-power .g-wbead{background:#E8873A;}
+.g-wnode.is-today em{color:#4ADE80;}
+.g-wnode.is-today .g-wbead{box-shadow:0 0 0 4px rgba(74,222,128,.12);}
+.g-wnode.is-sel .g-wbead{transform:scale(1.25);}
+.g-wnode.is-sel em{color:#E6F2EC;}
+.g-off-msg{max-width:1240px;margin:0 auto;padding:48px 24px;text-align:center;}
+.g-off-msg h2{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:12px;}
+.g-off-msg p{font:400 12px/1.7 'Inter',sans-serif;color:#5F786E;max-width:44ch;margin:0 auto;}
+/* extras block */
+.g-extras{max-width:1240px;margin:0 auto;}
+.g-xblk{border:1px solid rgba(74,222,128,.10);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.g-xblk-h{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;
+  background:rgba(255,255,255,.02);border:0;width:100%;color:inherit;font-family:inherit;}
+.g-xblk-h:hover{background:rgba(255,255,255,.04);}
+.g-xblk-l{font:500 9px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#E6F2EC;}
+.g-xblk-b{padding:6px 18px 14px;}
+.g-xrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.04);}
+.g-xrow:first-child{border-top:0;}
+.g-xrow-n{font:400 12px 'Inter',sans-serif;color:#E6F2EC;flex:1;}
+.g-xrow-d{font:400 9px 'JetBrains Mono',monospace;color:#5F786E;letter-spacing:.06em;}
 </style>
 </head>
 <body>
@@ -221,9 +253,12 @@ ul{list-style:none;}
   </div>
 </header>
 
+<nav class="g-spine" id="week-spine"></nav>
 <section class="g-coach" id="coach"></section>
 <div id="rest-bar"></div>
-<main class="g-main"><div class="g-col-l" id="col-left"></div><aside class="g-col-r" id="col-right"></aside></main>
+<div id="off-day-msg"></div>
+<main class="g-main" id="gym-main"><div class="g-col-l" id="col-left"></div><aside class="g-col-r" id="col-right"></aside></main>
+<div id="extras-area"></div>
 <footer class="g-foot"><span>EPLEY e1RM &middot; RPE-GATED PROGRESSION</span><span>DELOAD FLOORS BELOW THE INCREMENT</span></footer>
 
 <script>
@@ -273,65 +308,152 @@ ul{list-style:none;}
   var RPES = [6,7,8,9,10];
   var RESTS = [60,90,120,180,240];
 
-  /* ── Real training data — Monday Heavy Compound Day ── */
+  /* ── Week spine data ── */
+  var GYM_WEEK = [
+    { d:'MON', kind:'heavy', label:'Heavy Compounds', mins:50 },
+    { d:'TUE', kind:'off',   label:'No gym' },
+    { d:'WED', kind:'power', label:'Power & Explosive', mins:50 },
+    { d:'THU', kind:'off',   label:'No gym' },
+    { d:'FRI', kind:'off',   label:'Speed day' },
+    { d:'SAT', kind:'off',   label:'Match day' },
+    { d:'SUN', kind:'off',   label:'Recovery' }
+  ];
+
+  var TODAY_DOW = new Date().getDay();
+  TODAY_DOW = TODAY_DOW === 0 ? 6 : TODAY_DOW - 1; // 0=Mon
+  var selDay = TODAY_DOW;
+
+  /* ── Real training data ── */
   function st(kg, reps, rpe) { return { kg:kg, reps:reps, rpe:rpe }; }
 
-  var data = {
-    session: { name:'Heavy compound', at:'07:00' },
-    gate: { hold:false, reason:'' },
-    warmup: [
-      { n:'Empty bar squat 2x8', m:5, done:false },
-      { n:'Empty bar RDL 1x8', m:3, done:false },
-      { n:'Ramp-up set 50%', m:2, done:false },
-      { n:'Ramp-up set 75%', m:2, done:false }
-    ],
-    cooldown: [
-      { n:'Light jog 5 min', m:5, done:false },
-      { n:'Quad stretch each side', m:2, done:false },
-      { n:'Hamstring stretch each side', m:2, done:false },
-      { n:'Hip flexor stretch each side', m:2, done:false }
-    ],
-    lifts: [
-      { name:'Back squat', repRange:[6,8], increment:5, rest:180, history:[
-        { sets:[st(50,7,7.5),st(50,7,8),st(50,6,8),st(50,6,8)] }
-      ]},
-      { name:'Romanian deadlift', repRange:[6,8], increment:5, rest:180, history:[
-        { sets:[st(45,7,7),st(45,7,7.5),st(45,7,8),st(45,6,8)] }
-      ]},
-      { name:'Bench press', repRange:[6,8], increment:2.5, rest:120, history:[
-        { sets:[st(45,7,7.5),st(45,7,8),st(45,6,8)] }
-      ]},
-      { name:'Barbell row', repRange:[8,10], increment:2.5, rest:90, history:[
-        { sets:[st(40,9,7),st(40,9,7.5),st(40,8,8)] }
-      ]}
-    ],
-    weeks: [
-      {team:180,gym:115,run:40,mobility:25},{},{},{},
-      {},{},{},{}
-    ]
+  var SESSIONS = {
+    0: {  // Monday — Heavy Compounds
+      session: { name:'Heavy Compounds', at:'08:45' },
+      gate: { hold:false, reason:'' },
+      warmup: [
+        { n:'Empty bar squat 2\u00D78', m:5, done:false },
+        { n:'Empty bar RDL 1\u00D78', m:3, done:false },
+        { n:'Ramp-up set 50%', m:2, done:false },
+        { n:'Ramp-up set 75%', m:2, done:false }
+      ],
+      cooldown: [
+        { n:'Light jog 5 min', m:5, done:false },
+        { n:'Quad stretch each side', m:2, done:false },
+        { n:'Hamstring stretch each side', m:2, done:false },
+        { n:'Hip flexor stretch each side', m:2, done:false }
+      ],
+      lifts: [
+        { name:'Back squat', repRange:[6,8], increment:5, rest:180, history:[
+          { sets:[st(50,7,7.5),st(50,7,8),st(50,6,8),st(50,6,8)] }
+        ]},
+        { name:'Romanian deadlift', repRange:[6,8], increment:5, rest:180, history:[
+          { sets:[st(45,7,7),st(45,7,7.5),st(45,7,8),st(45,6,8)] }
+        ]},
+        { name:'Bench press', repRange:[6,8], increment:2.5, rest:120, history:[
+          { sets:[st(45,7,7.5),st(45,7,8),st(45,6,8)] }
+        ]},
+        { name:'Barbell row', repRange:[8,10], increment:2.5, rest:90, history:[
+          { sets:[st(40,9,7),st(40,9,7.5),st(40,8,8)] }
+        ]},
+        { name:'Pull-ups', repRange:[5,8], increment:0, rest:90, history:[] },
+        { name:'DB shoulder press', repRange:[8,10], increment:2, rest:90, history:[] }
+      ],
+      extras: [
+        { label:'CORE \u2014 STIFFNESS', items:[
+          { n:'Front Plank', d:'3\u00D745s' },
+          { n:'Pallof Press', d:'3\u00D710 each' },
+          { n:'Dead Bugs', d:'3\u00D78 each' }
+        ]},
+        { label:'NORDIC CURLS', items:[
+          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
+        ]}
+      ],
+      weeks: [
+        {team:180,gym:115,run:40,mobility:25},{},{},{},
+        {},{},{},{}
+      ]
+    },
+    2: {  // Wednesday — Power & Explosive
+      session: { name:'Power & Explosive', at:'09:00' },
+      gate: { hold:false, reason:'' },
+      warmup: [
+        { n:'Empty bar deadlift 2\u00D78', m:5, done:false },
+        { n:'Arm circles + band pull-aparts', m:3, done:false },
+        { n:'Ramp-up set 50%', m:2, done:false }
+      ],
+      cooldown: [
+        { n:'Light jog 5 min', m:5, done:false },
+        { n:'Chest stretch', m:2, done:false },
+        { n:'Lat hang', m:2, done:false },
+        { n:'Hip flexor stretch each side', m:2, done:false }
+      ],
+      lifts: [
+        { name:'Trap bar deadlift', repRange:[5,6], increment:5, rest:180, history:[] },
+        { name:'Push press', repRange:[5,6], increment:2.5, rest:120, history:[] },
+        { name:'Bulgarian split squat', repRange:[8,8], increment:2, rest:90, history:[] },
+        { name:'Single-arm DB row', repRange:[8,10], increment:2, rest:60, history:[] },
+        { name:'Incline DB press', repRange:[8,10], increment:2, rest:90, history:[] },
+        { name:'Chin-ups', repRange:[5,8], increment:0, rest:90, history:[] },
+        { name:'Lateral raises', repRange:[12,15], increment:1, rest:60, history:[] }
+      ],
+      extras: [
+        { label:'CORE \u2014 SPEED', items:[
+          { n:'Med Ball Slams', d:'3\u00D78, 45s rest' },
+          { n:'Rotational Throws', d:'3\u00D78 each, 45s rest' },
+          { n:'Russian Twists', d:'3\u00D715 each @5-8kg' }
+        ]},
+        { label:'NORDIC CURLS', items:[
+          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
+        ]}
+      ],
+      weeks: [
+        {team:180,gym:115,run:40,mobility:25},{},{},{},
+        {},{},{},{}
+      ]
+    }
   };
+
+  var data = SESSIONS[selDay] || null;
 
   /* ── State ── */
   var elapsed = 0;
   var finished = false;
-  var openEx = data.lifts[0].name;
+  var openEx = null;
   var rests = {};
-  data.lifts.forEach(function(l) { rests[l.name] = l.rest; });
-
   var plans = {};
-  data.lifts.forEach(function(l) { plans[l.name] = prescribe(l, data.gate); });
-
   var log = {};
-  data.lifts.forEach(function(l) {
-    var p = plans[l.name];
-    log[l.name] = [
-      { kg: p.kg || 0, reps: p.reps, rpe: null, done: false },
-      { kg: p.kg || 0, reps: p.reps, rpe: null, done: false },
-      { kg: p.kg || 0, reps: p.reps, rpe: null, done: false }
-    ];
-  });
-
   var restLeft = null, restTotal = 0, restInterval = null;
+
+  function initSession() {
+    if (!data || !data.lifts) return;
+    openEx = data.lifts[0].name;
+    rests = {};
+    plans = {};
+    log = {};
+    data.lifts.forEach(function(l) { rests[l.name] = l.rest; });
+    data.lifts.forEach(function(l) { plans[l.name] = prescribe(l, data.gate); });
+    data.lifts.forEach(function(l) {
+      var p = plans[l.name];
+      log[l.name] = [
+        { kg: p.kg || 0, reps: p.reps, rpe: null, done: false },
+        { kg: p.kg || 0, reps: p.reps, rpe: null, done: false },
+        { kg: p.kg || 0, reps: p.reps, rpe: null, done: false }
+      ];
+    });
+  }
+
+  function switchDay(dayIdx) {
+    selDay = dayIdx;
+    if (SESSIONS[selDay]) {
+      data = SESSIONS[selDay];
+      initSession();
+    } else {
+      data = null;
+    }
+    renderAll();
+  }
+
+  initSession();
 
   /* ── Timer ── */
   function startRest(secs) {
@@ -355,10 +477,15 @@ ul{list-style:none;}
   }, 1000);
 
   /* ── Render header ── */
-  document.getElementById('session-sub').textContent = data.session.name.toUpperCase() + ' \u00B7 ' + data.session.at;
+  if (data && data.session) {
+    document.getElementById('session-sub').textContent = data.session.name.toUpperCase() + ' \u00B7 ' + data.session.at;
+  } else {
+    document.getElementById('session-sub').textContent = GYM_WEEK[selDay].d + ' \u00B7 ' + GYM_WEEK[selDay].label.toUpperCase();
+  }
 
   /* ── Coach ── */
   function renderCoach() {
+    if (!data || !data.lifts) return;
     var ups = data.lifts.filter(function(l) { return plans[l.name].action === 'up'; });
     var downs = data.lifts.filter(function(l) { return plans[l.name].action === 'down'; });
     var headline = data.gate.hold ? 'HOLD EVERYTHING'
@@ -580,9 +707,66 @@ ul{list-style:none;}
     return html;
   }
 
+  /* ── Week spine render ── */
+  function renderSpine() {
+    var html = '<div class="g-spine-line"></div>';
+    GYM_WEEK.forEach(function(w, i) {
+      var cls = 'g-wnode is-' + w.kind;
+      if (i < TODAY_DOW) cls += ' is-past';
+      if (i === TODAY_DOW) cls += ' is-today';
+      if (i === selDay) cls += ' is-sel';
+      html += '<button class="' + cls + '" data-spine="' + i + '" aria-label="' + w.d + ' — ' + w.label + '">' +
+        '<span class="g-wbead"></span><em>' + w.d + '</em></button>';
+    });
+    document.getElementById('week-spine').innerHTML = html;
+  }
+
+  /* ── Extras render ── */
+  function renderExtras() {
+    var area = document.getElementById('extras-area');
+    if (!data || !data.extras || !data.extras.length) { area.innerHTML = ''; return; }
+    var html = '<div class="g-extras">';
+    data.extras.forEach(function(blk) {
+      html += '<div class="g-xblk"><button class="g-xblk-h"><span class="g-xblk-l">' + blk.label + '</span></button>' +
+        '<div class="g-xblk-b">';
+      blk.items.forEach(function(item) {
+        html += '<div class="g-xrow"><span class="g-xrow-n">' + item.n + '</span><span class="g-xrow-d">' + item.d + '</span></div>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+    area.innerHTML = html;
+  }
+
   /* ── Main render ── */
   function renderAll() {
+    renderSpine();
+
+    var mainEl = document.getElementById('gym-main');
+    var offEl = document.getElementById('off-day-msg');
+    var coachEl = document.getElementById('coach');
+    var restBarEl = document.getElementById('rest-bar');
+
+    if (!SESSIONS[selDay]) {
+      // Off day
+      mainEl.style.display = 'none';
+      coachEl.style.display = 'none';
+      restBarEl.innerHTML = '';
+      var w = GYM_WEEK[selDay];
+      offEl.innerHTML = '<div class="g-off-msg"><h2>No gym today.</h2><p>' + w.label + (w.label === 'No gym' ? ' \u2014 let the body recover and adapt.' : ' \u2014 energy goes elsewhere today.') + '</p></div>';
+      document.getElementById('extras-area').innerHTML = '';
+      document.getElementById('session-sub').textContent = w.d + ' \u00B7 ' + w.label.toUpperCase();
+      bindEvents();
+      return;
+    }
+
+    // Gym day
+    mainEl.style.display = '';
+    coachEl.style.display = '';
+    offEl.innerHTML = '';
     renderCoach();
+
+    document.getElementById('session-sub').textContent = data.session.name.toUpperCase() + ' \u00B7 ' + data.session.at;
 
     var left = '';
     left += renderBlock('warmup', 'WARM-UP', 'warm');
@@ -593,11 +777,20 @@ ul{list-style:none;}
 
     document.getElementById('col-right').innerHTML = renderSessionPanel() + renderLoadPanel();
 
+    renderExtras();
     bindEvents();
   }
 
   /* ── Event binding ── */
   function bindEvents() {
+    // Spine day click
+    document.querySelectorAll('[data-spine]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var day = parseInt(this.dataset.spine);
+        if (day !== selDay) switchDay(day);
+      });
+    });
+
     // Toggle expand
     document.querySelectorAll('[data-toggle]').forEach(function(btn) {
       btn.addEventListener('click', function() {
@@ -690,17 +883,7 @@ ul{list-style:none;}
   fetch('/api/gym/session').then(function(r) { return r.ok ? r.json() : null; }).then(function(j) {
     if (!j) return;
     data = j;
-    rests = {}; plans = {}; log = {};
-    data.lifts.forEach(function(l) { rests[l.name] = l.rest; });
-    data.lifts.forEach(function(l) { plans[l.name] = prescribe(l, data.gate); });
-    data.lifts.forEach(function(l) {
-      var p = plans[l.name];
-      log[l.name] = [
-        { kg:p.kg||0, reps:p.reps, rpe:null, done:false },
-        { kg:p.kg||0, reps:p.reps, rpe:null, done:false },
-        { kg:p.kg||0, reps:p.reps, rpe:null, done:false }
-      ];
-    });
+    initSession();
     renderAll();
   }).catch(function() {});
 

@@ -18,7 +18,7 @@ Contact: rowan.wisere@gmail.com
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0b">
 <title>Water Coach</title>
-<script src="topbar.js" defer></script>
+
 
 <!-- =============================================================
      EDIT THIS BLOCK TO MAKE THE APP YOURS.
@@ -82,6 +82,8 @@ html, body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
+.w-back{display:block;font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--text-3);text-decoration:none;margin-bottom:12px;}
+.w-back:hover{color:var(--accent);}
 .shell { max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
 
 /* ----- Top day pill + header ----- */
@@ -460,6 +462,7 @@ html, body {
 
 <div class="shell">
 
+  <a href="/" class="w-back">&#8592; Home</a>
   <button class="day-pill" id="dayPill" type="button">
     <span id="dayPillLabel">—</span>
   </button>
