@@ -35,8 +35,8 @@ button,a{font-family:inherit;}
 @keyframes orbit{to{transform:rotate(360deg)}}
 
 /* back */
-.d-back{display:block;font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;max-width:var(--w);margin:0 auto 12px;}
-.d-back:hover{color:var(--green);}
+.d-back{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:48px;height:48px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 18px/1 'Inter',sans-serif;color:var(--dim);text-decoration:none;max-width:var(--w);margin:0 auto 12px;}
+.d-back:hover{color:var(--green);border-color:rgba(74,222,128,.3);}
 
 /* header */
 .d-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;max-width:var(--w);margin:0 auto 22px;}
@@ -207,8 +207,16 @@ button,a{font-family:inherit;}
 .d-link{font:500 9px var(--mono);letter-spacing:.12em;color:var(--dim);text-decoration:none;text-transform:uppercase;}
 .d-link:hover{color:var(--green);}
 
-.d-rem li{border-top:1px solid rgba(255,255,255,.04);}
+.d-rem li{border-top:1px solid rgba(255,255,255,.04);display:flex;align-items:center;}
 .d-rem li:first-child{border-top:0;}
+.d-todo-add{display:flex;gap:8px;margin-bottom:10px;}
+.d-todo-in{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--ink);font:400 12px 'Inter',sans-serif;}
+.d-todo-in:focus{outline:none;border-color:rgba(74,222,128,.4);}
+.d-todo-in::placeholder{color:var(--dimmer);}
+.d-todo-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;background:rgba(74,222,128,.08);color:var(--green);font-size:18px;cursor:pointer;flex:none;display:grid;place-items:center;}
+.d-todo-btn:hover{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.3);}
+.d-todo-del{background:none;border:0;color:var(--dimmer);font-size:16px;cursor:pointer;padding:6px 8px;margin-left:auto;flex:none;}
+.d-todo-del:hover{color:var(--amber);}
 
 .d-week{display:flex;gap:5px;}
 .d-wd{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer;transition:all .15s;}
@@ -593,11 +601,11 @@ var PROPOSALS = [
     apply: function(d){return d;} }
 ];
 
-var REMINDERS = [
-  { id:"log", t:"Log Seward workout", at:550 },
-  { id:"caff", t:"Caffeine cutoff \u2014 last dose before 4pm", at:960 },
-  { id:"kit", t:"Pack bag for team training", at:900 }
-];
+// To-do list (localStorage-backed)
+function loadTodos() {
+  try { return JSON.parse(localStorage.getItem('v_todos') || '[]'); } catch(e) { return []; }
+}
+function saveTodos(arr) { localStorage.setItem('v_todos', JSON.stringify(arr)); }
 
 var APPOINTMENTS = [
   { id:"mfm", when:"MON 14 JUL \u00b7 12:00", t:"MFM \u2014 body assessment",
@@ -621,7 +629,7 @@ var state = {
   open: null,
   steps: {},
   done: {},
-  rem: {},
+  todos: loadTodos(),
   showPast: false
 };
 
@@ -878,21 +886,21 @@ function render() {
     h += '<h3 class="d-bt">Appointments</h3></section>';
   }
 
-  // Reminders (today only)
+  // To-do list
   if (isToday) {
-    var overdue = REMINDERS.filter(function(r){return !state.rem[r.id] && r.at < NOW;}).length;
-    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">03 \u00b7 REMINDERS</p>';
-    if (overdue > 0) h += '<span class="d-warn">' + overdue + ' overdue</span>';
-    h += '</header><ul class="d-rem">';
-    REMINDERS.forEach(function(r) {
-      var on = !!state.rem[r.id];
-      var late = !on && r.at < NOW;
-      h += '<li><button class="d-step' + (on ? ' is-on' : '') + '" data-remkey="' + r.id + '" aria-pressed="' + on + '">';
-      h += '<span class="d-box">' + (on ? '\u2713' : '') + '</span>';
-      h += '<span class="d-st"><b>' + esc(r.t) + '</b><em class="' + (late ? 'is-late' : '') + '">' + (late ? 'overdue' : hhmm(r.at)) + '</em></span>';
-      h += '</button></li>';
+    var tdDone = state.todos.filter(function(t){return t.done;}).length;
+    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">03 \u00b7 TO-DO</p>';
+    if (state.todos.length > 0) h += '<span style="font:400 9px var(--mono);color:var(--dim)">' + tdDone + '/' + state.todos.length + '</span>';
+    h += '</header>';
+    h += '<div class="d-todo-add"><input id="todoInput" type="text" placeholder="Add a task\u2026" class="d-todo-in" /><button id="todoBtn" class="d-todo-btn">+</button></div>';
+    h += '<ul class="d-rem">';
+    state.todos.forEach(function(t, i) {
+      h += '<li><button class="d-step' + (t.done ? ' is-on' : '') + '" data-todotoggle="' + i + '" aria-pressed="' + t.done + '">';
+      h += '<span class="d-box">' + (t.done ? '\u2713' : '') + '</span>';
+      h += '<span class="d-st"><b>' + esc(t.text) + '</b></span>';
+      h += '</button><button class="d-todo-del" data-tododel="' + i + '" aria-label="Delete">\u00D7</button></li>';
     });
-    h += '</ul><h3 class="d-bt">Reminders</h3></section>';
+    h += '</ul><h3 class="d-bt">To-do</h3></section>';
   }
 
   // Week
@@ -995,11 +1003,33 @@ function bindAll() {
     });
   });
 
-  // Reminders
-  document.querySelectorAll('[data-remkey]').forEach(function(btn){
+  // To-do list
+  var todoIn = document.getElementById('todoInput');
+  var todoBtn = document.getElementById('todoBtn');
+  if (todoBtn) {
+    var addTodo = function() {
+      var v = todoIn.value.trim();
+      if (!v) return;
+      state.todos.push({ text: v, done: false });
+      saveTodos(state.todos);
+      render();
+    };
+    todoBtn.addEventListener('click', addTodo);
+    todoIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') addTodo(); });
+  }
+  document.querySelectorAll('[data-todotoggle]').forEach(function(btn){
     btn.addEventListener('click', function(){
-      var id = this.dataset.remkey;
-      state.rem[id] = !state.rem[id];
+      var i = parseInt(this.dataset.todotoggle);
+      state.todos[i].done = !state.todos[i].done;
+      saveTodos(state.todos);
+      render();
+    });
+  });
+  document.querySelectorAll('[data-tododel]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var i = parseInt(this.dataset.tododel);
+      state.todos.splice(i, 1);
+      saveTodos(state.todos);
       render();
     });
   });

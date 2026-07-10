@@ -5,31 +5,34 @@ export type Exercise =
   | { type: 'drill';  id: string; name: string; sets: number; work: string; rest?: number; cue?: string }
   | { type: 'check';  id: string; name: string; minutes: number }
 
-export type Block = {
-  code: string
-  name: string
-  minutes: number
-  tone: 'warm' | 'work' | 'cool' | 'prime'
-  tag?: string
+export type Group = {
+  label: string
   note?: string
+  locked?: boolean
   exercises: Exercise[]
 }
 
-export type Phase = {
+export type Section = {
   id: string
-  number: string
   name: string
-  where: string
-  coach: { headline: string; line: string }
-  blocks: Block[]
+  purpose: string
+  tone: 'prime' | 'work' | 'gold' | 'cool'
+  minutes: number
+  tag?: string
+  rest?: number
+  note?: string
+  groups: Group[]
 }
 
 export type SessionTemplate = {
   id: string
   name: string
   startsAt: string
-  phases: Phase[]
+  sections: Section[]
 }
 
 export const totalReps = (e: Exercise): number =>
   e.type === 'sprint' ? e.reps : e.type === 'check' ? 1 : e.sets
+
+export const exRest = (e: Exercise): number | undefined =>
+  e.type === 'check' ? undefined : (e as { rest?: number }).rest
