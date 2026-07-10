@@ -294,27 +294,28 @@ var CATS = {
 };
 
 var DRILLS = [
-  { id: "coerver",    cat: "mastery",   n: "Coerver foundations",      m: 6,  reps: "3 \u00d7 60\u2033",  note: "Toe taps, sole rolls, inside\u2013outside. Head up on the last set.", flag: false },
-  { id: "berbatov",   cat: "mastery",   n: "Berbatov wall touches",    m: 8,  reps: "200 touches",        note: "Alternate feet. First touch away from pressure.", flag: false },
-  { id: "fig8",       cat: "mastery",   n: "Figure-8 dribble",        m: 5,  reps: "4 \u00d7 45\u2033",  note: "Two cones, close control, both feet.", flag: false },
-  { id: "vpull",      cat: "mastery",   n: "Sole roll \u2192 V-pull", m: 5,  reps: "5 \u00d7 30\u2033",  note: "Change direction under the sole.", flag: false },
+  { id: "berbatov",   cat: "mastery",   n: "Berbatov wall touches",    m: 8,  reps: "200 touches",        note: "Kick ball hard against wall, control rebound while turning.", flag: false },
+  { id: "coerver",    cat: "mastery",   n: "Coerver pull-push",        m: 6,  reps: "4 \u00d7 20s speed tests", note: "Stop ball, roll back with sole, push forward with inside.", flag: false },
+  { id: "juggle",     cat: "mastery",   n: "Two-touch juggling",       m: 8,  reps: "50 passes no drop",  note: "Pass back/forth with partner, two touches, no ground.", flag: false },
+  { id: "gateft",     cat: "mastery",   n: "Gate passing & first touch", m: 8, reps: "1 min per variation \u00d7 2 sets", note: "Pass through gates, touch through gate before passing back.", flag: false },
+  { id: "cognitive",  cat: "mastery",   n: "Cognitive ball mastery",   m: 6,  reps: "4 \u00d7 30s",       note: "Iniesters/sole drags while catching tennis ball tosses.", flag: false },
 
-  { id: "wallpass",   cat: "technical", n: "Wall passing accuracy",    m: 10, reps: "50 each foot",       note: "Target a 1m square. Count the misses.", flag: false },
-  { id: "firsttouch", cat: "technical", n: "First touch redirect",     m: 8,  reps: "40 reps",            note: "Into space, not under your feet.", flag: false },
-  { id: "weakfoot",   cat: "technical", n: "Weak foot passing",        m: 10, reps: "100 passes",         note: "The only drill you cannot skip.", flag: true },
-  { id: "crossing",   cat: "technical", n: "Crossing reps",            m: 10, reps: "30 crosses",         note: "15 near post, 15 cut back.", flag: false },
-  { id: "finishing",  cat: "technical", n: "Finishing",                m: 12, reps: "40 shots",           note: "20 first time, 20 off a touch.", flag: false },
+  { id: "weakfoot",   cat: "technical", n: "Weak foot passing",        m: 10, reps: "100 passes",         note: "Inside-outside rolls, wall passing, sole drag inside push, driven pass (all LEFT).", flag: true },
+  { id: "longpass",   cat: "technical", n: "Long passing (the ping)",  m: 10, reps: "30 \u00d7 40m",      note: "Laces, foot angled out, chop down for backspin.", flag: false },
+  { id: "crossing",   cat: "technical", n: "Crossing reps",            m: 10, reps: "30 crosses",         note: "Early low whipped, head-height, end-line cutback.", flag: false },
+  { id: "wallpass",   cat: "technical", n: "Wall passing accuracy",    m: 10, reps: "50 each foot",       note: "Stick/cone passing variations.", flag: false },
+  { id: "firsttouch", cat: "technical", n: "First touch redirect",     m: 8,  reps: "40 reps",            note: "Back foot reception, ground receive turn & play.", flag: false },
 
-  { id: "scan",       cat: "position",  n: "Scanning circuit",         m: 8,  reps: "6 \u00d7 60\u2033",  note: "Shoulder check every 3 seconds. Call what you see.", flag: false },
-  { id: "halfturn",   cat: "position",  n: "Half-turn receiving",      m: 8,  reps: "30 each side",       note: "Open the body before the ball arrives.", flag: false },
-  { id: "pressure",   cat: "position",  n: "Receiving under pressure", m: 10, reps: "20 reps",            note: "Back to goal, defender live. Protect, release.", flag: false },
-  { id: "switch",     cat: "position",  n: "Switch of play",           m: 10, reps: "30 \u00d7 40m",      note: "Driven, flat, into the far channel.", flag: false },
-  { id: "thirdman",   cat: "position",  n: "Third-man combination",    m: 10, reps: "20 patterns",        note: "Set, spin, receive on the half-turn.", flag: false },
+  { id: "turns",      cat: "position",  n: "Midfield turns",           m: 8,  reps: "30 each side",       note: "Turning the corner (outside foot/Cruyff), half-turn receiving.", flag: false },
+  { id: "scan",       cat: "position",  n: "Scanning circuit",         m: 8,  reps: "6 \u00d7 60s",       note: "Check shoulder, receive, play.", flag: false },
+  { id: "pressure",   cat: "position",  n: "Receiving under pressure", m: 10, reps: "20 reps",            note: "Body shape open, first touch away from pressure.", flag: false },
+  { id: "switch",     cat: "position",  n: "Switch of play",           m: 10, reps: "30 \u00d7 40m",      note: "Distribution drills, figure-8 dribbling then long pass.", flag: false },
+  { id: "edgebox",    cat: "position",  n: "Edge-of-box finishing",    m: 10, reps: "20 strikes",         note: "Pass into rebounder, touch out, strike.", flag: false },
 
-  { id: "accel",      cat: "speed",     n: "Wall acceleration",        m: 6,  reps: "8 \u00d7 10m",       note: "Shin angle. Punch the ground. Full recovery.", flag: false },
-  { id: "prostep",    cat: "speed",     n: "5-10-5 pro agility",       m: 8,  reps: "6 reps",             note: "Plant the outside foot. Drop the hips.", flag: false },
-  { id: "wickets",    cat: "speed",     n: "Wickets \u2014 mechanics",  m: 8,  reps: "6 \u00d7 20m",       note: "Front-side mechanics. Don\u2019t reach.", flag: false },
-  { id: "cod",        cat: "speed",     n: "Change of direction",      m: 8,  reps: "10 each way",        note: "Decelerate first. That\u2019s the skill.", flag: false }
+  { id: "accel",      cat: "speed",     n: "Wall acceleration",        m: 6,  reps: "8 \u00d7 10m",       note: "Wall drives then falling start sprints.", flag: false },
+  { id: "prostep",    cat: "speed",     n: "5-10-5 pro agility",       m: 8,  reps: "6 reps",             note: "Sprint 5m, touch, 10m opposite, touch, 5m back.", flag: false },
+  { id: "reactsq",    cat: "speed",     n: "Reaction agility square",  m: 8,  reps: "5 \u00d7 30s",       note: "Partner calls cone color/number, sprint to it.", flag: false },
+  { id: "tdrill",     cat: "speed",     n: "T-drill",                  m: 8,  reps: "6 reps",             note: "Forward 10m, shuffle R 5m, L 10m, R 5m, backpedal 10m.", flag: false }
 ];
 
 /* ═══ Khabib ═══════════════════════════════════════════════════ */

@@ -298,9 +298,9 @@ body {
 
   /* ── Day type targets ── */
   var DAY_TYPES = {
-    training: { label:'TRAINING DAY', kcal:2800, p:180, c:330, f:75, fibre:38, water:3800 },
-    rest:     { label:'REST DAY',     kcal:2400, p:180, c:220, f:75, fibre:42, water:3000 },
-    match:    { label:'MATCH DAY',    kcal:3100, p:160, c:430, f:70, fibre:22, water:4200 }
+    training: { label:'TRAINING DAY', kcal:2900, p:170, c:380, f:80, fibre:35, water:3500 },
+    rest:     { label:'REST DAY',     kcal:2400, p:170, c:250, f:80, fibre:40, water:3000 },
+    match:    { label:'MATCH DAY',    kcal:3200, p:160, c:450, f:70, fibre:25, water:4200 }
   };
 
   var CLASSES_COLOR = { vit:'#7DD3C0', min:'#4ADE80', oth:'#D8B24A' };
@@ -338,21 +338,17 @@ body {
       { k:'Fibre',         v:24,  t:38,  ul:null,  u:'g', g:'oth' }
     ],
     supplements: [
-      { slot:'ON WAKING', items:[{ n:'Probiotic \u2014 L. plantarum 299v', d:'1 cap', done:true }] },
+      { slot:'ON WAKING', items:[{ n:'Electrolytes + salt', done:false }] },
       { slot:'BREAKFAST', items:[
-        { n:'Vitamin D3 + K2', d:'1 cap', done:true },
-        { n:'Curcumin (Meriva)', d:'500 mg', done:true },
-        { n:'Creatine monohydrate', d:'5 g', done:true },
-        { n:'Calcium', d:'500 mg', done:false }
+        { n:'Creatine 5g', done:false },
+        { n:'Vitamin D3 1000-2000 IU', done:false },
+        { n:'Omega-3 / Fish Oil 1-2g EPA', done:false }
       ]},
-      { slot:'PRE-TRAINING', items:[{ n:'Collagen + Vitamin C', d:'15 g', done:true }] },
-      { slot:'LUNCH', items:[
-        { n:'Algae omega-3', d:'2 g EPA+DHA', done:false },
-        { n:'Zinc', d:'15 mg', done:false }
-      ]},
-      { slot:'BEDTIME', items:[{ n:'Magnesium glycinate', d:'350 mg', done:false }] }
+      { slot:'PRE-TRAINING', items:[{ n:'Caffeine 1-3mg/kg', done:false }, { n:'Water 300-500ml + electrolytes', done:false }] },
+      { slot:'POST-TRAINING', items:[{ n:'Protein shake 30-40g', done:false }] },
+      { slot:'BEDTIME', items:[{ n:'Mg Threonate 145mg', done:false }, { n:'Apigenin 50mg', done:false }, { n:'Theanine 100-400mg', done:false }] }
     ],
-    streak: 11
+    streak: 0
   };
 
   var tgt = DAY_TYPES[data.dayType];
@@ -490,7 +486,13 @@ body {
       { name:'Beef mince 5% fat', per:'100g', kcal:137, p:21, c:0, f:5 },
       { name:'Almonds', per:'30g', kcal:174, p:6.4, c:6.1, f:15 },
       { name:'Banana', per:'1 medium', kcal:105, p:1.3, c:27, f:0.4 },
-      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 }
+      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 },
+      { name:'Protein shake (whey)', per:'1 scoop', kcal:120, p:25, c:3, f:1.5 },
+      { name:'Greek yoghurt', per:'170g', kcal:100, p:17, c:6, f:0.7 },
+      { name:'Salmon fillet', per:'150g', kcal:311, p:34, c:0, f:18.5 },
+      { name:'Pasta, cooked', per:'200g', kcal:262, p:9.4, c:50, f:1.6 },
+      { name:'Avocado', per:'1 medium', kcal:240, p:3, c:12, f:22 },
+      { name:'Peanut butter', per:'2 tbsp', kcal:188, p:7, c:6, f:16 }
     ];
 
     var html = '<div class="u-seg" role="tablist" id="log-tabs">' +
@@ -579,7 +581,13 @@ body {
       { name:'Beef mince 5% fat', per:'100g', kcal:137, p:21, c:0, f:5 },
       { name:'Almonds', per:'30g', kcal:174, p:6.4, c:6.1, f:15 },
       { name:'Banana', per:'1 medium', kcal:105, p:1.3, c:27, f:0.4 },
-      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 }
+      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 },
+      { name:'Protein shake (whey)', per:'1 scoop', kcal:120, p:25, c:3, f:1.5 },
+      { name:'Greek yoghurt', per:'170g', kcal:100, p:17, c:6, f:0.7 },
+      { name:'Salmon fillet', per:'150g', kcal:311, p:34, c:0, f:18.5 },
+      { name:'Pasta, cooked', per:'200g', kcal:262, p:9.4, c:50, f:1.6 },
+      { name:'Avocado', per:'1 medium', kcal:240, p:3, c:12, f:22 },
+      { name:'Peanut butter', per:'2 tbsp', kcal:188, p:7, c:6, f:16 }
     ];
 
     function renderSearchHits(q) {

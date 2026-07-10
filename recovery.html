@@ -227,8 +227,8 @@ table{border-spacing:0;}
 'use strict';
 
 /* ═══ CONFIG ═══════════════════════════════════════════════════ */
-var SESSION = { name: "Gym \u2014 lower + pull", type: "strength", end: 8 * 60 + 5 };
-var MATCH_IN = 1;
+var SESSION = { name: "Team training", type: "team", end: 19 * 60 + 30 };
+var MATCH_IN = 2;
 var BED = 22 * 60 + 30;
 var COLD_GATE = 4 * 60;
 
@@ -250,28 +250,28 @@ function esc(s) { var d = document.createElement('div'); d.textContent = s; retu
 
 /* ═══ PROTOCOLS ═══════════════════════════════════════════════ */
 var TOOLS = {
-  sauna:    { n: "Sauna",              tag: "HEAT",        c: "#E8873A", weekly: 3, spec: "80\u2013100 \u00b0C \u00b7 4 \u00d7 15 min \u00b7 2 min cool between", rounds: [{ p: "HEAT", s: 900 }, { p: "COOL", s: 120 }], sets: 4, why: "Heat adaptation raises plasma volume. Real, but slow \u2014 weeks of sessions, not one before a match.", care: "Hydrate. Leave if you feel faint. Not within 90 minutes of bed." },
-  ice:      { n: "Ice bath",           tag: "COLD",        c: "#7DD3C0", weekly: 2, spec: "10\u201315 \u00b0C \u00b7 10\u201315 min \u00b7 to the sternum", rounds: [{ p: "IMMERSE", s: 720 }], sets: 1, why: "Blunts soreness. Best after matches and hard conditioning, when tomorrow matters more than adaptation.", care: "Never within 4 hours of strength work. Shivering hard means get out." },
-  contrast: { n: "Contrast",           tag: "HOT / COLD",  c: "#D8B24A", weekly: 2, spec: "3 min hot / 1 min cold \u00d7 4 \u00b7 finish cold", rounds: [{ p: "HOT", s: 180 }, { p: "COLD", s: 60 }], sets: 4, why: "Gentler than full immersion. Mostly makes you feel better, which on a Thursday is enough.", care: "Finish cold. Not the night before a match \u2014 you want to sleep." },
-  gun:      { n: "Massage gun",        tag: "PERCUSSION",  c: "#4ADE80", weekly: 5, spec: "60\u201390 s per area \u00b7 light pressure \u00b7 slow glide", rounds: [{ p: "WORK", s: 75 }], sets: 3, why: "Short-term range of motion without the strength cost of static stretching.", care: "Never on bone, joints, the front of the neck, or nerve lines. If it makes you flinch, stop." },
-  roll:     { n: "Foam roll \u00b7 fascia", tag: "MYOFASCIAL", c: "#4ADE80", weekly: 5, spec: "60\u201390 s per area \u00b7 slow \u00b7 breathe out on the tender spot", rounds: [{ p: "ROLL", s: 90 }], sets: 2, why: "Range without losing force. The effect fades in an hour \u2014 roll before you need it.", care: "Slow. Speed is how people convince themselves they\u2019ve done something." },
-  ball:     { n: "Spikey ball",        tag: "TARGETED",    c: "#7DD3C0", weekly: 4, spec: "90 s per point \u00b7 sustained, not rolling", rounds: [{ p: "SUSTAIN", s: 90 }], sets: 2, why: "Reaches what a roller can\u2019t \u2014 glute med, plantar fascia, under the shoulder blade.", care: "Stay off the ITB, the spine itself, and the back of the knee." },
-  press:    { n: "Pressure points",    tag: "ISCHAEMIC",   c: "#D8B24A", weekly: 3, spec: "30\u201345 s sustained \u00b7 6/10 discomfort \u00b7 breathe", rounds: [{ p: "HOLD", s: 40 }], sets: 3, why: "Hold a tender point until it softens. Nothing by 40 seconds means it isn\u2019t the point.", care: "6 out of 10, not 9. Pain you hold your breath through teaches you to brace." },
-  walk:     { n: "Walk & rehydrate",   tag: "IMMEDIATE",   c: "#5F786E", weekly: 7, spec: "5\u201310 min \u00b7 nasal breathing \u00b7 500 ml + electrolytes", rounds: [{ p: "WALK", s: 420 }], sets: 1, why: "The only thing worth doing in the first fifteen minutes. Everything else can wait.", care: "Nothing to get wrong here. Do it anyway." }
+  sauna:    { n: "Sauna",              tag: "HEAT",        c: "#E8873A", weekly: 3, spec: "80\u2013100 \u00b0C \u00b7 15\u201320 min \u00b7 2\u20133x/week = 27% CV reduction, 4\u20137x = 50%", rounds: [{ p: "HEAT", s: 1200 }], sets: 1, why: "Cardiovascular health, heat acclimation, mitochondrial biogenesis. Compensatory cooling 1\u20132 hrs before bed aids sleep.", care: "Growth hormone protocol: 4 \u00d7 30 min @ 80\u00b0C, max once/week. Man City uses infrared sauna." },
+  ice:      { n: "Cold plunge",        tag: "COLD",        c: "#7DD3FC", weekly: 3, spec: "10\u201315 \u00b0C \u00b7 1\u20135 min \u00b7 11 min total/week across 2\u20134 sessions", rounds: [{ p: "IMMERSE", s: 300 }], sets: 1, why: "Doubles baseline dopamine for 4\u20136 hours. Best done AM to stack with cortisol peak. Memory enhancement when done after learning.", care: "AVOID within 4\u20136 hours after strength/hypertrophy training \u2014 suppresses inflammatory response needed for adaptation. Move limbs to break thermal layer." },
+  contrast: { n: "Contrast bath",      tag: "HOT/COLD",    c: "#D8B24A", weekly: 2, spec: "3 min hot / 1 min cold \u00d7 4 rounds \u00b7 finish on cold", rounds: [{ p: "HOT", s: 180 }, { p: "COLD", s: 60 }], sets: 4, why: "Alternating vasodilation/constriction pumps blood and lymph. Good for heavy legs post-match.", care: "Not within 90 min of bed. Not within 4 hours of strength work." },
+  gun:      { n: "Percussion gun",     tag: "SOFT TISSUE", c: "#4ADE80", weekly: 5, spec: "30\u201360 sec per muscle group \u00b7 avoid bony prominences", rounds: [{ p: "WORK", s: 300 }], sets: 1, why: "Breaks up fascial adhesions, increases local blood flow, reduces DOMS.", care: "Light pressure on tender areas. Don\u2019t chase pain." },
+  roll:     { n: "Foam roller",        tag: "SOFT TISSUE", c: "#4ADE80", weekly: 4, spec: "60\u201390 sec per area \u00b7 slow rolls, pause on knots", rounds: [{ p: "ROLL", s: 600 }], sets: 1, why: "Fascial adhesion rolling. Myofascial release for recovery between sessions.", care: "Avoid rolling directly on joints or spine." },
+  ball:     { n: "Lacrosse ball",      tag: "TRIGGER",     c: "#7DD3C0", weekly: 3, spec: "60 sec per trigger point \u00b7 breathe into pressure", rounds: [{ p: "SUSTAIN", s: 300 }], sets: 1, why: "Deep trigger point release for glutes, hip flexors, calves, feet.", care: "Adductors \u2014 groin history. Treat it earlier than it asks." },
+  swim:     { n: "Pool recovery",      tag: "LYMPH",       c: "#7DD3FC", weekly: 1, spec: "15\u201320 min treading water or light swimming", rounds: [{ p: "SWIM", s: 1200 }], sets: 1, why: "Lymphatic drainage \u2014 shearing action of water on skin moves lymph fluid. Reduces heavy legs better than static immersion.", care: "Active recovery only. No intensity." },
+  walk:     { n: "Nasal walk",         tag: "ACTIVE",      c: "#2E7F5B", weekly: 7, spec: "10\u201320 min \u00b7 nasal breathing only \u00b7 optic flow", rounds: [{ p: "WALK", s: 1200 }], sets: 1, why: "Generates optic flow to quiet amygdala. Diaphragmatic breathing creates pressure differential to move lymph. 7000+ steps daily target.", care: "Morning sunlight walk is non-negotiable." }
 };
 
-var TOOL_KEYS = ["sauna", "ice", "contrast", "gun", "roll", "ball", "press", "walk"];
+var TOOL_KEYS = ["sauna", "ice", "contrast", "gun", "roll", "ball", "swim", "walk"];
 
 /* ═══ REGIONS ════════════════════════════════════════════════ */
 var REGIONS = {
   traps:   { view: "back",  n: "Traps & T-spine",  c: [[60,56,11]],               tools: ["ball","roll","gun"] },
   lowback: { view: "back",  n: "Lower back",       c: [[60,98,10]],               tools: ["ball","sauna","gun"] },
-  glutes:  { view: "back",  n: "Glutes",           c: [[60,119,12]],              tools: ["ball","gun","press"] },
-  hams:    { view: "back",  n: "Hamstrings",       c: [[51,160,9],[69,160,9]],    tools: ["roll","gun","press"] },
+  glutes:  { view: "back",  n: "Glutes",           c: [[60,119,12]],              tools: ["ball","gun","roll"] },
+  hams:    { view: "back",  n: "Hamstrings",       c: [[51,160,9],[69,160,9]],    tools: ["roll","gun","ball"] },
   calves:  { view: "back",  n: "Calves",           c: [[51,215,8],[69,215,8]],    tools: ["roll","gun","ball"] },
-  feet:    { view: "back",  n: "Feet & plantar",   c: [[50,259,6],[70,259,6]],    tools: ["ball","press"] },
-  hipflex: { view: "front", n: "Hip flexors",      c: [[60,120,10]],              tools: ["roll","gun","press"] },
-  adduct:  { view: "front", n: "Adductors",        c: [[60,152,9]],               tools: ["ball","gun","press"], watch: true },
+  feet:    { view: "back",  n: "Feet & plantar",   c: [[50,259,6],[70,259,6]],    tools: ["ball","roll"] },
+  hipflex: { view: "front", n: "Hip flexors",      c: [[60,120,10]],              tools: ["roll","gun","ball"] },
+  adduct:  { view: "front", n: "Adductors",        c: [[60,152,9]],               tools: ["ball","gun","roll"], watch: true },
   quads:   { view: "front", n: "Quads",            c: [[51,158,9],[69,158,9]],    tools: ["roll","gun"] },
   tib:     { view: "front", n: "Shins & tib ant",  c: [[51,214,7],[69,214,7]],    tools: ["gun","ball"] }
 };
@@ -281,22 +281,22 @@ var SORE = ["None", "Niggle", "Sore", "Angry"];
 var SORE_C = ["#3B4E47", "#D8B24A", "#E8873A", "#F05A3A"];
 
 var HISTORY = {
-  adduct:  [1,2,2,3,2,2,2],
-  lowback: [0,1,2,1,2,1,2],
-  calves:  [0,0,1,1,0,1,1],
-  hams:    [1,1,0,0,1,0,0],
-  glutes:  [0,1,1,0,0,0,0],
-  quads:   [0,0,0,1,0,0,0]
+  adduct:  [0,0,0,0,0,0,1],
+  lowback: [0,0,0,0,0,0,0],
+  calves:  [0,0,0,0,0,0,1],
+  hams:    [0,0,0,0,0,0,1],
+  glutes:  [0,0,0,0,0,0,0],
+  quads:   [0,0,0,0,0,0,1]
 };
 
 /* ═══ STATE ══════════════════════════════════════════════════ */
 var state = {
   view: "front",
-  sore: { adduct: 2, lowback: 2, calves: 1 },
-  sel: "adduct",
+  sore: { hams: 1, calves: 1, quads: 1 },
+  sel: null,
   run: null,       // { tool, startedAt, seq, idx }
   lib: false,
-  log: { sauna: 1, ice: 0, contrast: 1, gun: 3, roll: 2, ball: 2, press: 1, walk: 4 }
+  log: { sauna: 0, ice: 0, contrast: 0, gun: 0, roll: 0, ball: 0, swim: 0, walk: 1 }
 };
 
 /* ═══ COLD GATE ══════════════════════════════════════════════ */
@@ -339,7 +339,7 @@ function buildWindow() {
     { at: ca, label: strength ? "+4 hours" : "Any time", tools: ["ice", "contrast"],
       lock: strength && now < ca,
       note: strength ? "Cold before this costs you the session you just did." : "No strength work today \u2014 cold is free." },
-    { at: 19 * 60 + 30, label: "Evening", tools: ["ball", "press"], lock: false,
+    { at: 19 * 60 + 30, label: "Evening", tools: ["ball", "swim"], lock: false,
       note: "Sore spots only. Ten minutes, not forty." },
     { at: BED - 90, label: "\u226590 min before bed", tools: ["sauna"],
       lock: MATCH_IN === 1,

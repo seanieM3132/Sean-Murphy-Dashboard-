@@ -239,12 +239,12 @@ function kmark(size, live) {
 
 /* ═══ CONFIG ═════════════════════════════════════════════════ */
 var SIGNALS = [
-  { k:"Readiness", v:"82",   s:"GREEN",    href:"/plan.html",     tone:"good" },
-  { k:"Form",      v:"+14",  s:"PEAKING",  href:"/plan.html",     tone:"good" },
-  { k:"Protein",   v:"132",  s:"/ 180 g",  href:"/fuel.html",     tone:"hot" },
-  { k:"Sleep",     v:"7:08", s:"DEBT 2h",  href:"/health.html",   tone:"" },
-  { k:"Adductors", v:"5/7",  s:"FLAGGED",  href:"/train.html#recovery", tone:"hot" },
-  { k:"Load",      v:"412",  s:"BUILD",    href:"/train.html",    tone:"" }
+  { k:"Readiness", v:"\u2014",   s:"DAY 2",     href:"/plan.html",           tone:"" },
+  { k:"Load",      v:"115", s:"RAMP",       href:"/train.html",          tone:"" },
+  { k:"Protein",   v:"\u2014",   s:"NOT LOGGED", href:"/fuel.html",           tone:"hot" },
+  { k:"Sleep",     v:"\u2014",   s:"NOT LOGGED", href:"/health.html",         tone:"" },
+  { k:"Adductors", v:"\u2014",   s:"WATCH",      href:"/train.html#recovery", tone:"" },
+  { k:"Seward",    v:"2/15",s:"DAY 2",      href:"/train.html#seward",   tone:"good" }
 ];
 
 var KIND = {
@@ -257,72 +257,96 @@ var KIND = {
 };
 
 var BASE_DAY = [
-  { id:"am", at:390, mins:25, kind:"routine", title:"Morning routine", sub:"Light, water, mobility, round one", steps:[
-    {t:"Water \u2014 500 ml with a pinch of salt",d:"before anything else"},
-    {t:"Daylight on your face",d:"10 minutes, no sunglasses"},
-    {t:"Hip 90/90 + ankle rocks",d:"5 minutes"},
-    {t:"Probiotic \u2014 L. plantarum 299v",d:"empty stomach"},
-    {t:"Weigh in",d:"after the toilet, before food"}
+  { id:"am", at:420, mins:25, kind:"routine", title:"Morning protocol", sub:"Sunlight 10 min, hydrate 500ml + electrolytes", href:"/health.html", steps:[
+    {t:"Wake 7:00 \u2014 no snooze, no phone 15 min",d:""},
+    {t:"Sunlight walk 10 min \u2014 optic flow",d:"Panoramic vision, calm alertness"},
+    {t:"Hydrate 500ml + electrolytes + salt",d:""},
+    {t:"Breakfast \u2014 oats + banana + protein shake",d:"30-60g carbs + 20g protein"},
+    {t:"Creatine 5g, Vitamin D3, Omega-3",d:"Take with food"}
   ]},
-  { id:"gym", at:420, mins:65, kind:"train", title:"Gym \u2014 lower + pull", sub:"Squat up 5kg \u00b7 chin-up deload", href:"/train.html#gym", steps:[
-    {t:"Warm-up + squat ramp",d:"18 min"},
-    {t:"Back squat 3 \u00d7 5 @ 90kg",d:"up 5kg \u2014 you earned it"},
-    {t:"Romanian deadlift 3 \u00d7 10 @ 95kg",d:"hold"},
-    {t:"Weighted chin-up 3 \u00d7 4 @ 7.5kg",d:"deload"},
-    {t:"Nordic curl 3 \u00d7 6",d:"bodyweight"},
-    {t:"Cool-down + stretch",d:"16 min"}
+  { id:"mob", at:470, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext 3\u00d720 \u00b7 iso lunge \u00b7 slant board squat", href:"/train.html#mvmnt", steps:[
+    {t:"Banded Knee Extension 3\u00d720",d:"Full extension each rep"},
+    {t:"Isometric Lunge Hold 3\u00d730s",d:"90/90 position, back glute engaged"},
+    {t:"Reverse Step-Up 3\u00d76",d:"Knee tracks forward over toe"},
+    {t:"Slant Board Squat 3\u00d76-8",d:"Controlled tempo, full depth"},
+    {t:"Reverse Nordic Curl 3\u00d75",d:"Keep hips extended"},
+    {t:"Knee IR/ER 2\u00d75 each",d:"Slow and controlled"}
   ]},
-  { id:"bfast", at:510, mins:20, kind:"fuel", title:"Breakfast + round two", sub:"690 kcal \u00b7 38 g protein", href:"/fuel.html", steps:[
-    {t:"Eggs, GF oats, berries",d:"690 kcal \u00b7 38 g protein"},
-    {t:"Vitamin D3+K2 \u00b7 Curcumin \u00b7 Creatine",d:"with food"},
-    {t:"Calcium",d:"500 mg"}
+  { id:"goata", at:490, mins:10, kind:"train", title:"GOATA + toe curls", sub:"Groundwork 5 min \u00b7 elevated toe curls 3\u00d720s", href:"/train.html#mvmnt", steps:[
+    {t:"Ground Hip Stretch 45s each side",d:"All fours, cross leg, IABH"},
+    {t:"Child Rocker 60s \u00d7 3",d:"Toes together, heels out, head up"},
+    {t:"Toe Tuck Rocker 60s \u00d7 3",d:""},
+    {t:"Elevated toe curls 3\u00d720s",d:"Daily fascia foundation"}
   ]},
-  { id:"cold", at:725, mins:0, kind:"admin", title:"Cold unlocked", sub:"4 hours since strength work", href:"/train.html#recovery", passive:true, steps:[] },
-  { id:"physio", at:885, mins:45, kind:"appt", title:"Physio \u2014 adductors", sub:"Melbourne Sports Med \u00b7 Elizabeth St", steps:[
-    {t:"Bring the 7-day soreness report",d:"flagged 5 of 7 days"},
-    {t:"Ask about eccentric loading",d:"Copenhagen progressions"},
-    {t:"Ask whether Nordic phase 1 continues",d:"week 3 of 8"}
+  { id:"seward", at:500, mins:40, kind:"train", title:"Seward \u2014 Workout B + Abs 2", sub:"Walking pushups 4\u00d77 \u00b7 lunges 5\u00d710 \u00b7 planks", href:"/train.html#seward", steps:[
+    {t:"Walking pushups: 4 sets \u00d7 7",d:"Pushup \u2192 walk 90\u00b0 \u2192 pushup \u2192 walk back = 1 rep"},
+    {t:"Lunges: 5 sets \u00d7 10 each leg",d:"Knee behind toes"},
+    {t:"Front plank 3\u00d71 min",d:""},
+    {t:"Left side plank 3\u00d71 min",d:""},
+    {t:"Right side plank 3\u00d71 min",d:""}
   ]},
-  { id:"solo", at:990, mins:35, kind:"train", title:"Individual \u2014 light", sub:"Touch and shape, match tomorrow", href:"/train.html#soccer", steps:[
-    {t:"Coerver foundations",d:"6 min"},
-    {t:"Berbatov wall touches",d:"8 min"},
-    {t:"Scanning circuit",d:"8 min"},
-    {t:"Nothing that leaves you sore",d:"stop early if in doubt"}
+  { id:"cold", at:560, mins:3, kind:"recover", title:"Morning cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost", href:"/train.html#recovery", steps:[
+    {t:"Cold plunge 1-3 min",d:"Move limbs to break thermal layer"},
+    {t:"Doubles baseline dopamine for 4-6 hours",d:""}
   ]},
-  { id:"dinner", at:1140, mins:30, kind:"fuel", title:"Dinner", sub:"Carbs up \u2014 match tomorrow", href:"/fuel.html", steps:[
-    {t:"Beef mince, sweet potato, greens",d:"aim 750 kcal"},
-    {t:"Algae omega-3 + zinc",d:"missed at lunch"}
+  { id:"shake", at:565, mins:10, kind:"fuel", title:"Post-training shake", sub:"30-40g protein", href:"/fuel.html", steps:[
+    {t:"Protein shake 30-40g",d:"Within 1 hour of training"}
   ]},
-  { id:"pm", at:1290, mins:20, kind:"routine", title:"Evening routine", sub:"Soft tissue, magnesium, lights down", steps:[
-    {t:"Spikey ball \u2014 adductors, glutes",d:"90 s per point"},
-    {t:"Magnesium glycinate",d:"350 mg"},
-    {t:"Screens off",d:"30 min before bed"},
-    {t:"Room cold, dark, phone out",d:"match tomorrow"}
+  { id:"lunch", at:720, mins:30, kind:"fuel", title:"Lunch", sub:"Protein + healthy fats + veg \u00b7 lower carb", href:"/fuel.html", steps:[
+    {t:"Protein + healthy fats + veg",d:"Lower carb for afternoon alertness"},
+    {t:"Log it in Fuel",d:""}
+  ]},
+  { id:"ball", at:780, mins:15, kind:"train", title:"Light ball touches", sub:"Warm-up touches + juggling only", href:"/train.html#soccer", steps:[
+    {t:"Warm-up touches 5 min",d:"Toe taps, inside rolls, sole rolls"},
+    {t:"Juggling \u2014 aim 50+",d:"Save legs for team training"}
+  ]},
+  { id:"premeal", at:960, mins:15, kind:"fuel", title:"Pre-training meal", sub:"Banana + toast + small protein shake", href:"/fuel.html", steps:[
+    {t:"Light carbs + protein",d:""},
+    {t:"Caffeine 1-3mg/kg",d:"Coffee or pre-workout"}
+  ]},
+  { id:"team", at:1020, mins:90, kind:"train", title:"Team training", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+    {t:"PEP/ACL warm-up if time (15 min)",d:"Jog, shuttle, backward run, flexibility"},
+    {t:"Hydrate 300-500ml + electrolytes before",d:""},
+    {t:"Full team session",d:"Apply scanning, body shape, first touch"},
+    {t:"Cool-down: jog 5 min + stretch 5 min",d:"Glutes, hammys, quads, groin, calves"}
+  ]},
+  { id:"dinner", at:1140, mins:30, kind:"fuel", title:"Dinner", sub:"3:1 carb-to-protein \u00b7 starchy carbs for sleep", href:"/fuel.html", steps:[
+    {t:"Starchy carbs + protein within 1 hour",d:"Glycogen replenishment"},
+    {t:"Rehydrate 125-150% of fluid lost",d:""}
+  ]},
+  { id:"sauna", at:1200, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling for sleep", href:"/train.html#recovery", steps:[
+    {t:"80-100\u00b0C for 15 min",d:"Post-team-training recovery"}
+  ]},
+  { id:"pm", at:1290, mins:20, kind:"routine", title:"Evening routine", sub:"Sleep stack \u00b7 nose tape \u00b7 lights out 10pm", href:"/health.html", steps:[
+    {t:"Wind down from 8:30 \u2014 no intense screens",d:""},
+    {t:"Sleep stack at 9:30",d:"Mg Threonate 145mg + Apigenin 50mg + Theanine"},
+    {t:"Nose tape, side sleeping position",d:""},
+    {t:"LIGHTS OUT 10:00",d:""}
   ]}
 ];
 
 var PROPOSALS = [
-  { id:"cut", title:"Cut individual to 25 minutes", why:"Form is +14 and you play tomorrow. Sharpness is banked. Extra volume today only costs you Saturday.", signal:"FORM +14",
-    apply: function(d){return d.map(function(i){return i.id==="solo"?Object.assign({},i,{mins:25,sub:"Touch and shape \u00b7 trimmed for the match"}):i;})} },
-  { id:"protein", title:"Add a protein feed at 21:00", why:"48 g short with five hours left. Two feeds, not one. Do not try to fix it at 10pm.", signal:"PROTEIN 132/180",
-    apply: function(d){return d.concat([{id:"snack",at:1260,mins:10,kind:"fuel",title:"Protein feed",sub:"~30 g \u00b7 added by Khabib",added:true,href:"/fuel.html",steps:[{t:"Greek-style yoghurt or a shake",d:"30 g protein"},{t:"Log it",d:"or it didn\u2019t happen"}]}]).sort(function(a,b){return a.at-b.at;})} },
-  { id:"adduct", title:"Take the spikey ball off your adductors", why:"Flagged 5 of 7 days and you see the physio in 33 minutes. Don\u2019t work a region you\u2019re about to have assessed.", signal:"ADDUCTORS 5/7",
-    apply: function(d){return d.map(function(i){return i.id==="pm"?Object.assign({},i,{steps:[{t:"Spikey ball \u2014 glutes only",d:"adductors: hands off until the physio says"}].concat(i.steps.slice(1))}):i;})} },
-  { id:"contrast", title:"Contrast bath at 19:45", why:"Cold unlocked at 12:05. Contrast is gentle enough the night before a match, and finishing cold helps you sleep.", signal:"COLD UNLOCKED",
-    apply: function(d){return d.concat([{id:"cb",at:1185,mins:16,kind:"recover",title:"Contrast bath",sub:"3 min hot / 1 min cold \u00d7 4 \u00b7 added by Khabib",added:true,href:"/train.html#recovery",steps:[{t:"Finish on cold",d:"always"},{t:"Not within 90 min of bed",d:"you want to sleep"}]}]).sort(function(a,b){return a.at-b.at;})} }
+  { id:"p1", signal:"SEWARD DAY 2", title:"Skip gym activation \u2014 Seward Workout B is enough",
+    apply: function(d){return d.filter(function(x){return x.id!=="activation";})} },
+  { id:"p2", signal:"PROTEIN NOT LOGGED", title:"Start logging meals in Fuel today",
+    apply: function(d){return d;} },
+  { id:"p3", signal:"ADDUCTORS WATCH", title:"Add 2 min adductor check to GOATA warm-up",
+    apply: function(d){return d;} },
+  { id:"p4", signal:"TEAM TRAINING", title:"Hydrate 500ml extra before 4pm \u2014 evening session",
+    apply: function(d){return d;} }
 ];
 
 var REMINDERS = [
-  { id:"rpe", t:"Log gym RPE", at:490 },
-  { id:"omega", t:"Algae omega-3 + zinc", at:780 },
-  { id:"kit", t:"Pack boots and strapping", at:1260 },
-  { id:"sheet", t:"Confirm Saturday team sheet", at:1200 }
+  { id:"log", t:"Log Seward workout", at:550 },
+  { id:"caff", t:"Caffeine cutoff \u2014 last dose before 4pm", at:960 },
+  { id:"kit", t:"Pack bag for team training", at:900 },
+  { id:"mfm", t:"MFM appointment in 4 days (July 14)", at:480 }
 ];
 
 var WEEK_DATA = [
-  {d:"MON",n:6,k:"train"},{d:"TUE",n:7,k:"train"},{d:"WED",n:8,k:"train"},
-  {d:"THU",n:9,k:"train"},{d:"FRI",n:10,k:"train",today:true},
-  {d:"SAT",n:11,k:"match"},{d:"SUN",n:12,k:"rest"}
+  {d:"MON",n:7,k:"rest"},{d:"TUE",n:8,k:"train"},{d:"WED",n:9,k:"train"},
+  {d:"THU",n:10,k:"train",today:true},{d:"FRI",n:11,k:"train"},
+  {d:"SAT",n:12,k:"match"},{d:"SUN",n:13,k:"rest"}
 ];
 
 /* ═══ STATE ══════════════════════════════════════════════════ */
@@ -332,8 +356,8 @@ var state = {
   handled: {},
   open: null,
   steps: {},
-  done: { am:true, gym:true, bfast:true },
-  rem: { sheet:true }
+  done: {},
+  rem: {}
 };
 
 function pending() { return PROPOSALS.filter(function(p){return !state.handled[p.id];}); }

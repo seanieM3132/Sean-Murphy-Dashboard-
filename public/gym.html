@@ -273,47 +273,41 @@ ul{list-style:none;}
   var RPES = [6,7,8,9,10];
   var RESTS = [60,90,120,180,240];
 
-  /* ── Mock data ── */
+  /* ── Real training data — Monday Heavy Compound Day ── */
   function st(kg, reps, rpe) { return { kg:kg, reps:reps, rpe:rpe }; }
 
   var data = {
-    session: { name:'Lower + pull', at:'07:00' },
+    session: { name:'Heavy compound', at:'07:00' },
     gate: { hold:false, reason:'' },
     warmup: [
-      { n:'Bike or row, easy', m:5, done:false },
-      { n:'Hip 90/90 + ankle rocks', m:4, done:false },
-      { n:'Adductor rockbacks', m:3, done:false },
-      { n:'Squat ramp \u2014 bar, 40, 60kg', m:6, done:false }
+      { n:'Empty bar squat 2x8', m:5, done:false },
+      { n:'Empty bar RDL 1x8', m:3, done:false },
+      { n:'Ramp-up set 50%', m:2, done:false },
+      { n:'Ramp-up set 75%', m:2, done:false }
     ],
     cooldown: [
-      { n:'Walk, nasal breathing', m:5, done:false },
-      { n:'Couch stretch, each side', m:4, done:false },
-      { n:'Adductor + hamstring hold', m:4, done:false },
-      { n:'Box breathing, 4-4-4-4', m:3, done:false }
+      { n:'Light jog 5 min', m:5, done:false },
+      { n:'Quad stretch each side', m:2, done:false },
+      { n:'Hamstring stretch each side', m:2, done:false },
+      { n:'Hip flexor stretch each side', m:2, done:false }
     ],
     lifts: [
-      { name:'Back squat', repRange:[5,8], increment:5, rest:180, history:[
-        { sets:[st(85,7,8),st(85,7,8),st(85,6,8.5)] },
-        { sets:[st(85,8,7.5),st(85,8,8),st(85,8,8)] }
+      { name:'Back squat', repRange:[6,8], increment:5, rest:180, history:[
+        { sets:[st(50,7,7.5),st(50,7,8),st(50,6,8),st(50,6,8)] }
       ]},
-      { name:'Romanian deadlift', repRange:[6,10], increment:5, rest:150, history:[
-        { sets:[st(90,10,7),st(90,10,7.5),st(90,10,8)] },
-        { sets:[st(95,8,8),st(95,8,8),st(95,7,8.5)] }
+      { name:'Romanian deadlift', repRange:[6,8], increment:5, rest:180, history:[
+        { sets:[st(45,7,7),st(45,7,7.5),st(45,7,8),st(45,6,8)] }
       ]},
-      { name:'Weighted chin-up', repRange:[4,7], increment:2.5, rest:120, history:[
-        { sets:[st(10,6,8.5),st(10,5,9),st(10,3,10)] },
-        { sets:[st(10,5,9),st(10,4,9.5),st(10,3,10)] }
+      { name:'Bench press', repRange:[6,8], increment:2.5, rest:120, history:[
+        { sets:[st(45,7,7.5),st(45,7,8),st(45,6,8)] }
       ]},
-      { name:'Nordic curl', repRange:[4,6], increment:0, rest:90, history:[
-        { sets:[st(0,6,8),st(0,5,8.5),st(0,5,9)] },
-        { sets:[st(0,6,8),st(0,6,8.5),st(0,6,9)] }
+      { name:'Barbell row', repRange:[8,10], increment:2.5, rest:90, history:[
+        { sets:[st(40,9,7),st(40,9,7.5),st(40,8,8)] }
       ]}
     ],
     weeks: [
-      {team:160,gym:120,run:40,mobility:30},{team:180,gym:150,run:58,mobility:42},
-      {team:200,gym:120,run:76,mobility:54},{team:160,gym:150,run:94,mobility:30},
-      {team:180,gym:120,run:40,mobility:42},{team:200,gym:150,run:58,mobility:54},
-      {team:160,gym:120,run:76,mobility:30},{team:180,gym:150,run:94,mobility:42}
+      {team:180,gym:115,run:40,mobility:25},{},{},{},
+      {},{},{},{}
     ]
   };
 
