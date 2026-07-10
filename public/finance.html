@@ -211,49 +211,17 @@ body {
 
   /* ── Mock data ── */
   function buildMock() {
-    var accounts = [
-      { name:'CommBank Everyday', cls:'cash', value:2840 },
-      { name:'ING Savings Maximiser', cls:'cash', value:9600 },
-      { name:'Vanguard VAS', cls:'stocks', value:4120 },
-      { name:'Vanguard VGS', cls:'stocks', value:3380 },
-      { name:'BTC', cls:'crypto', value:1910 },
-      { name:'ETH', cls:'crypto', value:640 },
-      { name:'Road bike', cls:'other', value:1200 }
-    ];
+    var accounts = [];
 
-    var history = [];
-    for (var i = 0; i < 18; i++) {
-      var trend = 9200 + i * 780;
-      var wobble = Math.sin(i / 2.1) * 900 + (rng() - 0.5) * 700;
-      history.push({ m: i, value: Math.round(trend + wobble) });
-    }
-    var totalAccounts = accounts.reduce(function(a, b) { return a + b.value; }, 0);
-    history[history.length - 1].value = totalAccounts;
+    var history = [{ m: 0, value: 0 }];
 
-    var subs = [
-      { name:'Spotify', amount:13.99, cycle:'mo', cat:'Media', next:4 },
-      { name:'Adobe CC', amount:29.99, cycle:'mo', cat:'Tools', next:11 },
-      { name:'Claude Pro', amount:30.00, cycle:'mo', cat:'Tools', next:18 },
-      { name:'Gym — F45', amount:65.00, cycle:'mo', cat:'Health', next:2 },
-      { name:'Garmin Connect+', amount:9.99, cycle:'mo', cat:'Health', next:22 },
-      { name:'Domain + hosting', amount:216.00, cycle:'yr', cat:'Tools', next:61 },
-      { name:'Football club fees', amount:480.00, cycle:'yr', cat:'Health', next:143 }
-    ];
+    var subs = [];
 
-    var orders = [
-      { item:'Nike Phantom GX', cost:289, account:'CommBank Everyday', eta:3 },
-      { item:'Whoop strap', cost:349, account:'CommBank Everyday', eta:9 },
-      { item:'Recovery boots', cost:620, account:'ING Savings Maximiser', eta:21 }
-    ];
+    var orders = [];
 
-    var wishes = [
-      { item:'MacBook Air M4', cost:1799 },
-      { item:'Trip — Japan', cost:4200 },
-      { item:'Studio monitors', cost:890 },
-      { item:'New boots (spare)', cost:240 }
-    ];
+    var wishes = [];
 
-    return { accounts:accounts, history:history, subs:subs, orders:orders, wishes:wishes, savingsRate:640 };
+    return { accounts:accounts, history:history, subs:subs, orders:orders, wishes:wishes, savingsRate:0 };
   }
 
   /* ── Derive ── */

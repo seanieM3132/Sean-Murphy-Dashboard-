@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050D0A">
 <title>Fuel — Sean</title>
-<script src="/topbar.js" defer></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -308,34 +308,34 @@ body {
   /* ── Mock data ── */
   var data = {
     dayType: 'training',
-    activeBurn: 640,
+    activeBurn: 0,
     weight: 78,
-    consumed: { kcal:1985, p:132, c:218, f:54, fibre:24 },
-    waterMl: 2250,
+    consumed: { kcal:0, p:0, c:0, f:0, fibre:0 },
+    waterMl: 0,
     micros: [
-      { k:'Vitamin A',     v:780, t:900, ul:3000, u:'\u00B5g', g:'vit' },
-      { k:'Vitamin C',     v:118, t:90,  ul:2000, u:'mg', g:'vit' },
-      { k:'Vitamin D',     v:9.2, t:15,  ul:100,  u:'\u00B5g', g:'vit' },
-      { k:'Vitamin E',     v:11.4,t:15,  ul:1000, u:'mg', g:'vit' },
-      { k:'Vitamin K',     v:148, t:120, ul:null,  u:'\u00B5g', g:'vit' },
-      { k:'Thiamin B1',    v:1.4, t:1.2, ul:null,  u:'mg', g:'vit' },
-      { k:'Riboflavin B2', v:1.9, t:1.3, ul:null,  u:'mg', g:'vit' },
-      { k:'Niacin B3',     v:22,  t:16,  ul:35,   u:'mg', g:'vit' },
-      { k:'Vitamin B6',    v:1.8, t:1.3, ul:100,  u:'mg', g:'vit' },
-      { k:'Folate B9',     v:268, t:400, ul:1000, u:'\u00B5g', g:'vit' },
-      { k:'Vitamin B12',   v:4.1, t:2.4, ul:null,  u:'\u00B5g', g:'vit' },
-      { k:'Calcium',       v:620, t:1000,ul:2500, u:'mg', g:'min' },
-      { k:'Iron',          v:14.2,t:11,  ul:45,   u:'mg', g:'min' },
-      { k:'Magnesium',     v:288, t:400, ul:null,  u:'mg', g:'min' },
-      { k:'Zinc',          v:9.8, t:11,  ul:40,   u:'mg', g:'min' },
-      { k:'Potassium',     v:2740,t:3400,ul:null,  u:'mg', g:'min' },
-      { k:'Sodium',        v:3180,t:2000,ul:2300, u:'mg', g:'min' },
-      { k:'Selenium',      v:62,  t:55,  ul:400,  u:'\u00B5g', g:'min' },
-      { k:'Copper',        v:0.8, t:0.9, ul:10,   u:'mg', g:'min' },
-      { k:'Iodine',        v:96,  t:150, ul:1100, u:'\u00B5g', g:'min' },
-      { k:'Phosphorus',    v:1180,t:700, ul:4000, u:'mg', g:'min' },
-      { k:'Omega-3 EPA+DHA',v:2.1,t:2.0, ul:null, u:'g', g:'oth' },
-      { k:'Fibre',         v:24,  t:38,  ul:null,  u:'g', g:'oth' }
+      { k:'Vitamin A',     v:0, t:900, ul:3000, u:'\u00B5g', g:'vit' },
+      { k:'Vitamin C',     v:0, t:90,  ul:2000, u:'mg', g:'vit' },
+      { k:'Vitamin D',     v:0, t:15,  ul:100,  u:'\u00B5g', g:'vit' },
+      { k:'Vitamin E',     v:0, t:15,  ul:1000, u:'mg', g:'vit' },
+      { k:'Vitamin K',     v:0, t:120, ul:null,  u:'\u00B5g', g:'vit' },
+      { k:'Thiamin B1',    v:0, t:1.2, ul:null,  u:'mg', g:'vit' },
+      { k:'Riboflavin B2', v:0, t:1.3, ul:null,  u:'mg', g:'vit' },
+      { k:'Niacin B3',     v:0, t:16,  ul:35,   u:'mg', g:'vit' },
+      { k:'Vitamin B6',    v:0, t:1.3, ul:100,  u:'mg', g:'vit' },
+      { k:'Folate B9',     v:0, t:400, ul:1000, u:'\u00B5g', g:'vit' },
+      { k:'Vitamin B12',   v:0, t:2.4, ul:null,  u:'\u00B5g', g:'vit' },
+      { k:'Calcium',       v:0, t:1000,ul:2500, u:'mg', g:'min' },
+      { k:'Iron',          v:0, t:11,  ul:45,   u:'mg', g:'min' },
+      { k:'Magnesium',     v:0, t:400, ul:null,  u:'mg', g:'min' },
+      { k:'Zinc',          v:0, t:11,  ul:40,   u:'mg', g:'min' },
+      { k:'Potassium',     v:0, t:3400,ul:null,  u:'mg', g:'min' },
+      { k:'Sodium',        v:0, t:2000,ul:2300, u:'mg', g:'min' },
+      { k:'Selenium',      v:0, t:55,  ul:400,  u:'\u00B5g', g:'min' },
+      { k:'Copper',        v:0, t:0.9, ul:10,   u:'mg', g:'min' },
+      { k:'Iodine',        v:0, t:150, ul:1100, u:'\u00B5g', g:'min' },
+      { k:'Phosphorus',    v:0, t:700, ul:4000, u:'mg', g:'min' },
+      { k:'Omega-3 EPA+DHA',v:0,t:2.0, ul:null, u:'g', g:'oth' },
+      { k:'Fibre',         v:0, t:38,  ul:null,  u:'g', g:'oth' }
     ],
     supplements: [
       { slot:'ON WAKING', items:[{ n:'Electrolytes + salt', done:false }] },
@@ -834,7 +834,7 @@ body {
           (editMode ? ' disabled' : '') + ' aria-pressed="' + i.done + '">' +
           '<span class="u-box">' + (i.done ? '\u2713' : '') + '</span>' +
           '<span class="u-sn">' + i.n + '</span>' +
-          '<span class="u-sd">' + i.d + '</span></button>';
+          '<span class="u-sd">' + (i.d || '') + '</span></button>';
         if (editMode) {
           html += '<button class="u-del" data-slot="' + s.slot + '" data-name="' + i.n + '" aria-label="Remove ' + i.n + '">\u00D7</button>';
         }

@@ -263,7 +263,7 @@ var TODAY = new Date().getDay(); // 0=Sun in JS
 // Convert to 0=Mon format
 TODAY = TODAY === 0 ? 6 : TODAY - 1;
 
-var MATCH = { round: 12, opponent: "Northcote City", at: "SAT 14:00", home: true };
+var MATCH = { round: 12, opponent: "Bentleigh United Cobras FC", at: "SAT 15:00", home: true, venue: "Reema Reserve" };
 var WEAK_FOOT = 58;
 
 var WEEK = [
@@ -392,7 +392,7 @@ function render() {
     '<div class="c-hero-l">' +
       '<p class="c-eyebrow is-amber">ROUND ' + MATCH.round + ' \u00b7 ' + (MATCH.home ? 'HOME' : 'AWAY') + '</p>' +
       '<h2 class="c-opp">' + esc(MATCH.opponent) + '</h2>' +
-      '<p class="c-kick">' + esc(MATCH.at) + '</p>' +
+      '<p class="c-kick">' + esc(MATCH.at) + (MATCH.venue ? ' \u00b7 ' + esc(MATCH.venue) : '') + '</p>' +
     '</div>' +
     '<div class="c-hero-r">' +
       '<div class="c-count"><b>' + toMatch + '</b><span>' + (toMatch === 1 ? 'DAY' : 'DAYS') + '</span></div>' +
