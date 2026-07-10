@@ -263,7 +263,7 @@ ul{list-style:none;}
 <div id="off-day-msg"></div>
 <main class="g-main" id="gym-main"><div class="g-col-l" id="col-left"></div><aside class="g-col-r" id="col-right"></aside></main>
 <div id="extras-area"></div>
-<footer class="g-foot"><span>EPLEY e1RM &middot; RPE-GATED PROGRESSION</span><span>DELOAD FLOORS BELOW THE INCREMENT</span></footer>
+<footer class="g-foot"><span>STIGLER PEAK + BACK-OFF &middot; RPE-GATED</span><span>ACCUMULATION &rarr; POTENTIATION &rarr; REALIZATION</span></footer>
 
 <script>
 (function() {
@@ -364,15 +364,17 @@ ul{list-style:none;}
         { name:'Face pulls (band)', repRange:[15,15], increment:0, rest:60, history:[] }
       ],
       extras: [
-        { label:'PLYOMETRICS (do BEFORE main lifts)', items:[
-          { n:'Box Jumps (50-60cm)', d:'3\u00D75, 60s rest' },
-          { n:'Broad Jumps', d:'3\u00D75, 60s rest' },
-          { n:'Single-Leg Bounds', d:'3\u00D75 each, 45s rest' }
+        { label:'PLYOS \u2014 STIGLER (do BEFORE main lifts)', items:[
+          { n:'Split Squat Jumps', d:'4\u00D710-20, shift ROM each week' },
+          { n:'Weighted Lateral Bounds', d:'3\u00D75 each, deep ROM' },
+          { n:'Single-Leg Vertical Jumps', d:'3\u00D75 each (CDM power)' }
         ]},
-        { label:'CORE \u2014 STIFFNESS', items:[
-          { n:'Front Plank', d:'3\u00D745s' },
-          { n:'Pallof Press', d:'3\u00D710 each' },
-          { n:'Dead Bugs', d:'3\u00D78 each' }
+        { label:'CORE \u2014 STIGLER (full routine)', items:[
+          { n:'Fake rotation cross-body throw (split stance)', d:'3\u00D75 \u2014 Speed/Rotation' },
+          { n:'Heavy Turkish Get-Up', d:'1 per side, increase to failure \u2014 Stiffness' },
+          { n:'Cross-leg lateral flexion', d:'10, 8, 6 reps (increase weight) \u2014 Lateral' },
+          { n:'Decline Crunches', d:'2-3\u00D710-15 \u2014 Flexion' },
+          { n:'Thoracic Extension Overhead Crunches', d:'2-3\u00D710-15 \u2014 Extension' }
         ]},
         { label:'NORDIC CURLS', items:[
           { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
@@ -422,15 +424,24 @@ ul{list-style:none;}
         { name:'Push press', repRange:[5,6], increment:2.5, rest:120, history:[] },
         { name:'Bulgarian split squat', repRange:[8,8], increment:2, rest:90, history:[] },
         { name:'Single-arm DB row', repRange:[8,10], increment:2, rest:60, history:[] },
-        { name:'Incline DB press', repRange:[8,10], increment:2, rest:90, history:[] },
-        { name:'Chin-ups', repRange:[5,8], increment:0, rest:90, history:[] },
-        { name:'Lateral raises', repRange:[12,15], increment:1, rest:60, history:[] }
+        { name:'Alternating incline bench', repRange:[8,12], increment:2, rest:90, history:[] },
+        { name:'Rotation rows', repRange:[8,12], increment:2, rest:60, history:[] },
+        { name:'Push-up drop catches', repRange:[5,8], increment:0, rest:60, history:[] }
       ],
       extras: [
-        { label:'CORE \u2014 SPEED', items:[
-          { n:'Med Ball Slams', d:'3\u00D78, 45s rest' },
-          { n:'Rotational Throws', d:'3\u00D78 each, 45s rest' },
-          { n:'Russian Twists', d:'3\u00D715 each @5-8kg' }
+        { label:'SPEED & TRANSITION \u2014 STIGLER (6-week progression)', items:[
+          { n:'Barbell Push Press', d:'Lighten weight each week \u2014 overload speed' },
+          { n:'Medball Scoop Tosses', d:'Standing \u2192 1-step \u2192 2-step approach' },
+          { n:'Medball Slams (split stance)', d:'3\u00D78 \u2014 translates to running mechanics' }
+        ]},
+        { label:'CORE \u2014 STIGLER (speed focus)', items:[
+          { n:'Fake rotation cross-body throw (split stance)', d:'3\u00D75 \u2014 Speed/Rotation' },
+          { n:'Decline Crunches + T-Spine Extension Crunches', d:'2-3\u00D710-15 each \u2014 superset' },
+          { n:'Cross-leg lateral flexion', d:'10, 8, 6 reps (increase weight)' }
+        ]},
+        { label:'CDM-SPECIFIC \u2014 NICO GONZALEZ / MAN CITY', items:[
+          { n:'Horizontal acceleration push', d:'3\u00D76 \u2014 speed of action, positive shin angle' },
+          { n:'Ankle stiffness drills (heel-lifted)', d:'3\u00D710 \u2014 Achilles elastic power' }
         ]},
         { label:'NORDIC CURLS', items:[
           { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
@@ -585,7 +596,7 @@ ul{list-style:none;}
 
     document.getElementById('coach').innerHTML =
       '<div class="g-av"><span>K</span></div><div>' +
-      '<div class="g-cname">KHABIB <em>\u00B7 your AI coach</em></div>' +
+      '<div class="g-cname">KHABIB <em>\u00B7 Stigler method</em></div>' +
       '<h2 class="g-chead is-' + tone + '">' + headline + '</h2>' +
       '<p class="g-clead">' + lead + '</p></div>';
   }
