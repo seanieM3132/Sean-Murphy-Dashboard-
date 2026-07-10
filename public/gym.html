@@ -226,13 +226,28 @@ ul{list-style:none;}
 .g-off-msg{max-width:1240px;margin:0 auto;padding:48px 24px;text-align:center;}
 .g-off-msg h2{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:12px;}
 .g-off-msg p{font:400 12px/1.7 'Inter',sans-serif;color:#5F786E;max-width:44ch;margin:0 auto;}
+/* session flow bar */
+.g-flow{display:flex;flex-wrap:wrap;gap:6px;max-width:1240px;margin:0 auto var(--gap);padding:14px 18px;
+  border:1px solid var(--line);border-radius:var(--r);background:rgba(10,23,18,.5);}
+.g-flow-lab{font:500 9px var(--mono);letter-spacing:.2em;color:var(--dim);width:100%;margin-bottom:4px;}
+.g-flow-step{font:500 9px var(--mono);letter-spacing:.1em;color:var(--dimmer);padding:5px 10px;
+  border-radius:6px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);}
+.g-flow-step.is-active{color:var(--ink);border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.06);}
+.g-flow-step.is-fascia{color:var(--gold);border-color:rgba(216,178,74,.3);background:rgba(216,178,74,.08);}
+.g-flow-arr{font:400 10px var(--mono);color:var(--dimmer);align-self:center;}
+
 /* extras block */
 .g-extras{max-width:1240px;margin:0 auto;}
 .g-xblk{border:1px solid rgba(74,222,128,.10);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.g-xblk.is-fascia{border-color:rgba(216,178,74,.2);}
 .g-xblk-h{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;
-  background:rgba(255,255,255,.02);border:0;width:100%;color:inherit;font-family:inherit;}
+  background:rgba(255,255,255,.02);border:0;width:100%;color:inherit;font-family:inherit;transition:background .15s;}
 .g-xblk-h:hover{background:rgba(255,255,255,.04);}
+.g-xblk-h:focus-visible{outline:2px solid var(--green);outline-offset:-2px;}
+.g-xblk.is-open{border-color:rgba(74,222,128,.2);}
+.g-xblk.is-fascia.is-open{border-color:rgba(216,178,74,.35);}
 .g-xblk-l{font:500 9px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#E6F2EC;}
+.g-xblk-l.is-fascia{color:var(--gold);}
 .g-xblk-b{padding:6px 18px 14px;}
 .g-xrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.04);}
 .g-xrow:first-child{border-top:0;}
@@ -260,6 +275,7 @@ ul{list-style:none;}
 <nav class="g-spine" id="week-spine"></nav>
 <section class="g-coach" id="coach"></section>
 <div id="rest-bar"></div>
+<div id="flow-bar"></div>
 <div id="off-day-msg"></div>
 <main class="g-main" id="gym-main"><div class="g-col-l" id="col-left"></div><aside class="g-col-r" id="col-right"></aside></main>
 <div id="extras-area"></div>
@@ -363,42 +379,49 @@ ul{list-style:none;}
         { name:'DB shoulder press', repRange:[8,10], increment:2, rest:90, history:[] },
         { name:'Face pulls (band)', repRange:[15,15], increment:0, rest:60, history:[] }
       ],
-      extras: [
-        { label:'PLYOS \u2014 STIGLER (do BEFORE main lifts)', items:[
-          { n:'Split Squat Jumps', d:'4\u00D710-20, shift ROM each week' },
-          { n:'Weighted Lateral Bounds', d:'3\u00D75 each, deep ROM' },
-          { n:'Single-Leg Vertical Jumps', d:'3\u00D75 each (CDM power)' }
+      prework: [
+        { label:'01 \u2014 GOATA GROUNDWORK (do first)', items:[
+          { n:'Ground Hip Stretch', d:'45-60s each side \u2014 keep IABH' },
+          { n:'Child Rocker', d:'60s \u00D7 3 \u2014 head stays up' },
+          { n:'Toe Tuck Rocker', d:'60s \u00D7 3 \u2014 heels open' },
+          { n:'Elevated Toe Curls', d:'3\u00D720s, 10s rest \u2014 daily' }
         ]},
-        { label:'CORE \u2014 STIGLER (full routine)', items:[
+        { label:'02 \u2014 PLYOS \u2014 STIGLER (do fresh, before lifts)', items:[
+          { n:'Box Jumps (50-60cm)', d:'3\u00D75, 60s rest \u2014 land soft, step down' },
+          { n:'Broad Jumps', d:'3\u00D75, 60s rest \u2014 measure distance' },
+          { n:'Single-Leg Bounds', d:'3\u00D75 each, 45s rest \u2014 power + balance' }
+        ]}
+      ],
+      extras: [
+        { label:'CORE \u2014 STIGLER STIFFNESS (after lifts)', items:[
+          { n:'Front Plank', d:'3\u00D745s \u2014 add 10kg plate if easy' },
+          { n:'Pallof Press', d:'3\u00D710 each side \u2014 resist rotation' },
+          { n:'Dead Bugs', d:'3\u00D78 each side \u2014 lower back glued to floor' }
+        ]},
+        { label:'STIGLER EXTRAS', items:[
           { n:'Fake rotation cross-body throw (split stance)', d:'3\u00D75 \u2014 Speed/Rotation' },
           { n:'Heavy Turkish Get-Up', d:'1 per side, increase to failure \u2014 Stiffness' },
           { n:'Cross-leg lateral flexion', d:'10, 8, 6 reps (increase weight) \u2014 Lateral' },
-          { n:'Decline Crunches', d:'2-3\u00D710-15 \u2014 Flexion' },
-          { n:'Thoracic Extension Overhead Crunches', d:'2-3\u00D710-15 \u2014 Extension' }
+          { n:'Decline Crunches + T-spine Extension Crunches', d:'2-3\u00D710-15 each \u2014 superset' }
         ]},
-        { label:'NORDIC CURLS', items:[
-          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
+        { label:'NORDIC CURLS (Mon + Wed)', items:[
+          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3-4s tempo, 90s rest' }
         ]},
         { label:'FASCIA \u2014 COACH CHONG XIE (Mon/Wed/Fri)', items:[
           { n:'HFT Marble Swing', d:'3\u00D730s each foot, 15s rest' },
           { n:'Gait Cycle Drills (GOATA cues)', d:'5 min \u2014 heel-away, IABH, back chain' },
           { n:'Lateral Pelvic Tilts', d:'3 positions \u00D7 30s each, both sides' }
-        ]},
-        { label:'GOATA GROUNDWORK (before every session)', items:[
-          { n:'Ground Hip Stretch', d:'45-60s each side \u2014 keep IABH' },
-          { n:'Child Rocker', d:'60s \u00D7 3 \u2014 head stays up' },
-          { n:'Toe Tuck Rocker', d:'60s \u00D7 3 \u2014 heels open' },
-          { n:'Elevated Toe Curls', d:'3\u00D720s, 10s rest \u2014 daily' }
         ]}
       ],
       weeks: [
-        {team:180,gym:115,run:40,mobility:25},{},{},{},
-        {},{},{},{}
+        {team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},
+        {team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:180,gym:115,run:40,mobility:25}
       ]
     },
     1: {  // Tuesday — Activation (pre-team training)
       session: { name:'Activation', at:'Before team' },
       gate: { hold:false, reason:'' },
+      isActivation: true,
       warmup: [],
       cooldown: [
         { n:'Light jog 3 min', m:3, done:false },
@@ -414,7 +437,7 @@ ul{list-style:none;}
         { name:'Dead bugs', repRange:[8,8], increment:0, rest:30, history:[] }
       ],
       extras: [],
-      weeks: [{team:180,gym:25,run:0,mobility:25},{},{},{},{},{},{},{}]
+      weeks: [{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:180,gym:25,run:0,mobility:25}]
     },
     2: {  // Wednesday — Power & Explosive
       session: { name:'Power & Explosive', at:'09:00' },
@@ -439,44 +462,47 @@ ul{list-style:none;}
         { name:'Rotation rows', repRange:[8,12], increment:2, rest:60, history:[] },
         { name:'Push-up drop catches', repRange:[5,8], increment:0, rest:60, history:[] }
       ],
-      extras: [
-        { label:'SPEED & TRANSITION \u2014 STIGLER (6-week progression)', items:[
-          { n:'Barbell Push Press', d:'Lighten weight each week \u2014 overload speed' },
-          { n:'Medball Scoop Tosses', d:'Standing \u2192 1-step \u2192 2-step approach' },
-          { n:'Medball Slams (split stance)', d:'3\u00D78 \u2014 translates to running mechanics' }
-        ]},
-        { label:'CORE \u2014 STIGLER (speed focus)', items:[
-          { n:'Fake rotation cross-body throw (split stance)', d:'3\u00D75 \u2014 Speed/Rotation' },
-          { n:'Decline Crunches + T-Spine Extension Crunches', d:'2-3\u00D710-15 each \u2014 superset' },
-          { n:'Cross-leg lateral flexion', d:'10, 8, 6 reps (increase weight)' }
-        ]},
-        { label:'CDM-SPECIFIC \u2014 NICO GONZALEZ / MAN CITY', items:[
-          { n:'Horizontal acceleration push', d:'3\u00D76 \u2014 speed of action, positive shin angle' },
-          { n:'Ankle stiffness drills (heel-lifted)', d:'3\u00D710 \u2014 Achilles elastic power' }
-        ]},
-        { label:'NORDIC CURLS', items:[
-          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3s tempo' }
-        ]},
-        { label:'FASCIA \u2014 COACH CHONG XIE (Mon/Wed/Fri)', items:[
-          { n:'HFT Marble Swing', d:'3\u00D730s each foot, 15s rest' },
-          { n:'Gait Cycle Drills (GOATA cues)', d:'5 min \u2014 heel-away, IABH, back chain' },
-          { n:'Lateral Pelvic Tilts', d:'3 positions \u00D7 30s each, both sides' }
-        ]},
-        { label:'GOATA GROUNDWORK (before every session)', items:[
+      prework: [
+        { label:'01 \u2014 GOATA GROUNDWORK (do first)', items:[
           { n:'Ground Hip Stretch', d:'45-60s each side \u2014 keep IABH' },
           { n:'Child Rocker', d:'60s \u00D7 3 \u2014 head stays up' },
           { n:'Toe Tuck Rocker', d:'60s \u00D7 3 \u2014 heels open' },
           { n:'Elevated Toe Curls', d:'3\u00D720s, 10s rest \u2014 daily' }
         ]}
       ],
+      extras: [
+        { label:'CORE \u2014 STIGLER SPEED FOCUS (after lifts)', items:[
+          { n:'Med Ball Slams', d:'3\u00D78, 45s rest \u2014 full hip hinge' },
+          { n:'Rotational Throws', d:'3\u00D78 each side, 45s rest \u2014 stand sideways to wall' },
+          { n:'Russian Twists', d:'3\u00D715 each @ 5-8kg, 30s rest' }
+        ]},
+        { label:'SPEED & TRANSITION \u2014 STIGLER', items:[
+          { n:'Barbell Push Press', d:'Lighten weight each week \u2014 overload speed' },
+          { n:'Medball Scoop Tosses', d:'Standing \u2192 1-step \u2192 2-step approach' },
+          { n:'Medball Slams (split stance)', d:'3\u00D78 \u2014 running mechanics transfer' }
+        ]},
+        { label:'CDM-SPECIFIC \u2014 NICO GONZALEZ / MAN CITY', items:[
+          { n:'Horizontal acceleration push', d:'3\u00D76 \u2014 speed of action, positive shin angle' },
+          { n:'Ankle stiffness drills (heel-lifted)', d:'3\u00D710 \u2014 Achilles elastic power' }
+        ]},
+        { label:'NORDIC CURLS (Mon + Wed)', items:[
+          { n:'Banded assisted nordic', d:'3-4\u00D75-8, 3-4s tempo, 90s rest' }
+        ]},
+        { label:'FASCIA \u2014 COACH CHONG XIE (Mon/Wed/Fri)', items:[
+          { n:'HFT Marble Swing', d:'3\u00D730s each foot, 15s rest' },
+          { n:'Gait Cycle Drills (GOATA cues)', d:'5 min \u2014 heel-away, IABH, back chain' },
+          { n:'Lateral Pelvic Tilts', d:'3 positions \u00D7 30s each, both sides' }
+        ]}
+      ],
       weeks: [
-        {team:180,gym:115,run:40,mobility:25},{},{},{},
-        {},{},{},{}
+        {team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},
+        {team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:180,gym:115,run:40,mobility:25}
       ]
     },
     3: {  // Thursday — Activation (pre-team training)
       session: { name:'Activation', at:'Before team' },
       gate: { hold:false, reason:'' },
+      isActivation: true,
       warmup: [],
       cooldown: [
         { n:'Light jog 3 min', m:3, done:false },
@@ -492,11 +518,12 @@ ul{list-style:none;}
         { name:'Dead bugs', repRange:[8,8], increment:0, rest:30, history:[] }
       ],
       extras: [],
-      weeks: [{team:180,gym:25,run:0,mobility:25},{},{},{},{},{},{},{}]
+      weeks: [{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:180,gym:25,run:0,mobility:25}]
     },
     4: {  // Friday — Speed & Acceleration
       session: { name:'Speed & Acceleration', at:'09:00' },
       gate: { hold:false, reason:'' },
+      isSpeed: true,
       warmup: [
         { n:'A-skips 2\u00D720m', m:1, done:false },
         { n:'B-skips 2\u00D720m', m:1, done:false },
@@ -504,29 +531,28 @@ ul{list-style:none;}
         { n:'Wall drives 2\u00D78 each', m:1, done:false },
         { n:'Falling starts 3\u00D715m', m:1, done:false }
       ],
+      accel: [
+        { n:'Standing start 10m \u00D7 5', m:3, done:false },
+        { n:'3-point start 15m \u00D7 4', m:3, done:false },
+        { n:'Reaction sprint 10m \u00D7 4', m:3, done:false }
+      ],
+      topspeed: [
+        { n:'Flying 20s (10m build + 20m max) \u00D7 4', m:4, done:false },
+        { n:'Tempo run 100m @70% \u00D7 3', m:4, done:false }
+      ],
+      soccerspeed: [
+        { n:'5-10-5 shuttle \u00D7 4', m:3, done:false },
+        { n:'T-drill \u00D7 3', m:3, done:false },
+        { n:'Ball retrieval sprint 15m \u00D7 4', m:3, done:false }
+      ],
       cooldown: [
         { n:'Light jog 5 min', m:5, done:false },
         { n:'Quad stretch each side', m:1, done:false },
         { n:'Hamstring stretch each side', m:1, done:false },
         { n:'Hip flexor stretch each side', m:1, done:false }
       ],
-      lifts: [
-        { name:'Standing start 10m', repRange:[5,5], increment:0, rest:60, history:[] },
-        { name:'3-point start 15m', repRange:[4,4], increment:0, rest:60, history:[] },
-        { name:'Reaction sprint 10m', repRange:[4,4], increment:0, rest:60, history:[] },
-        { name:'Flying 20s (10m build + 20m max)', repRange:[4,4], increment:0, rest:90, history:[] },
-        { name:'Tempo run 100m @70%', repRange:[3,3], increment:0, rest:60, history:[] },
-        { name:'5-10-5 shuttle', repRange:[4,4], increment:0, rest:90, history:[] },
-        { name:'T-drill', repRange:[3,3], increment:0, rest:90, history:[] },
-        { name:'Ball retrieval sprint 15m', repRange:[4,4], increment:0, rest:60, history:[] }
-      ],
+      lifts: [],
       extras: [
-        { label:'OPTIONAL LIGHT GYM', items:[
-          { n:'Goblet Squat', d:'2\u00D710 @16kg KB' },
-          { n:'Push-ups', d:'2\u00D712' },
-          { n:'TRX/Band Rows', d:'2\u00D712' },
-          { n:'Hip Flexor Stretch', d:'2\u00D730s each' }
-        ]},
         { label:'FASCIA \u2014 COACH CHONG XIE (Mon/Wed/Fri)', items:[
           { n:'HFT Marble Swing', d:'3\u00D730s each foot, 15s rest' },
           { n:'Gait Cycle Drills (GOATA cues)', d:'5 min \u2014 heel-away, IABH, back chain' }
@@ -538,7 +564,7 @@ ul{list-style:none;}
           { n:'Elevated Toe Curls', d:'3\u00D720s, 10s rest \u2014 daily' }
         ]}
       ],
-      weeks: [{team:180,gym:0,run:40,mobility:25},{},{},{},{},{},{},{}]
+      weeks: [{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:0,gym:0,run:0,mobility:0},{team:180,gym:0,run:35,mobility:25}]
     }
   };
 
@@ -548,17 +574,23 @@ ul{list-style:none;}
   var elapsed = 0;
   var finished = false;
   var openEx = null;
+  var openExtras = {};
+  var openPrework = {};
   var rests = {};
   var plans = {};
   var log = {};
   var restLeft = null, restTotal = 0, restInterval = null;
 
   function initSession() {
-    if (!data || !data.lifts) return;
-    openEx = data.lifts[0].name;
+    if (!data) return;
     rests = {};
     plans = {};
     log = {};
+    if (!data.lifts || !data.lifts.length) {
+      openEx = data.warmup && data.warmup.length ? 'warmup' : null;
+      return;
+    }
+    openEx = data.lifts[0].name;
     data.lifts.forEach(function(l) { rests[l.name] = l.rest; });
     data.lifts.forEach(function(l) { plans[l.name] = prescribe(l, data.gate); });
     data.lifts.forEach(function(l) {
@@ -614,21 +646,36 @@ ul{list-style:none;}
 
   /* ── Coach ── */
   function renderCoach() {
-    if (!data || !data.lifts) return;
-    var ups = data.lifts.filter(function(l) { return plans[l.name].action === 'up'; });
-    var downs = data.lifts.filter(function(l) { return plans[l.name].action === 'down'; });
-    var headline = data.gate.hold ? 'HOLD EVERYTHING'
-      : downs.length ? downs[0].name.toUpperCase() + ' \u2014 BACK OFF'
-      : ups.length ? 'ADD LOAD TODAY' : 'CHASE REPS';
-    var lead = data.gate.hold ? data.gate.reason
-      : downs.length ? plans[downs[0].name].why
-      : ups.length ? plans[ups[0].name].why
-      : 'Nothing moves today. Top of every rep range, then we talk.';
-    var tone = (downs.length || data.gate.hold) ? 'hot' : 'good';
+    if (!data) return;
+    var headline, lead, tone, method;
+
+    if (data.isSpeed) {
+      headline = 'SPEED DAY';
+      lead = 'Full recovery between every rep. This is not conditioning \u2014 you\u2019re training the nervous system. If you\u2019re not fresh, you\u2019re just practising being slow.';
+      tone = 'good';
+      method = 'speed & acceleration';
+    } else if (data.isActivation) {
+      headline = 'ACTIVATION';
+      lead = 'Light work only. Save energy for team training tonight. Get in, get warm, get out.';
+      tone = 'good';
+      method = 'pre-team activation';
+    } else {
+      var ups = data.lifts.filter(function(l) { return plans[l.name] && plans[l.name].action === 'up'; });
+      var downs = data.lifts.filter(function(l) { return plans[l.name] && plans[l.name].action === 'down'; });
+      headline = data.gate.hold ? 'HOLD EVERYTHING'
+        : downs.length ? downs[0].name.toUpperCase() + ' \u2014 BACK OFF'
+        : ups.length ? 'ADD LOAD TODAY' : 'CHASE REPS';
+      lead = data.gate.hold ? data.gate.reason
+        : downs.length ? plans[downs[0].name].why
+        : ups.length ? plans[ups[0].name].why
+        : 'Nothing moves today. Top of every rep range, then we talk.';
+      tone = (downs.length || data.gate.hold) ? 'hot' : 'good';
+      method = 'Stigler method';
+    }
 
     document.getElementById('coach').innerHTML =
       '<div class="g-av"><span>K</span></div><div>' +
-      '<div class="g-cname">KHABIB <em>\u00B7 Stigler method</em></div>' +
+      '<div class="g-cname">KHABIB <em>\u00B7 ' + method + '</em></div>' +
       '<h2 class="g-chead is-' + tone + '">' + headline + '</h2>' +
       '<p class="g-clead">' + lead + '</p></div>';
   }
@@ -801,12 +848,12 @@ ul{list-style:none;}
   function renderLoadPanel() {
     var keys = ['team','gym','run','mobility'];
     var weeks = data.weeks;
-    var totals = weeks.map(function(w) { return keys.reduce(function(a, k) { return a + w[k]; }, 0); });
+    var totals = weeks.map(function(w) { return keys.reduce(function(a, k) { return a + (w[k] || 0); }, 0); });
     var max = Math.max.apply(null, totals);
     var now = weeks[weeks.length - 1];
     var total = totals[totals.length - 1];
     var prev = totals[totals.length - 2];
-    var delta = Math.round(((total - prev) / prev) * 100);
+    var delta = prev ? Math.round(((total - prev) / prev) * 100) : 0;
     var spike = delta > 30;
 
     var html = '<section class="g-panel"><div class="g-idx">02</div>' +
@@ -850,18 +897,63 @@ ul{list-style:none;}
     document.getElementById('week-spine').innerHTML = html;
   }
 
+  /* ── Flow bar ── */
+  function renderFlowBar() {
+    var el = document.getElementById('flow-bar');
+    if (!data) { el.innerHTML = ''; return; }
+    var steps = [];
+    if (data.prework) {
+      data.prework.forEach(function(p) {
+        if (/GOATA/i.test(p.label)) steps.push({n:'GOATA',f:false});
+        if (/PLYO/i.test(p.label)) steps.push({n:'PLYOS',f:false});
+      });
+    }
+    if (data.warmup && data.warmup.length) steps.push({n:'WARM-UP',f:false});
+    if (data.isSpeed) {
+      steps.push({n:'ACCEL',f:false});
+      steps.push({n:'TOP SPEED',f:false});
+      steps.push({n:'AGILITY',f:false});
+    }
+    if (data.lifts && data.lifts.length) steps.push({n:'LIFTS',f:false});
+    // Scan extras for categories
+    if (data.extras) {
+      data.extras.forEach(function(x) {
+        if (/CORE/i.test(x.label)) steps.push({n:'CORE',f:false});
+        else if (/NORDIC/i.test(x.label)) steps.push({n:'NORDICS',f:false});
+        else if (/FASCIA/i.test(x.label)) steps.push({n:'FASCIA',f:true});
+        else if (/STIGLER/i.test(x.label)) steps.push({n:'EXTRAS',f:false});
+        else if (/CDM/i.test(x.label)) steps.push({n:'CDM WORK',f:false});
+        else if (/SPEED/i.test(x.label)) steps.push({n:'SPEED WORK',f:false});
+        else if (/GOATA/i.test(x.label) && !data.prework) steps.push({n:'GOATA',f:false});
+      });
+    }
+    if (data.cooldown && data.cooldown.length) steps.push({n:'COOL-DOWN',f:false});
+    var html = '<div class="g-flow"><span class="g-flow-lab">SESSION FLOW</span>';
+    steps.forEach(function(s, i) {
+      if (i > 0) html += '<span class="g-flow-arr">\u2192</span>';
+      html += '<span class="g-flow-step' + (s.f ? ' is-fascia' : '') + '">' + s.n + '</span>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
   /* ── Extras render ── */
   function renderExtras() {
     var area = document.getElementById('extras-area');
     if (!data || !data.extras || !data.extras.length) { area.innerHTML = ''; return; }
     var html = '<div class="g-extras">';
-    data.extras.forEach(function(blk) {
-      html += '<div class="g-xblk"><button class="g-xblk-h"><span class="g-xblk-l">' + blk.label + '</span></button>' +
-        '<div class="g-xblk-b">';
-      blk.items.forEach(function(item) {
-        html += '<div class="g-xrow"><span class="g-xrow-n">' + item.n + '</span><span class="g-xrow-d">' + item.d + '</span></div>';
-      });
-      html += '</div></div>';
+    data.extras.forEach(function(blk, i) {
+      var isOpen = !!openExtras[i];
+      var isFascia = /FASCIA/i.test(blk.label);
+      html += '<div class="g-xblk' + (isOpen ? ' is-open' : '') + (isFascia ? ' is-fascia' : '') + '"><button class="g-xblk-h" data-xtra="' + i + '" aria-expanded="' + isOpen + '"><span class="g-xblk-l' + (isFascia ? ' is-fascia' : '') + '">' + blk.label + '</span><span class="g-chev" style="color:var(--dim)">' + (isOpen ? '\u2212' : '+') + '</span></button>';
+      if (isOpen) {
+        html += '<div class="g-xblk-b">';
+        blk.items.forEach(function(item) {
+          html += '<div class="g-xrow"><span class="g-xrow-n">' + item.n + '</span><span class="g-xrow-d">' + item.d + '</span></div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
     });
     html += '</div>';
     area.innerHTML = html;
@@ -881,6 +973,7 @@ ul{list-style:none;}
       mainEl.style.display = 'none';
       coachEl.style.display = 'none';
       restBarEl.innerHTML = '';
+      document.getElementById('flow-bar').innerHTML = '';
       var w = GYM_WEEK[selDay];
       offEl.innerHTML = '<div class="g-off-msg"><h2>No gym today.</h2><p>' + w.label + (w.label === 'No gym' ? ' \u2014 let the body recover and adapt.' : ' \u2014 energy goes elsewhere today.') + '</p></div>';
       document.getElementById('extras-area').innerHTML = '';
@@ -894,17 +987,52 @@ ul{list-style:none;}
     coachEl.style.display = '';
     offEl.innerHTML = '';
     renderCoach();
+    renderFlowBar();
 
     document.getElementById('session-sub').textContent = data.session.name.toUpperCase() + ' \u00B7 ' + data.session.at;
 
     var left = '';
+
+    // Pre-work (GOATA, plyos) — collapsible blocks before warmup
+    if (data.prework) {
+      data.prework.forEach(function(blk, i) {
+        var isOpen = !!openPrework[i];
+        left += '<div class="g-xblk' + (isOpen ? ' is-open' : '') + '" style="margin-bottom:10px"><button class="g-xblk-h" data-prework="' + i + '" aria-expanded="' + isOpen + '"><span class="g-xblk-l" style="color:var(--teal)">' + blk.label + '</span><span class="g-chev" style="color:var(--dim)">' + (isOpen ? '\u2212' : '+') + '</span></button>';
+        if (isOpen) {
+          left += '<div class="g-xblk-b">';
+          blk.items.forEach(function(item) {
+            left += '<div class="g-xrow"><span class="g-xrow-n">' + item.n + '</span><span class="g-xrow-d">' + item.d + '</span></div>';
+          });
+          left += '</div>';
+        }
+        left += '</div>';
+      });
+    }
+
     left += renderBlock('warmup', 'WARM-UP', 'warm');
+
+    // Speed drill blocks (Friday)
+    if (data.isSpeed) {
+      if (data.accel) left += renderBlock('accel', 'ACCELERATION \u2014 First 10m', 'warm');
+      if (data.topspeed) left += renderBlock('topspeed', 'TOP SPEED', 'warm');
+      if (data.soccerspeed) left += renderBlock('soccerspeed', 'SOCCER-SPECIFIC SPEED', 'warm');
+    }
+
+    // Main lifts (empty on Friday/speed days)
     data.lifts.forEach(function(l) { left += renderExercise(l); });
-    left += '<button class="g-addex">+ Add exercise</button>';
+    if (data.lifts.length) left += '<button class="g-addex">+ Add exercise</button>';
+
     left += renderBlock('cooldown', 'COOL-DOWN', 'cool');
     document.getElementById('col-left').innerHTML = left;
 
-    document.getElementById('col-right').innerHTML = renderSessionPanel() + renderLoadPanel();
+    // Right panel — only show session/load for lift days
+    if (data.lifts.length) {
+      mainEl.style.gridTemplateColumns = '';
+      document.getElementById('col-right').innerHTML = renderSessionPanel() + renderLoadPanel();
+    } else {
+      mainEl.style.gridTemplateColumns = '1fr';
+      document.getElementById('col-right').innerHTML = '';
+    }
 
     renderExtras();
     bindEvents();
@@ -917,6 +1045,25 @@ ul{list-style:none;}
       btn.addEventListener('click', function() {
         var day = parseInt(this.dataset.spine);
         if (day !== selDay) switchDay(day);
+      });
+    });
+
+    // Extras toggle
+    document.querySelectorAll('[data-xtra]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var i = parseInt(this.dataset.xtra);
+        openExtras[i] = !openExtras[i];
+        renderExtras();
+        bindEvents();
+      });
+    });
+
+    // Prework toggle
+    document.querySelectorAll('[data-prework]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var i = parseInt(this.dataset.prework);
+        openPrework[i] = !openPrework[i];
+        renderAll();
       });
     });
 

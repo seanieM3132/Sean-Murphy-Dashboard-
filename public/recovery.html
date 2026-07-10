@@ -509,6 +509,7 @@ function renderRunner() {
 }
 
 function renderBody() {
+  if (!state.sel) state.sel = REGION_KEYS[0];
   var region = REGIONS[state.sel];
   var h = '<div class="r-figs">';
   h += '<div class="r-toggle">';
