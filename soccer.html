@@ -392,6 +392,8 @@ var state = {
   sel: TODAY,
   done: {},       // 'blockIdx-drillIdx' -> true
   openBlock: 0,   // which block is expanded
+  openProto: null, // which pre-training protocol block is expanded
+  protoDone: {},   // 'blockIdx-itemIdx' -> true
   logs: {},       // i -> { themes: {}, rpe, mins }
   match: { pos: "CDM", mins: 90, rating: 0, goals: 0, assists: 0, moments: [] }
 };
@@ -517,10 +519,58 @@ function renderTeamPanel() {
 }
 
 /* ═══ TRAINING ═══════════════════════════════════════════════ */
+var PRE_TRAINING = [
+  { label: 'GOATA GROUNDWORK (5 min)', items: [
+    'Ground Hip Stretch \u2014 45-60s each side, keep IABH',
+    'Child Rocker \u2014 60s \u00d7 3, head stays up',
+    'Toe Tuck Rocker \u2014 60s \u00d7 3, heels open'
+  ]},
+  { label: 'PEP / ACL PREVENTION (15-20 min) \u2014 reduces ACL injuries 70%', items: [
+    'Avoidance: Jog straight 1 min \u00d7 3, side shuttle 1 min, backward run 1 min',
+    'Flexibility: Calf stretch, quad stretch, figure-4 hamstring, inner thigh, hip flexor (30s each)',
+    'Strength: Walking lunges 1 min, single-leg bridge 30s/side, single toe raise 30s/side',
+    'Plyometrics: Side-to-side hops 20 reps, front-back hops 30s, single-leg hops 30s/side, scissor jumps 30s',
+    'CUE: Land softly on balls of feet, knees slightly bent, hips straight'
+  ]},
+  { label: 'FIFA 11+ RUNNING (2 sets each)', items: [
+    'Jog straight \u2014 hip/knee/foot aligned',
+    'Hip Out / Hip In \u2014 rotate knee while jogging',
+    'Circling Partner / Shoulder Contact \u2014 land hips/knees bent',
+    'Quick forward & backward runs'
+  ]}
+];
+
 function renderTraining() {
   var log = state.logs[state.sel];
   var load = Math.round(log.rpe * log.mins);
   var h = '';
+
+  // Pre-training protocols
+  h += '<div class="c-field"><p class="c-lab">Pre-training protocol</p>';
+  PRE_TRAINING.forEach(function(block, bi) {
+    var key = 'pt-' + bi;
+    var isOpen = state.openProto === bi;
+    var allDone = block.items.every(function(_, ii) { return state.protoDone[bi + '-' + ii]; });
+    h += '<div class="c-blk' + (allDone ? ' is-complete' : '') + '" style="margin-bottom:8px">';
+    h += '<button class="c-blk-h" data-toggleproto="' + bi + '">';
+    h += '<span class="c-blk-l">' + esc(block.label) + '</span>';
+    h += '<span class="c-blk-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
+    h += '</button>';
+    if (isOpen) {
+      h += '<div class="c-blk-b">';
+      block.items.forEach(function(item, ii) {
+        var dk = bi + '-' + ii;
+        var done = !!state.protoDone[dk];
+        h += '<div class="c-blk-row' + (done ? ' is-done' : '') + '">';
+        h += '<button class="c-blk-box" data-checkproto="' + dk + '">' + (done ? '\u2713' : '') + '</button>';
+        h += '<span class="c-blk-name">' + esc(item) + '</span>';
+        h += '</div>';
+      });
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += '</div>';
 
   // Themes
   h += '<div class="c-field"><p class="c-lab">Worked on</p><div class="c-chips">';
@@ -783,6 +833,25 @@ function bindAll() {
       e.stopPropagation();
       var key = this.dataset.check;
       if (state.done[key]) { delete state.done[key]; } else { state.done[key] = true; }
+      render();
+    });
+  });
+
+  // Pre-training protocol toggles
+  document.querySelectorAll('[data-toggleproto]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var idx = parseInt(this.dataset.toggleproto);
+      state.openProto = state.openProto === idx ? null : idx;
+      render();
+    });
+  });
+
+  // Pre-training protocol checkboxes
+  document.querySelectorAll('[data-checkproto]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var key = this.dataset.checkproto;
+      if (state.protoDone[key]) { delete state.protoDone[key]; } else { state.protoDone[key] = true; }
       render();
     });
   });
