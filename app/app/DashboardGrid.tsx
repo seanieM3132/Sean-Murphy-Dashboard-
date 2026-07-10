@@ -337,9 +337,24 @@ export default function DashboardGrid({ userId }: DashboardGridProps) {
 
   if (!mounted) return null
 
+  // Map tile IDs to standalone HTML pages
+  const PAGE_MAP: Record<string, string> = {
+    train: '/train.html',
+    fuel: '/fuel.html',
+    vitals: '/health.html',
+    vee: '/dashboard.html',
+    peak: '/plan.html',
+    finance: '/finance.html',
+  }
+
   const openSlot = (id: string) => {
-    if (filled[id]) setOpenId(id)
-    else setConnectId(id)
+    if (PAGE_MAP[id]) {
+      window.location.href = PAGE_MAP[id]
+    } else if (filled[id]) {
+      setOpenId(id)
+    } else {
+      setConnectId(id)
+    }
   }
 
   const labelFor = (id: string) => (id === 'vee' ? VEE_TILE.label : CORE_TILES[id as keyof typeof CORE_TILES].label)

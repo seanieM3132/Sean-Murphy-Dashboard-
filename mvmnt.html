@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050D0A">
+<title>112mvmnt — Sean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#050D0A;--line:rgba(74,222,128,.10);
+  --green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;
+  --ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;
+  --mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;
+  --w:1080px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  min-height:100vh;padding:40px 24px 64px;
+  background:radial-gradient(1000px 500px at 50% -10%,#0D2419 0%,transparent 60%),var(--bg);
+  color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+}
+ul{list-style:none;padding:0;}
+button{font-family:inherit;}
+
+.m-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;max-width:var(--w);margin:0 auto 22px;}
+.m-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
+.m-back:hover{color:var(--green);}
+.m-title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;margin:14px 0 8px;letter-spacing:-.01em;}
+.m-title em{font-style:italic;color:var(--green);}
+.m-sub{font:500 10px/1 var(--mono);letter-spacing:.22em;color:var(--dimmer);}
+
+.m-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:var(--w);margin:0 auto 16px;}
+.m-strip>div{background:#0A1712;padding:16px 18px;}
+.m-strip b{display:block;font-family:var(--serif);font-size:26px;font-weight:400;line-height:1;}
+.m-strip b.is-good{color:var(--green);} .m-strip b.is-hot{color:var(--amber);}
+.m-strip em{font-style:normal;font:400 11px var(--mono);color:var(--dim);margin-left:3px;}
+.m-strip span{display:block;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dim);margin-top:9px;text-transform:uppercase;}
+
+.m-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 24px;padding:18px 20px;
+  border:1px solid rgba(74,222,128,.14);border-radius:14px;background:rgba(16,36,27,.4);}
+.m-av{width:38px;height:38px;flex:none;border-radius:11px;border:1px solid rgba(74,222,128,.3);
+  display:grid;place-items:center;background:rgba(74,222,128,.06);}
+.m-av span{font-family:var(--serif);font-size:19px;color:var(--green);}
+.m-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
+.m-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
+.m-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.85;margin-top:8px;max-width:74ch;}
+
+.m-rail{position:relative;display:flex;justify-content:space-between;max-width:var(--w);margin:0 auto 30px;padding:0 6px;}
+.m-rail-line{position:absolute;left:14px;right:14px;top:5px;height:1px;background:var(--line);}
+.m-node{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:0;}
+.m-nd{width:11px;height:11px;border-radius:50%;border:1px solid var(--dimmer);background:var(--bg);transition:all .2s;}
+.m-node em{font-style:normal;font:400 10px var(--mono);color:var(--dimmer);letter-spacing:.06em;}
+.m-node.is-past .m-nd{background:var(--dim);border-color:var(--dim);}
+.m-node.is-now .m-nd{background:var(--green);border-color:var(--green);box-shadow:0 0 0 4px rgba(74,222,128,.15),0 0 10px rgba(74,222,128,.6);}
+.m-node.is-now em{color:var(--green);}
+.m-node.is-deload .m-nd{border-style:dashed;border-color:var(--amber);}
+.m-node.is-deload em{color:var(--amber);}
+.m-node.is-deload.is-now .m-nd{background:var(--amber);box-shadow:0 0 0 4px rgba(232,135,58,.15);}
+.m-node:focus-visible{outline:2px solid var(--green);outline-offset:4px;border-radius:4px;}
+
+.m-week{max-width:var(--w);margin:0 auto;}
+.m-wh{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;}
+.m-eyebrow{font:500 9px var(--mono);letter-spacing:.22em;color:var(--dim);}
+.m-wt{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,34px);margin-top:9px;}
+.m-wt em{font-style:italic;color:var(--green);}
+.m-pct{font-family:var(--serif);font-size:30px;color:var(--dim);}
+.m-pct em{font-style:normal;font:400 12px var(--mono);margin-left:2px;}
+.m-bar{height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:22px;}
+.m-bar span{display:block;height:100%;background:var(--green);box-shadow:0 0 8px rgba(74,222,128,.5);transition:width .3s;}
+
+.m-cards{display:flex;flex-direction:column;gap:8px;}
+.m-card{border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);transition:border-color .2s;}
+.m-card.is-open{border-color:rgba(74,222,128,.24);background:rgba(16,36,27,.55);}
+.m-card.is-complete{opacity:.55;}
+.m-card.is-nordic{border-color:rgba(255,255,255,.14);}
+.m-card-h{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;cursor:pointer;padding:16px 20px;color:inherit;}
+.m-card-h:focus-visible{outline:2px solid var(--green);outline-offset:-2px;border-radius:14px;}
+.m-swatch{width:8px;height:8px;border-radius:2px;flex:none;}
+.m-name{flex:1;text-align:left;font:400 14px 'Inter',sans-serif;color:var(--ink);}
+.m-name em{font-style:normal;display:block;font:400 9px var(--mono);letter-spacing:.14em;color:var(--dimmer);margin-top:4px;text-transform:uppercase;}
+.m-tag{font:500 8px var(--mono);letter-spacing:.14em;border:1px solid;border-radius:3px;padding:4px 6px;flex:none;}
+.m-tag.is-priority{color:var(--green);border-color:rgba(74,222,128,.35);}
+.m-tag.is-rotation{color:var(--dimmer);border-color:var(--line);}
+.m-tag.is-always{color:var(--ink);border-color:rgba(255,255,255,.18);}
+.m-freq{font:400 11px var(--mono);color:var(--dim);width:22px;text-align:right;}
+.m-dots{display:flex;gap:4px;}
+.m-sdot{width:12px;height:12px;border-radius:50%;border:1px solid var(--dimmer);background:none;cursor:pointer;padding:0;transition:all .15s;}
+.m-sdot.is-done{background:var(--green);border-color:var(--green);box-shadow:0 0 7px rgba(74,222,128,.5);}
+.m-sdot:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.m-chev{font:400 14px var(--mono);color:var(--dim);width:12px;text-align:center;}
+
+.m-card-b{padding:0 20px 16px;}
+.m-why{font:400 12px/1.6 'Inter',sans-serif;color:var(--dim);padding-bottom:16px;max-width:70ch;}
+.m-why b{color:var(--ink);font-weight:400;}
+
+.m-th,.m-tr{display:grid;grid-template-columns:1fr 132px 128px 1.1fr;gap:14px;align-items:baseline;}
+.m-th{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.05);}
+.m-tr{padding:11px 0;border-bottom:1px solid rgba(255,255,255,.03);}
+.m-en{font:400 12px 'Inter',sans-serif;color:var(--ink);}
+.m-ep{font:400 11px var(--mono);color:var(--dim);}
+.m-ep em{font-style:normal;display:block;font-size:9px;color:var(--dimmer);margin-top:3px;}
+.m-el b{font:400 12px var(--mono);color:var(--gold);font-weight:400;}
+.m-el b.is-dim{color:var(--dimmer);}
+.m-el em{font-style:normal;display:block;font:400 8px var(--mono);letter-spacing:.1em;color:var(--dimmer);margin-top:3px;}
+.m-note{font:400 10px/1.6 'Inter',sans-serif;color:var(--dimmer);}
+.m-tip{font:400 10px/1.7 var(--mono);color:var(--dim);letter-spacing:.03em;margin-top:14px;
+  padding-left:12px;border-left:1px solid var(--line);}
+
+.m-phase{display:flex;gap:5px;margin-bottom:10px;}
+.m-pseg{flex:1;padding:9px 0;text-align:center;border:1px solid var(--line);border-radius:6px;
+  font:500 9px var(--mono);letter-spacing:.1em;color:var(--dimmer);}
+.m-pseg.is-past{color:var(--dim);border-color:rgba(255,255,255,.1);}
+.m-pseg.is-on{background:rgba(230,242,236,.08);border-color:rgba(230,242,236,.3);color:var(--ink);}
+.m-pbar{height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:20px;}
+.m-pbar span{display:block;height:100%;background:var(--ink);opacity:.5;}
+.m-nex h4{font-family:var(--serif);font-style:italic;font-weight:400;font-size:20px;margin-bottom:14px;}
+.m-nex ul{display:flex;gap:36px;}
+.m-nex li span{display:block;font:500 8px var(--mono);letter-spacing:.2em;color:var(--dimmer);margin-bottom:7px;}
+.m-nex li b{font-family:var(--serif);font-size:20px;font-weight:400;}
+
+.m-off{font:400 10px var(--mono);letter-spacing:.14em;color:var(--dimmer);margin-top:18px;text-align:center;}
+.m-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
+  border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
+
+@media (max-width:900px){
+  .m-th,.m-tr{grid-template-columns:1fr 116px 110px;}
+  .m-th span:nth-child(4),.m-note{display:none;}
+}
+@media (max-width:680px){
+  body{padding:24px 16px 48px;}
+  .m-top{flex-direction:column;}
+  .m-strip{grid-template-columns:1fr 1fr;}
+  .m-coach{flex-direction:column;gap:12px;}
+  .m-th,.m-tr{grid-template-columns:1fr 96px;}
+  .m-th span:nth-child(3),.m-el{display:none;}
+  .m-tag,.m-freq{display:none;}
+  .m-nex ul{gap:24px;}
+  .m-foot{flex-direction:column;gap:8px;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="m-top">
+  <div>
+    <a href="/train.html" class="m-back">&#8592; Train</a>
+    <h1 class="m-title">112<em>mvmnt</em></h1>
+    <p class="m-sub">SEVEN PROGRAMS &middot; SEVEN-WEEK CYCLE</p>
+  </div>
+</header>
+
+<div class="m-strip" id="strip"></div>
+
+<section class="m-coach" id="coach"></section>
+
+<nav class="m-rail" aria-label="Cycle weeks" id="rail"></nav>
+
+<main class="m-week" id="weekMain"></main>
+
+<footer class="m-foot">
+  <span>112MVMNT &middot; %BW LOADS RESOLVE AGAINST YOUR LATEST WEIGH-IN</span>
+  <span>PROGRAMS FIXED &middot; ALLOCATION ADAPTIVE</span>
+</footer>
+
+<script>
+(function() {
+'use strict';
+
+/* ═══ CONFIG ═══════════════════════════════════════════════════ */
+var BODYWEIGHT = 78; // kg — latest weigh-in
+var CYCLE = 7;
+var CURRENT_WEEK = 3;
+var NORDIC_WEEK_OFFSET = 0; // nordicWeek = currentWeek + offset
+
+/* ═══ PROGRAMS (fixed data, transcribed from PDFs) ═══════════ */
+var PROGRAMS = {
+  glutes: {
+    name: "Glutes & Groins", short: "GROINS", color: "#4ADE80", region: "Adductors \u00b7 glutes",
+    ex: [
+      { n: "Dynamic leg lifts", p: "3 \u00d7 5 each angle", l: null, rest: null, note: "Controlled through every angle." },
+      { n: "Tailor's pose", p: "3 \u00d7 8\u201310", l: { pct: 25 }, rest: null, note: "Per leg." },
+      { n: "Kneeling tilt", p: "3 \u00d7 8", l: null, rest: null, note: "5 s hold on the last rep of set 3." },
+      { n: "Elevated pigeon", p: "1 min passive", l: null, rest: null, note: "Breathe into it." },
+      { n: "Standing pancake", p: "1 min", l: null, rest: null, note: "Back flat. Chase depth." },
+      { n: "Wall straddle", p: "2 min", l: { kg: [1, 5] }, rest: null, note: "Add load over time." },
+      { n: "Side split iso hold", p: "1 min", l: null, rest: null, note: "Contract, relax, sink." },
+      { n: "Standing pancake C.R.A.C", p: "3 \u00d7 30\u2033", l: { text: "weighted" }, rest: null, note: "5 s contractions. Contract quads to relax hamstrings." },
+      { n: "Horse stance iso", p: "3 \u00d7 30\u2033", l: { pct: 25, optional: true }, rest: null, note: "Hip flexors and glutes." }
+    ]
+  },
+  hips: {
+    name: "Hips & Hammies", short: "HIPS", color: "#7DD3C0", region: "Hip flexors \u00b7 hamstrings",
+    ex: [
+      { n: "A1. Hip flexor leg lifts", p: "3 \u00d7 3 \u00d7 5\u2033", l: { kg: [1, 2] }, rest: null, note: "Leg straight, heel in line with the big toe." },
+      { n: "A2. Banded hamstring stretch", p: "3 \u00d7 3 \u00d7 5\u2033", l: null, rest: null, note: "Knee locked. Let the hip flexor pull." },
+      { n: "Hamstring block crush", p: "1 \u00d7 3 \u00d7 10\u2033", l: null, rest: null, note: "Heel must touch. Work through cramps." },
+      { n: "Hip 90/90 internal rotation", p: "3 \u00d7 3 \u00d7 5\u2033", l: { kg: [1, 3] }, rest: null, note: "Don\u2019t lean away from the working leg." },
+      { n: "Butterfly C.R.A.C", p: "3 \u00d7 6 \u00d7 10\u2033", l: { pct: 25 }, rest: null, note: "Contract hard." },
+      { n: "Banded hip flexion end-range iso", p: "1 \u00d7 3 \u00d7 10\u2033", l: null, rest: null, note: "Lightest band first. Build time under tension." },
+      { n: "Lateral hip flexion", p: "3 \u00d7 3 \u00d7 5\u2033", l: null, rest: null, note: "Stay centred." },
+      { n: "Wall frog + hip IR", p: "3 \u00d7 4 \u00d7 5\u2033", l: { kg: [1, 5] }, rest: null, note: "Hips back, shoulders above hips." },
+      { n: "Couch stretch", p: "2 \u00d7 1 min", l: null, rest: null, note: "Quad straight, knee to the wall." }
+    ],
+    tip: "Form and control before load. Work through cramps to own the new range."
+  },
+  shoulders: {
+    name: "Shoulders & Spine", short: "SPINE", color: "#D8B24A", region: "T-spine \u00b7 shoulders",
+    ex: [
+      { n: "Banded T-spine rotations", p: "3 \u00d7 5", l: null, rest: null, note: "No compensating." },
+      { n: "Thoracic rotation weighted stretch", p: "45\u201360\u2033", l: { text: "light" }, rest: null, note: "Light weight to deepen it." },
+      { n: "Inverted cat", p: "60\u2033", l: null, rest: null, note: "Open the upper back." },
+      { n: "End-range shoulder flexion lift-offs", p: "3 \u00d7 3 \u00d7 5\u2033", l: null, rest: null, note: "Arms straight." },
+      { n: "Hands behind (passive)", p: "60\u2033", l: null, rest: null, note: "Relax. Breathe." },
+      { n: "Banded shoulder extension iso holds", p: "1 \u00d7 5 \u00d7 10\u2033", l: null, rest: null, note: "Light band." },
+      { n: "Shoulder circles", p: "3 \u00d7 5", l: null, rest: null, note: "Slow." },
+      { n: "Barbell + foam roller T-spine stretch", p: "3 \u00d7 45\u2033", l: null, rest: null, note: "Core engaged." },
+      { n: "Shoulder pullovers", p: "3 \u00d7 5\u20138", l: { text: "to ability" }, rest: null, note: "" },
+      { n: "Seal stretch", p: "60\u2033", l: null, rest: null, note: "Don\u2019t overarch." },
+      { n: "Active cobra", p: "3 \u00d7 3 \u00d7 5\u2033", l: null, rest: null, note: "Engage the low back." },
+      { n: "Thoracic bridge", p: "1\u20132 \u00d7 30\u2033", l: null, rest: null, note: "Work deeper over time." }
+    ]
+  },
+  back: {
+    name: "Stronger Lower Back", short: "BACK", color: "#2E7F5B", region: "Lumbar \u00b7 posterior chain",
+    ex: [
+      { n: "Bent knee forward fold", p: "1 min", l: null, rest: null, note: "Soft knees. Let it release." },
+      { n: "Active cobra", p: "3 \u00d7 5 \u00b7 5 s hold", l: null, rest: null, note: "Trunk high, legs off the floor." },
+      { n: "Single-leg hamstring extension", p: "3 \u00d7 30\u2033 \u2192 45\u2033", l: null, rest: null, note: "Hips square." },
+      { n: "World\u2019s greatest stretch", p: "1 min each side", l: null, rest: null, note: "Back leg straight." },
+      { n: "Banded spinal rotation", p: "1 \u00d7 1 min", l: null, rest: null, note: "Build band power slowly." },
+      { n: "Seated good mornings", p: "3 \u00d7 6", l: { pct: 50 }, rest: null, note: "Strong hinge, knees out." },
+      { n: "Inner thigh leg lifts", p: "3 \u00d7 3 \u00b7 5 s hold", l: { kg: [5, 7] }, rest: null, note: "Body straight, leg long." },
+      { n: "Banded internal rotation", p: "3 \u00d7 3 \u00b7 5 s hold", l: null, rest: null, note: "Drive in hard. Hips square." },
+      { n: "Big twist", p: "1 \u00d7 1 min", l: { kg: [5, 10] }, rest: null, note: "Shoulder pinned." }
+    ]
+  },
+  knee: {
+    name: "Stronger Knee", short: "KNEE", color: "#E8873A", region: "Knee \u00b7 quads",
+    ex: [
+      { n: "Banded knee extension", p: "3 \u00d7 20", l: { text: "heavy band" }, rest: 60, note: "Full extension every rep." },
+      { n: "Isometric lunge hold", p: "3 \u00d7 30\u2033 \u2192 45\u2033", l: null, rest: 90, note: "90/90, back glute on." },
+      { n: "Reverse step-up", p: "3 \u00d7 6", l: { pct: 25 }, rest: 75, note: "Knee tracks over the toe." },
+      { n: "Slant board squat", p: "3 \u00d7 6\u20138", l: { pct: [25, 50] }, rest: 75, note: "Controlled tempo, full depth if tolerated." },
+      { n: "Reverse Nordic curl", p: "3 \u00d7 5", l: { text: "assisted" }, rest: 90, note: "Hips extended. Don\u2019t hinge." },
+      { n: "Knee internal / external rotation", p: "2 \u00d7 5 each way", l: { text: "light band" }, rest: 30, note: "Quality over range." }
+    ]
+  },
+  calves: {
+    name: "Stronger Calves & Ankles", short: "CALVES", color: "#B8E6C8", region: "Calves \u00b7 ankles \u00b7 feet",
+    ex: [
+      { n: "Slant board unilateral calf raise", p: "3 \u00d7 8\u201310", l: { pct: 20 }, rest: null, note: "Once 20% is easy, build to 25\u201335%." },
+      { n: "Bent-leg unilateral calf raise", p: "3 \u00d7 8\u201310", l: { pct: 20 }, rest: null, note: "Soleus. Endurance." },
+      { n: "Tib raises", p: "3 \u00d7 8\u201310", l: { pct: 10 }, rest: null, note: "Once 10% is easy, build to 15%." },
+      { n: "A1. Foot stretch", p: "60\u2033 / 40\u2033 / 20\u2033", l: null, rest: null, note: "Superset with the hack squat." },
+      { n: "A2. Hack squat", p: "3 \u00d7 8", l: null, rest: null, note: "Superset with the foot stretch." },
+      { n: "Banded ankle dorsiflexion", p: "2 min", l: null, rest: null, note: "Assists posterior talus glide." },
+      { n: "Deep squat, heels elevated", p: "4 min total", l: null, rest: null, note: "In as few sets as possible." },
+      { n: "Elevated seiza", p: "1 min", l: null, rest: null, note: "Calves, ankles, foot arches." }
+    ]
+  }
+};
+
+/* ═══ NORDIC — phased by absolute week ═══════════════════════ */
+var NORDIC = [
+  { p: 1, ex: "Banded assisted Nordic curls", from: 1, to: 8, sets: "3\u20134", reps: "5\u20138", tempo: "3\u20134 s",
+    prog: "Start with a moderate band. Reduce assistance as strength comes." },
+  { p: 2, ex: "Partial eccentric Nordic curls", from: 9, to: 12, sets: "3\u20134", reps: "3\u20138", tempo: "3\u20135 s",
+    prog: "Limit range with a foam roller. Lower the prop as you get stronger." },
+  { p: 3, ex: "Full negative Nordic curls", from: 13, to: 16, sets: "3", reps: "3\u20135", tempo: "4\u20136 s",
+    prog: "Slow controlled descents. Assist yourself back up." },
+  { p: 4, ex: "Eccentric\u2013concentric Nordic curls (partial)", from: 17, to: 20, sets: "3\u20134", reps: "3\u20136", tempo: "3\u20134 s",
+    prog: "Explosive concentric. Partial range before full." },
+  { p: 5, ex: "Full Nordic curls", from: 21, to: 999, sets: "3", reps: "3\u20135", tempo: "controlled",
+    prog: "Unassisted. Build rep volume as control improves." }
+];
+
+function nordicPhase(wk) {
+  for (var i = 0; i < NORDIC.length; i++) {
+    if (wk >= NORDIC[i].from && wk <= NORDIC[i].to) return NORDIC[i];
+  }
+  return NORDIC[NORDIC.length - 1];
+}
+
+/* ═══ ALLOCATION (pure) ══════════════════════════════════════ */
+var ROTATION = ["glutes", "hips", "shoulders", "back", "knee", "calves"];
+
+var SIGNALS = {
+  deficits: { glutes: 0.36, hips: 0.71, shoulders: 0.88, back: 0.62, knee: 0.94, calves: 0.79 },
+  reasons: {
+    glutes: "Adductors at 36% of target and you\u2019re a fullback. Twice this week.",
+    back: "Low back has been tight three sessions running.",
+    hips: "Hip flexors lagging behind the rest of the chain."
+  }
+};
+
+function planWeek(week, signals) {
+  var deload = week === CYCLE;
+  var ranked = Object.entries(signals.deficits).sort(function(a, b) { return a[1] - b[1]; });
+  var priority = ranked[0][0];
+  var pool = ROTATION.filter(function(k) { return k !== priority; });
+  var rot = [pool[(week * 2 - 2) % pool.length], pool[(week * 2 - 1) % pool.length]];
+  var plan = [
+    { key: priority, freq: deload ? 1 : 2, tag: "PRIORITY",
+      why: signals.reasons[priority] || "Weakest signal this week." }
+  ];
+  rot.forEach(function(k) {
+    plan.push({ key: k, freq: 1, tag: "ROTATION", why: "Keeping the cycle honest." });
+  });
+  return { plan: plan, deload: deload, priority: priority };
+}
+
+/* ═══ LOAD RESOLVER ══════════════════════════════════════════ */
+function fmtKg(n) { return n % 1 === 0 ? String(n) : n.toFixed(1); }
+
+function resolveLoad(spec, bw, deload) {
+  if (!spec) return null;
+  if (spec.text) return { main: spec.text, sub: null, isText: true };
+  if (spec.kg) return { main: spec.kg[0] + "\u2013" + spec.kg[1] + " kg", sub: "added", isText: true };
+  // %BW loads
+  if (deload) return { main: "hold only", sub: null, isHold: true };
+  if (Array.isArray(spec.pct)) {
+    return {
+      main: fmtKg(bw * spec.pct[0] / 100) + " \u2192 " + fmtKg(bw * spec.pct[1] / 100) + " kg",
+      sub: spec.pct[0] + "% \u2192 " + spec.pct[1] + "% BW"
+    };
+  }
+  return {
+    main: fmtKg(bw * spec.pct / 100) + " kg",
+    sub: spec.pct + "% BW" + (spec.optional ? " \u00b7 optional" : "")
+  };
+}
+
+/* ═══ STATE ══════════════════════════════════════════════════ */
+var state = {
+  week: CURRENT_WEEK,
+  open: null,
+  log: {} // "week|key" -> sessions done
+};
+
+function logKey(k) { return state.week + "|" + k; }
+function doneOf(k) { return state.log[logKey(k)] || 0; }
+function tick(k, i) {
+  var key = logKey(k);
+  state.log[key] = (state.log[key] || 0) === i + 1 ? i : i + 1;
+  render();
+}
+
+/* ═══ RENDER ═════════════════════════════════════════════════ */
+function render() {
+  var week = state.week;
+  var nordicWk = week + NORDIC_WEEK_OFFSET;
+  var result = planWeek(week, SIGNALS);
+  var plan = result.plan;
+  var deload = result.deload;
+  var priority = result.priority;
+  var ph = nordicPhase(nordicWk);
+  var bw = BODYWEIGHT;
+
+  var target = 2; // nordic
+  plan.forEach(function(p) { target += p.freq; });
+  var done = doneOf("nordic");
+  plan.forEach(function(p) { done += doneOf(p.key); });
+  var pct = Math.round((done / target) * 100);
+
+  // Strip
+  var strip = document.getElementById("strip");
+  strip.innerHTML =
+    '<div><b>' + week + '<em>/' + CYCLE + '</em></b><span>Cycle week</span></div>' +
+    '<div><b class="' + (done === target ? 'is-good' : '') + '">' + done + '<em>/' + target + '</em></b><span>Sessions</span></div>' +
+    '<div><b>' + ph.p + '</b><span>Nordic phase</span></div>' +
+    '<div><b class="' + (deload ? 'is-hot' : 'is-good') + '">' + (deload ? 'DELOAD' : 'BUILD') + '</b><span>Week type</span></div>';
+
+  // Coach
+  var coach = document.getElementById("coach");
+  var coachMsg = deload
+    ? "Deload week. Everything once, holds only, no percentage builds. You don\u2019t grow in the work, you grow after it."
+    : (SIGNALS.reasons[priority] || "Weakest signal takes the priority slot.");
+  coach.innerHTML =
+    '<div class="m-av"><span>K</span></div>' +
+    '<div><div class="m-cname">KHABIB <em>\u00b7 allocates the week, never the exercise</em></div>' +
+    '<p class="m-clead">' + coachMsg + '</p></div>';
+
+  // Rail
+  var rail = document.getElementById("rail");
+  var railHtml = '<span class="m-rail-line"></span>';
+  for (var i = 1; i <= CYCLE; i++) {
+    var s = i === week ? "now" : i < week ? "past" : "next";
+    var dl = i === CYCLE ? " is-deload" : "";
+    railHtml += '<button class="m-node is-' + s + dl + '" data-week="' + i + '" aria-pressed="' + (i === week) + '" aria-label="Week ' + i + '"><span class="m-nd"></span><em>W' + i + '</em></button>';
+  }
+  rail.innerHTML = railHtml;
+  rail.querySelectorAll('.m-node').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      state.week = parseInt(this.dataset.week);
+      render();
+    });
+  });
+
+  // Week main
+  var main = document.getElementById("weekMain");
+  var html = '';
+  html += '<header class="m-wh"><div><p class="m-eyebrow">' + (deload ? 'DELOAD' : 'BUILD') + ' \u00b7 WEEK ' + week + '</p>';
+  html += '<h2 class="m-wt">This <em>week</em></h2></div>';
+  html += '<span class="m-pct">' + pct + '<em>%</em></span></header>';
+  html += '<div class="m-bar"><span style="width:' + pct + '%"></span></div>';
+  html += '<div class="m-cards">';
+
+  // Nordic card
+  html += renderNordic(nordicWk, ph);
+
+  // Program cards
+  plan.forEach(function(item) {
+    html += renderProgram(item, bw, deload);
+  });
+
+  html += '</div>';
+
+  // Resting
+  var resting = ROTATION.filter(function(k) { return !plan.some(function(p) { return p.key === k; }); });
+  var restingNames = resting.map(function(k) { return PROGRAMS[k].short; }).join(" \u00b7 ");
+  html += '<p class="m-off">Resting this week: ' + restingNames + '</p>';
+
+  main.innerHTML = html;
+
+  // Bind events
+  bindCards();
+}
+
+function renderNordic(nordicWk, ph) {
+  var isOpen = state.open === "nordic";
+  var isDone = doneOf("nordic") >= 2;
+  var span = ph.to > 900 ? "21+" : ph.from + "\u2013" + ph.to;
+  var through = ph.to > 900 ? 1 : (nordicWk - ph.from + 1) / (ph.to - ph.from + 1);
+
+  var html = '<section class="m-card is-nordic' + (isOpen ? ' is-open' : '') + (isDone ? ' is-complete' : '') + '" data-key="nordic">';
+  html += '<button class="m-card-h" aria-expanded="' + isOpen + '" data-toggle="nordic">';
+  html += '<span class="m-swatch" style="background:#E6F2EC"></span>';
+  html += '<span class="m-name">Nordic<em>Phase ' + ph.p + ' \u00b7 weeks ' + span + '</em></span>';
+  html += '<span class="m-tag is-always">EVERY WEEK</span>';
+  html += '<span class="m-freq">2\u00d7</span>';
+  html += renderDots("nordic", 2);
+  html += '<span class="m-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
+  html += '</button>';
+
+  if (isOpen) {
+    html += '<div class="m-card-b">';
+    html += '<p class="m-why">Nordic runs on its own clock \u2014 <b>week ' + nordicWk + ' of the program</b>, not of the cycle. It does not deload with everything else.</p>';
+
+    // Phase segments
+    html += '<div class="m-phase">';
+    NORDIC.forEach(function(p) {
+      var cls = p.p === ph.p ? "is-on" : p.p < ph.p ? "is-past" : "";
+      html += '<div class="m-pseg ' + cls + '"><span>P' + p.p + '</span></div>';
+    });
+    html += '</div>';
+    html += '<div class="m-pbar"><span style="width:' + (through * 100) + '%"></span></div>';
+
+    html += '<div class="m-nex">';
+    html += '<h4>' + ph.ex + '</h4>';
+    html += '<ul><li><span>SETS</span><b>' + ph.sets + '</b></li>';
+    html += '<li><span>REPS</span><b>' + ph.reps + '</b></li>';
+    html += '<li><span>TEMPO</span><b>' + ph.tempo + '</b></li></ul>';
+    html += '<p class="m-tip">' + ph.prog + '</p>';
+    html += '</div></div>';
+  }
+
+  html += '</section>';
+  return html;
+}
+
+function renderProgram(item, bw, deload) {
+  var pk = item.key;
+  var p = PROGRAMS[pk];
+  var isOpen = state.open === pk;
+  var isDone = doneOf(pk) >= item.freq;
+
+  var html = '<section class="m-card' + (isOpen ? ' is-open' : '') + (isDone ? ' is-complete' : '') + '" data-key="' + pk + '">';
+  html += '<button class="m-card-h" aria-expanded="' + isOpen + '" data-toggle="' + pk + '">';
+  html += '<span class="m-swatch" style="background:' + p.color + '"></span>';
+  html += '<span class="m-name">' + p.name + '<em>' + p.region + '</em></span>';
+  html += '<span class="m-tag is-' + item.tag.toLowerCase() + '">' + item.tag + '</span>';
+  html += '<span class="m-freq">' + item.freq + '\u00d7</span>';
+  html += renderDots(pk, item.freq);
+  html += '<span class="m-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
+  html += '</button>';
+
+  if (isOpen) {
+    html += '<div class="m-card-b">';
+    html += '<p class="m-why">' + item.why + '</p>';
+    html += '<div class="m-th"><span>EXERCISE</span><span>SETS \u00d7 REPS</span><span>LOAD</span><span>NOTE</span></div>';
+
+    p.ex.forEach(function(e) {
+      var l = resolveLoad(e.l, bw, deload);
+      html += '<div class="m-tr">';
+      html += '<span class="m-en">' + e.n + '</span>';
+      html += '<span class="m-ep">' + e.p + (e.rest ? '<em>' + e.rest + 's rest</em>' : '') + '</span>';
+      html += '<span class="m-el">';
+      if (l) {
+        if (l.isHold) {
+          html += '<b class="is-dim">hold only</b>';
+        } else {
+          html += '<b>' + l.main + '</b>';
+          if (l.sub) html += '<em>' + l.sub + '</em>';
+        }
+      } else {
+        html += '<b class="is-dim">\u2014</b>';
+      }
+      html += '</span>';
+      html += '<span class="m-note">' + (e.note || '') + '</span>';
+      html += '</div>';
+    });
+
+    if (p.tip) html += '<p class="m-tip">' + p.tip + '</p>';
+    html += '</div>';
+  }
+
+  html += '</section>';
+  return html;
+}
+
+function renderDots(key, freq) {
+  var d = doneOf(key);
+  var html = '<span class="m-dots">';
+  for (var i = 0; i < freq; i++) {
+    html += '<button class="m-sdot' + (i < d ? ' is-done' : '') + '" data-dot-key="' + key + '" data-dot-i="' + i + '" aria-label="Session ' + (i + 1) + ' of ' + freq + '" aria-pressed="' + (i < d) + '"></button>';
+  }
+  html += '</span>';
+  return html;
+}
+
+function bindCards() {
+  // Toggle cards
+  document.querySelectorAll('[data-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      var key = this.dataset.toggle;
+      state.open = state.open === key ? null : key;
+      render();
+    });
+  });
+
+  // Dots
+  document.querySelectorAll('[data-dot-key]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      tick(this.dataset.dotKey, parseInt(this.dataset.dotI));
+    });
+  });
+}
+
+// Initial render
+render();
+
+})();
+</script>
+</body>
+</html>

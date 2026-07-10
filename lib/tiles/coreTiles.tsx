@@ -213,8 +213,8 @@ export const VEE_TILE = {
   id: 'vee' as const,
   href: '/app/starter',
   index: '06',
-  label: 'Khabib',
-  kicker: 'Your AI coach',
+  label: 'Dashboard',
+  kicker: 'Signals · plan · timeline',
 }
 
 export type HomeTileId = CoreTileId | 'vee' | 'library'

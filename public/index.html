@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<title>Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="topbar.js" defer></script>
+<style>
+:root {
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --success: #6BE3A4;
+  --warning: #F2C063;
+  --danger: #FF6B6B;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: #050506;
+  color: var(--text-primary);
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 24px) 20px 40px;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 82% 14%, rgba(224, 118, 88, 0.16), transparent 60%),
+    radial-gradient(ellipse at 18% 90%, rgba(180, 180, 200, 0.06), transparent 60%);
+  filter: blur(40px);
+  animation: bgDrift 36s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -2;
+}
+
+@keyframes bgDrift {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-12px, 8px); }
+  100% { transform: translate(8px, -6px); }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='3' height='3' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.014)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dash-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C7C4BC 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 14px;
+}
+
+/* ── Bento Grid ── */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 168px;
+  gap: 14px;
+  grid-auto-flow: dense;
+}
+
+.tile {
+  --accent: #6BE3A4;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 20px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.tile.big  { grid-column: span 2; grid-row: span 2; }
+.tile.wide { grid-column: span 2; }
+
+/* Tile header row */
+.tile-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tile-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+}
+
+.tile-emoji {
+  font-size: 28px;
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+
+/* Spacer pushes content to bottom */
+.tile-spacer { flex: 1; }
+
+.tile-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.tile-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tile-sub {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.tile-arrow {
+  font-size: 18px;
+  color: var(--accent);
+  transition: transform 0.2s;
+}
+
+.tile:hover .tile-arrow {
+  transform: translateX(4px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tile.big {
+    grid-row: span 1;
+  }
+}
+
+@media (max-width: 440px) {
+  .bento {
+    grid-template-columns: 1fr;
+  }
+  .tile.big, .tile.wide {
+    grid-column: span 1;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1 class="dash-title">Dashboard</h1>
+
+<div class="bento">
+
+  <a href="main.html" class="tile big" style="--accent:#6BE3A4">
+    <div class="tile-head">
+      <span class="tile-num">·01</span>
+      <span class="tile-emoji">🏠</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Main</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Goals & daily plan</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="gym.html" class="tile wide" style="--accent:#7DD3FC">
+    <div class="tile-head">
+      <span class="tile-num">·02</span>
+      <span class="tile-emoji">💪</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Fitness</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Workouts, splits, sessions</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="health.html" class="tile" style="--accent:#A7F3D0">
+    <div class="tile-head">
+      <span class="tile-num">·03</span>
+      <span class="tile-emoji">💊</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Health</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Supplements & vitals</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="water.html" class="tile" style="--accent:#60A5FA">
+    <div class="tile-head">
+      <span class="tile-num">·04</span>
+      <span class="tile-emoji">💧</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Water</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Hydration</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="finance.html" class="tile wide" style="--accent:#F2C063">
+    <div class="tile-head">
+      <span class="tile-num">·05</span>
+      <span class="tile-emoji">📊</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Finance</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Net worth & spending</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="dashboard.html" class="tile wide" style="--accent:#4ADE80">
+    <div class="tile-head">
+      <span class="tile-num">·06</span>
+      <span class="tile-emoji">🧠</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Dashboard</div>
+    <div class="tile-footer">
+      <span class="tile-sub">signals · plan · daily timeline</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+  <a href="plan.html" class="tile big" style="--accent:#F472B6">
+    <div class="tile-head">
+      <span class="tile-num">·07</span>
+      <span class="tile-emoji">📋</span>
+    </div>
+    <div class="tile-spacer"></div>
+    <div class="tile-title">Weekly Plan</div>
+    <div class="tile-footer">
+      <span class="tile-sub">Full operating system — hour by hour</span>
+      <span class="tile-arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+</body>
+</html>

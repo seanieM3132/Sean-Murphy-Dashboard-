@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050D0A">
+<title>Train — Sean</title>
+<script src="/topbar.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#050D0A;--line:rgba(74,222,128,.10);
+  --green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;
+  --ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;
+  --mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  min-height:100vh;padding:40px 32px 64px;
+  background:radial-gradient(1200px 600px at 20% -10%,#0D2419 0%,transparent 60%),var(--bg);
+  color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+}
+
+/* header */
+.t-top{max-width:1240px;margin:0 auto 26px;}
+.t-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
+.t-back:hover{color:var(--green);}
+.t-title{font-family:var(--serif);font-size:clamp(34px,4.4vw,54px);font-weight:400;font-style:italic;margin:14px 0 6px;}
+.t-title em{color:var(--green);}
+.t-sub{font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--dim);}
+
+/* tabs */
+.t-tabs{display:flex;gap:2px;max-width:1240px;margin:0 auto 4px;border:1px solid var(--line);border-radius:12px;padding:4px;background:rgba(10,23,18,.5);}
+.t-tabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:none;border:0;cursor:pointer;
+  padding:13px;border-radius:9px;font:500 11px var(--mono);letter-spacing:.18em;color:var(--dim);transition:all .2s;}
+.t-tabs button:hover{color:var(--ink);}
+.t-tabs button.is-on{background:rgba(74,222,128,.09);color:var(--green);}
+.t-tabs button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.t-tn{color:var(--dimmer);font-weight:400;}
+.t-tabs button.is-on .t-tn{color:rgba(74,222,128,.5);}
+
+/* frame */
+.t-frame{max-width:1240px;margin:0 auto;border:0;width:100%;border-radius:16px;background:transparent;}
+.t-frame iframe{width:100%;border:0;border-radius:16px;background:transparent;min-height:calc(100vh - 200px);}
+
+@media (max-width:640px){
+  body{padding:24px 16px 48px;}
+  .t-tabs button{font-size:9px;letter-spacing:.1em;padding:11px;}
+  .t-tn{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="t-top">
+  <a href="/" class="t-back">&#8592; Home</a>
+  <h1 class="t-title">Train, <em>Sean</em></h1>
+  <p class="t-sub">SESSION LOGGER &middot; COLLEGE PROGRAM &middot; 112MVMNT &middot; SOCCER &middot; RECOVERY</p>
+</header>
+
+<nav class="t-tabs" role="tablist" id="tabs">
+  <button role="tab" aria-selected="true" class="is-on" data-tab="gym">
+    <span class="t-tn">01</span>GYM
+  </button>
+  <button role="tab" aria-selected="false" data-tab="seward">
+    <span class="t-tn">02</span>SEWARD
+  </button>
+  <button role="tab" aria-selected="false" data-tab="mvmnt">
+    <span class="t-tn">03</span>112MVMNT
+  </button>
+  <button role="tab" aria-selected="false" data-tab="soccer">
+    <span class="t-tn">04</span>SOCCER
+  </button>
+  <button role="tab" aria-selected="false" data-tab="recovery">
+    <span class="t-tn">05</span>RECOVERY
+  </button>
+</nav>
+
+<div class="t-frame" id="frame">
+  <iframe id="content-frame" src="/gym.html" title="Gym"></iframe>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var tabs = document.querySelectorAll('[data-tab]');
+  var frame = document.getElementById('content-frame');
+  var pages = { gym: '/gym.html', seward: '/seward.html', mvmnt: '/mvmnt.html', soccer: '/soccer.html', recovery: '/recovery.html' };
+  var titles = { gym: 'Gym', seward: 'Seward College Work', mvmnt: '112mvmnt', soccer: 'Soccer', recovery: 'Recovery' };
+
+  // Check URL hash for initial tab
+  var hash = window.location.hash.replace('#', '');
+  if (hash && pages[hash]) {
+    frame.src = pages[hash];
+    frame.title = titles[hash];
+    tabs.forEach(function(t) {
+      var isOn = t.dataset.tab === hash;
+      t.classList.toggle('is-on', isOn);
+      t.setAttribute('aria-selected', isOn);
+    });
+  }
+
+  tabs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tab = this.dataset.tab;
+      tabs.forEach(function(t) {
+        var isOn = t.dataset.tab === tab;
+        t.classList.toggle('is-on', isOn);
+        t.setAttribute('aria-selected', isOn);
+      });
+      frame.src = pages[tab];
+      frame.title = titles[tab];
+      window.location.hash = tab;
+    });
+  });
+
+  // Auto-resize iframe to content height
+  function resizeFrame() {
+    try {
+      var doc = frame.contentDocument || frame.contentWindow.document;
+      if (doc && doc.body) {
+        frame.style.height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight) + 'px';
+      }
+    } catch(e) {}
+  }
+
+  frame.addEventListener('load', function() {
+    resizeFrame();
+    // Also resize after a short delay for dynamic content
+    setTimeout(resizeFrame, 500);
+    setTimeout(resizeFrame, 2000);
+  });
+
+  // Periodic resize check
+  setInterval(resizeFrame, 3000);
+})();
+</script>
+</body>
+</html>
