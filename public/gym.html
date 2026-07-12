@@ -55,17 +55,17 @@ button{font-family:inherit;cursor:pointer;}
 .s-line{max-width:var(--w);margin:0 auto 12px;}
 .s-track{position:relative;display:flex;gap:3px;height:64px;}
 .s-seg{position:relative;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.014);
-  cursor:pointer;overflow:hidden;display:grid;place-items:center;transition:border-color .16s;min-width:56px;}
+  cursor:pointer;overflow:hidden;display:grid;place-items:center;transition:border-color .16s;min-width:50px;}
 .s-seg.is-prime{--sc:var(--violet);} .s-seg.is-work{--sc:var(--green);}
 .s-seg.is-gold{--sc:var(--gold);} .s-seg.is-cool{--sc:var(--teal);} .s-seg.is-power{--sc:var(--amber);}
 .s-seg:hover{border-color:color-mix(in srgb,var(--sc) 40%,transparent);}
 .s-seg.is-on{border-color:var(--sc);box-shadow:inset 0 0 24px color-mix(in srgb,var(--sc) 10%,transparent);}
 .s-seg.is-done{opacity:.5;}
 .s-fill{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--sc) 20%,transparent);transition:width .3s;}
-.s-seg-t{position:relative;text-align:center;padding:0 6px;}
-.s-seg-t b{display:block;font:500 9px var(--mono);letter-spacing:.18em;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.s-seg-t{position:relative;text-align:center;padding:0 4px;}
+.s-seg-t b{display:block;font:500 8px var(--mono);letter-spacing:.14em;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .s-seg.is-on .s-seg-t b{color:var(--sc);}
-.s-seg-t em{display:block;font-style:normal;font:400 8px var(--mono);color:var(--dimmer);margin-top:6px;}
+.s-seg-t em{display:block;font-style:normal;font:400 7px var(--mono);color:var(--dimmer);margin-top:5px;}
 .s-head{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--ink);box-shadow:0 0 10px rgba(230,242,236,.85);transition:left .35s;pointer-events:none;}
 .s-head i{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-style:normal;font:500 7px var(--mono);letter-spacing:.14em;color:var(--ink);}
 .s-seg:focus-visible{outline:2px solid var(--sc);outline-offset:2px;}
@@ -89,7 +89,7 @@ button{font-family:inherit;cursor:pointer;}
 .s-gl .lock{font-style:normal;margin-left:auto;font:500 7px var(--mono);letter-spacing:.16em;color:var(--violet);
   border:1px solid rgba(156,138,222,.32);border-radius:3px;padding:3px 6px;}
 
-.s-row{position:relative;display:grid;grid-template-columns:1fr 130px 44px 46px 80px;gap:14px;align-items:center;
+.s-row{position:relative;display:grid;grid-template-columns:1fr 140px 44px 46px 80px;gap:12px;align-items:center;
   padding:10px 8px;border-top:1px solid rgba(255,255,255,.04);border-radius:8px;}
 .s-row.is-next{background:color-mix(in srgb,var(--hc) 7%,transparent);}
 .s-row.is-done{opacity:.4;}
@@ -103,7 +103,7 @@ button{font-family:inherit;cursor:pointer;}
   color:var(--ink);font:400 11px var(--mono);text-align:center;}
 .s-t:focus{outline:none;border-color:color-mix(in srgb,var(--hc) 45%,transparent);}
 .s-t.is-empty{border:0;background:none;pointer-events:none;}
-.s-dots{display:flex;gap:6px;justify-content:flex-end;}
+.s-dots{display:flex;gap:5px;justify-content:flex-end;}
 .s-dot{width:18px;height:18px;border-radius:50%;border:1px solid var(--dimmer);background:none;cursor:pointer;padding:0;transition:all .15s;}
 .s-dot:hover{border-color:var(--hc);}
 .s-dot.is-done{background:var(--hc);border-color:var(--hc);box-shadow:0 0 8px color-mix(in srgb,var(--hc) 55%,transparent);}
@@ -126,13 +126,13 @@ button{font-family:inherit;cursor:pointer;}
 .s-btns button:hover{color:var(--teal);border-color:rgba(125,211,192,.3);}
 
 /* READOUT */
-.s-read{max-width:var(--w);margin:0 auto;display:flex;align-items:flex-end;gap:34px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;
+.s-read{max-width:var(--w);margin:0 auto;display:flex;align-items:flex-end;gap:28px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;
   background:rgba(16,36,27,.25);flex-wrap:wrap;}
 .s-read .fig b{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--dim);}
 .s-read .fig b.teal{color:var(--teal);} .s-read .fig b.green{color:var(--green);}
 .s-read .fig b small{font-style:normal;font:400 10px var(--mono);color:var(--dimmer);}
 .s-read .fig span{display:block;font:500 7px var(--mono);letter-spacing:.18em;color:var(--dimmer);margin-top:7px;}
-.s-load{flex:1;min-width:220px;}
+.s-load{flex:1;min-width:200px;}
 .s-scale{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:9px;}
 .s-scale button{flex:1;height:24px;background:none;border:0;border-right:1px solid var(--line);
   color:var(--dimmer);font:400 9px var(--mono);}
@@ -146,7 +146,6 @@ button{font-family:inherit;cursor:pointer;}
 @media (max-width:900px){
   .s-top{flex-direction:column;align-items:flex-start;gap:12px;}
   .s-track{height:74px;}
-  .s-seg-t em{font-size:7px;}
   .s-h{flex-direction:column;align-items:flex-start;gap:14px;}
 }
 @media (max-width:640px){
@@ -161,7 +160,7 @@ button{font-family:inherit;cursor:pointer;}
   .s-t{grid-column:2;}
   .s-caret{left:-10px;}
   .s-rb{flex-wrap:wrap;gap:16px;}
-  .s-read{gap:20px;}
+  .s-read{gap:18px;}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
@@ -175,116 +174,133 @@ button{font-family:inherit;cursor:pointer;}
 'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════
-   ALL SESSION TEMPLATES
+   FOOTBALLER-SPECIFIC GYM PROGRAMMING
+   Sources: Matt Stigler, Man City/Nico Gonzalez, Huberman/Galpin,
+   GOATA/Coach Gil, Hyperarch Fascia/Coach Chong Xie, 112mvmnt
+
+   Structure: Total Body split (Stigler recommendation for footballers)
+   Method: Peak set + Back-off sets for compounds (Stigler)
+   Sprint on same day as lower body (neurological crossover benefit)
+   Core: Stiffness (Mon) + Speed (Wed) + Fluidity (Fri)
    ═══════════════════════════════════════════════════════════════════ */
 
 var SESSIONS = {
 
-/* ─── MONDAY: Heavy Compound Day ─────────────────────────────────── */
+/* ─── MONDAY: Lower Power + Sprint Projections ───────────────────── */
 monday: {
-  name: 'Heavy Compound Day', day: 'MONDAY', time: '08:00', sections: [
+  name: 'Lower Power + Sprint Mechanics', day: 'MONDAY', time: '08:30',
+  sections: [
     {
-      id:'m-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:15,
+      id:'m-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:12,
       groups:[
         { label:'Groundwork', note:'GOATA \u00B7 every session, barefoot', ex:[
-          { id:'mp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH.' },
-          { id:'mp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:20, cue:'Head stays up.' },
-          { id:'mp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:20, cue:'Heels open.' },
-          { id:'mp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 curls', rest:30, cue:'Slow. Feel the arch.' }
+          { id:'mp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH. Head up, reach foot back.' },
+          { id:'mp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:15, cue:'Toes together, heels out. As butt goes down, ankle bone climbs higher.' },
+          { id:'mp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:15, cue:'Toes tucked. Heels open during the rock.' },
+          { id:'mp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 sec', rest:10, cue:'Curl toes over step edge. Plantar fascia.' }
         ]},
-        { label:'Gym warm-up', ex:[
-          { id:'mp5', type:'drill', n:'Empty bar squat', sets:2, work:'8 reps', rest:30, cue:'Groove the pattern, full depth.' },
+        { label:'Ramp', ex:[
+          { id:'mp5', type:'drill', n:'Empty bar squat', sets:2, work:'8 reps', rest:30, cue:'Full depth, groove the pattern.' },
           { id:'mp6', type:'drill', n:'Empty bar RDL', sets:1, work:'8 reps', rest:30, cue:'Feel the hamstring stretch.' },
-          { id:'mp7', type:'drill', n:'Ramp-up set 1 (50%)', sets:1, work:'5 reps', rest:30, cue:'Building up.' },
-          { id:'mp8', type:'drill', n:'Ramp-up set 2 (75%)', sets:1, work:'3 reps', rest:45, cue:'Nearly there.' }
+          { id:'mp7', type:'drill', n:'Ramp set (50% working)', sets:1, work:'5 reps', rest:45, cue:'Building intent.' },
+          { id:'mp8', type:'drill', n:'Ramp set (75% working)', sets:1, work:'3 reps', rest:60, cue:'Prime the nervous system.' }
         ]}
       ]
     },
     {
-      id:'m-plyo', name:'PLYOS', purpose:'Explosive power while fresh', tone:'power', mins:15, tag:'BEFORE LIFTS',
-      rest:60, note:'Do these AFTER warm-up but BEFORE main lifts. Maximum intent on every rep.',
+      id:'m-plyo', name:'PLYOS', purpose:'Explosive power while the nervous system is fresh', tone:'power', mins:12,
+      tag:'BEFORE LIFTS', rest:60,
+      note:'Matt Stigler: High stim plyos first. Build volume by increasing time (10 min \u2192 14 min over weeks). Every rep = max intent.',
       groups:[
-        { label:'Plyometrics', ex:[
-          { id:'mpl1', type:'drill', n:'Box jumps (50-60cm)', sets:3, work:'5 reps', rest:60, cue:'Explode up, land soft. Step down, don\'t jump down.' },
-          { id:'mpl2', type:'drill', n:'Broad jumps', sets:3, work:'5 reps', rest:60, cue:'Swing arms, explode forward, stick the landing.' },
-          { id:'mpl3', type:'drill', n:'Single-leg bounds', sets:3, work:'5 each leg', rest:45, cue:'Drive knee up, cover ground, land on same leg.' }
-        ]}
-      ]
-    },
-    {
-      id:'m-strength', name:'STRENGTH', purpose:'The hardest work of the week', tone:'work', mins:40,
-      tag:'MANDATORY', rest:150, note:'Progressive overload. When you hit all sets at top reps with clean form, increase weight next session.',
-      groups:[
-        { label:'Main lifts', ex:[
-          { id:'ms1', type:'lift', n:'Back squat', sets:4, reps:8, load:'50kg', rest:180, cue:'Feet shoulder width, break at hips first, hit parallel minimum. Brace core hard.' },
-          { id:'ms2', type:'lift', n:'Romanian deadlift', sets:4, reps:8, load:'45kg', rest:180, cue:'Slight knee bend, bar slides down thighs. FLAT BACK.' },
-          { id:'ms3', type:'lift', n:'Barbell bench press', sets:3, reps:8, load:'45kg', rest:120, cue:'Retract shoulder blades, bar touches mid-chest, drive up explosively.' },
-          { id:'ms4', type:'lift', n:'Barbell row', sets:3, reps:10, load:'40kg', rest:90, cue:'Hinge 45\u00B0, pull to lower chest, no momentum.' }
+        { label:'Plyometrics', note:'Stigler \u00B7 High Stim', ex:[
+          { id:'mpl1', type:'drill', n:'Box jumps (50-60cm)', sets:3, work:'5 reps', rest:60, cue:'Explode up, land soft on balls of feet. Step down.' },
+          { id:'mpl2', type:'drill', n:'Broad jumps', sets:3, work:'5 reps', rest:60, cue:'Swing arms, explode forward, STICK the landing.' },
+          { id:'mpl3', type:'drill', n:'Weighted lateral bounds', sets:3, work:'5 each side', rest:60, cue:'Deep ROM. Absorb force, then redirect. (Stigler: stiff players = deep range)' },
+          { id:'mpl4', type:'drill', n:'Single-leg bounds', sets:3, work:'5 each leg', rest:45, cue:'Drive knee, cover ground, land same leg.' }
         ]},
-        { label:'Accessories', ex:[
-          { id:'ms5', type:'lift', n:'Pull-ups', sets:3, reps:8, load:'BW', rest:90, cue:'Full dead hang to chin over bar. Use band if needed.' },
-          { id:'ms6', type:'lift', n:'DB shoulder press', sets:3, reps:10, load:'14kg ea', rest:90, cue:'Full lockout overhead. Control the descent.' },
-          { id:'ms7', type:'drill', n:'Face pulls (band)', sets:3, work:'15 reps', rest:60, cue:'Pull to face, external rotate at end. Shoulder health.' }
+        { label:'Sprint projections', note:'Stigler \u00B7 acceleration mechanics', ex:[
+          { id:'mpl5', type:'sprint', n:'Half-kneeling start', reps:3, dist:5, rest:45, cue:'Delay knee extension. Glutes drive horizontal force. Low shin angle.' },
+          { id:'mpl6', type:'sprint', n:'Split stance start', reps:3, dist:10, rest:60, cue:'Positive shin angle. Punch the ground BEHIND you.' }
         ]}
       ]
     },
     {
-      id:'m-core', name:'CORE', purpose:'Stiffness and anti-rotation', tone:'gold', mins:10, rest:30,
+      id:'m-strength', name:'STRENGTH', purpose:'Peak + back-off method \u2014 lift heavy every session', tone:'work', mins:35,
+      tag:'MANDATORY', rest:150,
+      note:'Stigler peak + back-off: 1 peak set near failure, then 2-3 back-off sets at 80-85%. Tempo: 3-1-1 (3 sec down, 1 pause, 1 up).',
       groups:[
-        { label:'Core stiffness', ex:[
-          { id:'mc1', type:'hold', n:'Front plank', sets:3, secs:45, rest:30, cue:'Squeeze glutes, no sagging. Add 10kg plate if easy.' },
-          { id:'mc2', type:'drill', n:'Pallof press', sets:3, work:'10 each side', rest:30, cue:'Press out, hold 2 sec, resist rotation.' },
-          { id:'mc3', type:'drill', n:'Dead bugs', sets:3, work:'8 each side', rest:30, cue:'Lower back GLUED to floor. Slow.' }
+        { label:'Main lifts', note:'Peak + Back-off', ex:[
+          { id:'ms1', type:'lift', n:'Back squat \u2014 PEAK', sets:1, reps:5, load:'55kg', rest:180, cue:'1 set, near failure. Full depth. Brace core hard.' },
+          { id:'ms2', type:'lift', n:'Back squat \u2014 back-off', sets:3, reps:8, load:'45kg', rest:120, cue:'80-85% of peak. Tempo 3-1-1. Quality reps.' },
+          { id:'ms3', type:'lift', n:'RDL \u2014 PEAK', sets:1, reps:5, load:'50kg', rest:180, cue:'1 set, near failure. Bar slides down thighs. FLAT BACK.' },
+          { id:'ms4', type:'lift', n:'RDL \u2014 back-off', sets:3, reps:8, load:'40kg', rest:120, cue:'Feel the hamstring stretch. Squeeze glutes to stand.' }
+        ]},
+        { label:'Man City neural drive', note:'Nico Gonzalez style', ex:[
+          { id:'ms5', type:'lift', n:'Horizontal acceleration push (sled/band)', sets:3, reps:6, load:'Light', rest:90, cue:'Speed of action, positive shin angle. Horizontal force production.' },
+          { id:'ms6', type:'drill', n:'Ankle stiffness pogos', sets:3, work:'10 reps', rest:60, cue:'Heel slightly lifted. Activate Achilles elastic properties. Quick ground contact.' },
+          { id:'ms7', type:'lift', n:'Single-leg vertical jump', sets:3, reps:5, load:'BW', rest:60, cue:'Vertically-oriented. Heading/takeoff power. Soft landing.' }
         ]}
       ]
     },
     {
-      id:'m-restore', name:'RESTORE', purpose:'Cool down and fascia work', tone:'cool', mins:15,
+      id:'m-core', name:'CORE', purpose:'Stiffness \u2014 resist rotation, brace under load', tone:'gold', mins:10, rest:30,
+      note:'Stigler: Core stiffness = bilateral stances + heavy/slow loads OR reactive loads.',
       groups:[
+        { label:'Core stiffness', note:'Stigler method', ex:[
+          { id:'mc1', type:'lift', n:'Heavy Turkish get-up', sets:3, reps:1, load:'12kg', rest:60, cue:'1 per side. Increase weight each set until form breaks. Full control.' },
+          { id:'mc2', type:'drill', n:'Pallof press', sets:3, work:'10 each side', rest:30, cue:'Press out, hold 2 sec. Resist rotation. BRACE.' },
+          { id:'mc3', type:'drill', n:'Dead bugs', sets:3, work:'8 each side', rest:30, cue:'Lower back GLUED to floor. Slow and controlled.' }
+        ]}
+      ]
+    },
+    {
+      id:'m-restore', name:'RESTORE', purpose:'Nordics and fascia \u2014 non-negotiable', tone:'cool', mins:15,
+      groups:[
+        { label:'Nordics', note:'Phase 1 \u00B7 banded assisted \u00B7 21-week progression', ex:[
+          { id:'mr1', type:'drill', n:'Banded nordic curls', sets:4, work:'5-8 reps', rest:90, cue:'3-4 sec eccentric. Band assists concentric. Reduce band over weeks.' }
+        ]},
         { label:'Fascia', note:'Coach Chong Xie \u00B7 Mon / Wed / Fri', locked:true, ex:[
-          { id:'mr1', type:'hold', n:'HFT marble swing', sets:3, secs:30, side:true, rest:15, cue:'Each foot.' },
-          { id:'mr2', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:30, cue:'Heel-away, IABH, back chain.' }
-        ]},
-        { label:'Nordics', note:'Phase 1 \u00B7 banded assisted', ex:[
-          { id:'mr3', type:'drill', n:'Banded nordic curls', sets:4, work:'5-8 reps', rest:90, cue:'3-4 sec tempo down. Band assists back up.' }
+          { id:'mr2', type:'hold', n:'HFT marble swing', sets:3, secs:30, side:true, rest:15, cue:'Hyperarch fascia training. Elastic recoil in foot arch.' },
+          { id:'mr3', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:0, cue:'Heel-away, IABH, back chain loading.' }
         ]},
         { label:'Cool-down', ex:[
           { id:'mr4', type:'check', n:'Light jog', m:3 },
-          { id:'mr5', type:'check', n:'Quad stretch (standing)', m:1 },
-          { id:'mr6', type:'check', n:'Hamstring stretch', m:1 },
-          { id:'mr7', type:'check', n:'Hip flexor stretch', m:1 },
-          { id:'mr8', type:'check', n:'Lat stretch (bar hang)', m:1 }
+          { id:'mr5', type:'check', n:'Quad stretch + hamstring stretch', m:2 },
+          { id:'mr6', type:'check', n:'Hip flexor stretch + lat hang', m:2 }
         ]}
       ]
     }
   ]
 },
 
-/* ─── TUESDAY: Activation Only ───────────────────────────────────── */
+/* ─── TUESDAY: Activation Only (pre-team training) ───────────────── */
 tuesday: {
-  name: 'Activation Only', day: 'TUESDAY', time: '08:30', sections: [
+  name: 'Activation Only', day: 'TUESDAY', time: '08:30',
+  sections: [
     {
-      id:'t-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:10,
+      id:'t-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:8,
       groups:[
         { label:'Groundwork', note:'GOATA \u00B7 every session, barefoot', ex:[
           { id:'tp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH.' },
-          { id:'tp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:20, cue:'Head stays up.' },
-          { id:'tp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:20, cue:'Heels open.' },
-          { id:'tp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 curls', rest:10, cue:'Over edge of step.' }
+          { id:'tp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:15, cue:'Head stays up.' },
+          { id:'tp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:15, cue:'Heels open.' },
+          { id:'tp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 sec', rest:10, cue:'Daily. Over edge of step.' }
         ]}
       ]
     },
     {
-      id:'t-act', name:'ACTIVATE', purpose:'Light work only \u2014 save energy for team training', tone:'work', mins:20,
-      rest:30, note:'25-30 min max. This is NOT a gym session. Just wake the muscles up.',
+      id:'t-act', name:'ACTIVATE', purpose:'Light work only \u2014 save energy for team training tonight', tone:'work', mins:22,
+      rest:30, note:'25-30 min max. NOT a gym session. Wake the muscles, activate the glutes, prime the nervous system for tonight.',
       groups:[
-        { label:'Activation', ex:[
-          { id:'ta1', type:'drill', n:'Glute bridges', sets:3, work:'12 reps', rest:30, cue:'Squeeze glutes at top, hold 2 sec.' },
-          { id:'ta2', type:'drill', n:'Banded lateral walks', sets:3, work:'10 each way', rest:30, cue:'Stay low, knees don\'t cave.' },
-          { id:'ta3', type:'drill', n:'Single-leg RDL', sets:3, work:'8 each', rest:30, cue:'Balance, hinge forward, touch ground.' },
-          { id:'ta4', type:'drill', n:'Push-ups', sets:3, work:'10-15 reps', rest:30, cue:'Full range, chest to ground.' },
-          { id:'ta5', type:'drill', n:'Band pull-aparts', sets:3, work:'15 reps', rest:30, cue:'Arms straight, squeeze shoulder blades.' },
-          { id:'ta6', type:'drill', n:'Bird dogs', sets:3, work:'8 each side', rest:30, cue:'Opposite arm/leg, hold 2 sec, no rotation.' },
+        { label:'Glute + hip activation', ex:[
+          { id:'ta1', type:'drill', n:'Glute bridges', sets:3, work:'12 reps', rest:30, cue:'Squeeze at top, hold 2 sec. Progress to single-leg.' },
+          { id:'ta2', type:'drill', n:'Banded lateral walks', sets:3, work:'10 each way', rest:30, cue:'Stay low, knees don\'t cave. Mini band above knees.' },
+          { id:'ta3', type:'drill', n:'Single-leg RDL', sets:3, work:'8 each', rest:30, cue:'BW \u2192 8kg DB. Balance, hinge, touch ground, stand tall.' }
+        ]},
+        { label:'Upper body + core', ex:[
+          { id:'ta4', type:'drill', n:'Push-ups', sets:3, work:'10-15 reps', rest:30, cue:'Full range, chest to ground, lock out.' },
+          { id:'ta5', type:'drill', n:'Band pull-aparts', sets:3, work:'15 reps', rest:30, cue:'Arms straight, pull to chest, squeeze shoulder blades.' },
+          { id:'ta6', type:'drill', n:'Bird dogs', sets:3, work:'8 each side', rest:30, cue:'Opposite arm/leg extend, hold 2 sec, no hip rotation.' },
           { id:'ta7', type:'drill', n:'Dead bugs', sets:2, work:'8 each side', rest:30, cue:'Lower back pinned to floor.' }
         ]}
       ]
@@ -292,174 +308,210 @@ tuesday: {
   ]
 },
 
-/* ─── WEDNESDAY: Power & Explosive ───────────────────────────────── */
+/* ─── WEDNESDAY: Upper Body + Power + Core Speed ─────────────────── */
 wednesday: {
-  name: 'Power & Explosive', day: 'WEDNESDAY', time: '09:15', sections: [
+  name: 'Upper Power + Core Speed', day: 'WEDNESDAY', time: '09:15',
+  sections: [
     {
-      id:'w-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:15,
+      id:'w-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:10,
       groups:[
         { label:'Groundwork', note:'GOATA \u00B7 every session, barefoot', ex:[
           { id:'wp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH.' },
-          { id:'wp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:20, cue:'Head stays up.' },
-          { id:'wp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:20, cue:'Heels open.' },
-          { id:'wp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 curls', rest:30, cue:'Slow. Feel the arch.' }
+          { id:'wp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:15, cue:'Head stays up.' },
+          { id:'wp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:15, cue:'Heels open.' },
+          { id:'wp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 sec', rest:10, cue:'Slow. Feel the arch.' }
         ]},
         { label:'Warm-up', ex:[
-          { id:'wp5', type:'check', n:'Light jog or row', m:3 },
-          { id:'wp6', type:'drill', n:'Goblet squat ramp', sets:2, work:'8 reps', rest:30, cue:'Light, groove the hinge.' }
+          { id:'wp5', type:'check', n:'Light row or jog', m:3 },
+          { id:'wp6', type:'drill', n:'Band dislocates + pull-aparts', sets:2, work:'10 each', rest:20, cue:'Shoulder mobility. Controlled.' }
         ]}
       ]
     },
     {
-      id:'w-power', name:'POWER', purpose:'Move weight FAST \u2014 explosive intent', tone:'power', mins:40,
-      tag:'MAX SPEED', rest:150, note:'Tempo: controlled down, EXPLOSIVE up. This is a power day, not a grind day.',
+      id:'w-upper', name:'UPPER', purpose:'Athletic upper body \u2014 not bodybuilding', tone:'work', mins:30,
+      tag:'PEAK + BACK-OFF', rest:120,
+      note:'Stigler: 1-2 heavy compounds, then sports-specific accessories. Shift from bodybuilding to athletic movement.',
       groups:[
-        { label:'Main lifts', ex:[
-          { id:'ws1', type:'lift', n:'Trap bar deadlift', sets:4, reps:6, load:'60kg', rest:180, cue:'Grip center, sit hips back, drive through floor FAST.' },
-          { id:'ws2', type:'lift', n:'Push press', sets:3, reps:6, load:'30kg', rest:120, cue:'Quarter dip with legs, drive bar overhead. Full lockout.' },
-          { id:'ws3', type:'lift', n:'Bulgarian split squat', sets:3, reps:8, load:'12kg ea', rest:90, cue:'Rear foot on bench, go deep. BALANCE.' },
-          { id:'ws4', type:'lift', n:'Single-arm DB row', sets:3, reps:10, load:'18kg', rest:60, cue:'Row to hip, squeeze lat, no twisting.' }
+        { label:'Compound base', note:'Peak + Back-off', ex:[
+          { id:'ws1', type:'lift', n:'Bench press \u2014 PEAK', sets:1, reps:5, load:'50kg', rest:180, cue:'1 set near failure. Retract shoulder blades, drive up explosive.' },
+          { id:'ws2', type:'lift', n:'Bench press \u2014 back-off', sets:2, reps:8, load:'40kg', rest:120, cue:'80-85% of peak. Controlled eccentric.' },
+          { id:'ws3', type:'lift', n:'Barbell row \u2014 PEAK', sets:1, reps:5, load:'45kg', rest:150, cue:'Hinge 45\u00B0, pull to lower chest. No momentum.' },
+          { id:'ws4', type:'lift', n:'Barbell row \u2014 back-off', sets:2, reps:10, load:'35kg', rest:90, cue:'Squeeze shoulder blades at top.' }
         ]},
-        { label:'Accessories', ex:[
-          { id:'ws5', type:'lift', n:'Incline DB press', sets:3, reps:10, load:'16kg ea', rest:90, cue:'30\u00B0 incline. Full stretch at bottom.' },
-          { id:'ws6', type:'lift', n:'Chin-ups (underhand)', sets:3, reps:8, load:'BW', rest:90, cue:'Full range. Add weight when 8+ clean.' },
-          { id:'ws7', type:'lift', n:'Lateral raises', sets:3, reps:15, load:'6kg ea', rest:60, cue:'Slight lean forward, shoulder height, light weight.' }
-        ]}
-      ]
-    },
-    {
-      id:'w-core', name:'CORE', purpose:'Speed and rotation', tone:'gold', mins:10, rest:45,
-      groups:[
-        { label:'Core speed', ex:[
-          { id:'wc1', type:'drill', n:'Med ball slams', sets:3, work:'8 reps', rest:45, cue:'Overhead, slam as hard as possible. Full hip hinge.' },
-          { id:'wc2', type:'drill', n:'Med ball rotational throws', sets:3, work:'8 each side', rest:45, cue:'Stand sideways to wall, rotate and throw. FAST.' },
-          { id:'wc3', type:'drill', n:'Russian twists', sets:3, work:'15 each side', rest:30, cue:'5-8kg plate. Feet off ground, touch plate to ground.' }
-        ]}
-      ]
-    },
-    {
-      id:'w-restore', name:'RESTORE', purpose:'Fascia and nordics', tone:'cool', mins:15,
-      groups:[
-        { label:'Fascia', note:'Coach Chong Xie \u00B7 Mon / Wed / Fri', locked:true, ex:[
-          { id:'wr1', type:'hold', n:'HFT marble swing', sets:3, secs:30, side:true, rest:15, cue:'Each foot.' },
-          { id:'wr2', type:'drill', n:'Lateral pelvic tilts', sets:3, work:'30s each position', rest:0, cue:'Side-lying \u2192 half-kneeling \u2192 split squat.' },
-          { id:'wr3', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:30, cue:'Heel-away, IABH, back chain.' }
+        { label:'Sports-specific', note:'Stigler \u00B7 footballer upper body', ex:[
+          { id:'ws5', type:'lift', n:'Alternating incline bench', sets:3, reps:8, load:'14kg ea', rest:90, cue:'30\u00B0 incline, alternate arms. Loads rib cage, trains rotation.' },
+          { id:'ws6', type:'lift', n:'Rotation rows', sets:3, reps:8, load:'16kg', rest:60, cue:'Row + rotate torso. Train deceleration position. Anti-rotation under load.' },
+          { id:'ws7', type:'drill', n:'Push-up drop catches', sets:3, work:'5 reps', rest:60, cue:'IMPULSE TRAINING. Drop from height, catch yourself instantly. Zero to max tension.' }
         ]},
+        { label:'Speed transition', note:'Stigler \u00B7 overload transition speed', ex:[
+          { id:'ws8', type:'lift', n:'Push press', sets:3, reps:6, load:'30kg', rest:90, cue:'Quarter dip, EXPLODE overhead. Lighten weight each week to overload speed.' },
+          { id:'ws9', type:'lift', n:'Chin-ups (underhand)', sets:3, reps:8, load:'BW', rest:90, cue:'Full dead hang to chin over. Add weight at 3\u00D78 clean.' },
+          { id:'ws10', type:'drill', n:'Face pulls (band)', sets:3, work:'15 reps', rest:45, cue:'External rotate at end. Shoulder health.' }
+        ]}
+      ]
+    },
+    {
+      id:'w-power', name:'POWER', purpose:'Lower body power + single-leg', tone:'power', mins:15, rest:90,
+      note:'Trap bar = power movement. Tempo: 1-0-X (controlled down, EXPLOSIVE up). Move the bar FAST.',
+      groups:[
+        { label:'Power lifts', ex:[
+          { id:'wpl1', type:'lift', n:'Trap bar deadlift', sets:4, reps:5, load:'60kg', rest:150, cue:'Grip center, sit hips back, drive through floor FAST. EXPLOSIVE.' },
+          { id:'wpl2', type:'lift', n:'Bulgarian split squat', sets:3, reps:8, load:'12kg ea', rest:90, cue:'Rear foot on bench. Deep. Knee tracks toe. BALANCE.' }
+        ]}
+      ]
+    },
+    {
+      id:'w-core', name:'CORE', purpose:'Speed and rotation \u2014 transfer power through the trunk', tone:'gold', mins:10, rest:45,
+      note:'Stigler: Speed core = medball throws. Forward/down for acceleration, up for top-speed unweighting.',
+      groups:[
+        { label:'Core speed', note:'Stigler method', ex:[
+          { id:'wc1', type:'drill', n:'Fake rotation cross-body throw', sets:3, work:'5 each side', rest:30, cue:'Split stance. Fake rotation, fire through. 3 sets of 5.' },
+          { id:'wc2', type:'drill', n:'Med ball slams (split stance)', sets:3, work:'8 reps', rest:45, cue:'Split stance to translate to running mechanics. Full hip hinge, SLAM.' },
+          { id:'wc3', type:'drill', n:'Med ball rotational throws', sets:3, work:'8 each side', rest:45, cue:'Sideways to wall 2m. Rotate and throw FAST. Catch and repeat.' },
+          { id:'wc4', type:'drill', n:'Med ball scoop toss', sets:3, work:'5 reps', rest:45, cue:'Increase approach steps each week: standing \u2192 1-step \u2192 2-step.' }
+        ]}
+      ]
+    },
+    {
+      id:'w-restore', name:'RESTORE', purpose:'Nordics and fascia', tone:'cool', mins:15,
+      groups:[
         { label:'Nordics', note:'Phase 1 \u00B7 banded assisted', ex:[
-          { id:'wr4', type:'drill', n:'Banded nordic curls', sets:4, work:'5-8 reps', rest:90, cue:'3-4 sec tempo down. Band assists back up.' }
+          { id:'wr1', type:'drill', n:'Banded nordic curls', sets:4, work:'5-8 reps', rest:90, cue:'3-4 sec tempo. Protect those hamstrings.' }
+        ]},
+        { label:'Fascia', note:'Coach Chong Xie \u00B7 Mon / Wed / Fri', locked:true, ex:[
+          { id:'wr2', type:'hold', n:'HFT marble swing', sets:3, secs:30, side:true, rest:15, cue:'Each foot. Elastic recoil.' },
+          { id:'wr3', type:'drill', n:'Lateral pelvic tilts', sets:3, work:'30s each position', rest:0, cue:'Side-lying \u2192 half-kneeling \u2192 split squat. Both sides.' },
+          { id:'wr4', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:0, cue:'Heel-away, IABH, back chain.' }
         ]},
         { label:'Cool-down', ex:[
           { id:'wr5', type:'check', n:'Light jog', m:3 },
-          { id:'wr6', type:'check', n:'Quad + hamstring stretch', m:2 },
-          { id:'wr7', type:'check', n:'Hip flexor + chest stretch', m:2 }
+          { id:'wr6', type:'check', n:'Chest/shoulder doorway stretch', m:1 },
+          { id:'wr7', type:'check', n:'Hip flexor + quad stretch', m:2 }
         ]}
       ]
     }
   ]
 },
 
-/* ─── THURSDAY: Activation Only (same as Tuesday) ────────────────── */
+/* ─── THURSDAY: Activation Only (pre-team training) ──────────────── */
 thursday: {
-  name: 'Activation Only', day: 'THURSDAY', time: '08:30', sections: [
+  name: 'Activation Only', day: 'THURSDAY', time: '08:30',
+  sections: [
     {
-      id:'th-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:10,
+      id:'th-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:8,
       groups:[
         { label:'Groundwork', note:'GOATA \u00B7 every session, barefoot', ex:[
           { id:'thp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH.' },
-          { id:'thp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:20, cue:'Head stays up.' },
-          { id:'thp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:20, cue:'Heels open.' },
-          { id:'thp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 curls', rest:10, cue:'Over edge of step.' }
+          { id:'thp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:15, cue:'Head stays up.' },
+          { id:'thp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:15, cue:'Heels open.' },
+          { id:'thp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 sec', rest:10, cue:'Daily. Over edge of step.' }
         ]}
       ]
     },
     {
-      id:'th-act', name:'ACTIVATE', purpose:'Light work only \u2014 save energy for team training', tone:'work', mins:20,
-      rest:30, note:'25-30 min max. This is NOT a gym session. Just wake the muscles up.',
+      id:'th-act', name:'ACTIVATE', purpose:'Light work only \u2014 save energy for team training tonight', tone:'work', mins:22,
+      rest:30, note:'Mirror of Tuesday. NOT a gym session. Wake the muscles up.',
       groups:[
-        { label:'Activation', ex:[
-          { id:'tha1', type:'drill', n:'Glute bridges', sets:3, work:'12 reps', rest:30, cue:'Squeeze glutes at top, hold 2 sec.' },
+        { label:'Glute + hip activation', ex:[
+          { id:'tha1', type:'drill', n:'Glute bridges', sets:3, work:'12 reps', rest:30, cue:'Squeeze at top, hold 2 sec.' },
           { id:'tha2', type:'drill', n:'Banded lateral walks', sets:3, work:'10 each way', rest:30, cue:'Stay low, knees don\'t cave.' },
-          { id:'tha3', type:'drill', n:'Single-leg RDL', sets:3, work:'8 each', rest:30, cue:'Balance, hinge forward, touch ground.' },
+          { id:'tha3', type:'drill', n:'Single-leg RDL', sets:3, work:'8 each', rest:30, cue:'Balance, hinge, touch ground.' }
+        ]},
+        { label:'Upper body + core', ex:[
           { id:'tha4', type:'drill', n:'Push-ups', sets:3, work:'10-15 reps', rest:30, cue:'Full range, chest to ground.' },
-          { id:'tha5', type:'drill', n:'Band pull-aparts', sets:3, work:'15 reps', rest:30, cue:'Arms straight, squeeze shoulder blades.' },
-          { id:'tha6', type:'drill', n:'Bird dogs', sets:3, work:'8 each side', rest:30, cue:'Opposite arm/leg, hold 2 sec, no rotation.' },
-          { id:'tha7', type:'drill', n:'Dead bugs', sets:2, work:'8 each side', rest:30, cue:'Lower back pinned to floor.' }
+          { id:'tha5', type:'drill', n:'Band pull-aparts', sets:3, work:'15 reps', rest:30, cue:'Squeeze shoulder blades.' },
+          { id:'tha6', type:'drill', n:'Bird dogs', sets:3, work:'8 each side', rest:30, cue:'Hold 2 sec, no rotation.' },
+          { id:'tha7', type:'drill', n:'Dead bugs', sets:2, work:'8 each side', rest:30, cue:'Lower back pinned.' }
         ]}
       ]
     }
   ]
 },
 
-/* ─── FRIDAY: Speed & Acceleration ───────────────────────────────── */
+/* ─── FRIDAY: Speed & Acceleration + Agility + Deceleration ──────── */
 friday: {
-  name: 'Speed & Acceleration', day: 'FRIDAY', time: '09:00', sections: [
+  name: 'Speed & Acceleration', day: 'FRIDAY', time: '09:00',
+  sections: [
     {
       id:'f-prime', name:'PRIME', purpose:'Wake the feet, then the body', tone:'prime', mins:15,
       groups:[
         { label:'Groundwork', note:'GOATA \u00B7 every session, barefoot', ex:[
           { id:'fp1', type:'hold', n:'Ground hip stretch', sets:2, secs:50, side:true, rest:30, cue:'Keep IABH.' },
-          { id:'fp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:20, cue:'Head stays up.' },
-          { id:'fp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:20, cue:'Heels open.' },
-          { id:'fp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 curls', rest:30, cue:'Slow. Feel the arch.' }
+          { id:'fp2', type:'hold', n:'Child rocker', sets:3, secs:60, rest:15, cue:'Head stays up.' },
+          { id:'fp3', type:'hold', n:'Toe tuck rocker', sets:3, secs:60, rest:15, cue:'Heels open.' },
+          { id:'fp4', type:'drill', n:'Elevated toe curls', sets:3, work:'20 sec', rest:10, cue:'Feel the arch.' }
         ]},
-        { label:'Warm-up', ex:[
+        { label:'Sprint mechanics warm-up', note:'Stigler/Athletic Performance', ex:[
           { id:'fp5', type:'check', n:'Easy jog', m:2 },
-          { id:'fp6', type:'check', n:'Leg swings, both planes', m:1 },
-          { id:'fp7', type:'check', n:'A-skips + B-skips', m:1 },
-          { id:'fp8', type:'check', n:'Build-ups \u2014 60, 70, 80%', m:1 }
+          { id:'fp6', type:'drill', n:'A-skips', sets:2, work:'20m', rest:0, cue:'Drive knee up, pop off ground. Posture tall.' },
+          { id:'fp7', type:'drill', n:'B-skips', sets:2, work:'20m', rest:0, cue:'Knee up \u2192 extend and claw ground backward.' },
+          { id:'fp8', type:'drill', n:'Wall drives', sets:2, work:'8 each leg', rest:15, cue:'Hands on wall 45\u00B0, drive knee up, switch. POWER.' },
+          { id:'fp9', type:'drill', n:'Falling starts', sets:3, work:'15m', rest:30, cue:'Lean until you fall, EXPLODE into sprint.' }
         ]}
       ]
     },
     {
-      id:'f-speed', name:'SPEED', purpose:'The point of the day', tone:'work', mins:36, tag:'MAX INTENT',
-      rest:300, note:'Full recovery between every rep. When the times fall off, the section is over.',
+      id:'f-speed', name:'SPEED', purpose:'The point of the day \u2014 first 10m is everything for soccer', tone:'work', mins:30, tag:'MAX INTENT',
+      rest:300, note:'Full recovery between EVERY rep. When times fall off, section is over. Quality > quantity.',
       groups:[
-        { label:'Acceleration', ex:[
-          { id:'fs1', type:'sprint', n:'Standing start', reps:3, dist:10, rest:120, cue:'Shin angle. Punch the ground.' },
-          { id:'fs2', type:'sprint', n:'3-point start', reps:3, dist:15, rest:150, cue:'Front-side mechanics. Don\'t pop up.' },
-          { id:'fs3', type:'sprint', n:'Reaction sprint', reps:3, dist:10, rest:120, cue:'React to a call, not a count.' }
+        { label:'Acceleration', note:'First step = most important for soccer', ex:[
+          { id:'fs1', type:'sprint', n:'Standing start', reps:5, dist:10, rest:60, cue:'Low start, 45\u00B0 body angle, short choppy steps. First 3 steps are EVERYTHING.' },
+          { id:'fs2', type:'sprint', n:'3-point start', reps:4, dist:15, rest:60, cue:'Hand on ground, explode out. Gradually rise to upright by 10m.' },
+          { id:'fs3', type:'sprint', n:'Reaction sprint (partner clap/call)', reps:4, dist:10, rest:60, cue:'Wait for signal, EXPLODE. Train reaction + first step.' }
         ]},
-        { label:'Max velocity', note:'Fastest thing you\'ll do all week', ex:[
-          { id:'fs4', type:'sprint', n:'Flying 20s', reps:3, dist:20, rest:180, cue:'10m build, 20m max. Tall, relaxed.' }
+        { label:'Max velocity', note:'Front-side separation \u00B7 foot strikes under hips', ex:[
+          { id:'fs4', type:'sprint', n:'Flying 20s (10m build + 20m max)', reps:4, dist:20, rest:90, cue:'Build to 80% in 10m, hit MAX for 20m. Upright, knees high, relax face/hands.' },
+          { id:'fs5', type:'sprint', n:'Tempo runs', reps:3, dist:100, rest:60, cue:'70-75%. Aerobic base for speed endurance. Smooth and relaxed.' }
         ]}
       ]
     },
     {
-      id:'f-agility', name:'AGILITY', purpose:'Cut, and hold the tank', tone:'work', mins:20, rest:180,
+      id:'f-agility', name:'AGILITY', purpose:'Cut, decelerate, redirect \u2014 game speed', tone:'work', mins:20, rest:90,
+      note:'Deceleration: foot strikes OUT IN FRONT to create negative shin angle. Absorb through heel. Hips level.',
       groups:[
         { label:'Change of direction', ex:[
-          { id:'fa1', type:'sprint', n:'5-10-5 shuttle', reps:3, dist:20, rest:120, cue:'Plant the outside foot. Decelerate first.' },
-          { id:'fa2', type:'sprint', n:'T-drill', reps:3, dist:40, rest:120, cue:'Shuffle, don\'t cross.' },
-          { id:'fa3', type:'sprint', n:'Ball retrieval sprint', reps:3, dist:15, rest:90, cue:'Game speed. Head up at the end.' }
+          { id:'fa1', type:'sprint', n:'5-10-5 shuttle', reps:4, dist:20, rest:90, cue:'LOW on the turns. Plant outside foot. Decelerate FIRST.' },
+          { id:'fa2', type:'sprint', n:'T-drill', reps:3, dist:40, rest:90, cue:'Sprint 10m, shuffle R 5m, shuffle L 10m, shuffle R 5m, backpedal 10m.' },
+          { id:'fa3', type:'sprint', n:'Reaction agility square', reps:4, dist:6, rest:30, cue:'6yd square. Partner calls cone. Sprint there and back. 30s work.' },
+          { id:'fa4', type:'sprint', n:'Ball retrieval sprint', reps:4, dist:15, rest:60, cue:'Sprint to ball, control first touch, dribble back. Game-realistic.' }
         ]},
-        { label:'Tempo', ex:[
-          { id:'fa4', type:'sprint', n:'Tempo run', reps:3, dist:100, rest:60, cue:'70%. Aerobic, not a sprint.' }
+        { label:'Deceleration', note:'Athletic Performance \u00B7 injury prevention', ex:[
+          { id:'fa5', type:'sprint', n:'20m sprint + sharp stop', reps:4, dist:20, rest:60, cue:'Sprint, then STOP in 2 steps. Foot in front, negative shin angle. Hips level.' },
+          { id:'fa6', type:'drill', n:'Lateral decel bounds', sets:3, work:'5 each side', rest:45, cue:'Bound laterally, stick the landing. Absorb. No knee cave.' }
         ]}
       ]
     },
     {
-      id:'f-strength', name:'STRENGTH', purpose:'Tell the tissue the sprints were real', tone:'gold', mins:20,
-      tag:'MANDATORY', rest:90, note:'Called optional on the sheet. It is not optional here.',
+      id:'f-strength', name:'STRENGTH', purpose:'Tell the tissue the sprints were real', tone:'gold', mins:15,
+      tag:'MANDATORY', rest:60,
+      note:'Light strength priming. NOT optional. Goblet squat + push pattern + pull pattern + stretch.',
       groups:[
-        { label:'Ramp', ex:[
-          { id:'fg1', type:'check', n:'Bike or row, easy', m:3 },
-          { id:'fg2', type:'drill', n:'Goblet squat ramp', sets:2, work:'8 reps', rest:45, cue:'Empty, then 8kg.' },
-          { id:'fg3', type:'drill', n:'Band pull-aparts', sets:2, work:'15 reps', rest:30, cue:'Slow return.' }
-        ]},
         { label:'Priming', ex:[
-          { id:'fg4', type:'lift', n:'Goblet squat', sets:2, reps:10, load:'16 kg KB', rest:60, cue:'Elbows inside the knees.' },
-          { id:'fg5', type:'lift', n:'Push-ups', sets:2, reps:12, load:'BW', rest:60, cue:'Ribs down.' },
-          { id:'fg6', type:'lift', n:'TRX / band rows', sets:2, reps:12, load:'BW', rest:60, cue:'Squeeze, don\'t yank.' },
-          { id:'fg7', type:'hold', n:'Hip flexor stretch', sets:2, secs:30, side:true, rest:30, cue:'Glute on. Ribs down.' }
+          { id:'fg1', type:'check', n:'Bike or row, easy', m:3 },
+          { id:'fg2', type:'lift', n:'Goblet squat', sets:2, reps:10, load:'16kg KB', rest:60, cue:'Elbows inside knees. Mobility not max strength.' },
+          { id:'fg3', type:'lift', n:'Push-ups', sets:2, reps:12, load:'BW', rest:60, cue:'Ribs down. Controlled.' },
+          { id:'fg4', type:'lift', n:'TRX / band rows', sets:2, reps:12, load:'BW', rest:60, cue:'Squeeze, don\'t yank.' },
+          { id:'fg5', type:'hold', n:'Hip flexor stretch', sets:2, secs:30, side:true, rest:30, cue:'Glute on. Ribs down. Open up for game tomorrow.' }
         ]}
       ]
     },
     {
-      id:'f-restore', name:'RESTORE', purpose:'The part you\'ll skip', tone:'cool', mins:17,
+      id:'f-core', name:'CORE', purpose:'Fluidity \u2014 rotation and lateral movement', tone:'gold', mins:8, rest:30,
+      note:'Stigler: Core fluidity = rotation, lateral flexion. Supported \u2192 unsupported progressions.',
+      groups:[
+        { label:'Core fluidity', note:'Stigler method', ex:[
+          { id:'fc1', type:'drill', n:'Cross-leg lateral flexion', sets:3, work:'10, 8, 6 reps', rest:30, cue:'Increase weight each set. Side-bend with control.' },
+          { id:'fc2', type:'drill', n:'Supine rotation (feet up)', sets:3, work:'8 each side', rest:30, cue:'Knees together, rotate to each side. Control the return.' },
+          { id:'fc3', type:'drill', n:'Split stance weighted rotation', sets:3, work:'8 each side', rest:30, cue:'Unsupported rotation. Resist snapping back.' }
+        ]}
+      ]
+    },
+    {
+      id:'f-restore', name:'RESTORE', purpose:'The part you\'ll skip', tone:'cool', mins:12,
       groups:[
         { label:'Fascia', note:'Coach Chong Xie \u00B7 Mon / Wed / Fri', locked:true, ex:[
           { id:'fr1', type:'hold', n:'HFT marble swing', sets:3, secs:30, side:true, rest:15, cue:'Each foot.' },
-          { id:'fr2', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:30, cue:'Heel-away, IABH, back chain.' }
+          { id:'fr2', type:'drill', n:'Gait cycle drills', sets:1, work:'5 min', rest:0, cue:'Heel-away, IABH, back chain.' }
         ]},
         { label:'Cool-down', ex:[
           { id:'fr3', type:'check', n:'Walk, nasal breathing', m:3 },
@@ -478,10 +530,9 @@ friday: {
 
 var DAYS = ['monday','tuesday','wednesday','thursday','friday'];
 var DAY_LABELS = {monday:'MON',tuesday:'TUE',wednesday:'WED',thursday:'THU',friday:'FRI'};
-var DAY_NOTES = {monday:'Heavy',tuesday:'Activation',wednesday:'Power',thursday:'Activation',friday:'Speed'};
+var DAY_NOTES = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper Power',thursday:'Activation',friday:'Speed'};
 
-// Auto-select today's day or default to friday
-var today = new Date().getDay(); // 0=sun,1=mon...
+var today = new Date().getDay();
 var currentDay = today>=1&&today<=5 ? DAYS[today-1] : 'friday';
 
 var log = {};
@@ -599,9 +650,9 @@ function render(){
   html += '<div class="s-coach">';
   html += '<svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(74,222,128,.05)" stroke="rgba(74,222,128,.24)"/><path d="M24 20 V44 M40 20 L26 32 L41 44" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var coachMsg = {
-    monday:'Progressive overload. Hit all reps at top range, then increase weight.',
+    monday:'Sprint on lower body day = neurological crossover. Peak set then back-offs. Earn the weight.',
     tuesday:'Save your energy for team training tonight. Light and quick.',
-    wednesday:'Power day. Move the bar FAST. Controlled down, explosive up.',
+    wednesday:'Athletic upper body. Impulse training, rotation rows, speed transition. Not bodybuilding.',
     thursday:'Save your energy for team training tonight. Light and quick.',
     friday:'Full recovery between every rep. When your times fall off, you\'re done.'
   };
@@ -692,12 +743,10 @@ function render(){
   // READOUT
   html += '<section class="s-read">';
   html += '<div class="fig"><b>'+totalDone+'<small>/'+totalReps+'</small></b><span>REPS</span></div>';
-  // Show metres for speed day, tonnage hint for lift days
   if(sprints.length>0){
-    html += '<div class="fig"><b class="teal">'+metres+'<small>m</small></b><span>\u03A3 d \u00B7 reps</span></div>';
-    html += '<div class="fig"><b class="green">'+(vMax?vMax.toFixed(2):'\u2014')+'</b><span>v = d / t \u00B7 PEAK</span></div>';
+    html += '<div class="fig"><b class="teal">'+metres+'<small>m</small></b><span>\u03A3 METRES</span></div>';
+    html += '<div class="fig"><b class="green">'+(vMax?vMax.toFixed(2):'\u2014')+'<small>m/s</small></b><span>PEAK v</span></div>';
   } else {
-    // For lift days show sets completed
     var setsLogged = lifts.reduce(function(a,e){return a+getDone(e);},0);
     var setsTotal = lifts.reduce(function(a,e){return a+getReps(e);},0);
     html += '<div class="fig"><b class="teal">'+setsLogged+'<small>/'+setsTotal+'</small></b><span>LIFT SETS</span></div>';
@@ -721,15 +770,12 @@ function render(){
 /* ═══ EVENTS ═════════════════════════════════════════════════════ */
 
 function bindEvents(){
-  // Day selector
   document.querySelectorAll('[data-day]').forEach(function(btn){
     btn.onclick = function(){ switchDay(this.getAttribute('data-day')); };
   });
-  // Timeline segments
   document.querySelectorAll('[data-sec]').forEach(function(btn){
     btn.onclick = function(){ openSec = this.getAttribute('data-sec'); render(); };
   });
-  // Rep dots
   document.querySelectorAll('[data-tick]').forEach(function(btn){
     btn.onclick = function(){
       var id = this.getAttribute('data-tick');
@@ -741,23 +787,19 @@ function bindEvents(){
       tick(e, (n+1===d)? n : n+1);
     };
   });
-  // Time inputs
   document.querySelectorAll('[data-time]').forEach(function(inp){
     inp.oninput = function(){ times[this.getAttribute('data-time')] = this.value; };
     inp.onblur = function(){ render(); };
   });
-  // RPE
   document.querySelectorAll('[data-rpe]').forEach(function(btn){
     btn.onclick = function(){ rpe = parseInt(this.getAttribute('data-rpe'),10); render(); };
   });
-  // Rest buttons
   var addBtn = document.querySelector('[data-rest-add]');
   if(addBtn) addBtn.onclick = function(){
     if(restState){ restState.endsAt += 30000; restState.total += 30; }
   };
   var skipBtn = document.querySelector('[data-rest-skip]');
   if(skipBtn) skipBtn.onclick = function(){ restState=null; clearInterval(restTimer); render(); };
-  // Finish
   var fin = document.querySelector('[data-finish]');
   if(fin) fin.onclick = function(){
     if(!rpe) return;

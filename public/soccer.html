@@ -8,865 +8,269 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#050D0A;--line:rgba(74,222,128,.10);
-  --green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;
-  --ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;
-  --mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;
-  --w:1000px;
-}
+:root{--bg:#050D0A;--line:rgba(74,222,128,.10);--green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;--violet:#9C8ADE;
+  --ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;--w:1060px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{
-  min-height:100vh;padding:40px 24px 64px;
-  background:radial-gradient(1000px 500px at 50% -10%,#0D2419 0%,transparent 60%),var(--bg);
-  color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+body{min-height:100vh;padding:26px 20px 40px;background:radial-gradient(900px 460px at 50% -6%,rgba(74,222,128,.04),transparent 62%),var(--bg);
+  color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+ul{list-style:none;padding:0;} button{font-family:inherit;cursor:pointer;}
+.mono{font:500 8px var(--mono);letter-spacing:.22em;color:var(--dim);}
+
+.s-top{max-width:var(--w);margin:0 auto 20px;}
+.s-top h1{font-family:var(--serif);font-size:30px;font-weight:400;}
+.s-top h1 em{font-style:italic;color:var(--green);}
+.s-top .sub{margin-top:7px;font:500 8px var(--mono);letter-spacing:.22em;color:var(--dim);}
+
+.s-tabs{max-width:var(--w);margin:0 auto 16px;display:flex;gap:3px;border:1px solid var(--line);border-radius:10px;padding:3px;background:rgba(10,23,18,.5);}
+.s-tabs button{flex:1;background:none;border:0;padding:10px 6px;border-radius:7px;font:500 8px var(--mono);letter-spacing:.12em;color:var(--dim);transition:all .2s;}
+.s-tabs button:hover{color:var(--ink);}
+.s-tabs button.is-on{background:rgba(74,222,128,.09);color:var(--green);}
+
+.blk{max-width:var(--w);margin:0 auto 16px;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:16px;padding:20px 24px;background:rgba(6,15,11,.5);}
+.blk h2{font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:4px;}
+.blk .purpose{font:500 8px var(--mono);letter-spacing:.2em;color:var(--dim);margin-bottom:14px;}
+.blk .note{font:400 10px/1.6 'Inter',sans-serif;color:var(--dimmer);margin-bottom:12px;max-width:70ch;}
+
+.drill{display:grid;grid-template-columns:1fr 120px 60px;gap:12px;align-items:center;padding:8px 0;border-top:1px solid rgba(255,255,255,.04);}
+.drill .nm{font:400 12px 'Inter',sans-serif;color:var(--ink);}
+.drill .nm .cue{display:block;font:400 9px/1.4 'Inter',sans-serif;color:var(--dimmer);margin-top:2px;}
+.drill .rx{font:400 9px var(--mono);color:var(--green);text-align:right;}
+.drill .ft{font:400 9px var(--mono);color:var(--dimmer);text-align:right;}
+
+.grp{margin-top:16px;}
+.grp-label{font:500 8px var(--mono);letter-spacing:.22em;color:var(--ink);text-transform:uppercase;margin-bottom:8px;}
+
+@media(max-width:640px){
+  body{padding:20px 14px 36px;}
+  .drill{grid-template-columns:1fr auto;gap:8px;}
+  .drill .ft{display:none;}
 }
-ul{list-style:none;padding:0;}
-button{font-family:inherit;}
-input{font-family:inherit;}
-
-/* header */
-.c-top{max-width:var(--w);margin:0 auto 20px;}
-.c-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.c-back:hover{color:var(--green);}
-.c-title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;font-style:italic;margin:14px 0 10px;}
-.c-title em{color:var(--green);}
-.c-meta{display:flex;align-items:center;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dimmer);}
-.c-meta i{width:3px;height:3px;border-radius:50%;background:currentColor;margin:0 12px;opacity:.5;}
-
-/* HERO */
-.c-hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:24px;
-  max-width:var(--w);margin:0 auto 16px;padding:30px 32px;border-radius:20px;
-  border:1px solid rgba(232,135,58,.26);
-  background:linear-gradient(115deg,rgba(56,26,10,.75) 0%,rgba(10,23,18,.6) 55%,rgba(6,15,11,.5) 100%);}
-.c-pitch{position:absolute;inset:0;width:100%;height:100%;opacity:.055;pointer-events:none;}
-.c-pitch rect,.c-pitch line,.c-pitch circle{fill:none;stroke:var(--amber);stroke-width:1.4;}
-.c-pitch .c-pitch-f{fill:var(--amber);stroke:none;}
-.c-hero-l,.c-hero-r{position:relative;}
-.c-eyebrow{font:500 9px var(--mono);letter-spacing:.24em;color:var(--dim);}
-.c-eyebrow.is-amber{color:var(--amber);}
-.c-opp{font-family:var(--serif);font-weight:400;font-size:clamp(28px,4vw,42px);margin:12px 0 8px;letter-spacing:-.01em;}
-.c-kick{font:500 10px var(--mono);letter-spacing:.2em;color:var(--dim);}
-.c-hero-r{text-align:right;}
-.c-count b{font-family:var(--serif);font-size:clamp(48px,7vw,76px);line-height:.9;color:var(--amber);font-weight:400;}
-.c-count span{font:500 10px var(--mono);letter-spacing:.24em;color:var(--amber);opacity:.7;margin-left:8px;}
-.c-left{font:400 10px var(--mono);letter-spacing:.06em;color:var(--dim);margin-top:12px;}
-
-/* coach — left border rule, not a card */
-.c-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 20px;padding:16px 20px;
-  border-left:2px solid rgba(74,222,128,.4);border-radius:0 12px 12px 0;background:rgba(16,36,27,.35);}
-.c-av{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid rgba(74,222,128,.3);
-  display:grid;place-items:center;background:rgba(74,222,128,.06);}
-.c-av span{font-family:var(--serif);font-size:18px;color:var(--green);}
-.c-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
-.c-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
-.c-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.88;margin-top:7px;max-width:74ch;}
-.c-clead.is-hot{color:var(--amber);opacity:1;}
-
-/* tabs — underline, not pill */
-.c-tabs{display:flex;gap:28px;max-width:var(--w);margin:0 auto 24px;border-bottom:1px solid var(--line);}
-.c-tabs button{display:flex;align-items:center;gap:9px;background:none;border:0;cursor:pointer;padding:0 2px 14px;
-  font:500 10px var(--mono);letter-spacing:.2em;color:var(--dim);position:relative;transition:color .2s;}
-.c-tabs button em{font-style:normal;color:var(--dimmer);font-weight:400;}
-.c-tabs button:hover{color:var(--ink);}
-.c-tabs button.is-on{color:var(--green);}
-.c-tabs button.is-on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--green);
-  box-shadow:0 0 8px rgba(74,222,128,.7);}
-.c-tabs button:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:3px;}
-
-.c-main{max-width:var(--w);margin:0 auto;}
-
-/* week spine */
-.c-spine{position:relative;display:flex;justify-content:space-between;margin-bottom:24px;padding:0 10px;}
-.c-spine-line{position:absolute;left:18px;right:18px;top:7px;height:1px;background:var(--line);}
-.c-node{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;background:none;border:0;cursor:pointer;padding:0;color:inherit;}
-.c-bead{width:11px;height:11px;border-radius:50%;background:var(--bg);border:1px solid var(--dimmer);transition:transform .2s;}
-.c-node em{font-style:normal;font:400 9px var(--mono);letter-spacing:.14em;color:var(--dimmer);}
-.c-node.is-team .c-bead{border-color:var(--green);}
-.c-node.is-solo .c-bead{border-color:var(--teal);}
-.c-node.is-past .c-bead{background:currentColor;}
-.c-node.is-past.is-team .c-bead{background:var(--green);}
-.c-node.is-past.is-solo .c-bead{background:var(--teal);}
-.c-node.is-today em{color:var(--green);}
-.c-node.is-today .c-bead{box-shadow:0 0 0 4px rgba(74,222,128,.12);}
-.c-node.is-match{margin-top:-3px;}
-.c-node.is-match .c-bead{width:17px;height:17px;background:var(--amber);border-color:var(--amber);
-  box-shadow:0 0 0 5px rgba(232,135,58,.12),0 0 14px rgba(232,135,58,.6);}
-.c-node.is-match em{color:var(--amber);}
-.c-node.is-sel .c-bead{transform:scale(1.25);}
-.c-node.is-sel em{color:var(--ink);}
-.c-node:focus-visible{outline:2px solid var(--green);outline-offset:5px;border-radius:4px;}
-
-/* panel */
-.c-panel{border:1px solid var(--line);border-radius:18px;background:rgba(16,36,27,.35);}
-.c-ph{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:22px 24px 20px;border-bottom:1px solid var(--line);}
-.c-pt{font-family:var(--serif);font-style:italic;font-weight:400;font-size:27px;margin-top:10px;}
-.c-body{padding:24px;}
-.c-field{margin-bottom:26px;}
-.c-field:last-child{margin-bottom:0;}
-.c-row{display:flex;gap:32px;}
-.c-row .c-field{flex:none;}
-.c-grow{flex:1 !important;}
-.c-lab{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin-bottom:12px;text-transform:uppercase;}
-.c-empty{font:400 12px 'Inter',sans-serif;color:var(--dim);margin-bottom:16px;}
-
-.c-chips{display:flex;gap:6px;flex-wrap:wrap;}
-.c-chips button{background:none;border:1px solid var(--line);border-radius:20px;padding:9px 15px;cursor:pointer;
-  font:400 11px 'Inter',sans-serif;color:var(--dim);transition:all .15s;}
-.c-chips button:hover{color:var(--ink);border-color:rgba(255,255,255,.16);}
-.c-chips button.is-on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.35);color:var(--green);}
-.c-chips button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
-
-.c-step{display:flex;align-items:center;gap:3px;width:148px;}
-.c-step button{width:32px;height:36px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.02);
-  color:var(--dim);cursor:pointer;font-size:15px;line-height:1;}
-.c-step button:hover{color:var(--green);border-color:rgba(74,222,128,.3);}
-.c-step button:focus-visible{outline:2px solid var(--green);outline-offset:1px;}
-.c-step span{flex:1;text-align:center;font:400 16px var(--mono);color:var(--ink);}
-
-.c-scale{display:flex;gap:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
-.c-scale button{flex:1;height:36px;background:none;border:0;border-right:1px solid var(--line);cursor:pointer;
-  color:var(--dimmer);font:400 12px var(--mono);transition:all .12s;}
-.c-scale button:last-child{border-right:0;}
-.c-scale button.is-on{background:rgba(216,178,74,.1);color:var(--gold);}
-.c-scale button.is-sel{background:var(--gold);color:#1A1204;font-weight:500;}
-.c-scale button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
-.c-scale.is-wide button.is-on{background:rgba(74,222,128,.09);color:var(--green);}
-.c-scale.is-wide button.is-sel{background:var(--green);color:#062015;}
-
-.c-ratebox{display:flex;align-items:center;gap:22px;}
-.c-ratenum{font-family:var(--serif);font-size:42px;line-height:1;color:var(--green);flex:none;}
-.c-ratenum em{font-style:normal;font:400 12px var(--mono);color:var(--dimmer);margin-left:3px;}
-.c-ratebox .c-scale{flex:1;}
-
-.c-readout{display:flex;align-items:center;gap:24px;border-top:1px solid var(--line);padding-top:22px;}
-.c-readout b{display:block;font-family:var(--serif);font-size:44px;font-weight:400;color:var(--green);line-height:1;margin-top:8px;}
-.c-readout p{font:400 10px/1.7 var(--mono);color:var(--dim);letter-spacing:.03em;max-width:46ch;}
-
-.c-add{display:flex;gap:8px;margin-bottom:6px;}
-.c-add input{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;
-  padding:13px;color:var(--ink);font:400 12px 'Inter',sans-serif;}
-.c-add input::placeholder{color:var(--dimmer);}
-.c-add input:focus{outline:none;border-color:rgba(74,222,128,.4);}
-.c-add button{background:rgba(74,222,128,.09);border:1px solid rgba(74,222,128,.28);color:var(--green);
-  border-radius:9px;padding:0 18px;cursor:pointer;font:500 10px var(--mono);letter-spacing:.1em;}
-.c-moments li{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid rgba(255,255,255,.04);}
-.c-moments span{flex:1;font:400 12px 'Inter',sans-serif;color:var(--dim);}
-.c-moments button{width:22px;height:22px;border-radius:5px;border:1px solid var(--line);background:none;
-  color:var(--dim);cursor:pointer;font-size:12px;line-height:1;}
-.c-moments button:hover{color:var(--amber);border-color:rgba(232,135,58,.35);}
-
-/* guided session blocks */
-.c-sess-h{margin-bottom:20px;}
-.c-sess-title{font-family:var(--serif);font-style:italic;font-weight:400;font-size:22px;margin:8px 0 6px;}
-.c-sess-dur{font:400 10px var(--mono);color:var(--dim);letter-spacing:.1em;}
-.c-blk{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;}
-.c-blk-h{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;
-  background:rgba(255,255,255,.02);border:0;width:100%;color:inherit;font-family:inherit;}
-.c-blk-h:hover{background:rgba(255,255,255,.04);}
-.c-blk-l{font:500 11px var(--mono);letter-spacing:.12em;color:var(--ink);}
-.c-blk-m{font:400 10px var(--mono);color:var(--dim);}
-.c-blk-c{font:500 9px var(--mono);color:var(--dimmer);margin-left:auto;margin-right:12px;}
-.c-blk-chev{font:400 14px var(--mono);color:var(--dimmer);}
-.c-blk-b{padding:0 18px 14px;}
-.c-blk-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.04);}
-.c-blk-row:first-child{border-top:0;}
-.c-blk-row.is-done{opacity:.45;}
-.c-blk-box{width:20px;height:20px;border-radius:5px;border:1px solid var(--line);display:grid;place-items:center;
-  cursor:pointer;background:none;color:var(--dimmer);font-size:11px;flex:none;}
-.c-blk-box:hover{border-color:rgba(74,222,128,.4);}
-.c-blk-row.is-done .c-blk-box{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:var(--green);}
-.c-blk-name{font:400 12px 'Inter',sans-serif;color:var(--ink);flex:1;}
-.c-blk-reps{font:400 9px var(--mono);color:var(--dim);letter-spacing:.06em;flex:none;}
-.c-blk.is-complete .c-blk-l{color:var(--green);}
-.c-blk.is-complete{border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.02);}
-
-.c-go{background:var(--green);border:0;color:#062015;border-radius:9px;padding:14px 20px;cursor:pointer;
-  font:500 10px var(--mono);letter-spacing:.14em;}
-.c-go:disabled{opacity:.22;cursor:not-allowed;}
-.c-go:hover:not(:disabled){filter:brightness(1.08);}
-.c-ghost{background:none;border:1px solid var(--line);border-radius:8px;padding:12px 15px;cursor:pointer;
-  font:500 9px var(--mono);letter-spacing:.12em;color:var(--dim);}
-.c-ghost:hover{color:var(--green);border-color:rgba(74,222,128,.3);}
-.c-go:focus-visible,.c-ghost:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
-
-.c-sess-progress{display:flex;align-items:center;gap:14px;margin-top:18px;padding:16px 20px;
-  border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);}
-.c-sess-progress-bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;}
-.c-sess-progress-fill{height:100%;border-radius:3px;background:var(--green);transition:width .3s;}
-.c-sess-progress-txt{font:500 10px var(--mono);color:var(--dim);letter-spacing:.1em;flex:none;}
-
-.c-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
-  border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
-
-@media(max-width:760px){
-  body{padding:24px 16px 48px;}
-  .c-hero{flex-direction:column;align-items:flex-start;gap:20px;padding:24px;}
-  .c-hero-r{text-align:left;}
-  .c-coach{flex-direction:column;gap:12px;}
-  .c-row{flex-direction:column;gap:0;}
-  .c-row .c-field{flex:1 !important;}
-  .c-readout{flex-direction:column;align-items:flex-start;gap:14px;}
-  .c-ratebox{flex-direction:column;align-items:flex-start;gap:14px;}
-  .c-ratebox .c-scale{width:100%;}
-  .c-foot{flex-direction:column;gap:8px;}
-}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
 
-<header class="c-top">
-  <a href="/train.html" class="c-back">&#8592; Train</a>
-  <h1 class="c-title">Soccer, <em>Sean</em></h1>
-  <p class="c-meta" id="meta"></p>
+<header class="s-top">
+  <h1>Soccer, <em>Sean</em></h1>
+  <p class="sub">TECHNICAL TRAINING &middot; CM / CDM &middot; BALL EVERY DAY</p>
 </header>
 
-<section class="c-hero" id="hero"></section>
-
-<section class="c-coach" id="coach"></section>
-
-<nav class="c-tabs" role="tablist" id="tabs"></nav>
-
-<main class="c-main" id="main"></main>
-
-<footer class="c-foot">
-  <span>SESSION LOAD = RPE &times; MINUTES</span>
-  <span>BALL WORK ROTATION &middot; BRAIN-PLANNED</span>
-</footer>
+<nav class="s-tabs" id="tabs"></nav>
+<div id="content"></div>
 
 <script>
 (function(){
 'use strict';
 
-/* ═══ CONFIG ═══════════════════════════════════════════════════ */
-var TODAY = new Date().getDay(); // 0=Sun in JS
-// Convert to 0=Mon format
-TODAY = TODAY === 0 ? 6 : TODAY - 1;
-
-var MATCH = { round: 12, opponent: "Bentleigh United Cobras FC", at: "SAT 15:00", home: true, venue: "Reema Reserve" };
-var WEAK_FOOT = 58;
-
-var WEEK = [
-  { d: "MON", kind: "rest",  label: "Rest" },
-  { d: "TUE", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "WED", kind: "solo",  label: "Individual" },
-  { d: "THU", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "FRI", kind: "solo",  label: "Individual \u00b7 light" },
-  { d: "SAT", kind: "match", label: "Round " + MATCH.round, at: "14:00" },
-  { d: "SUN", kind: "rest",  label: "Rest & mobility" }
-];
-
-var KIND = {
-  team:  { c: "#4ADE80", t: "TEAM" },
-  solo:  { c: "#7DD3C0", t: "INDIVIDUAL" },
-  match: { c: "#E8873A", t: "MATCH" },
-  rest:  { c: "#3B4E47", t: "REST" }
-};
-
-var THEMES = ["Possession", "Pressing", "Set pieces", "Shape", "Scrimmage", "Transition", "Finishing", "Crossing"];
-var POSITIONS = ["CDM", "CM", "RB", "LB", "CB"];
-
-var DAYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
-
-/* ═══ BALL WORK ROTATION ══════════════════════════════════════ */
-var WARMUP = [
-  { n: 'Toe taps', d: '1 min' },
-  { n: 'Inside rolls', d: '1 min' },
-  { n: 'Sole rolls', d: '1 min' },
-  { n: 'Foundation', d: '2 min' },
-  { n: 'Juggling (aim 50+)', d: '5 min' }
-];
-
-var SET_A = { label: 'Set A \u2014 Joner Style', mins: 10, drills: [
-  { n: 'Sole drag inside push', d: '4\u00d720s' },
-  { n: 'Inside-outside cut', d: '4\u00d720s' },
-  { n: 'Iniesta', d: '4\u00d720s' },
-  { n: 'V-drag', d: '4\u00d720s' },
-  { n: 'La Croqueta', d: '4\u00d720s' }
-]};
-
-var SET_B = { label: 'Set B \u2014 Takuya Sole Skills', mins: 10, drills: [
-  { n: 'Sole roll stepover', d: '4\u00d720s' },
-  { n: 'Fake shot sole pull', d: '4\u00d720s' },
-  { n: 'Matthews cut', d: '4\u00d720s' },
-  { n: 'Elastico', d: '4\u00d720s' },
-  { n: 'Berbatov wall drill', d: '4\u00d730s' }
-]};
-
-var SET_C = { label: 'Set C \u2014 Cognitive', mins: 10, drills: [
-  { n: 'Sole drags + tennis ball catch', d: '4\u00d730s' },
-  { n: 'Coerver pull-push speed test', d: '4\u00d720s' },
-  { n: 'Freestyle combo chains', d: '4\u00d730s' }
-]};
-
-var FIRST_TOUCH = { label: 'First Touch \u2014 CM', mins: 8, drills: [
-  { n: 'Wall pass open body', d: '3\u00d710 R/L' },
-  { n: 'Back foot reception', d: '3\u00d710 R/L' },
-  { n: 'Ground receive turn & play', d: '3\u00d78 each' },
-  { n: 'Chest control volley', d: '3\u00d78' }
-]};
-
-var PASSING = { label: 'Passing & Switching', mins: 8, drills: [
-  { n: 'Short pass accuracy', d: '3\u00d710 R/L' },
-  { n: 'Driven pass', d: '3\u00d78 R/L' },
-  { n: 'Lofted switch', d: '3\u00d76 R/L' },
-  { n: 'One-two off wall', d: '4\u00d730s' },
-  { n: 'Ping long ball', d: '3\u00d78 R/L' }
-]};
-
-var WEAK_FOOT_BLOCK = { label: 'Weak Foot Block', mins: 5, drills: [
-  { n: 'Inside-outside rolls (LEFT)', d: '1 min' },
-  { n: 'Wall passing (LEFT)', d: '2 min' },
-  { n: 'Sole drag inside push (LEFT)', d: '1 min' },
-  { n: 'Driven pass to target (LEFT)', d: '1 min' }
-]};
-
-var LONG_THROWS = { label: 'Long Throw Training', mins: 8, drills: [
-  { n: 'Arm circles + light throws', d: '2 min' },
-  { n: 'Standing throws', d: '3\u00d75' },
-  { n: 'One-step throws', d: '3\u00d75' },
-  { n: 'Run-up throws', d: '3\u00d75' },
-  { n: 'Max attempts', d: '5\u00d71' }
-]};
-
-var PRE_TEAM = { label: 'Pre-team Touches', mins: 10, drills: [
-  { n: 'Toe taps', d: '1 min' },
-  { n: 'Inside rolls', d: '1 min' },
-  { n: 'Sole rolls', d: '1 min' },
-  { n: 'Foundation', d: '2 min' },
-  { n: 'Juggling (aim 50+)', d: '5 min' }
-]};
-
-var PRE_GAME = { label: 'Pre-game Warm-up Touches', mins: 5, drills: [
-  { n: 'Passing pairs', d: '2 min' },
-  { n: 'Shooting', d: '2 min' },
-  { n: 'Coerver pull-push', d: '1 min' }
-]};
-
-// SESSIONS keyed by day (0=Mon...6=Sun)
 var SESSIONS = {
-  0: { title: 'Set A + Passing & Switching + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    PASSING,
-    LONG_THROWS
-  ]},
-  1: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  2: { title: 'Set B + Weak Foot Block + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_B,
-    WEAK_FOOT_BLOCK,
-    LONG_THROWS
-  ]},
-  3: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  4: { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_C,
-    FIRST_TOUCH,
-    LONG_THROWS
-  ]},
-  5: { title: 'Pre-game Warm-up', blocks: [PRE_GAME] },
-  6: { title: 'Set A + First Touch', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    FIRST_TOUCH
-  ]}
-};
 
-/* ═══ Khabib ═══════════════════════════════════════════════════ */
-function khabib(today) {
-  var m = -1;
-  for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { m = i; break; } }
-  var days = m === -1 ? null : m - today;
-  if (days === 0) return { tone: "hot", line: "Match today. Nothing on this page matters now. Warm up, play." };
-  if (days === 1) return { tone: "hot", line: "Match tomorrow. Keep tonight light \u2014 touch and shape, nothing that leaves you sore." };
-  if (days === 2) return { tone: "good", line: "Two days out. Sharp and short. Volume was yesterday\u2019s job." };
-  if (days === null || days < 0) return { tone: "good", line: "No match this week. Double down \u2014 weak foot is at " + WEAK_FOOT + "% and it won\u2019t fix itself in season." };
-  return { tone: "good", line: "Match in " + days + " days. Load now, sharpen later." };
-}
-
-/* ═══ STATE ═══════════════════════════════════════════════════ */
-var state = {
-  tab: "team",
-  sel: TODAY,
-  done: {},       // 'blockIdx-drillIdx' -> true
-  openBlock: 0,   // which block is expanded
-  openProto: null, // which pre-training protocol block is expanded
-  protoDone: {},   // 'blockIdx-itemIdx' -> true
-  logs: {},       // i -> { themes: {}, rpe, mins }
-  match: { pos: "CDM", mins: 90, rating: 0, goals: 0, assists: 0, moments: [] }
-};
-
-// Init logs
-for (var i = 0; i < WEEK.length; i++) {
-  state.logs[i] = { themes: {}, rpe: 7, mins: WEEK[i].mins || 60 };
-}
-
-/* ═══ HELPERS ═════════════════════════════════════════════════ */
-function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-function weekLoad() {
-  var total = 0;
-  for (var i = 0; i < WEEK.length; i++) {
-    if (WEEK[i].kind === "team" && Object.keys(state.logs[i].themes).length > 0) {
-      total += state.logs[i].rpe * state.logs[i].mins;
+full: {
+  label: 'Full Session',
+  desc: '30-45 min. Ball mastery + first touch + passing + weak foot + long throws.',
+  blocks: [
+    {
+      title: 'Warm-Up Touches', purpose: '5 MIN', note: 'Light and rhythmic. Wake up the feet.',
+      drills: [
+        { n:'Toe taps on ball', rx:'30 sec', ft:'Both', cue:'Light and quick. Stay on balls of feet.' },
+        { n:'Inside-inside rolls', rx:'30 sec', ft:'Both', cue:'Roll ball side to side. Low center of gravity.' },
+        { n:'Sole rolls forward/back', rx:'30s R + 30s L', ft:'Each', cue:'Pull back with sole, push forward with laces.' },
+        { n:'Foundation (ball between feet)', rx:'30 sec', ft:'Both', cue:'Inside R \u2192 inside L. Tight. Head up.' },
+        { n:'Freestyle juggling', rx:'2 min', ft:'Both', cue:'Mix feet, thighs, head. Target: 50+ without drop.' }
+      ]
+    },
+    {
+      title: 'Ball Mastery', purpose: '10 MIN \u00B7 SPEED OF FEET', note: 'Rotate sets A/B/C every 2 weeks. 4 \u00D7 20 sec per drill, 10 sec rest.',
+      groups: [
+        { label: 'Set A \u2014 Joner Football (Weeks 1-2)', drills: [
+          { n:'Sole drag \u2192 inside push', rx:'4\u00D720s', ft:'R then L', cue:'Drag back, push forward. SPEED.' },
+          { n:'Inside-outside cut', rx:'4\u00D720s', ft:'R then L', cue:'Inside across body, outside to push away.' },
+          { n:'Iniesta (sole drag behind standing leg)', rx:'4\u00D720s', ft:'R then L', cue:'Drag behind, pop out. Head UP.' },
+          { n:'V-drag', rx:'4\u00D720s', ft:'R then L', cue:'Pull back, push 45\u00B0 with inside. Explosive.' },
+          { n:'La Croqueta (inside-inside)', rx:'4\u00D720s', ft:'Both', cue:'Quick succession. Tight space skill.' }
+        ]},
+        { label: 'Set B \u2014 Takuya Sole Skills (Weeks 3-4)', drills: [
+          { n:'Sole roll stepover', rx:'4\u00D720s', ft:'R then L', cue:'Roll across, stepover, push opposite.' },
+          { n:'Fake shot \u2192 sole pull', rx:'4\u00D720s', ft:'R then L', cue:'Wind up, pull back with sole.' },
+          { n:'Matthews cut (outside hook)', rx:'4\u00D720s', ft:'R then L', cue:'Push outside, sharp cut inside.' },
+          { n:'Elastico', rx:'4\u00D720s', ft:'R then L', cue:'Outside \u2192 inside flick. Whip ankle.' },
+          { n:'Berbatov wall drill', rx:'4\u00D730s', ft:'Both', cue:'Pass wall, first touch, pass. Rhythm.' }
+        ]},
+        { label: 'Set C \u2014 Cognitive (Weeks 5+)', drills: [
+          { n:'Sole drags + tennis ball catch', rx:'4\u00D730s', ft:'Both', cue:'Partner tosses tennis ball. EYES OFF BALL.' },
+          { n:'Coerver pull-push speed test', rx:'4\u00D720s', ft:'R then L', cue:'Count reps. Beat your number.' },
+          { n:'Ball mastery + color call', rx:'4\u00D730s', ft:'Both', cue:'Partner holds colored cones. Call while mastering.' },
+          { n:'Freestyle combo chains', rx:'4\u00D730s', ft:'Both', cue:'Chain 3 skills. No stopping.' }
+        ]}
+      ]
+    },
+    {
+      title: 'First Touch \u2014 CM Specific', purpose: '5-8 MIN',
+      note: 'Know where you\'re playing BEFORE the ball arrives. Scan \u2192 shoulder check \u2192 receive \u2192 play.',
+      drills: [
+        { n:'Wall pass \u2192 open body first touch', rx:'3\u00D710 ea ft', ft:'R + L', cue:'Open hips, receive half-turn. Head up BEFORE ball.' },
+        { n:'Wall pass \u2192 back foot reception', rx:'3\u00D710 ea ft', ft:'R + L', cue:'Ball across body, back foot. Creates space.' },
+        { n:'Chest control \u2192 volley pass', rx:'3\u00D78', ft:'Both', cue:'Chest down, volley to target.' },
+        { n:'Ground receive \u2192 turn & play', rx:'3\u00D78 ea side', ft:'Both', cue:'Already turning. One fluid motion.' },
+        { n:'Lofted \u2192 thigh/chest \u2192 pass', rx:'3\u00D76', ft:'Both', cue:'Control high ball, set, pass.' }
+      ]
+    },
+    {
+      title: 'Passing & Switching', purpose: '5-8 MIN',
+      note: '7mlc Ping: Plant foot at target, laces, angle foot out. Chop down for backspin.',
+      drills: [
+        { n:'Short pass accuracy (5m)', rx:'3\u00D710 ea ft', ft:'R + L', cue:'Inside foot. Hit base of cone.' },
+        { n:'Driven pass (15-20m)', rx:'3\u00D78 ea ft', ft:'R + L', cue:'Lock ankle, strike center. Ground. FIRM.' },
+        { n:'Lofted switch (25-30m)', rx:'3\u00D76 ea ft', ft:'R + L', cue:'Lean back, laces under ball.' },
+        { n:'One-two off wall', rx:'4\u00D730s', ft:'Both', cue:'Pass \u2192 move \u2192 receive \u2192 pass. Speed.' },
+        { n:'Ping long ball', rx:'3\u00D78 ea ft', ft:'R + L', cue:'Lower half with laces. Backspin.' }
+      ]
+    },
+    {
+      title: 'Weak Foot Block', purpose: '5 MIN \u00B7 LEFT FOOT ONLY',
+      note: 'Every session. No exceptions.',
+      drills: [
+        { n:'Inside-outside rolls', rx:'1 min', ft:'L only', cue:'Smooth. Don\'t rush.' },
+        { n:'Wall passing', rx:'2 min', ft:'L only', cue:'5m. Clean strike, clean reception.' },
+        { n:'Sole drag \u2192 inside push', rx:'1 min', ft:'L only', cue:'Build speed over weeks.' },
+        { n:'Driven pass to target', rx:'1 min', ft:'L only', cue:'15m. Lock ankle. Every rep.' }
+      ]
+    },
+    {
+      title: 'Long Throw-In', purpose: '5-10 MIN \u00B7 MON / WED / FRI',
+      note: 'Gronnemark: Start with the HIP. Arch back like a bow, snap forward like releasing an arrow. Target: 25m+.',
+      drills: [
+        { n:'Arm circles + overhead stretch', rx:'2 min', ft:'\u2014', cue:'Open lats and obliques.' },
+        { n:'Standing throw (feet together)', rx:'3\u00D75', ft:'\u2014', cue:'Feet planted. Ball behind head. Snap with core + lats.' },
+        { n:'One-step approach', rx:'3\u00D75', ft:'\u2014', cue:'Plant hard. Transfer weight. Ground reaction force.' },
+        { n:'Run-up throw (3-5 steps)', rx:'3\u00D75', ft:'\u2014', cue:'Plant, lean back, explode. Ball BEHIND head (Law 15).' },
+        { n:'Max distance attempts', rx:'5\u00D71', ft:'\u2014', cue:'Full effort. Measure. Track weekly.' }
+      ]
     }
-  }
-  return total;
+  ]
+},
+
+light: {
+  label: 'Light Touches',
+  desc: '10-15 min. Pre-team training. Just stay sharp.',
+  blocks: [
+    {
+      title: 'Pre-Team Touch Work', purpose: '10-15 MIN',
+      note: 'Don\'t fatigue yourself. Get comfortable on the ball before tonight.',
+      drills: [
+        { n:'Toe taps', rx:'30 sec', ft:'Both', cue:'Light rhythm.' },
+        { n:'Inside-inside foundation', rx:'1 min', ft:'Both', cue:'Tight, head up.' },
+        { n:'Sole rolls', rx:'1 min', ft:'Both', cue:'Smooth control.' },
+        { n:'Freestyle juggling', rx:'3 min', ft:'Both', cue:'Beat yesterday.' },
+        { n:'Wall passing rhythm', rx:'3 min', ft:'Alternate', cue:'2 touch: control + pass.' },
+        { n:'Coerver pull-push', rx:'2 min', ft:'R then L', cue:'20s speed test each foot.' }
+      ]
+    }
+  ]
+},
+
+cm: {
+  label: 'CM Specific',
+  desc: 'Midfield turns, distribution, 1v1 defending. RC Performance + 7mlc.',
+  blocks: [
+    {
+      title: 'Midfield Turns', purpose: 'RECEIVE \u2192 TURN \u2192 PLAY FORWARD',
+      note: 'RC Performance: Open hip, back foot, Cruyff, half-turn. Always on the move.',
+      drills: [
+        { n:'Wall pass \u2192 open hip turn', rx:'3\u00D710 ea side', ft:'Both', cue:'Pass, open body, take around marker.' },
+        { n:'Back foot \u2192 Cruyff turn', rx:'3\u00D78 ea ft', ft:'Both', cue:'Receive back foot, Cruyff behind standing leg, burst.' },
+        { n:'180\u00B0 turn + through ball', rx:'3\u00D78', ft:'Both', cue:'Rebounder, back foot, turn 180\u00B0, play forward.' },
+        { n:'Half-turn reception', rx:'3\u00D78 ea side', ft:'Both', cue:'Body sideways on reception. Transition forward.' },
+        { n:'Outside cut \u2192 accelerate', rx:'3\u00D78', ft:'Both', cue:'Spin off press with outside foot. Burst away.' }
+      ]
+    },
+    {
+      title: 'Distribution', purpose: 'DICTATE TEMPO',
+      note: '7mlc: Figure-8 dribble \u2192 immediate long pass. Close control to range instantly.',
+      drills: [
+        { n:'Figure-8 dribble \u2192 long pass', rx:'3\u00D76', ft:'Both', cue:'Tight through cones, then ping far target.' },
+        { n:'Grass cutter passes (18 yard)', rx:'3\u00D710 ea ft', ft:'R + L', cue:'Flat, backspin. Low and firm.' },
+        { n:'Clipped pass into channel', rx:'3\u00D78', ft:'Both', cue:'Chip with backspin for overlapping run.' },
+        { n:'Quick switch (2 targets)', rx:'3\u00D78', ft:'Both', cue:'Receive left, switch right. One touch.' }
+      ]
+    },
+    {
+      title: '1v1 Defending', purpose: 'CLOSE \u2192 JOCKEY \u2192 WIN',
+      note: 'Close 1-2 steps. Eyes on ball. Small steps. Force weak foot/sideline.',
+      drills: [
+        { n:'Close down + jockey (solo)', rx:'4\u00D730s', ft:'\u2014', cue:'15m cones. Sprint, close, jockey back. Toes.' },
+        { n:'Shadow defending (partner)', rx:'3\u00D71 min', ft:'\u2014', cue:'Mirror. Stay 1 step away. Don\'t commit.' },
+        { n:'1v1 in gates', rx:'5 each', ft:'\u2014', cue:'Force wide. Angle. Patient then STRIKE.' }
+      ]
+    },
+    {
+      title: 'Dynamic Ball Mastery (7mlc)', purpose: '30 SEC BURSTS',
+      note: '30 seconds non-stop touches through scattered cones. All surfaces, both feet. Repeat 3 times.',
+      drills: [
+        { n:'30s non-stop through cones', rx:'3\u00D730s', ft:'Both', cue:'All surfaces. No stopping. Game chaos.' },
+        { n:'Edge-of-box finishing', rx:'3\u00D75', ft:'Both', cue:'Pass rebounder, touch out of feet, strike.' }
+      ]
+    }
+  ]
+},
+
+gameday: {
+  label: 'Game Day',
+  desc: 'Pre-match warm-up. ~30 min. Ready to play from minute 1.',
+  blocks: [
+    {
+      title: 'Pre-Game Warm-Up', purpose: '30 MIN BEFORE KICKOFF',
+      note: 'Structure: GOATA (joints) \u2192 Pelvic tilts (sensation) \u2192 Aerobic \u2192 ACL prevention \u2192 Velocity \u2192 Ball.',
+      drills: [
+        { n:'GOATA Groundwork', rx:'5 min', ft:'\u2014', cue:'Ground hip stretch 45s/side + Child rocker 60s\u00D72 + Toe tuck 60s\u00D72.' },
+        { n:'Lateral pelvic tilts', rx:'3 min', ft:'Both', cue:'Side-lying 30s \u2192 half-kneeling 30s \u2192 split squat 30s. Both sides.' },
+        { n:'Aerobic (jog + sidestep + backward)', rx:'8 min', ft:'\u2014', cue:'Gradually increase. Open up the body.' },
+        { n:'PEP/ACL activation', rx:'5 min', ft:'\u2014', cue:'Lunges 1 min, SL bridge 30s/side, hip flexor 30s/side.' },
+        { n:'Velocity: 4\u00D720m sprints + 2 direction changes', rx:'4 min', ft:'\u2014', cue:'Match speed. 30s rest between. EXPLODE.' },
+        { n:'Passing pairs', rx:'2 min', ft:'Both', cue:'Short, crisp. Find rhythm.' },
+        { n:'Shooting (edge of box)', rx:'2 min', ft:'Both', cue:'3-4 strikes each foot. Hit the target.' },
+        { n:'Coerver pull-push speed', rx:'1 min', ft:'Both', cue:'20s each foot. Get feet FAST before kickoff.' }
+      ]
+    }
+  ]
 }
 
-/* ═══ RENDER ═════════════════════════════════════════════════ */
-function render() {
-  var k = khabib(TODAY);
-  var matchIdx = -1;
-  for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { matchIdx = i; break; } }
-  var toMatch = matchIdx >= 0 ? matchIdx - TODAY : 0;
-  if (toMatch < 0) toMatch = 0;
-  var sessionsLeft = 0;
-  for (var i = TODAY; i < matchIdx; i++) { if (WEEK[i].kind !== "rest") sessionsLeft++; }
+};
 
-  var wl = weekLoad();
+var TABS = ['full','light','cm','gameday'];
+var currentTab = 'full';
 
-  // Meta
-  document.getElementById("meta").innerHTML =
-    'FULLBACK / CDM<i></i>WEEK LOAD ' + (wl || "\u2014") + '<i></i>WEAK FOOT ' + WEAK_FOOT + '%';
+function render(){
+  var sess = SESSIONS[currentTab];
+  var tabHtml = '';
+  TABS.forEach(function(t){
+    tabHtml += '<button class="'+(t===currentTab?'is-on':'')+'" data-tab="'+t+'">'+SESSIONS[t].label+'</button>';
+  });
+  document.getElementById('tabs').innerHTML = tabHtml;
 
-  // Hero
-  document.getElementById("hero").innerHTML =
-    '<svg class="c-pitch" viewBox="0 0 400 260" aria-hidden="true" preserveAspectRatio="xMidYMid slice">' +
-      '<rect x="1" y="1" width="398" height="258" rx="2"/>' +
-      '<line x1="200" y1="1" x2="200" y2="259"/>' +
-      '<circle cx="200" cy="130" r="46"/>' +
-      '<circle cx="200" cy="130" r="2.5" class="c-pitch-f"/>' +
-      '<rect x="1" y="62" width="62" height="136"/>' +
-      '<rect x="337" y="62" width="62" height="136"/>' +
-      '<rect x="1" y="100" width="22" height="60"/>' +
-      '<rect x="377" y="100" width="22" height="60"/>' +
-    '</svg>' +
-    '<div class="c-hero-l">' +
-      '<p class="c-eyebrow is-amber">ROUND ' + MATCH.round + ' \u00b7 ' + (MATCH.home ? 'HOME' : 'AWAY') + '</p>' +
-      '<h2 class="c-opp">' + esc(MATCH.opponent) + '</h2>' +
-      '<p class="c-kick">' + esc(MATCH.at) + (MATCH.venue ? ' \u00b7 ' + esc(MATCH.venue) : '') + '</p>' +
-    '</div>' +
-    '<div class="c-hero-r">' +
-      '<div class="c-count"><b>' + toMatch + '</b><span>' + (toMatch === 1 ? 'DAY' : 'DAYS') + '</span></div>' +
-      '<p class="c-left">' + sessionsLeft + ' session' + (sessionsLeft === 1 ? '' : 's') + ' before kickoff</p>' +
-    '</div>';
-
-  // Coach
-  document.getElementById("coach").innerHTML =
-    '<div class="c-av"><span>K</span></div>' +
-    '<div><div class="c-cname">KHABIB <em>\u00b7 reads the week, not the drill</em></div>' +
-    '<p class="c-clead' + (k.tone === 'hot' ? ' is-hot' : '') + '">' + esc(k.line) + '</p></div>';
-
-  // Tabs
-  document.getElementById("tabs").innerHTML =
-    '<button role="tab" aria-selected="' + (state.tab === 'team') + '" class="' + (state.tab === 'team' ? 'is-on' : '') + '" data-stab="team"><em>01</em>TEAM</button>' +
-    '<button role="tab" aria-selected="' + (state.tab === 'solo') + '" class="' + (state.tab === 'solo' ? 'is-on' : '') + '" data-stab="solo"><em>02</em>INDIVIDUAL</button>';
-
-  // Main
-  var main = document.getElementById("main");
-  if (state.tab === "team") {
-    main.innerHTML = renderSpine() + renderTeamPanel();
-  } else {
-    main.innerHTML = renderIndividualPanel();
-  }
-
-  bindAll();
-}
-
-/* ═══ SPINE ══════════════════════════════════════════════════ */
-function renderSpine() {
-  var h = '<nav class="c-spine" aria-label="Week"><span class="c-spine-line"></span>';
-  for (var i = 0; i < WEEK.length; i++) {
-    var d = WEEK[i];
-    var cls = 'c-node is-' + d.kind;
-    if (i === state.sel) cls += ' is-sel';
-    if (i === TODAY) cls += ' is-today';
-    if (i < TODAY) cls += ' is-past';
-    h += '<button class="' + cls + '" data-day="' + i + '" aria-pressed="' + (i === state.sel) + '" aria-label="' + d.d + ' \u2014 ' + esc(d.label) + '">';
-    h += '<span class="c-bead"></span><em>' + d.d + '</em></button>';
-  }
-  h += '</nav>';
-  return h;
-}
-
-/* ═══ TEAM PANEL ═════════════════════════════════════════════ */
-function renderTeamPanel() {
-  var day = WEEK[state.sel];
-  var h = '<section class="c-panel"><header class="c-ph"><div>';
-  h += '<p class="c-eyebrow" style="color:' + KIND[day.kind].c + '">' + KIND[day.kind].t;
-  if (day.at) h += ' \u00b7 ' + day.at;
-  if (state.sel === TODAY) h += ' \u00b7 TODAY';
-  h += '</p><h2 class="c-pt">' + esc(day.label) + '</h2></div>';
-  if (state.sel !== TODAY) h += '<button class="c-ghost" data-backtoday>Back to today</button>';
-  h += '</header><div class="c-body">';
-
-  if (day.kind === "team") {
-    h += renderTraining();
-  } else if (day.kind === "match") {
-    h += renderMatch();
-  } else if (day.kind === "solo") {
-    h += '<p class="c-empty">Individual work lives in the next tab.</p>';
-    h += '<button class="c-go" data-gotosolo>Open individual</button>';
-  } else {
-    h += '<p class="c-empty">Rest. It is a session. Treat it like one.</p>';
-  }
-
-  h += '</div></section>';
-  return h;
-}
-
-/* ═══ TRAINING ═══════════════════════════════════════════════ */
-var PRE_TRAINING = [
-  { label: 'GOATA GROUNDWORK (5 min)', items: [
-    'Ground Hip Stretch \u2014 45-60s each side, keep IABH',
-    'Child Rocker \u2014 60s \u00d7 3, head stays up',
-    'Toe Tuck Rocker \u2014 60s \u00d7 3, heels open'
-  ]},
-  { label: 'PEP / ACL PREVENTION (15-20 min) \u2014 reduces ACL injuries 70%', items: [
-    'Avoidance: Jog straight 1 min \u00d7 3, side shuttle 1 min, backward run 1 min',
-    'Flexibility: Calf stretch, quad stretch, figure-4 hamstring, inner thigh, hip flexor (30s each)',
-    'Strength: Walking lunges 1 min, single-leg bridge 30s/side, single toe raise 30s/side',
-    'Plyometrics: Side-to-side hops 20 reps, front-back hops 30s, single-leg hops 30s/side, scissor jumps 30s',
-    'CUE: Land softly on balls of feet, knees slightly bent, hips straight'
-  ]},
-  { label: 'FIFA 11+ RUNNING (2 sets each)', items: [
-    'Jog straight \u2014 hip/knee/foot aligned',
-    'Hip Out / Hip In \u2014 rotate knee while jogging',
-    'Circling Partner / Shoulder Contact \u2014 land hips/knees bent',
-    'Quick forward & backward runs'
-  ]}
-];
-
-function renderTraining() {
-  var log = state.logs[state.sel];
-  var load = Math.round(log.rpe * log.mins);
-  var h = '';
-
-  // Pre-training protocols
-  h += '<div class="c-field"><p class="c-lab">Pre-training protocol</p>';
-  PRE_TRAINING.forEach(function(block, bi) {
-    var key = 'pt-' + bi;
-    var isOpen = state.openProto === bi;
-    var allDone = block.items.every(function(_, ii) { return state.protoDone[bi + '-' + ii]; });
-    h += '<div class="c-blk' + (allDone ? ' is-complete' : '') + '" style="margin-bottom:8px">';
-    h += '<button class="c-blk-h" data-toggleproto="' + bi + '">';
-    h += '<span class="c-blk-l">' + esc(block.label) + '</span>';
-    h += '<span class="c-blk-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
-    h += '</button>';
-    if (isOpen) {
-      h += '<div class="c-blk-b">';
-      block.items.forEach(function(item, ii) {
-        var dk = bi + '-' + ii;
-        var done = !!state.protoDone[dk];
-        h += '<div class="c-blk-row' + (done ? ' is-done' : '') + '">';
-        h += '<button class="c-blk-box" data-checkproto="' + dk + '">' + (done ? '\u2713' : '') + '</button>';
-        h += '<span class="c-blk-name">' + esc(item) + '</span>';
-        h += '</div>';
+  var html = '<p class="mono" style="max-width:var(--w);margin:0 auto 16px;">'+sess.desc+'</p>';
+  sess.blocks.forEach(function(b){
+    html += '<div class="blk"><h2>'+b.title+'</h2><p class="purpose">'+b.purpose+'</p>';
+    if(b.note) html += '<p class="note">'+b.note+'</p>';
+    if(b.groups){
+      b.groups.forEach(function(g){
+        html += '<div class="grp"><p class="grp-label">'+g.label+'</p>';
+        g.drills.forEach(function(d){
+          html += '<div class="drill"><span class="nm">'+d.n+(d.cue?'<span class="cue">'+d.cue+'</span>':'')+'</span><span class="rx">'+d.rx+'</span><span class="ft">'+d.ft+'</span></div>';
+        });
+        html += '</div>';
       });
-      h += '</div>';
+    } else {
+      b.drills.forEach(function(d){
+        html += '<div class="drill"><span class="nm">'+d.n+(d.cue?'<span class="cue">'+d.cue+'</span>':'')+'</span><span class="rx">'+d.rx+'</span><span class="ft">'+d.ft+'</span></div>';
+      });
     }
-    h += '</div>';
+    html += '</div>';
   });
-  h += '</div>';
-
-  // Themes
-  h += '<div class="c-field"><p class="c-lab">Worked on</p><div class="c-chips">';
-  THEMES.forEach(function(t) {
-    h += '<button class="' + (log.themes[t] ? 'is-on' : '') + '" data-theme="' + esc(t) + '" aria-pressed="' + !!log.themes[t] + '">' + esc(t) + '</button>';
-  });
-  h += '</div></div>';
-
-  // Minutes + RPE
-  h += '<div class="c-row">';
-  h += '<div class="c-field"><p class="c-lab">Minutes</p>';
-  h += '<div class="c-step"><button data-stepm="-5">\u2212</button><span>' + log.mins + '</span><button data-stepm="5">+</button></div>';
-  h += '</div>';
-  h += '<div class="c-field c-grow"><p class="c-lab">Session RPE</p><div class="c-scale">';
-  [4,5,6,7,8,9,10].forEach(function(r) {
-    var cls = log.rpe === r ? 'is-sel' : log.rpe > r ? 'is-on' : '';
-    h += '<button class="' + cls + '" data-rpe="' + r + '">' + r + '</button>';
-  });
-  h += '</div></div></div>';
-
-  // Readout
-  h += '<div class="c-readout"><div><span class="c-lab">Session load</span><b>' + (load || '\u2014') + '</b></div>';
-  h += '<p>RPE \u00d7 minutes. The number the Peak page reads \u2014 Garmin can\u2019t score a football session.</p></div>';
-
-  return h;
-}
-
-/* ═══ MATCH ══════════════════════════════════════════════════ */
-function renderMatch() {
-  var m = state.match;
-  var h = '';
-
-  // Position + Minutes
-  h += '<div class="c-row"><div class="c-field"><p class="c-lab">Position</p><div class="c-chips">';
-  POSITIONS.forEach(function(p) {
-    h += '<button class="' + (m.pos === p ? 'is-on' : '') + '" data-pos="' + p + '" aria-pressed="' + (m.pos === p) + '">' + p + '</button>';
-  });
-  h += '</div></div>';
-  h += '<div class="c-field"><p class="c-lab">Minutes</p>';
-  h += '<div class="c-step"><button data-matchm="-5">\u2212</button><span>' + m.mins + '</span><button data-matchm="5">+</button></div>';
-  h += '</div></div>';
-
-  // Rating
-  h += '<div class="c-field"><p class="c-lab">Rating</p><div class="c-ratebox">';
-  h += '<span class="c-ratenum">' + (m.rating || '\u2014') + '<em>/10</em></span>';
-  h += '<div class="c-scale is-wide">';
-  for (var r = 1; r <= 10; r++) {
-    var cls = m.rating === r ? 'is-sel' : m.rating > r ? 'is-on' : '';
-    h += '<button class="' + cls + '" data-rate="' + r + '" aria-label="Rate ' + r + '">' + r + '</button>';
-  }
-  h += '</div></div></div>';
-
-  // Goals + Assists
-  h += '<div class="c-row">';
-  h += '<div class="c-field"><p class="c-lab">Goals</p><div class="c-step"><button data-matchg="-1">\u2212</button><span>' + m.goals + '</span><button data-matchg="1">+</button></div></div>';
-  h += '<div class="c-field"><p class="c-lab">Assists</p><div class="c-step"><button data-matcha="-1">\u2212</button><span>' + m.assists + '</span><button data-matcha="1">+</button></div></div>';
-  h += '</div>';
-
-  // Key moments
-  h += '<div class="c-field"><p class="c-lab">Key moments</p>';
-  h += '<div class="c-add"><input id="momentInput" placeholder="Lost the ball turning into pressure, 62\u2032" aria-label="Key moment">';
-  h += '<button data-addmoment>Add</button></div>';
-  h += '<ul class="c-moments">';
-  if (m.moments.length) {
-    m.moments.forEach(function(x, i) {
-      h += '<li><span>' + esc(x) + '</span><button data-rmmoment="' + i + '" aria-label="Remove">\u00d7</button></li>';
-    });
-  } else {
-    h += '<p class="c-empty">The moments you remember are the ones worth training.</p>';
-  }
-  h += '</ul></div>';
-
-  return h;
-}
-
-/* ═══ INDIVIDUAL PANEL (GUIDED DAILY SESSION) ════════════════ */
-function renderIndividualPanel() {
-  var sess = SESSIONS[TODAY];
-  var totalMins = 0;
-  for (var b = 0; b < sess.blocks.length; b++) { totalMins += sess.blocks[b].mins; }
-
-  // Count done drills
-  var totalDrills = 0;
-  var doneDrills = 0;
-  for (var b = 0; b < sess.blocks.length; b++) {
-    for (var d = 0; d < sess.blocks[b].drills.length; d++) {
-      totalDrills++;
-      if (state.done[b + '-' + d]) doneDrills++;
-    }
-  }
-  var pct = totalDrills > 0 ? Math.round((doneDrills / totalDrills) * 100) : 0;
-
-  var h = '<section class="c-panel"><header class="c-ph"><div>';
-  h += '<p class="c-eyebrow" style="color:var(--teal)">GUIDED SESSION \u00b7 ' + DAYS[TODAY] + '</p>';
-  h += '<div class="c-sess-h">';
-  h += '<h2 class="c-sess-title">' + esc(sess.title) + '</h2>';
-  h += '<p class="c-sess-dur">' + totalMins + ' MIN \u00b7 ' + sess.blocks.length + ' BLOCK' + (sess.blocks.length === 1 ? '' : 'S') + '</p>';
-  h += '</div>';
-  h += '</div></header><div class="c-body">';
-
-  // Blocks
-  for (var b = 0; b < sess.blocks.length; b++) {
-    var blk = sess.blocks[b];
-    var isOpen = state.openBlock === b;
-
-    // Check if block is complete
-    var blockDone = true;
-    for (var d = 0; d < blk.drills.length; d++) {
-      if (!state.done[b + '-' + d]) { blockDone = false; break; }
-    }
-    var blockDoneCount = 0;
-    for (var d = 0; d < blk.drills.length; d++) {
-      if (state.done[b + '-' + d]) blockDoneCount++;
-    }
-
-    h += '<div class="c-blk' + (blockDone ? ' is-complete' : '') + '">';
-    h += '<button class="c-blk-h" data-toggleblk="' + b + '">';
-    h += '<span class="c-blk-l">' + esc(blk.label) + '</span>';
-    h += '<span class="c-blk-c">' + blockDoneCount + '/' + blk.drills.length + '</span>';
-    h += '<span class="c-blk-m">' + blk.mins + ' min</span>';
-    h += '<span class="c-blk-chev">' + (isOpen ? '\u2212' : '+') + '</span>';
-    h += '</button>';
-
-    if (isOpen) {
-      h += '<div class="c-blk-b">';
-      for (var d = 0; d < blk.drills.length; d++) {
-        var dr = blk.drills[d];
-        var key = b + '-' + d;
-        var isDone = !!state.done[key];
-        h += '<div class="c-blk-row' + (isDone ? ' is-done' : '') + '">';
-        h += '<button class="c-blk-box" data-check="' + key + '" aria-label="Mark done">' + (isDone ? '\u2713' : '') + '</button>';
-        h += '<span class="c-blk-name">' + esc(dr.n) + '</span>';
-        h += '<span class="c-blk-reps">' + esc(dr.d) + '</span>';
-        h += '</div>';
-      }
-      h += '</div>';
-    }
-
-    h += '</div>';
-  }
-
-  // Progress bar
-  h += '<div class="c-sess-progress">';
-  h += '<div class="c-sess-progress-bar"><div class="c-sess-progress-fill" style="width:' + pct + '%"></div></div>';
-  h += '<span class="c-sess-progress-txt">' + doneDrills + '/' + totalDrills + ' \u00b7 ' + pct + '%</span>';
-  h += '</div>';
-
-  h += '</div></section>';
-  return h;
-}
-
-/* ═══ BIND ═══════════════════════════════════════════════════ */
-function bindAll() {
-  // Tabs
-  document.querySelectorAll('[data-stab]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.tab = this.dataset.stab; render(); });
-  });
-
-  // Spine days
-  document.querySelectorAll('[data-day]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.sel = parseInt(this.dataset.day); render(); });
-  });
-
-  // Back to today
-  var bt = document.querySelector('[data-backtoday]');
-  if (bt) bt.addEventListener('click', function() { state.sel = TODAY; render(); });
-
-  // Go to solo
-  var gs = document.querySelector('[data-gotosolo]');
-  if (gs) gs.addEventListener('click', function() { state.tab = 'solo'; render(); });
-
-  // Theme chips
-  document.querySelectorAll('[data-theme]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var t = this.dataset.theme;
-      var log = state.logs[state.sel];
-      if (log.themes[t]) { delete log.themes[t]; } else { log.themes[t] = true; }
-      render();
-    });
-  });
-
-  // Minutes stepper
-  document.querySelectorAll('[data-stepm]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var d = parseInt(this.dataset.stepm);
-      var log = state.logs[state.sel];
-      log.mins = Math.max(0, Math.min(180, log.mins + d));
-      render();
-    });
-  });
-
-  // RPE scale
-  document.querySelectorAll('[data-rpe]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.logs[state.sel].rpe = parseInt(this.dataset.rpe);
-      render();
-    });
-  });
-
-  // Position
-  document.querySelectorAll('[data-pos]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.match.pos = this.dataset.pos; render(); });
-  });
-
-  // Match minutes
-  document.querySelectorAll('[data-matchm]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.match.mins = Math.max(0, Math.min(120, state.match.mins + parseInt(this.dataset.matchm)));
-      render();
-    });
-  });
-
-  // Rating
-  document.querySelectorAll('[data-rate]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.match.rating = parseInt(this.dataset.rate); render(); });
-  });
-
-  // Goals
-  document.querySelectorAll('[data-matchg]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.match.goals = Math.max(0, Math.min(9, state.match.goals + parseInt(this.dataset.matchg)));
-      render();
-    });
-  });
-
-  // Assists
-  document.querySelectorAll('[data-matcha]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.match.assists = Math.max(0, Math.min(9, state.match.assists + parseInt(this.dataset.matcha)));
-      render();
-    });
-  });
-
-  // Add moment
-  var am = document.querySelector('[data-addmoment]');
-  if (am) am.addEventListener('click', addMoment);
-  var mi = document.getElementById('momentInput');
-  if (mi) mi.addEventListener('keydown', function(e) { if (e.key === 'Enter') addMoment(); });
-
-  // Remove moment
-  document.querySelectorAll('[data-rmmoment]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.match.moments.splice(parseInt(this.dataset.rmmoment), 1);
-      render();
-    });
-  });
-
-  // Toggle block
-  document.querySelectorAll('[data-toggleblk]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var idx = parseInt(this.dataset.toggleblk);
-      state.openBlock = state.openBlock === idx ? -1 : idx;
-      render();
-    });
-  });
-
-  // Drill checkboxes
-  document.querySelectorAll('[data-check]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var key = this.dataset.check;
-      if (state.done[key]) { delete state.done[key]; } else { state.done[key] = true; }
-      render();
-    });
-  });
-
-  // Pre-training protocol toggles
-  document.querySelectorAll('[data-toggleproto]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var idx = parseInt(this.dataset.toggleproto);
-      state.openProto = state.openProto === idx ? null : idx;
-      render();
-    });
-  });
-
-  // Pre-training protocol checkboxes
-  document.querySelectorAll('[data-checkproto]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var key = this.dataset.checkproto;
-      if (state.protoDone[key]) { delete state.protoDone[key]; } else { state.protoDone[key] = true; }
-      render();
-    });
+  document.getElementById('content').innerHTML = html;
+  document.querySelectorAll('[data-tab]').forEach(function(btn){
+    btn.onclick = function(){ currentTab = this.getAttribute('data-tab'); render(); };
   });
 }
-
-function addMoment() {
-  var inp = document.getElementById('momentInput');
-  if (!inp) return;
-  var v = inp.value.trim();
-  if (v) { state.match.moments.push(v); render(); }
-}
-
-// Initial render
 render();
-
 })();
 </script>
 </body>
