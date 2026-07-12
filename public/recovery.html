@@ -4,721 +4,402 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050D0A">
-<title>Recovery — Sean</title>
+<title>Recovery System — Sean</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#050D0A;--line:rgba(74,222,128,.10);
-  --green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;--red:#F05A3A;
+  --green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;--violet:#9C8ADE;
   --ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;
   --mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;
-  --w:1000px;
+  --w:960px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{
-  min-height:100vh;padding:40px 24px 64px;
+  min-height:100vh;padding:40px 24px 80px;
   background:radial-gradient(1000px 500px at 50% -10%,#0D2419 0%,transparent 60%),var(--bg);
   color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
 }
-ol,ul{list-style:none;padding:0;}
-button{font-family:inherit;}
-table{border-spacing:0;}
 
-.r-top{max-width:var(--w);margin:0 auto 20px;}
-.r-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.r-back:hover{color:var(--green);}
-.r-title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;font-style:italic;margin:14px 0 10px;}
-.r-title em{color:var(--green);}
-.r-meta{display:flex;align-items:center;flex-wrap:wrap;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dimmer);}
-.r-meta i{width:3px;height:3px;border-radius:50%;background:currentColor;margin:0 12px;opacity:.5;}
+/* HEADER */
+.top{max-width:var(--w);margin:0 auto 28px;}
+.back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
+.back:hover{color:var(--green);}
+.title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;font-style:italic;margin:14px 0 6px;}
+.title em{color:var(--green);}
+.subtitle{font:400 13px/1.6 'Inter',sans-serif;color:var(--dim);max-width:60ch;}
 
-.r-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 22px;padding:16px 20px;
-  border-left:2px solid rgba(74,222,128,.4);border-radius:0 12px 12px 0;background:rgba(16,36,27,.35);}
-.r-av{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid rgba(74,222,128,.3);
-  display:grid;place-items:center;background:rgba(74,222,128,.06);}
-.r-av span{font-family:var(--serif);font-size:18px;color:var(--green);}
-.r-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
-.r-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
-.r-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.88;margin-top:7px;max-width:78ch;}
-.r-clead.is-hot{color:var(--amber);opacity:1;}
+/* TABS */
+.tabs{display:flex;gap:4px;max-width:var(--w);margin:0 auto 24px;border-bottom:1px solid var(--line);padding-bottom:0;overflow-x:auto;}
+.tab{background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;padding:12px 18px;
+  font:500 10px var(--mono);letter-spacing:.16em;color:var(--dim);white-space:nowrap;transition:all .15s;}
+.tab:hover{color:var(--ink);}
+.tab.is-active{color:var(--green);border-bottom-color:var(--green);}
+.tab:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
 
-.r-block{max-width:var(--w);margin:0 auto 20px;padding:24px 26px;border:1px solid var(--line);border-radius:18px;background:rgba(16,36,27,.3);}
-.r-bh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;}
-.r-eyebrow{font:500 9px var(--mono);letter-spacing:.24em;color:var(--dim);}
-.r-bh h2,.r-libh h2{font-family:var(--serif);font-weight:400;font-size:26px;margin-top:10px;}
-.r-bh em,.r-libh em{font-style:italic;color:var(--green);}
-.r-gate{text-align:right;}
-.r-gate b{display:block;font-family:var(--serif);font-size:30px;font-weight:400;color:var(--teal);line-height:1;}
-.r-gate span{display:block;font:500 8px var(--mono);letter-spacing:.2em;color:var(--dimmer);margin-top:7px;}
+/* TAB PANELS */
+.panel{display:none;max-width:var(--w);margin:0 auto;}
+.panel.is-active{display:block;}
 
-/* window */
-.r-win li{position:relative;display:flex;gap:18px;padding:16px 0;border-top:1px solid rgba(255,255,255,.04);}
-.r-win li:first-child{border-top:0;}
-.r-win li.is-past{opacity:.42;}
-.r-win li.is-now .r-bead{background:var(--green);border-color:var(--green);box-shadow:0 0 0 4px rgba(74,222,128,.14);}
-.r-win li.is-past .r-bead{background:var(--dim);border-color:var(--dim);}
-.r-win li.is-locked .r-bead{border-color:var(--amber);}
-.r-bead{width:9px;height:9px;border-radius:50%;border:1px solid var(--dimmer);background:var(--bg);flex:none;margin-top:6px;}
-.r-wt{width:150px;flex:none;}
-.r-wtime{display:block;font:400 15px var(--mono);color:var(--ink);}
-.r-win li.is-now .r-wtime{color:var(--green);}
-.r-wlab{display:block;font:500 8px var(--mono);letter-spacing:.2em;color:var(--dimmer);margin-top:6px;text-transform:uppercase;}
-.r-wc{flex:1;min-width:0;}
-.r-wn{font:400 10px/1.7 var(--mono);color:var(--dim);letter-spacing:.03em;margin-top:11px;}
-.r-wn.is-hot{color:var(--amber);}
+/* CARDS */
+.card{border:1px solid var(--line);border-radius:16px;background:rgba(16,36,27,.3);padding:24px;margin-bottom:16px;}
+.card-header{margin-bottom:16px;}
+.card-eyebrow{font:500 9px var(--mono);letter-spacing:.24em;color:var(--dim);margin-bottom:8px;}
+.card h2{font-family:var(--serif);font-weight:400;font-size:24px;}
+.card h2 em{font-style:italic;color:var(--green);}
+.card h3{font-family:var(--serif);font-weight:400;font-size:20px;margin-bottom:12px;}
+.card h3 em{font-style:italic;color:var(--teal);}
 
-.r-chips{display:flex;gap:7px;flex-wrap:wrap;}
-.r-chips button{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);
-  border-radius:20px;padding:9px 14px;cursor:pointer;font:400 11px 'Inter',sans-serif;color:var(--dim);transition:all .15s;}
-.r-chips button i{width:6px;height:6px;border-radius:50%;flex:none;}
-.r-chips button:hover:not(:disabled){color:var(--ink);}
-.r-chips button:disabled{opacity:.28;cursor:not-allowed;text-decoration:line-through;}
-.r-chips button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+/* INFO CARDS */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:16px;}
+.info-card{padding:16px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.014);}
+.info-card.gold{border-top:2px solid var(--gold);}.info-card.teal{border-top:2px solid var(--teal);}
+.info-card.amber{border-top:2px solid var(--amber);}.info-card.green{border-top:2px solid var(--green);}
+.info-card.violet{border-top:2px solid var(--violet);}
+.info-card p{font:400 12px/1.7 'Inter',sans-serif;color:var(--ink);opacity:.88;}
+.info-card .stat{font:500 22px var(--mono);color:var(--gold);display:block;margin-bottom:4px;}
+.info-card .stat.teal{color:var(--teal);}.info-card .stat.green{color:var(--green);}
 
-/* runner */
-.r-runner{display:flex;align-items:center;gap:22px;max-width:var(--w);margin:0 auto 20px;padding:18px 24px;
-  border:1px solid rgba(255,255,255,.15);border-radius:16px;background:rgba(8,26,20,.92);}
-.r-ring{width:74px;flex:none;transform:rotate(-90deg);}
-.r-ring-t{fill:none;stroke:rgba(255,255,255,.06);stroke-width:5;}
-.r-ring-p{fill:none;stroke:var(--teal);stroke-width:5;stroke-linecap:round;}
-.r-rt{flex:1;}
-.r-rt b{display:block;font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;color:var(--teal);}
-.r-rt span{display:block;font:500 9px var(--mono);letter-spacing:.16em;color:var(--dim);margin-top:9px;}
-.r-rb{display:flex;gap:8px;}
-.r-go{border:0;color:#08150F;border-radius:9px;padding:13px 20px;cursor:pointer;
-  font:500 10px var(--mono);letter-spacing:.14em;}
-.r-go:hover{filter:brightness(1.1);}
-.r-ghost{background:none;border:1px solid var(--line);border-radius:9px;padding:13px 16px;cursor:pointer;
-  font:500 9px var(--mono);letter-spacing:.12em;color:var(--dim);}
-.r-ghost:hover{color:var(--ink);border-color:rgba(255,255,255,.2);}
-.r-go:focus-visible,.r-ghost:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+/* ALERT CARD */
+.alert{padding:18px 22px;border-radius:12px;border:1px solid rgba(232,135,58,.4);background:rgba(232,135,58,.06);margin:16px 0;}
+.alert p{font:500 13px/1.7 'Inter',sans-serif;color:var(--amber);}
+.alert .label{font:500 9px var(--mono);letter-spacing:.2em;color:var(--amber);margin-bottom:6px;display:block;}
 
-/* body map */
-.r-hero{display:grid;grid-template-columns:280px 1fr;gap:30px;}
-.r-figs{display:flex;flex-direction:column;align-items:center;gap:14px;}
-.r-toggle{display:flex;gap:2px;border:1px solid var(--line);border-radius:8px;padding:3px;}
-.r-toggle button{background:none;border:0;cursor:pointer;padding:8px 16px;border-radius:6px;
-  font:500 8px var(--mono);letter-spacing:.2em;color:var(--dim);}
-.r-toggle button.is-on{background:rgba(74,222,128,.09);color:var(--green);}
-.r-toggle button:focus-visible{outline:2px solid var(--green);outline-offset:1px;}
-.r-fig svg{width:180px;height:auto;display:block;}
-.r-figlab{text-align:center;font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin-top:6px;}
-.r-body *{fill:rgba(255,255,255,.028);stroke:rgba(74,222,128,.16);stroke-width:.8;}
-.r-reg{cursor:pointer;}
-.r-reg circle{fill-opacity:.16;stroke-width:1.1;stroke-opacity:.5;transition:fill-opacity .2s,stroke-opacity .2s;}
-.r-reg:hover circle{fill-opacity:.3;stroke-opacity:.9;}
-.r-reg.is-sore circle{fill-opacity:.34;stroke-opacity:.8;}
-.r-reg.is-sel circle{fill-opacity:.5;stroke-opacity:1;stroke-width:1.6;}
-.r-reg:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font:400 12px/1.6 'Inter',sans-serif;}
+thead th{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);text-align:left;padding:10px 12px;
+  border-bottom:1px solid var(--line);white-space:nowrap;}
+tbody td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--ink);vertical-align:top;}
+tbody tr:hover{background:rgba(74,222,128,.02);}
+td.dim{color:var(--dim);}
+td.amber{color:var(--amber);}
+td.teal{color:var(--teal);}
+td.gold{color:var(--gold);}
+td.green{color:var(--green);}
+.no-row td{color:var(--dimmer);opacity:.5;}
 
-.r-side{display:flex;flex-direction:column;}
-.r-rn{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin-top:11px;}
-.r-watch{font:400 11px var(--mono);color:var(--amber);letter-spacing:.03em;margin-top:9px;}
-.r-lab{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin:24px 0 11px;text-transform:uppercase;}
-.r-scale{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
-.r-scale button{flex:1;padding:12px 6px;background:none;border:0;border-right:1px solid var(--line);cursor:pointer;
-  color:var(--dim);font:400 11px 'Inter',sans-serif;transition:all .12s;}
-.r-scale button:last-child{border-right:0;}
-.r-scale button:hover{color:var(--ink);}
-.r-scale button.is-sel{font-weight:500;}
-.r-scale button:focus-visible{outline:2px solid var(--green);outline-offset:-2px;}
+/* ORDERED LIST */
+.steps{counter-reset:step;list-style:none;padding:0;}
+.steps li{counter-increment:step;position:relative;padding:12px 0 12px 42px;border-bottom:1px solid rgba(255,255,255,.03);
+  font:400 13px/1.7 'Inter',sans-serif;color:var(--ink);}
+.steps li::before{content:counter(step);position:absolute;left:0;top:12px;width:28px;height:28px;
+  border-radius:8px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);
+  display:grid;place-items:center;font:500 11px var(--mono);color:var(--green);}
+.steps li .note{display:block;font:400 11px/1.6 var(--mono);color:var(--dim);margin-top:4px;}
 
-/* report */
-.r-rep{width:100%;border-collapse:collapse;}
-.r-rep th{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);text-align:center;padding-bottom:12px;font-weight:500;}
-.r-rep th:first-child{text-align:left;}
-.r-rep th:last-child{text-align:right;}
-.r-rep tr{cursor:pointer;transition:background .15s;}
-.r-rep tbody tr:hover{background:rgba(74,222,128,.03);}
-.r-rep tbody tr.is-sel{background:rgba(74,222,128,.06);}
-.r-rep td{padding:9px 0;border-top:1px solid rgba(255,255,255,.04);text-align:center;}
-.r-rname{text-align:left !important;font:400 12px 'Inter',sans-serif;color:var(--ink);padding-left:2px !important;}
-.r-cell{display:inline-block;width:24px;height:11px;border-radius:3px;}
-.r-flag{text-align:right !important;white-space:nowrap;}
-.r-flag b{font:400 12px var(--mono);color:var(--dim);font-weight:400;}
-.r-flag b.is-hot{color:var(--amber);}
-.r-flag b em{font-style:normal;color:var(--dimmer);}
-.r-flag i{font-style:normal;font-size:8px;color:var(--dimmer);margin-left:9px;}
-.r-flag i.is-hot{color:var(--amber);} .r-flag i.is-good{color:var(--green);}
-.r-insight{font:400 12px/1.75 'Inter',sans-serif;color:var(--dim);margin-top:20px;padding-left:14px;
-  border-left:2px solid rgba(232,135,58,.4);max-width:74ch;}
-.r-insight b{color:var(--ink);font-weight:400;}
+/* THREE RS */
+.rs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:16px 0;}
+.r-card{padding:16px;border-radius:12px;border:1px solid var(--line);text-align:center;}
+.r-card .r-letter{font:500 28px var(--mono);color:var(--teal);display:block;margin-bottom:6px;}
+.r-card .r-name{font:500 11px var(--mono);letter-spacing:.1em;color:var(--ink);display:block;margin-bottom:6px;}
+.r-card p{font:400 11px/1.6 'Inter',sans-serif;color:var(--dim);}
 
-/* library */
-.r-lib{padding-bottom:20px;}
-.r-libh{display:flex;justify-content:space-between;align-items:flex-end;width:100%;background:none;border:0;
-  cursor:pointer;text-align:left;padding:0;color:inherit;}
-.r-libh:focus-visible{outline:2px solid var(--green);outline-offset:4px;border-radius:6px;}
-.r-chev{font:400 20px var(--mono);color:var(--dim);}
-.r-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:24px;}
-.r-tool{display:flex;flex-direction:column;gap:10px;padding:18px 20px 16px;border-radius:14px;
-  border:1px solid var(--line);border-top:2px solid var(--tc,var(--dim));background:rgba(255,255,255,.014);}
-.r-tool.is-blocked{opacity:.6;}
-.r-tool header{display:flex;align-items:center;justify-content:space-between;}
-.r-tag{font:500 8px var(--mono);letter-spacing:.2em;}
-.r-dots{display:flex;gap:4px;}
-.r-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--dimmer);background:none;cursor:pointer;padding:0;}
-.r-dot.is-done{border-color:var(--tc,var(--green));}
-.r-dot:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
-.r-tool h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:21px;}
-.r-spec{font:400 10px var(--mono);letter-spacing:.04em;opacity:.85;}
-.r-why{font:400 11px/1.7 'Inter',sans-serif;color:var(--dim);}
-.r-care{font:400 10px/1.7 var(--mono);color:var(--dimmer);padding-left:11px;border-left:1px solid rgba(255,255,255,.07);}
-.r-care.is-blocked{color:var(--amber);border-color:rgba(232,135,58,.4);}
-.r-start{margin-top:4px;background:none;border:1px solid var(--line);border-radius:9px;padding:11px;cursor:pointer;
-  font:500 9px var(--mono);letter-spacing:.16em;color:var(--dim);}
-.r-start:hover:not(:disabled){background:rgba(255,255,255,.03);}
-.r-start:disabled{color:var(--amber);border-color:rgba(232,135,58,.3);cursor:not-allowed;}
-.r-start:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+/* SUPPLEMENT SECTION */
+.supp-group{margin-bottom:20px;}
+.supp-group h4{font:500 10px var(--mono);letter-spacing:.2em;color:var(--dim);margin-bottom:10px;padding-bottom:6px;
+  border-bottom:1px solid var(--line);}
+.supp-list{list-style:none;padding:0;}
+.supp-list li{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.02);font:400 13px/1.5 'Inter',sans-serif;}
+.supp-list li .name{color:var(--ink);}
+.supp-list li .dose{font:400 11px var(--mono);color:var(--dim);}
 
-.r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
+/* MFM NOTE */
+.mfm-note{margin-top:20px;padding:16px 20px;border-radius:12px;border:1px solid rgba(156,138,222,.3);
+  background:rgba(156,138,222,.04);}
+.mfm-note p{font:400 12px/1.7 'Inter',sans-serif;color:var(--violet);}
+.mfm-note .label{font:500 9px var(--mono);letter-spacing:.2em;color:var(--violet);margin-bottom:6px;display:block;}
+
+/* FOOTER */
+.foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
 
-@media(max-width:840px){
-  .r-hero{grid-template-columns:1fr;gap:26px;}
-  .r-figs{order:-1;}
-  .r-wt{width:112px;}
-}
 @media(max-width:680px){
-  body{padding:24px 16px 48px;}
-  .r-block{padding:20px 18px;}
-  .r-coach{flex-direction:column;gap:12px;}
-  .r-runner{flex-direction:column;align-items:flex-start;gap:16px;}
-  .r-win li{flex-wrap:wrap;}
-  .r-wt{width:auto;flex:1;display:flex;gap:12px;align-items:baseline;}
-  .r-wlab{margin-top:0;}
-  .r-wc{flex-basis:100%;padding-left:27px;}
-  .r-tools{grid-template-columns:1fr;}
-  .r-scale{flex-wrap:wrap;} .r-scale button{flex:1 1 44%;}
-  .r-cell{width:14px;}
-  .r-foot{flex-direction:column;gap:8px;}
+  body{padding:24px 14px 60px;}
+  .tabs{gap:0;}
+  .tab{padding:10px 12px;font-size:9px;}
+  .card{padding:18px 16px;}
+  .info-grid{grid-template-columns:1fr;}
+  .rs-grid{grid-template-columns:1fr;}
+  table{font-size:11px;}
+  thead th,tbody td{padding:8px 8px;}
+  .foot{flex-direction:column;gap:8px;}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
 
-<header class="r-top">
-  <a href="/train.html" class="r-back">&#8592; Train</a>
-  <h1 class="r-title">Recovery, <em>Sean</em></h1>
-  <p class="r-meta" id="meta"></p>
+<header class="top">
+  <a href="/" class="back">&#8592; Dashboard</a>
+  <h1 class="title">Recovery <em>System</em></h1>
+  <p class="subtitle">Full protocol from Huberman, Galpin, Man City, and brain sources. Heat, cold, post-match, nutrition.</p>
 </header>
 
-<section class="r-coach" id="coach"></section>
+<nav class="tabs" role="tablist">
+  <button class="tab is-active" role="tab" data-tab="sauna" aria-selected="true">SAUNA</button>
+  <button class="tab" role="tab" data-tab="cold" aria-selected="false">ICE BATH</button>
+  <button class="tab" role="tab" data-tab="postmatch" aria-selected="false">POST-MATCH</button>
+  <button class="tab" role="tab" data-tab="nutrition" aria-selected="false">NUTRITION</button>
+</nav>
 
-<section class="r-block" id="windowBlock"></section>
+<!-- ═══ TAB 1: SAUNA ═══════════════════════════════════════════ -->
+<section class="panel is-active" id="panel-sauna" role="tabpanel">
 
-<div id="runnerSlot"></div>
+  <div class="card">
+    <div class="card-header">
+      <p class="card-eyebrow">SOURCE: HUBERMAN</p>
+      <h2>Weekly <em>Sauna Schedule</em></h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>DAY</th><th>USE</th><th>DURATION</th><th>TEMP</th><th>NOTES</th></tr></thead>
+        <tbody>
+          <tr><td>Sunday</td><td>Post-recovery</td><td>15-20 min</td><td class="gold">80-100C</td><td class="dim">Pair with cold plunge 2-3 min</td></tr>
+          <tr><td>Monday</td><td>Post-training</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">NO ice bath after heavy gym</td></tr>
+          <tr><td>Tuesday</td><td>Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery after team training</td></tr>
+          <tr><td>Wednesday</td><td>Post-training OR GH protocol</td><td>15-20 min or 4x30 min</td><td class="gold">80C</td><td class="dim">GH protocol = once/week max</td></tr>
+          <tr><td>Thursday</td><td>Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery</td></tr>
+          <tr><td>Friday</td><td>Pre-bed</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">Compensatory cooling for sleep. NO ice bath</td></tr>
+          <tr class="no-row"><td>Saturday</td><td>NO</td><td>—</td><td>—</td><td class="dim">Match night: eat, hydrate, sleep</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<section class="r-block r-hero" id="bodyBlock"></section>
+  <div class="card">
+    <h3>Key <em>Facts</em></h3>
+    <div class="info-grid">
+      <div class="info-card gold">
+        <p><span class="stat">27%</span>Reduced cardiovascular mortality at 2-3x/week sauna use</p>
+      </div>
+      <div class="info-card gold">
+        <p><span class="stat">50%</span>Reduced cardiovascular mortality at 4-7x/week sauna use</p>
+      </div>
+      <div class="info-card gold">
+        <p><span class="stat">16x</span>Growth Hormone increase with protocol: 4 x 30 min at 80C, once/week max</p>
+      </div>
+      <div class="info-card green">
+        <p><span class="stat teal">1-3F</span>Core temp drop when sauna is done 1-2hrs before bed — triggers compensatory cooling for deep sleep</p>
+      </div>
+      <div class="info-card green">
+        <p>Heat acclimation improves sweat rate and fluid retention — critical for pre-season conditioning in Kansas heat</p>
+      </div>
+      <div class="info-card violet">
+        <p>Man City uses infrared sauna for recovery. Haaland uses red-light therapy room post-session.</p>
+      </div>
+    </div>
+  </div>
 
-<section class="r-block" id="reportBlock"></section>
+</section>
 
-<section class="r-block r-lib" id="libBlock"></section>
+<!-- ═══ TAB 2: ICE BATH ════════════════════════════════════════ -->
+<section class="panel" id="panel-cold" role="tabpanel">
 
-<footer class="r-foot">
-  <span>NO COLD WITHIN 4H OF STRENGTH WORK</span>
-  <span>SORENESS FEEDS EVERY OTHER PAGE</span>
+  <div class="card">
+    <div class="card-header">
+      <p class="card-eyebrow">SOURCE: HUBERMAN</p>
+      <h2>Cold Exposure <em>Protocol</em></h2>
+    </div>
+    <p style="font:500 12px var(--mono);color:var(--teal);margin-bottom:16px;">Weekly target: 11 min total, split across 2-4 sessions</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>DAY</th><th>EXPOSURE</th><th>DURATION</th><th>TEMP</th><th>NOTES</th></tr></thead>
+        <tbody>
+          <tr><td>Sunday</td><td>Post-sauna</td><td>2-3 min</td><td class="teal">10-15C</td><td class="dim">Recovery day</td></tr>
+          <tr><td>Tuesday</td><td>Morning (standalone)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Dopamine boost — doubles baseline for 4-6 hours</td></tr>
+          <tr><td>Thursday</td><td>Morning (standalone)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Same</td></tr>
+          <tr class="no-row"><td>Friday</td><td>NO</td><td>—</td><td>—</td><td class="dim">Save stress for game day</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert">
+    <span class="label">CRITICAL RULE</span>
+    <p>AVOID cold within 6 hours after gym. It suppresses the inflammatory response needed for muscle growth.</p>
+  </div>
+
+  <div class="card">
+    <h3>Key <em>Facts</em></h3>
+    <div class="info-grid">
+      <div class="info-card teal">
+        <p><span class="stat teal">2x</span>Doubles baseline dopamine for 4-6 hours. Morning = best timing to stack with cortisol peak.</p>
+      </div>
+      <div class="info-card teal">
+        <p>Move limbs to break thermal layer for stronger effect. Don't stay still — agitate the water around you.</p>
+      </div>
+      <div class="info-card teal">
+        <p>Spiking adrenaline after learning improves retention. Cold exposure post-study = better memory consolidation.</p>
+      </div>
+      <div class="info-card teal">
+        <p>Rapid cooling targets: palms, soles of feet, upper face (glabrous skin). Use these for quick cooldowns.</p>
+      </div>
+      <div class="info-card green">
+        <p>Stress inoculation: relax mind while body is activated = raises your stress threshold over time. Builds mental toughness.</p>
+      </div>
+      <div class="info-card amber">
+        <p>NEVER within 6 hours of strength/hypertrophy work — kills the inflammatory adaptation signal your muscles need to grow.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ TAB 3: POST-MATCH ══════════════════════════════════════ -->
+<section class="panel" id="panel-postmatch" role="tabpanel">
+
+  <div class="card">
+    <div class="card-header">
+      <p class="card-eyebrow">SOURCE: GAME DAY RECOVERY / HUBERMAN / MAN CITY</p>
+      <h2>Immediate <em>Post-Match</em></h2>
+    </div>
+    <p style="font:400 12px var(--mono);color:var(--dim);margin-bottom:16px;">0-1 hour after final whistle</p>
+    <ol class="steps">
+      <li>Light jog/walk cool-down<span class="note">5-10 min. Bring heart rate down gradually.</span></li>
+      <li>Static stretching: glutes, hammys, quads, groin, calves<span class="note">30 seconds each. 5-10 min total.</span></li>
+      <li>Cold plunge: 10-15C for 10-15 min<span class="note">Soccer-specific protocol. Longer than standalone sessions.</span></li>
+      <li>Meal within 1 hour: 3:1 carb-to-protein ratio<span class="note">E.g. rice + chicken, pasta + mince, recovery shake + banana.</span></li>
+      <li>Rehydrate: 125-150% of fluid lost<span class="note">Weigh before and after match to calculate.</span></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>The Three <em>Rs</em></h3>
+    <div class="rs-grid">
+      <div class="r-card">
+        <span class="r-letter">R</span>
+        <span class="r-name">REHYDRATE</span>
+        <p>125-150% of fluid weight lost. Weigh before/after.</p>
+      </div>
+      <div class="r-card">
+        <span class="r-letter">R</span>
+        <span class="r-name">REBUILD</span>
+        <p>Protein (amino acids) within 4 hours post-match.</p>
+      </div>
+      <div class="r-card">
+        <span class="r-letter">R</span>
+        <span class="r-name">REPLENISH</span>
+        <p>Carbs at 3:1 carb-to-protein ratio to refill glycogen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Next Day <em>(Sunday)</em></h3>
+    </div>
+    <ol class="steps">
+      <li>Swimming/treading water 15-20 min<span class="note">Lymphatic drainage. Shearing action of water moves lymph.</span></li>
+      <li>Light movement for blood flow<span class="note">Walk, easy bike, nothing that creates soreness.</span></li>
+      <li>Morning cold exposure 1-3 min for dopamine<span class="note">Standalone. Not post-gym.</span></li>
+      <li>112mvmnt: Hips & Hammys routine<span class="note">Mobility focus. Restore range of motion.</span></li>
+    </ol>
+  </div>
+
+  <div class="alert">
+    <span class="label">IF SUBBED EARLY / &lt;60 MIN PLAYED</span>
+    <p>Do a 20-min tempo run at 70% OR 6x100m sprints with 45s rest. Log it so Sunday recovery is adjusted accordingly.</p>
+  </div>
+
+</section>
+
+<!-- ═══ TAB 4: NUTRITION ═══════════════════════════════════════ -->
+<section class="panel" id="panel-nutrition" role="tabpanel">
+
+  <div class="card">
+    <div class="card-header">
+      <p class="card-eyebrow">SOURCE: GALPIN / HUBERMAN</p>
+      <h2>Hydration <em>Targets</em></h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>WINDOW</th><th>AMOUNT</th><th>DETAILS</th></tr></thead>
+        <tbody>
+          <tr><td>Wake (7:00)</td><td class="teal">500ml</td><td class="dim">Water + electrolytes + pinch salt</td></tr>
+          <tr><td>Mid-morning</td><td class="teal">300-500ml</td><td class="dim">Plain or electrolytes</td></tr>
+          <tr><td>Lunch</td><td class="teal">300ml</td><td class="dim">With meal</td></tr>
+          <tr><td>Afternoon</td><td class="teal">300-500ml</td><td class="dim">Plain</td></tr>
+          <tr><td>Pre-training (30-60 min)</td><td class="teal">300-500ml</td><td class="dim">With electrolytes</td></tr>
+          <tr><td>During training</td><td class="teal">Sip every 15-20 min</td><td class="dim">Galpin: bodyweight(lbs)/30 = oz per 15 min</td></tr>
+          <tr><td>Post-training</td><td class="teal">125-150% of lost</td><td class="dim">Weigh before/after</td></tr>
+          <tr><td>Dinner</td><td class="teal">300ml</td><td class="dim">With meal</td></tr>
+          <tr><td><strong>Daily total</strong></td><td class="green"><strong>3-4 liters</strong></td><td class="dim">More on training/match days</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Supplement <em>Stack</em></h2>
+    </div>
+
+    <div class="supp-group">
+      <h4>DAILY (EVERY DAY)</h4>
+      <ul class="supp-list">
+        <li><span class="name">Creatine</span><span class="dose">5g with breakfast</span></li>
+        <li><span class="name">Vitamin D3</span><span class="dose">1000-2000 IU</span></li>
+        <li><span class="name">Omega-3 / Fish Oil</span><span class="dose">1-2g EPA</span></li>
+        <li><span class="name">Electrolytes</span><span class="dose">Morning + around training</span></li>
+      </ul>
+    </div>
+
+    <div class="supp-group">
+      <h4>PRE-TRAINING (30-50 MIN BEFORE)</h4>
+      <ul class="supp-list">
+        <li><span class="name">Caffeine</span><span class="dose">1-3mg/kg</span></li>
+        <li><span class="name">Water + electrolytes</span><span class="dose">300-500ml</span></li>
+      </ul>
+    </div>
+
+    <div class="supp-group">
+      <h4>POST-TRAINING</h4>
+      <ul class="supp-list">
+        <li><span class="name">Protein (shake or meal)</span><span class="dose">30-40g within 1 hour</span></li>
+      </ul>
+    </div>
+
+    <div class="supp-group">
+      <h4>BEFORE BED (9:30PM)</h4>
+      <ul class="supp-list">
+        <li><span class="name">Magnesium Threonate</span><span class="dose">145mg</span></li>
+        <li><span class="name">Apigenin</span><span class="dose">50mg</span></li>
+        <li><span class="name">L-Theanine</span><span class="dose">100-400mg</span></li>
+        <li><span class="name">Myo-inositol (optional)</span><span class="dose">900mg — if waking mid-night</span></li>
+      </ul>
+    </div>
+
+    <div class="mfm-note">
+      <span class="label">MFM APPOINTMENT — TUESDAY JULY 15</span>
+      <p>After MFM appointment (labs, body assessment, supplement protocol): Replace baseline stack with whatever they prescribe from bloods/labs.</p>
+    </div>
+  </div>
+
+</section>
+
+<footer class="foot">
+  <span>SOURCES: HUBERMAN / GALPIN / MAN CITY / 112MVMNT</span>
+  <span>SEAN MURPHY 2026</span>
 </footer>
 
 <script>
 (function(){
 'use strict';
+var tabs = document.querySelectorAll('.tab');
+var panels = document.querySelectorAll('.panel');
 
-/* ═══ CONFIG ═══════════════════════════════════════════════════ */
-var SESSION = { name: "Team training", type: "team", end: 19 * 60 + 30 };
-var MATCH_IN = 2;
-var BED = 22 * 60 + 30;
-var COLD_GATE = 4 * 60;
-
-function getNow() {
-  var d = new Date();
-  return d.getHours() * 60 + d.getMinutes();
-}
-
-function hhmm(m) {
-  return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
-}
-
-function dur(m) {
-  if (m < 0) m = 0;
-  return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm';
-}
-
-function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-/* ═══ PROTOCOLS ═══════════════════════════════════════════════ */
-var TOOLS = {
-  sauna:    { n: "Sauna",              tag: "HEAT",        c: "#E8873A", weekly: 3, spec: "80\u2013100 \u00b0C \u00b7 15\u201320 min \u00b7 2\u20133x/week = 27% CV reduction, 4\u20137x = 50%", rounds: [{ p: "HEAT", s: 1200 }], sets: 1, why: "Cardiovascular health, heat acclimation, mitochondrial biogenesis. Compensatory cooling 1\u20132 hrs before bed aids sleep.", care: "Growth hormone protocol: 4 \u00d7 30 min @ 80\u00b0C, max once/week. Man City uses infrared sauna." },
-  ice:      { n: "Cold plunge",        tag: "COLD",        c: "#7DD3FC", weekly: 3, spec: "10\u201315 \u00b0C \u00b7 1\u20135 min \u00b7 11 min total/week across 2\u20134 sessions", rounds: [{ p: "IMMERSE", s: 300 }], sets: 1, why: "Doubles baseline dopamine for 4\u20136 hours. Best done AM to stack with cortisol peak. Memory enhancement when done after learning.", care: "AVOID within 4\u20136 hours after strength/hypertrophy training \u2014 suppresses inflammatory response needed for adaptation. Move limbs to break thermal layer." },
-  contrast: { n: "Contrast bath",      tag: "HOT/COLD",    c: "#D8B24A", weekly: 2, spec: "3 min hot / 1 min cold \u00d7 4 rounds \u00b7 finish on cold", rounds: [{ p: "HOT", s: 180 }, { p: "COLD", s: 60 }], sets: 4, why: "Alternating vasodilation/constriction pumps blood and lymph. Good for heavy legs post-match.", care: "Not within 90 min of bed. Not within 4 hours of strength work." },
-  gun:      { n: "Percussion gun",     tag: "SOFT TISSUE", c: "#4ADE80", weekly: 5, spec: "30\u201360 sec per muscle group \u00b7 avoid bony prominences", rounds: [{ p: "WORK", s: 300 }], sets: 1, why: "Breaks up fascial adhesions, increases local blood flow, reduces DOMS.", care: "Light pressure on tender areas. Don\u2019t chase pain." },
-  roll:     { n: "Foam roller",        tag: "SOFT TISSUE", c: "#4ADE80", weekly: 4, spec: "60\u201390 sec per area \u00b7 slow rolls, pause on knots", rounds: [{ p: "ROLL", s: 600 }], sets: 1, why: "Fascial adhesion rolling. Myofascial release for recovery between sessions.", care: "Avoid rolling directly on joints or spine." },
-  ball:     { n: "Lacrosse ball",      tag: "TRIGGER",     c: "#7DD3C0", weekly: 3, spec: "60 sec per trigger point \u00b7 breathe into pressure", rounds: [{ p: "SUSTAIN", s: 300 }], sets: 1, why: "Deep trigger point release for glutes, hip flexors, calves, feet.", care: "Adductors \u2014 groin history. Treat it earlier than it asks." },
-  swim:     { n: "Pool recovery",      tag: "LYMPH",       c: "#7DD3FC", weekly: 1, spec: "15\u201320 min treading water or light swimming", rounds: [{ p: "SWIM", s: 1200 }], sets: 1, why: "Lymphatic drainage \u2014 shearing action of water on skin moves lymph fluid. Reduces heavy legs better than static immersion.", care: "Active recovery only. No intensity." },
-  walk:     { n: "Nasal walk",         tag: "ACTIVE",      c: "#2E7F5B", weekly: 7, spec: "10\u201320 min \u00b7 nasal breathing only \u00b7 optic flow", rounds: [{ p: "WALK", s: 1200 }], sets: 1, why: "Generates optic flow to quiet amygdala. Diaphragmatic breathing creates pressure differential to move lymph. 7000+ steps daily target.", care: "Morning sunlight walk is non-negotiable." }
-};
-
-var TOOL_KEYS = ["sauna", "ice", "contrast", "gun", "roll", "ball", "swim", "walk"];
-
-/* ═══ REGIONS ════════════════════════════════════════════════ */
-var REGIONS = {
-  traps:   { view: "back",  n: "Traps & T-spine",  c: [[60,56,11]],               tools: ["ball","roll","gun"] },
-  lowback: { view: "back",  n: "Lower back",       c: [[60,98,10]],               tools: ["ball","sauna","gun"] },
-  glutes:  { view: "back",  n: "Glutes",           c: [[60,119,12]],              tools: ["ball","gun","roll"] },
-  hams:    { view: "back",  n: "Hamstrings",       c: [[51,160,9],[69,160,9]],    tools: ["roll","gun","ball"] },
-  calves:  { view: "back",  n: "Calves",           c: [[51,215,8],[69,215,8]],    tools: ["roll","gun","ball"] },
-  feet:    { view: "back",  n: "Feet & plantar",   c: [[50,259,6],[70,259,6]],    tools: ["ball","roll"] },
-  hipflex: { view: "front", n: "Hip flexors",      c: [[60,120,10]],              tools: ["roll","gun","ball"] },
-  adduct:  { view: "front", n: "Adductors",        c: [[60,152,9]],               tools: ["ball","gun","roll"], watch: true },
-  quads:   { view: "front", n: "Quads",            c: [[51,158,9],[69,158,9]],    tools: ["roll","gun"] },
-  tib:     { view: "front", n: "Shins & tib ant",  c: [[51,214,7],[69,214,7]],    tools: ["gun","ball"] }
-};
-
-var REGION_KEYS = ["traps","lowback","glutes","hams","calves","feet","hipflex","adduct","quads","tib"];
-var SORE = ["None", "Niggle", "Sore", "Angry"];
-var SORE_C = ["#3B4E47", "#D8B24A", "#E8873A", "#F05A3A"];
-
-var HISTORY = {
-  adduct:  [0,0,0,0,0,0,1],
-  lowback: [0,0,0,0,0,0,0],
-  calves:  [0,0,0,0,0,0,1],
-  hams:    [0,0,0,0,0,0,1],
-  glutes:  [0,0,0,0,0,0,0],
-  quads:   [0,0,0,0,0,0,1]
-};
-
-/* ═══ STATE ══════════════════════════════════════════════════ */
-var state = {
-  view: "front",
-  sore: { hams: 1, calves: 1, quads: 1 },
-  sel: null,
-  run: null,       // { tool, startedAt, seq, idx }
-  lib: false,
-  log: { sauna: 0, ice: 0, contrast: 0, gun: 0, roll: 0, ball: 0, swim: 0, walk: 1 }
-};
-
-/* ═══ COLD GATE ══════════════════════════════════════════════ */
-function coldAt() { return SESSION.end + COLD_GATE; }
-function isLocked(t) {
-  return (t === "ice" || t === "contrast") && SESSION.type === "strength" && getNow() < coldAt();
-}
-
-/* ═══ KHABIB ═════════════════════════════════════════════════ */
-function khabibLine() {
-  var now = getNow();
-  var cold = coldAt();
-  var worst = null, worstV = 0;
-  Object.keys(state.sore).forEach(function(k) {
-    if (state.sore[k] >= 2 && state.sore[k] > worstV) { worst = k; worstV = state.sore[k]; }
+tabs.forEach(function(tab){
+  tab.addEventListener('click', function(){
+    tabs.forEach(function(t){ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+    panels.forEach(function(p){ p.classList.remove('is-active'); });
+    tab.classList.add('is-active');
+    tab.setAttribute('aria-selected','true');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('is-active');
   });
-
-  if (SESSION.type === "strength" && now < cold) {
-    return { tone: "hot", line: "You lifted " + dur(now - SESSION.end) + " ago. No cold until " + hhmm(cold) + " \u2014 it would cost you the session you just did. Heat or soft tissue instead." };
-  }
-  if (MATCH_IN === 1 && worst) {
-    return { tone: "hot", line: REGIONS[worst].n + " is " + SORE[worstV].toLowerCase() + " and you play tomorrow. Soft tissue tonight, nothing that leaves you flat." };
-  }
-  if (worst) {
-    return { tone: "hot", line: REGIONS[worst].n + " is " + SORE[worstV].toLowerCase() + ". Start there. The rest can wait." };
-  }
-  return { tone: "good", line: "Nothing angry today. Ten minutes of soft tissue and get on with your life." };
-}
-
-/* ═══ WINDOW ═════════════════════════════════════════════════ */
-function buildWindow() {
-  var strength = SESSION.type === "strength";
-  var ca = coldAt();
-  var now = getNow();
-  return [
-    { at: SESSION.end, label: "Straight after", tools: ["walk"], lock: false,
-      note: "Nothing else. Move, drink, eat." },
-    { at: SESSION.end + 30, label: "+30 minutes", tools: ["gun", "roll"], lock: false,
-      note: "Light. You\u2019re helping the tissue, not training it." },
-    { at: ca, label: strength ? "+4 hours" : "Any time", tools: ["ice", "contrast"],
-      lock: strength && now < ca,
-      note: strength ? "Cold before this costs you the session you just did." : "No strength work today \u2014 cold is free." },
-    { at: 19 * 60 + 30, label: "Evening", tools: ["ball", "swim"], lock: false,
-      note: "Sore spots only. Ten minutes, not forty." },
-    { at: BED - 90, label: "\u226590 min before bed", tools: ["sauna"],
-      lock: MATCH_IN === 1,
-      note: MATCH_IN === 1 ? "Match tomorrow. Skip the heat, sleep instead." : "Core temp needs time to fall." }
-  ];
-}
-
-/* ═══ BODY SVG ═══════════════════════════════════════════════ */
-function bodysvg(view) {
-  var h = '<svg viewBox="0 0 120 300" aria-label="' + view + ' view">';
-  h += '<g class="r-body">';
-  h += '<circle cx="60" cy="20" r="14"/>';
-  h += '<rect x="55" y="32" width="10" height="8" rx="3"/>';
-  h += '<rect x="40" y="40" width="40" height="70" rx="12"/>';
-  h += '<rect x="42" y="108" width="36" height="26" rx="9"/>';
-  h += '<rect x="24" y="44" width="12" height="62" rx="6"/>';
-  h += '<rect x="84" y="44" width="12" height="62" rx="6"/>';
-  h += '<rect x="44" y="132" width="14" height="62" rx="7"/>';
-  h += '<rect x="62" y="132" width="14" height="62" rx="7"/>';
-  h += '<rect x="45" y="196" width="12" height="58" rx="6"/>';
-  h += '<rect x="63" y="196" width="12" height="58" rx="6"/>';
-  h += '<rect x="43" y="256" width="14" height="9" rx="3"/>';
-  h += '<rect x="63" y="256" width="14" height="9" rx="3"/>';
-  h += '</g>';
-
-  REGION_KEYS.forEach(function(k) {
-    var r = REGIONS[k];
-    if (r.view !== view) return;
-    var s = state.sore[k] || 0;
-    var cls = 'r-reg';
-    if (state.sel === k) cls += ' is-sel';
-    if (s) cls += ' is-sore';
-    h += '<g class="' + cls + '" data-reg="' + k + '" role="button" tabindex="0" aria-label="' + esc(r.n) + ' \u2014 ' + SORE[s] + '">';
-    r.c.forEach(function(pt) {
-      h += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + pt[2] + '" style="fill:' + SORE_C[s] + ';stroke:' + SORE_C[s] + '"/>';
-    });
-    h += '</g>';
-  });
-
-  h += '</svg>';
-  return h;
-}
-
-/* ═══ REPORT ═════════════════════════════════════════════════ */
-function buildReport() {
-  var rows = [];
-  Object.keys(HISTORY).forEach(function(k) {
-    var d = HISTORY[k];
-    var flagged = d.filter(function(v) { return v >= 2; }).length;
-    var trend = d[d.length - 1] - d[0];
-    rows.push({ k: k, d: d, flagged: flagged, trend: trend });
-  });
-  rows.sort(function(a, b) { return b.flagged - a.flagged; });
-  return rows;
-}
-
-/* ═══ RUNNER (timestamp-based) ═══════════════════════════════ */
-function buildSeq(tool) {
-  var t = TOOLS[tool];
-  var seq = [];
-  for (var s = 0; s < t.sets; s++) {
-    t.rounds.forEach(function(r) { seq.push({ p: r.p, s: r.s }); });
-  }
-  return seq;
-}
-
-function runnerLeft() {
-  if (!state.run) return 0;
-  var elapsed = Math.floor((Date.now() - state.run.startedAt) / 1000);
-  return Math.max(0, state.run.seq[state.run.idx].s - elapsed);
-}
-
-function clockStr(s) {
-  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-}
-
-/* ═══ RENDER ═════════════════════════════════════════════════ */
-function render() {
-  var now = getNow();
-  var k = khabibLine();
-  var ca = coldAt();
-
-  // Meta
-  document.getElementById('meta').innerHTML =
-    esc(SESSION.name.toUpperCase()) + '<i></i>ENDED ' + hhmm(SESSION.end) + '<i></i>MATCH IN ' + MATCH_IN + ' DAY';
-
-  // Coach
-  document.getElementById('coach').innerHTML =
-    '<div class="r-av"><span>K</span></div><div>' +
-    '<div class="r-cname">KHABIB <em>\u00b7 recovery is not a workout</em></div>' +
-    '<p class="r-clead' + (k.tone === 'hot' ? ' is-hot' : '') + '">' + esc(k.line) + '</p></div>';
-
-  // Window block
-  renderWindow(now, ca);
-
-  // Runner
-  renderRunner();
-
-  // Body block
-  renderBody();
-
-  // Report
-  renderReport();
-
-  // Library
-  renderLib(ca);
-
-  bindAll();
-}
-
-function renderWindow(now, ca) {
-  var win = buildWindow();
-  var h = '<header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\u2019S WINDOW</p><h2>When, <em>not what</em></h2></div>';
-  if (now < ca) {
-    h += '<div class="r-gate"><b>' + dur(ca - now) + '</b><span>UNTIL COLD UNLOCKS</span></div>';
-  }
-  h += '</header><ol class="r-win">';
-
-  win.forEach(function(slot, i) {
-    var next = win[i + 1];
-    var st = (now >= slot.at && (!next || now < next.at)) ? "now" : (now >= slot.at ? "past" : "next");
-    var locked = slot.lock;
-    h += '<li class="is-' + st + (locked ? ' is-locked' : '') + '">';
-    h += '<span class="r-bead"></span>';
-    h += '<div class="r-wt"><span class="r-wtime">' + hhmm(slot.at) + '</span>';
-    h += '<span class="r-wlab">' + esc(slot.label) + '</span></div>';
-    h += '<div class="r-wc"><div class="r-chips">';
-    slot.tools.forEach(function(t) {
-      var dis = isLocked(t) || locked;
-      h += '<button data-runtool="' + t + '"' + (dis ? ' disabled' : '') + '>';
-      h += '<i style="background:' + TOOLS[t].c + '"></i> ' + esc(TOOLS[t].n) + '</button>';
-    });
-    h += '</div>';
-    var hot = locked || (st !== 'past' && slot.tools.some(isLocked));
-    h += '<p class="r-wn' + (hot ? ' is-hot' : '') + '">' + esc(slot.note) + '</p>';
-    h += '</div></li>';
-  });
-  h += '</ol>';
-  document.getElementById('windowBlock').innerHTML = h;
-}
-
-function renderRunner() {
-  var el = document.getElementById('runnerSlot');
-  if (!state.run) { el.innerHTML = ''; return; }
-  var t = TOOLS[state.run.tool];
-  var seq = state.run.seq;
-  var idx = state.run.idx;
-  var left = runnerLeft();
-  var done = idx + 1 >= seq.length && left <= 0;
-  var cur = seq[idx];
-  var R = 40, C = 2 * Math.PI * R;
-  var frac = done ? 1 : 1 - left / cur.s;
-  var setNum = Math.floor(idx / t.rounds.length) + 1;
-
-  var h = '<section class="r-runner" style="--tc:' + t.c + '">';
-  h += '<svg viewBox="0 0 100 100" class="r-ring" aria-hidden="true">';
-  h += '<circle cx="50" cy="50" r="' + R + '" class="r-ring-t"/>';
-  h += '<circle cx="50" cy="50" r="' + R + '" class="r-ring-p" stroke-dasharray="' + (C * frac) + ' ' + C + '" style="stroke:' + t.c + '"/>';
-  h += '</svg>';
-  h += '<div class="r-rt"><b style="color:' + t.c + '">' + (done ? 'Done' : clockStr(left)) + '</b>';
-  h += '<span>' + (done ? esc(t.n) + ' complete' : esc(t.n) + ' \u00b7 ' + cur.p + ' \u00b7 ' + setNum + ' of ' + t.sets) + '</span></div>';
-  h += '<div class="r-rb">';
-  if (!done) h += '<button class="r-go" data-runpause style="background:' + t.c + '">' + (state.run.paused ? 'Start' : 'Pause') + '</button>';
-  h += '<button class="r-ghost" data-runclose>Close</button>';
-  h += '</div></section>';
-  el.innerHTML = h;
-}
-
-function renderBody() {
-  if (!state.sel) state.sel = REGION_KEYS[0];
-  var region = REGIONS[state.sel];
-  var h = '<div class="r-figs">';
-  h += '<div class="r-toggle">';
-  h += '<button class="' + (state.view === 'back' ? 'is-on' : '') + '" data-bview="back">BACK</button>';
-  h += '<button class="' + (state.view === 'front' ? 'is-on' : '') + '" data-bview="front">FRONT</button>';
-  h += '</div>';
-  h += '<div class="r-fig">' + bodysvg(state.view) + '<p class="r-figlab">' + state.view.toUpperCase() + '</p></div>';
-  h += '</div>';
-
-  h += '<div class="r-side">';
-  h += '<p class="r-eyebrow">02 \u00b7 SELECTED REGION</p>';
-  h += '<h2 class="r-rn">' + esc(region.n) + '</h2>';
-  if (region.watch) h += '<p class="r-watch">Groin history. Treat it earlier than it asks.</p>';
-
-  h += '<p class="r-lab">How does it feel</p>';
-  h += '<div class="r-scale">';
-  var sv = state.sore[state.sel] || 0;
-  SORE.forEach(function(s, i) {
-    var sel = sv === i;
-    var style = sel ? ' style="background:' + SORE_C[i] + ';border-color:' + SORE_C[i] + ';color:#08150F"' : '';
-    h += '<button class="' + (sel ? 'is-sel' : '') + '"' + style + ' data-sore="' + i + '" aria-pressed="' + sel + '">' + s + '</button>';
-  });
-  h += '</div>';
-
-  h += '<p class="r-lab">What reaches it</p>';
-  h += '<div class="r-chips">';
-  region.tools.forEach(function(t) {
-    var dis = isLocked(t);
-    h += '<button data-runtool="' + t + '"' + (dis ? ' disabled' : '') + '>';
-    h += '<i style="background:' + TOOLS[t].c + '"></i> ' + esc(TOOLS[t].n) + '</button>';
-  });
-  h += '</div></div>';
-
-  document.getElementById('bodyBlock').innerHTML = h;
-}
-
-function renderReport() {
-  var report = buildReport();
-  var chief = report[0];
-  var h = '<header class="r-bh"><div><p class="r-eyebrow">03 \u00b7 SEVEN-DAY REPORT</p><h2>The <em>pattern</em></h2></div></header>';
-  h += '<table class="r-rep"><thead><tr><th>Region</th>';
-  ["M","T","W","T","F","S","S"].forEach(function(d) { h += '<th>' + d + '</th>'; });
-  h += '<th>Flagged</th></tr></thead><tbody>';
-
-  report.forEach(function(row) {
-    h += '<tr class="' + (state.sel === row.k ? 'is-sel' : '') + '" data-reprow="' + row.k + '">';
-    h += '<td class="r-rname">' + esc(REGIONS[row.k].n) + '</td>';
-    row.d.forEach(function(v) {
-      var op = v ? (0.25 + v * 0.25) : 0.1;
-      h += '<td><span class="r-cell" style="background:' + SORE_C[v] + ';opacity:' + op + '"></span></td>';
-    });
-    h += '<td class="r-flag"><b class="' + (row.flagged >= 4 ? 'is-hot' : '') + '">' + row.flagged + '<em>/7</em></b>';
-    var tCls = row.trend > 0 ? 'is-hot' : row.trend < 0 ? 'is-good' : '';
-    var tChar = row.trend > 0 ? '\u25b2' : row.trend < 0 ? '\u25bc' : '=';
-    h += '<i class="' + tCls + '">' + tChar + '</i></td></tr>';
-  });
-  h += '</tbody></table>';
-
-  if (chief) {
-    h += '<p class="r-insight"><b>' + esc(REGIONS[chief.k].n) + '</b> flagged ' + chief.flagged + ' of the last 7 days and it hasn\u2019t improved. That\u2019s not a recovery problem any more. Book the physio.</p>';
-  }
-
-  document.getElementById('reportBlock').innerHTML = h;
-}
-
-function renderLib(ca) {
-  var h = '<button class="r-libh" data-libtogg aria-expanded="' + state.lib + '">';
-  h += '<div><p class="r-eyebrow">04 \u00b7 ALL PROTOCOLS</p><h2>The <em>library</em></h2></div>';
-  h += '<span class="r-chev">' + (state.lib ? '\u2212' : '+') + '</span></button>';
-
-  if (state.lib) {
-    h += '<div class="r-tools">';
-    TOOL_KEYS.forEach(function(key) {
-      var t = TOOLS[key];
-      var off = isLocked(key);
-      h += '<article class="r-tool' + (off ? ' is-blocked' : '') + '" style="--tc:' + t.c + '">';
-      h += '<header><span class="r-tag" style="color:' + t.c + '">' + t.tag + '</span>';
-      h += '<span class="r-dots">';
-      for (var i = 0; i < t.weekly; i++) {
-        h += '<button class="r-dot' + (i < (state.log[key] || 0) ? ' is-done' : '') + '" data-logdot="' + key + '" data-doti="' + i + '" aria-label="' + esc(t.n) + ' session ' + (i+1) + '" aria-pressed="' + (i < (state.log[key] || 0)) + '" style="' + (i < (state.log[key] || 0) ? 'background:' + t.c + ';border-color:' + t.c : '') + '"></button>';
-      }
-      h += '</span></header>';
-      h += '<h3>' + esc(t.n) + '</h3>';
-      h += '<p class="r-spec" style="color:' + t.c + '">' + esc(t.spec) + '</p>';
-      h += '<p class="r-why">' + esc(t.why) + '</p>';
-      h += '<p class="r-care' + (off ? ' is-blocked' : '') + '">' + (off ? 'Locked until ' + hhmm(ca) + '. ' : '') + esc(t.care) + '</p>';
-      h += '<button class="r-start" data-runtool="' + key + '"' + (off ? ' disabled' : '') + ' style="' + (off ? '' : 'color:' + t.c + ';border-color:' + t.c + '40') + '">' + (off ? 'Blocked' : 'Run protocol') + '</button>';
-      h += '</article>';
-    });
-    h += '</div>';
-  }
-
-  document.getElementById('libBlock').innerHTML = h;
-}
-
-/* ═══ BIND ═══════════════════════════════════════════════════ */
-function bindAll() {
-  // View toggle
-  document.querySelectorAll('[data-bview]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.view = this.dataset.bview; render(); });
-  });
-
-  // Region select
-  document.querySelectorAll('[data-reg]').forEach(function(g) {
-    var handler = function() {
-      var k = g.dataset.reg;
-      state.sel = k;
-      state.view = REGIONS[k].view;
-      render();
-    };
-    g.addEventListener('click', handler);
-    g.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
-    });
-  });
-
-  // Soreness scale
-  document.querySelectorAll('[data-sore]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.sore[state.sel] = parseInt(this.dataset.sore);
-      render();
-    });
-  });
-
-  // Report rows
-  document.querySelectorAll('[data-reprow]').forEach(function(tr) {
-    tr.addEventListener('click', function() {
-      var k = this.dataset.reprow;
-      state.sel = k;
-      state.view = REGIONS[k].view;
-      render();
-    });
-  });
-
-  // Run tool
-  document.querySelectorAll('[data-runtool]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tool = this.dataset.runtool;
-      if (isLocked(tool)) return;
-      state.run = { tool: tool, startedAt: Date.now(), seq: buildSeq(tool), idx: 0, paused: false };
-      render();
-      tickRunner();
-    });
-  });
-
-  // Runner pause/start
-  var pp = document.querySelector('[data-runpause]');
-  if (pp) pp.addEventListener('click', function() {
-    if (!state.run) return;
-    if (state.run.paused) {
-      // Resume: adjust startedAt to account for paused time
-      state.run.startedAt = Date.now() - state.run.pausedElapsed * 1000;
-      state.run.paused = false;
-      state.run.pausedElapsed = undefined;
-      tickRunner();
-    } else {
-      var elapsed = Math.floor((Date.now() - state.run.startedAt) / 1000);
-      state.run.paused = true;
-      state.run.pausedElapsed = elapsed;
-    }
-    render();
-  });
-
-  // Runner close
-  var rc = document.querySelector('[data-runclose]');
-  if (rc) rc.addEventListener('click', function() { state.run = null; render(); });
-
-  // Library toggle
-  var lt = document.querySelector('[data-libtogg]');
-  if (lt) lt.addEventListener('click', function() { state.lib = !state.lib; render(); });
-
-  // Log dots
-  document.querySelectorAll('[data-logdot]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var key = this.dataset.logdot;
-      var i = parseInt(this.dataset.doti);
-      state.log[key] = (state.log[key] || 0) === i + 1 ? i : i + 1;
-      render();
-    });
-  });
-}
-
-/* ═══ RUNNER TICK ═════════════════════════════════════════════ */
-function tickRunner() {
-  if (!state.run || state.run.paused) return;
-  var left = runnerLeft();
-  if (left <= 0) {
-    var next = state.run.idx + 1;
-    if (next >= state.run.seq.length) {
-      state.run = null;
-      render();
-      return;
-    }
-    state.run.idx = next;
-    state.run.startedAt = Date.now();
-    render();
-  } else {
-    renderRunner();
-  }
-  requestAnimationFrame(tickRunner);
-}
-
-// Re-render periodically to update cold gate countdown and window states
-setInterval(render, 60000);
-
-// Initial
-render();
-
+});
 })();
 </script>
 </body>

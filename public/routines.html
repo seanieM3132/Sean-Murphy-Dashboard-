@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Routines — Sean Murphy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#050D0A;--line:rgba(74,222,128,.10);--green:#4ADE80;--teal:#7DD3C0;--amber:#E8873A;--gold:#D8B24A;--violet:#9C8ADE;
+--ink:#E6F2EC;--dim:#5F786E;--dimmer:#3B4E47;
+--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',Georgia,serif;--sans:'Inter',sans-serif;
+}
+body{
+background:var(--bg);color:var(--ink);font-family:var(--sans);
+min-height:100vh;padding:1.5rem;line-height:1.5;
+}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:2rem;color:var(--green);margin-bottom:.25rem}
+.clock{font-family:var(--mono);font-size:.85rem;color:var(--dim);margin-bottom:1.5rem}
+
+/* Tabs */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab-btn{
+background:transparent;border:1px solid var(--dimmer);color:var(--dim);
+font-family:var(--mono);font-size:.75rem;padding:.5rem 1rem;border-radius:6px;
+cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;
+}
+.tab-btn.active{background:var(--green);color:var(--bg);border-color:var(--green);font-weight:500}
+.tab-btn:hover:not(.active){border-color:var(--green);color:var(--green)}
+
+/* Progress */
+.progress-wrap{margin-bottom:1.25rem}
+.progress-bar{height:6px;background:var(--dimmer);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .3s ease}
+.progress-label{font-family:var(--mono);font-size:.7rem;color:var(--dim);margin-top:.35rem}
+
+/* Reset */
+.reset-btn{
+background:transparent;border:1px solid var(--dimmer);color:var(--dim);
+font-family:var(--mono);font-size:.7rem;padding:.35rem .75rem;border-radius:4px;
+cursor:pointer;transition:all .2s;margin-bottom:1.5rem;
+}
+.reset-btn:hover{border-color:var(--amber);color:var(--amber)}
+
+/* Tab panels */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Checklist */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.checklist li{
+display:grid;grid-template-columns:auto 3.5rem 1fr;align-items:start;gap:.75rem;
+padding:.75rem;background:rgba(255,255,255,.02);border:1px solid var(--line);
+border-radius:8px;transition:all .2s;
+}
+.checklist li.checked{opacity:.5;border-color:transparent}
+.checklist li.checked .item-title{text-decoration:line-through;color:var(--dim)}
+.checklist input[type=checkbox]{
+appearance:none;width:18px;height:18px;border:2px solid var(--dimmer);border-radius:4px;
+cursor:pointer;margin-top:2px;position:relative;flex-shrink:0;transition:all .15s;
+}
+.checklist input[type=checkbox]:checked{background:var(--green);border-color:var(--green)}
+.checklist input[type=checkbox]:checked::after{
+content:'';position:absolute;top:2px;left:5px;width:4px;height:8px;
+border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.time-col{font-family:var(--mono);font-size:.75rem;color:var(--teal);padding-top:2px;white-space:nowrap}
+.item-content{}
+.item-title{font-size:.875rem;font-weight:500;color:var(--ink)}
+.item-note{font-size:.75rem;color:var(--dim);margin-top:.2rem;font-style:italic}
+
+/* Note cards */
+.note-card{
+margin:1.25rem 0;padding:1rem 1.25rem;border-left:3px solid var(--amber);
+background:rgba(232,135,58,.05);border-radius:0 8px 8px 0;
+}
+.note-card h4{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--amber);margin-bottom:.4rem}
+.note-card p{font-size:.8rem;color:var(--ink);line-height:1.6;opacity:.85}
+.note-card.violet{border-left-color:var(--violet);background:rgba(156,138,222,.05)}
+.note-card.violet h4{color:var(--violet)}
+
+@media(max-width:480px){
+body{padding:1rem}
+h1{font-size:1.5rem}
+.checklist li{grid-template-columns:auto 2.75rem 1fr;gap:.5rem;padding:.6rem}
+.tab-btn{padding:.4rem .7rem;font-size:.65rem}
+}
+</style>
+</head>
+<body>
+
+<h1>Daily Routines</h1>
+<div class="clock" id="clock"></div>
+
+<div class="tabs">
+<button class="tab-btn active" data-tab="morning">Morning</button>
+<button class="tab-btn" data-tab="evening">Evening</button>
+<button class="tab-btn" data-tab="gameday">Game Day</button>
+</div>
+
+<div class="progress-wrap">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-label" id="progressLabel">0 / 0 complete</div>
+</div>
+
+<button class="reset-btn" id="resetBtn">Reset today</button>
+
+<!-- MORNING -->
+<div class="tab-panel active" id="panel-morning">
+<ul class="checklist">
+<li>
+<input type="checkbox" data-id="m1">
+<span class="time-col">7:00</span>
+<div class="item-content">
+<div class="item-title">Wake. NO SNOOZE. No phone 15 min</div>
+<div class="item-note">Avoid reactive dopamine spike (Huberman)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m2">
+<span class="time-col">7:00</span>
+<div class="item-content">
+<div class="item-title">Open blinds / step outside immediately</div>
+<div class="item-note">Sunlight in eyes within 30 min — triggers 50% cortisol pulse, clears adenosine, sets melatonin timer (Huberman)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m3">
+<span class="time-col">7:10</span>
+<div class="item-content">
+<div class="item-title">Hydrate: 500ml water + pinch salt + electrolytes</div>
+<div class="item-note">Rehydrate from overnight (Galpin protocol)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m4">
+<span class="time-col">7:15</span>
+<div class="item-content">
+<div class="item-title">10-min optic flow walk (outside, sunlight)</div>
+<div class="item-note">Forward ambulation + panoramic vision reduces amygdala, calm alertness (Huberman)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m5">
+<span class="time-col">7:25</span>
+<div class="item-content">
+<div class="item-title">EAT BREAKFAST — never skip</div>
+<div class="item-note">3 eggs + toast + fruit OR oats + banana + protein shake. 30-60g carbs + 20g protein</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m6">
+<span class="time-col">7:50</span>
+<div class="item-content">
+<div class="item-title">Creatine 5g (with breakfast)</div>
+<div class="item-note">Daily, no skipping. Consistency is everything</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="m7">
+<span class="time-col">8:00</span>
+<div class="item-content">
+<div class="item-title">Begin training block</div>
+<div class="item-note">See day-specific schedule</div>
+</div>
+</li>
+</ul>
+<div class="note-card">
+<h4>Caffeine Rule</h4>
+<p>Delay caffeine 90-120 min after waking (until ~8:30-9:00am) to let natural cortisol clear adenosine first. Exception: match day — take 30-50 min before kickoff. Dose: 1-3mg/kg.</p>
+</div>
+</div>
+
+<!-- EVENING -->
+<div class="tab-panel" id="panel-evening">
+<ul class="checklist">
+<li>
+<input type="checkbox" data-id="e1">
+<span class="time-col">8:00</span>
+<div class="item-content">
+<div class="item-title">Begin wind-down. Reduce overhead lights, use dim/warm lighting</div>
+<div class="item-note">Bright light 10pm-4am suppresses dopamine by 50% for days (Huberman)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="e2">
+<span class="time-col">8:30</span>
+<div class="item-content">
+<div class="item-title">No intense screen content. Read, visualize, watch calm game film</div>
+<div class="item-note">Reduce cortisol/adrenaline before sleep</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="e3">
+<span class="time-col">9:00</span>
+<div class="item-content">
+<div class="item-title">Sauna 15-20 min at 80-100C (if scheduled)</div>
+<div class="item-note">Compensatory cooling 1-2hrs later helps fall asleep. Core temp must drop 1-3F (Huberman)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="e4">
+<span class="time-col">9:30</span>
+<div class="item-content">
+<div class="item-title">Sleep supplement stack</div>
+<div class="item-note">Magnesium Threonate 145mg + Apigenin 50mg + L-Theanine 100-400mg</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="e5">
+<span class="time-col">9:45</span>
+<div class="item-content">
+<div class="item-title">Nose breathing tape if needed. Side sleeping position</div>
+<div class="item-note">Side sleeping maximizes glymphatic clearance (brain waste removal). Nose = better O2 exchange</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="e6">
+<span class="time-col">10:00</span>
+<div class="item-content">
+<div class="item-title">LIGHTS OUT</div>
+<div class="item-note">9 hours before 7am wake = optimal for testosterone, GH, recovery</div>
+</div>
+</li>
+</ul>
+<div class="note-card violet">
+<h4>Can't Sleep?</h4>
+<p>If you can't sleep within 20 min: Do a 10-min NSDR (Non-Sleep Deep Rest) protocol. Don't lie there stressing.</p>
+</div>
+</div>
+
+<!-- GAME DAY -->
+<div class="tab-panel" id="panel-gameday">
+<ul class="checklist">
+<li>
+<input type="checkbox" data-id="g1">
+<span class="time-col">7:30</span>
+<div class="item-content">
+<div class="item-title">Wake. Sunlight 10 min. No phone 15 min</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g2">
+<span class="time-col">7:45</span>
+<div class="item-content">
+<div class="item-title">Hydrate: 500ml water + electrolytes</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g3">
+<span class="time-col">8:00</span>
+<div class="item-content">
+<div class="item-title">Breakfast (carb-focused): oats + banana + honey OR toast + eggs</div>
+<div class="item-note">30-60g carbs + 20g protein</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g4">
+<span class="time-col">8:30</span>
+<div class="item-content">
+<div class="item-title">Creatine 5g</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g5">
+<span class="time-col">9:00</span>
+<div class="item-content">
+<div class="item-title">Light walk (15 min) + visualization (10 min)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g6">
+<span class="time-col">10:00</span>
+<div class="item-content">
+<div class="item-title">Free time — stay off feet, stay calm</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g7">
+<span class="time-col">12:00</span>
+<div class="item-content">
+<div class="item-title">Lunch (3-4 hours before game): Pasta/rice + chicken + veg</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g8">
+<span class="time-col">2:00</span>
+<div class="item-content">
+<div class="item-title">Rest</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g9">
+<span class="time-col">3:30</span>
+<div class="item-content">
+<div class="item-title">Pre-game meal (light): banana + toast + honey</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g10">
+<span class="time-col">4:00</span>
+<div class="item-content">
+<div class="item-title">Caffeine: 1-3mg/kg, empty stomach (60-90 min before kickoff)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g11">
+<span class="time-col">4:30</span>
+<div class="item-content">
+<div class="item-title">Hydrate: 300ml + electrolytes</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g12">
+<span class="time-col">5:00</span>
+<div class="item-content">
+<div class="item-title">Travel to ground</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g13">
+<span class="time-col">5:15</span>
+<div class="item-content">
+<div class="item-title">PRE-GAME WARM-UP (see Soccer page)</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g14">
+<span class="time-col">6:00+</span>
+<div class="item-content">
+<div class="item-title">GAME</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g15">
+<span class="time-col">Post</span>
+<div class="item-content">
+<div class="item-title">Cool-down: light jog 5 min + static stretch 5 min</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g16">
+<span class="time-col">Post</span>
+<div class="item-content">
+<div class="item-title">Protein shake + banana immediately</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g17">
+<span class="time-col">Home</span>
+<div class="item-content">
+<div class="item-title">Dinner within 1 hour. 3:1 carb-to-protein ratio</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g18">
+<span class="time-col">Home</span>
+<div class="item-content">
+<div class="item-title">Hydrate: 125-150% of fluid lost</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g19">
+<span class="time-col">Home</span>
+<div class="item-content">
+<div class="item-title">NO sauna/ice bath on match night — eat, hydrate, sleep</div>
+</div>
+</li>
+<li>
+<input type="checkbox" data-id="g20">
+<span class="time-col">10:00</span>
+<div class="item-content">
+<div class="item-title">LIGHTS OUT</div>
+</div>
+</li>
+</ul>
+<div class="note-card">
+<h4>Performance Strategy</h4>
+<p>Caffeine abstain Wed-Fri, resume Saturday. Resets adenosine receptors — match-day dose hits significantly harder.</p>
+</div>
+<div class="note-card violet">
+<h4>If Subbed Early</h4>
+<p>Do 20-min tempo run (70%) OR 6x100m sprints with 45s rest. Log it.</p>
+</div>
+</div>
+
+<script>
+(function(){
+  // Clock
+  function updateClock(){
+    const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = `Melbourne (AEST): ${h}:${m}:${s}`;
+  }
+  updateClock();
+  setInterval(updateClock,1000);
+
+  // Date key
+  function getDateKey(){
+    const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `routines-${y}-${m}-${day}`;
+  }
+
+  // State
+  let state = JSON.parse(localStorage.getItem(getDateKey())||'{}');
+
+  // Tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  let activeTab = 'morning';
+
+  tabs.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      document.getElementById('panel-'+activeTab).classList.add('active');
+      updateProgress();
+    });
+  });
+
+  // Checkboxes
+  const allCheckboxes = document.querySelectorAll('input[type=checkbox]');
+  allCheckboxes.forEach(cb=>{
+    const id = cb.dataset.id;
+    if(state[id]){
+      cb.checked = true;
+      cb.closest('li').classList.add('checked');
+    }
+    cb.addEventListener('change',()=>{
+      state[id] = cb.checked;
+      cb.closest('li').classList.toggle('checked',cb.checked);
+      localStorage.setItem(getDateKey(),JSON.stringify(state));
+      updateProgress();
+    });
+  });
+
+  // Progress
+  function updateProgress(){
+    const panel = document.getElementById('panel-'+activeTab);
+    const cbs = panel.querySelectorAll('input[type=checkbox]');
+    const total = cbs.length;
+    const checked = Array.from(cbs).filter(c=>c.checked).length;
+    const pct = total?Math.round((checked/total)*100):0;
+    document.getElementById('progressFill').style.width = pct+'%';
+    document.getElementById('progressLabel').textContent = `${checked} / ${total} complete`;
+  }
+  updateProgress();
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    if(!confirm('Reset all checkboxes for today?')) return;
+    state = {};
+    localStorage.removeItem(getDateKey());
+    allCheckboxes.forEach(cb=>{
+      cb.checked = false;
+      cb.closest('li').classList.remove('checked');
+    });
+    updateProgress();
+  });
+})();
+</script>
+</body>
+</html>
