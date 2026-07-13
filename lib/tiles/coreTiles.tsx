@@ -25,6 +25,7 @@ export type CoreTileId =
   | 'fuel'
   | 'vitals'
   | 'peak'
+  | 'plan'
   | 'finance'
 
 /** A single live metric to surface on a tile (Train day, Fuel kcal). */
@@ -142,6 +143,28 @@ export const CORE_TILES: Record<CoreTileId, CoreTile> = {
       </svg>
     ),
   },
+  plan: {
+    id: 'plan',
+    href: '/plan.html',
+    index: '05',
+    label: 'Plan',
+    orb: { mode: 'wander' },
+    defaultSize: 'm' as TileSize,
+    glyph: (
+      <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="-8" y="-9" width="16" height="18" rx="2" />
+        <line x1="-4" y1="-4" x2="4" y2="-4" />
+        <line x1="-4" y1="0" x2="4" y2="0" />
+        <line x1="-4" y1="4" x2="1" y2="4" />
+      </svg>
+    ),
+    art: (
+      <svg className="art" viewBox="0 0 434 118">
+        <path className="mot" d="M44 80 H120 M44 60 H160 M44 40 H140 M200 80 H300 M200 60 H340 M200 40 H280" />
+        <g className="orb"><circle className="glow" r="9" /><circle className="node" r="3.4" /></g>
+      </svg>
+    ),
+  },
   finance: {
     id: 'finance',
     href: '/app/starter',
@@ -235,6 +258,7 @@ export const DEFAULT_HOME_ORDER: HomeTileId[] = [
   'vitals',
   'vee',
   'peak',
+  'plan',
   'finance',
 ]
 

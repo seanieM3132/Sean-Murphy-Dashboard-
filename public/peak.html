@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050D0A">
+<title>Peak, Sean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+.p-root{
+  --bg:#050D0A; --bg2:#0A1712; --line:rgba(74,222,128,.10);
+  --green:#4ADE80; --teal:#7DD3C0; --amber:#E8873A; --gold:#D8B24A;
+  --ink:#E6F2EC; --dim:#5F786E; --dimmer:#3B4E47;
+  min-height:100vh;padding:40px 32px 64px;
+  background:radial-gradient(1200px 600px at 20% -10%,#0D2419 0%,transparent 60%),var(--bg);
+  color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+}
+.p-root *{box-sizing:border-box;margin:0;}
+
+.p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;max-width:1240px;margin:0 auto 28px;}
+.p-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.p-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
+.p-title{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(34px,4.4vw,54px);font-weight:400;font-style:italic;margin:14px 0 6px;letter-spacing:-.01em;}
+.p-title em{color:var(--green);}
+.p-date{font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:var(--dim);}
+.p-phase{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 16px;background:rgba(10,23,18,.6);}
+.p-phase b{display:block;font:500 12px/1.5 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--green);}
+.p-phase span{font:400 11px/1.5 'JetBrains Mono',monospace;color:var(--dim);}
+.p-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pk 2.4s infinite;flex-shrink:0;}
+@keyframes pk{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 10px rgba(74,222,128,0)}}
+
+/* game week toggle */
+.p-gw{max-width:1240px;margin:0 auto 16px;display:flex;gap:6px;align-items:center;}
+.p-gw span{font:500 8px 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--dimmer);}
+.p-gw button{background:none;border:1px solid var(--line);border-radius:6px;padding:7px 12px;
+  font:500 8px 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--dim);cursor:pointer;transition:all .2s;}
+.p-gw button:hover{color:var(--ink);border-color:rgba(74,222,128,.3);}
+.p-gw button.is-on{background:rgba(74,222,128,.09);color:var(--green);border-color:rgba(74,222,128,.35);}
+
+.p-cards{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;max-width:1240px;margin:0 auto;}
+.p-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;padding:18px 20px 16px;
+  background:linear-gradient(180deg,rgba(16,36,27,.55),rgba(6,15,11,.55));transition:border-color .25s,transform .25s;}
+.p-card:hover{border-color:rgba(74,222,128,.28);transform:translateY(-2px);}
+.p-card-h{display:flex;justify-content:space-between;font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--dimmer);}
+.p-icon{color:var(--green);opacity:.55;font-size:12px;}
+.p-card-b{flex:1;padding:18px 0 14px;}
+.p-card-t{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:22px;}
+.p-card-m{font:500 9px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:var(--dim);margin-top:7px;}
+
+.p-stat-v{font-family:'Instrument Serif',Georgia,serif;font-size:28px;line-height:1;}
+.p-stat-v.is-good{color:var(--green);} .p-stat-v.is-hot{color:var(--amber);}
+.p-stat-u{font:400 10px 'JetBrains Mono',monospace;color:var(--dim);margin-left:4px;}
+.p-stat-l{font:500 9px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--dim);margin-top:8px;text-transform:uppercase;}
+.p-legend{display:flex;gap:32px;margin-bottom:16px;flex-wrap:wrap;}
+
+.p-svg{width:100%;height:auto;display:block;overflow:visible;}
+.p-fit{fill:none;stroke:var(--green);stroke-width:1.8;filter:drop-shadow(0 0 6px rgba(74,222,128,.45));}
+.p-fat{fill:none;stroke:var(--amber);stroke-width:1.4;opacity:.85;}
+.p-form{fill:none;stroke:var(--teal);stroke-width:1.2;opacity:.8;}
+.p-rhr{fill:none;stroke:var(--teal);stroke-width:1.4;stroke-dasharray:4 3;}
+.p-fit.is-proj,.p-fat.is-proj{stroke-dasharray:5 4;opacity:.6;filter:none;}
+.p-proj{fill:rgba(255,255,255,.018);}
+.p-now{stroke:rgba(74,222,128,.4);stroke-width:1;}
+.p-target{stroke:var(--gold);stroke-width:1;stroke-dasharray:2 4;}
+.p-tdot{fill:var(--gold);}
+.p-grid-line{stroke:rgba(255,255,255,.06);}
+.p-cross{stroke:rgba(74,222,128,.3);stroke-dasharray:3 3;}
+.p-dot{fill:#fff;stroke:var(--green);stroke-width:2;}
+.p-dot.is-hot{stroke:var(--amber);}
+.p-pt{fill:var(--green);opacity:.45;}
+.p-fitline{stroke:var(--green);stroke-width:1.6;filter:drop-shadow(0 0 6px rgba(74,222,128,.5));}
+.p-axis{font:500 8px 'JetBrains Mono',monospace;fill:var(--dimmer);letter-spacing:.18em;}
+.p-axis.is-dim{fill:rgba(255,255,255,.14);} .p-axis.is-gold{fill:var(--gold);opacity:.7;} .p-axis.is-hot{fill:var(--amber);opacity:.6;}
+.p-bar.is-good{fill:rgba(74,222,128,.55);} .p-bar.is-hot{fill:rgba(232,135,58,.55);}
+
+.p-keys{display:flex;gap:18px;align-items:center;margin-top:14px;font:400 10px 'JetBrains Mono',monospace;color:var(--dim);}
+.p-keys span{display:flex;align-items:center;gap:6px;}
+.p-keys i{width:14px;height:2px;border-radius:2px;display:inline-block;}
+.p-keys i.is-fit{background:var(--green);} .p-keys i.is-fat{background:var(--amber);} .p-keys i.is-form{background:var(--teal);}
+.p-note{margin-left:auto;color:var(--dimmer);}
+.p-read{font:400 10px/1.5 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:.05em;margin-top:14px;}
+
+.p-idx{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.p-ring{width:150px;transform:rotate(-90deg);}
+.p-ring-t{fill:none;stroke:rgba(255,255,255,.06);stroke-width:7;}
+.p-ring-p{fill:none;stroke-width:7;stroke-linecap:round;}
+.p-ring-p.is-good{stroke:var(--green);filter:drop-shadow(0 0 8px rgba(74,222,128,.55));}
+.p-ring-p.is-mid{stroke:var(--gold);} .p-ring-p.is-hot{stroke:var(--amber);}
+.p-ring-v{font-family:'Instrument Serif',serif;font-size:40px;fill:var(--ink);transform:rotate(90deg);transform-origin:75px 75px;}
+.p-tag{margin-top:16px;font:500 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:var(--green);border:1px solid rgba(74,222,128,.3);border-radius:4px;padding:6px 9px;}
+.p-call{font:400 13px/1.6 'Inter',sans-serif;color:var(--dim);margin-top:14px;max-width:230px;}
+
+.p-pillars{list-style:none;padding:0;display:flex;flex-direction:column;gap:16px;}
+.p-prow{display:flex;align-items:baseline;gap:8px;font:400 10px 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:.05em;}
+.p-pk{color:var(--ink);} .p-pw{color:var(--dimmer);}
+.p-prow b{margin-left:auto;font-family:'Instrument Serif',serif;font-size:17px;font-weight:400;color:var(--ink);}
+.p-pbar{height:4px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin:7px 0 5px;}
+.p-pbar div{height:100%;background:var(--gold);border-radius:3px;}
+.p-pbar div.is-good{background:var(--green);box-shadow:0 0 8px rgba(74,222,128,.5);}
+.p-pbar div.is-hot{background:var(--amber);}
+.p-phint{font:400 9px 'JetBrains Mono',monospace;color:var(--dimmer);letter-spacing:.06em;}
+
+.p-grid8{display:flex;gap:5px;}
+.p-gcol{display:flex;flex-direction:column;gap:5px;flex:1;}
+.p-cell{display:block;aspect-ratio:1;border-radius:3px;background:var(--green);}
+.p-cell.is-skip{background:transparent;border:1px solid var(--amber);opacity:1 !important;}
+
+.p-foot{display:flex;justify-content:space-between;max-width:1240px;margin:44px auto 0;padding-top:18px;border-top:1px solid var(--line);
+  font:400 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:var(--dimmer);}
+
+@media (max-width:1000px){.p-card{grid-column:span 12 !important;} .p-top{flex-direction:column;}}
+@media (max-width:560px){.p-root{padding:24px 16px 48px;} .p-legend{gap:20px;} .p-note{display:none;}}
+@media (prefers-reduced-motion:reduce){.p-root *{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+<div class="p-root" id="app"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ─── config ───────────────────────────────────────────────────── */
+var TARGET = { name: 'COLLEGE SHOWCASE', date: '2026-08-08' };
+var SLEEP_TARGET = 480;
+var CTL_GOAL = 92;
+
+/* ─── deterministic RNG ────────────────────────────────────────── */
+var _seed = 70826;
+function rng(){ _seed = (_seed * 1664525 + 1013904223) >>> 0; return _seed / 4294967296; }
+
+/* ─── Banister impulse-response ────────────────────────────────── */
+function banister(loads){
+  var ctl = 44, atl = 44;
+  return loads.map(function(entry){
+    ctl += (entry.load - ctl) / 42;
+    atl += (entry.load - atl) / 7;
+    return { load: entry.load, planned: entry.planned, ctl: ctl, atl: atl, tsb: ctl - atl };
+  });
+}
+
+/* ─── least-squares slope ──────────────────────────────────────── */
+function slope(ys){
+  var n = ys.length, mx = (n - 1) / 2;
+  var my = ys.reduce(function(a,b){return a+b;},0) / n;
+  var num = 0, den = 0;
+  ys.forEach(function(y,i){ num += (i - mx) * (y - my); den += (i - mx) * (i - mx); });
+  return num / den;
+}
+
+/* ─── build mock data ──────────────────────────────────────────── */
+function buildMock(){
+  _seed = 70826;
+  var daysBack = 112, daysFwd = 29;
+  var rhythm = [74, 132, 51, 128, 27, 168, 0];
+
+  var history = [];
+  for(var i = 0; i < daysBack; i++){
+    var base = rhythm[i % 7];
+    var build = 0.78 + (i / daysBack) * 0.4;
+    var dip = (i > 68 && i < 78) ? 0.35 : 1;
+    var noise = 0.85 + rng() * 0.3;
+    history.push({ load: Math.round(base * build * dip * noise), planned: false });
+  }
+
+  var future = [];
+  for(var j = 0; j < daysFwd; j++){
+    var base2 = rhythm[(daysBack + j) % 7];
+    var taper = j < 15 ? 1.05 : 1.05 - ((j - 15) / 14) * 0.55;
+    future.push({ load: Math.round(base2 * taper), planned: true });
+  }
+
+  var series = banister(history.concat(future));
+
+  var hrv = [];
+  for(var h = 0; h < 60; h++){
+    hrv.push({ d: h, ms: Math.round(50 + h * 0.19 + Math.sin(h / 4) * 3 + (rng() - 0.5) * 6) });
+  }
+
+  var sleep = [];
+  for(var s = 0; s < 14; s++){
+    var mins = Math.round(415 + Math.sin(s / 2.4) * 45 + (rng() - 0.5) * 50);
+    sleep.push({ d: s, mins: mins, delta: mins - SLEEP_TARGET });
+  }
+
+  var engine = [];
+  for(var e = 0; e < 12; e++){
+    engine.push({
+      wk: e,
+      vo2: +(48.9 + e * 0.29 + (rng() - 0.5) * 0.25).toFixed(1),
+      rhr: Math.round(54 - e * 0.5 + (rng() - 0.5) * 2)
+    });
+  }
+
+  var grid = [];
+  for(var w = 0; w < 8; w++){
+    var wk = [];
+    for(var d2 = 0; d2 < 7; d2++){
+      var idx = daysBack - (8 - w) * 7 + d2;
+      var sv = series[idx];
+      wk.push({ load: sv ? sv.load : 0, skipped: rng() < 0.05 });
+    }
+    grid.push(wk);
+  }
+
+  return { series: series, historyLen: daysBack, hrv: hrv, sleep: sleep, engine: engine, grid: grid };
+}
+
+/* ─── compute peak index ───────────────────────────────────────── */
+function computePeak(d){
+  var today = d.series[d.historyLen - 1];
+  var target = d.series[d.series.length - 1];
+
+  function clamp(v){ return Math.max(0, Math.min(1, v)); }
+
+  var vo2 = d.engine[d.engine.length - 1].vo2;
+  var rhrSlope = slope(d.engine.map(function(e){ return e.rhr; }));
+  var engineVal = clamp((vo2 - 42) / 16) * 0.8 + clamp(-rhrSlope * 4) * 0.2;
+
+  var hrvSlope = slope(d.hrv.slice(-28).map(function(h){ return h.ms; }));
+  var debt = d.sleep.slice(-7).reduce(function(a,s){ return a + Math.min(0, s.delta); }, 0);
+  var recovery = clamp(0.5 + hrvSlope * 6) * 0.55 + clamp(1 + debt / 420) * 0.45;
+
+  var fitness = clamp(today.ctl / CTL_GOAL);
+
+  // Gaussian freshness — NOT a threshold
+  var form = Math.exp(-Math.pow((today.tsb - 14) / 15, 2));
+
+  var done = 0, total = 0;
+  d.grid.forEach(function(wk){ wk.forEach(function(c){
+    if(c.load > 0){ total++; if(!c.skipped) done++; }
+  }); });
+  var consistency = clamp(total > 0 ? done / total : 0);
+
+  var pillars = [
+    { k: 'Aerobic engine', v: engineVal, w: 0.25, hint: 'VO\u2082 ' + vo2 + ' \u00B7 rHR ' + (rhrSlope < 0 ? 'falling' : 'rising') },
+    { k: 'Recovery', v: recovery, w: 0.25, hint: 'HRV ' + (hrvSlope > 0 ? '\u2191' : '\u2193') + ' \u00B7 ' + Math.round(-debt / 60) + 'h sleep debt' },
+    { k: 'Fitness', v: fitness, w: 0.20, hint: 'CTL ' + Math.round(today.ctl) + ' / ' + CTL_GOAL },
+    { k: 'Freshness', v: form, w: 0.15, hint: 'TSB ' + (today.tsb > 0 ? '+' : '') + today.tsb.toFixed(1) },
+    { k: 'Consistency', v: consistency, w: 0.15, hint: done + ' sessions, 8 weeks' }
+  ];
+
+  var index = Math.round(pillars.reduce(function(a,p){ return a + p.v * p.w; }, 0) * 100);
+
+  var tsb = today.tsb;
+  var phase, call;
+  if(tsb < -22){ phase = 'OVERREACHING'; call = 'You\'re buried. Two easy days or the block is wasted.'; }
+  else if(tsb < -6){ phase = 'BUILDING'; call = 'Deep in the work. Keep loading, don\'t test yourself yet.'; }
+  else if(tsb < 6){ phase = 'SHARPENING'; call = 'Fatigue is clearing. Intensity up, volume down.'; }
+  else if(tsb < 26){ phase = 'PEAKING'; call = 'This is the window. Everything you\'ve built is available.'; }
+  else { phase = 'DETRAINING'; call = 'Too fresh for too long. You\'re losing fitness.'; }
+
+  var targetDate = new Date(TARGET.date + 'T00:00:00');
+  var nowDate = new Date();
+  var days = Math.max(0, Math.round((targetDate - nowDate) / 864e5));
+  var projected = Math.round(target.tsb);
+
+  return { index: index, phase: phase, call: call, pillars: pillars, today: today, days: days, projected: projected, hrvSlope: hrvSlope, debt: debt };
+}
+
+/* ─── game week toggle ─────────────────────────────────────────── */
+var gameWeek = localStorage.getItem('gym-gameweek') || 'sat';
+
+/* ─── render ───────────────────────────────────────────────────── */
+function render(){
+  var d = buildMock();
+  var p = computePeak(d);
+
+  // Try live data
+  fetch('/api/peak').then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if(j){ d = j; p = computePeak(d); renderPage(d, p); }
+  }).catch(function(){});
+
+  renderPage(d, p);
+}
+
+function renderPage(d, p){
+  var html = '';
+
+  // Header
+  html += '<header class="p-top">';
+  html += '<div>';
+  html += '<a href="/" class="p-back">&#8592; Home</a>';
+  html += '<h1 class="p-title">Peak, <em>Sean</em></h1>';
+  html += '<p class="p-date">' + p.days + ' DAYS TO ' + TARGET.name + '</p>';
+  html += '</div>';
+  html += '<div class="p-phase">';
+  html += '<span class="p-pulse"></span>';
+  html += '<div><b>' + p.phase + '</b><span>Peak index ' + p.index + ' / 100</span></div>';
+  html += '</div>';
+  html += '</header>';
+
+  // Game week toggle
+  html += '<div class="p-gw">';
+  html += '<span>GAME WEEK:</span>';
+  html += '<button class="' + (gameWeek === 'sat' ? 'is-on' : '') + '" data-gw="sat">SAT GAME</button>';
+  html += '<button class="' + (gameWeek === 'fri' ? 'is-on' : '') + '" data-gw="fri">FRI GAME</button>';
+  html += '</div>';
+
+  // Cards grid
+  html += '<main class="p-cards">';
+
+  // 01 — The Curve
+  html += '<section class="p-card" style="grid-column:span 12">';
+  html += '<header class="p-card-h"><span>01</span><span class="p-icon">\u25ED</span></header>';
+  html += '<div class="p-card-b" id="curve-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">THE CURVE</h2><p class="p-card-m">FITNESS \u00B7 FATIGUE \u00B7 FORM</p></footer>';
+  html += '</section>';
+
+  // 02 — Peak Index
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>02</span><span class="p-icon">\u25CE</span></header>';
+  html += '<div class="p-card-b" id="index-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">PEAK INDEX</h2><p class="p-card-m">' + p.phase + '</p></footer>';
+  html += '</section>';
+
+  // 03 — Pillars
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>03</span><span class="p-icon">\u2317</span></header>';
+  html += '<div class="p-card-b" id="pillars-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">PILLARS</h2><p class="p-card-m">WHAT MOVES THE NUMBER</p></footer>';
+  html += '</section>';
+
+  // 04 — Sleep Debt
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>04</span><span class="p-icon">\u263E</span></header>';
+  html += '<div class="p-card-b" id="sleep-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">SLEEP DEBT</h2><p class="p-card-m">14 NIGHTS</p></footer>';
+  html += '</section>';
+
+  // 05 — HRV Drift
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>05</span><span class="p-icon">\u223F</span></header>';
+  html += '<div class="p-card-b" id="hrv-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">HRV DRIFT</h2><p class="p-card-m">60-DAY BASELINE</p></footer>';
+  html += '</section>';
+
+  // 06 — Engine
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>06</span><span class="p-icon">\u2197</span></header>';
+  html += '<div class="p-card-b" id="engine-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">ENGINE</h2><p class="p-card-m">VO\u2082 MAX \u00D7 RESTING HR</p></footer>';
+  html += '</section>';
+
+  // 07 — Consistency
+  html += '<section class="p-card" style="grid-column:span 4">';
+  html += '<header class="p-card-h"><span>07</span><span class="p-icon">\u25A6</span></header>';
+  html += '<div class="p-card-b" id="consist-wrap"></div>';
+  html += '<footer><h2 class="p-card-t">CONSISTENCY</h2><p class="p-card-m">8-WEEK LOAD GRID</p></footer>';
+  html += '</section>';
+
+  html += '</main>';
+
+  // Footer
+  html += '<footer class="p-foot">';
+  html += '<span>BANISTER IMPULSE-RESPONSE \u00B7 CTL 42D / ATL 7D</span>';
+  html += '<span>GARMIN FORERUNNER 265</span>';
+  html += '</footer>';
+
+  document.getElementById('app').innerHTML = html;
+
+  // Render chart components
+  renderCurve(d, p);
+  renderIndex(p);
+  renderPillars(p);
+  renderSleepDebt(d, p);
+  renderHrvDrift(d, p);
+  renderEngine(d);
+  renderConsistency(d);
+
+  // Bind game week toggle
+  document.querySelectorAll('[data-gw]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      gameWeek = this.getAttribute('data-gw');
+      localStorage.setItem('gym-gameweek', gameWeek);
+      render();
+    });
+  });
+}
+
+/* ─── 01 · The Curve ───────────────────────────────────────────── */
+function renderCurve(d, p){
+  var wrap = document.getElementById('curve-wrap');
+  var W = 980, H = 300, PAD = 10, BASE = H - 34;
+  var series = d.series, historyLen = d.historyLen;
+
+  var all = [];
+  series.forEach(function(s){ all.push(s.ctl, s.atl); });
+  var hi = Math.max.apply(null, all) * 1.12, lo = 0;
+
+  function x(i){ return PAD + (i / (series.length - 1)) * (W - PAD * 2); }
+  function y(v){ return BASE - ((v - lo) / (hi - lo)) * (BASE - PAD); }
+  function line(key, from, to){
+    var pts = '';
+    for(var i = from; i < to; i++){
+      pts += (i === from ? 'M' : 'L') + x(i).toFixed(1) + ',' + y(series[i][key]).toFixed(1);
+    }
+    return pts;
+  }
+  function fy(v){ return BASE + 2 - (v / 60) * 26; }
+  var formPath = '';
+  series.forEach(function(s, i){
+    formPath += (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + fy(s.tsb).toFixed(1);
+  });
+
+  var hx = x(historyLen - 1);
+  var tx = x(series.length - 1);
+  var s0 = series[historyLen - 1];
+
+  // Legend
+  var legendHtml = '<div class="p-legend">';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v">' + Math.round(s0.ctl) + '</div><div class="p-stat-l">Fitness \u00B7 CTL</div></div>';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v is-hot">' + Math.round(s0.atl) + '</div><div class="p-stat-l">Fatigue \u00B7 ATL</div></div>';
+  var tsbTone = s0.tsb > 5 ? 'is-good' : (s0.tsb < -20 ? 'is-hot' : '');
+  legendHtml += '<div class="p-stat"><div class="p-stat-v ' + tsbTone + '">' + (s0.tsb > 0 ? '+' : '') + s0.tsb.toFixed(1) + '</div><div class="p-stat-l">Form \u00B7 TSB</div></div>';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v">' + p.days + '<span class="p-stat-u">d</span></div><div class="p-stat-l">To ' + TARGET.name.split(' ')[0].toLowerCase() + '</div></div>';
+  legendHtml += '</div>';
+
+  // SVG
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="p-svg">';
+  svg += '<defs><linearGradient id="pkFit" x1="0" y1="0" x2="0" y2="1">';
+  svg += '<stop offset="0%" stop-color="#4ADE80" stop-opacity=".24"/>';
+  svg += '<stop offset="100%" stop-color="#4ADE80" stop-opacity="0"/>';
+  svg += '</linearGradient></defs>';
+
+  // Projection field
+  svg += '<rect x="' + hx + '" y="' + PAD + '" width="' + (tx - hx) + '" height="' + (BASE - PAD) + '" class="p-proj"/>';
+  svg += '<line x1="' + hx + '" x2="' + hx + '" y1="' + PAD + '" y2="' + BASE + '" class="p-now"/>';
+  svg += '<text x="' + (hx - 6) + '" y="' + (PAD + 12) + '" class="p-axis" text-anchor="end">TODAY</text>';
+  svg += '<text x="' + (hx + 6) + '" y="' + (PAD + 12) + '" class="p-axis is-dim">PROJECTED</text>';
+
+  // Fitness area + lines
+  var areaPath = line('ctl', 0, historyLen) + 'L' + hx + ',' + BASE + 'L' + PAD + ',' + BASE + 'Z';
+  svg += '<path d="' + areaPath + '" fill="url(#pkFit)"/>';
+  svg += '<path d="' + line('ctl', 0, historyLen) + '" class="p-fit" vector-effect="non-scaling-stroke"/>';
+  svg += '<path d="' + line('ctl', historyLen - 1, series.length) + '" class="p-fit is-proj" vector-effect="non-scaling-stroke"/>';
+  svg += '<path d="' + line('atl', 0, historyLen) + '" class="p-fat" vector-effect="non-scaling-stroke"/>';
+  svg += '<path d="' + line('atl', historyLen - 1, series.length) + '" class="p-fat is-proj" vector-effect="non-scaling-stroke"/>';
+
+  // Form ribbon
+  svg += '<line x1="' + PAD + '" x2="' + (W - PAD) + '" y1="' + fy(0) + '" y2="' + fy(0) + '" class="p-grid-line"/>';
+  svg += '<path d="' + formPath + '" class="p-form" vector-effect="non-scaling-stroke"/>';
+
+  // Target
+  svg += '<line x1="' + tx + '" x2="' + tx + '" y1="' + PAD + '" y2="' + BASE + '" class="p-target"/>';
+  svg += '<circle cx="' + tx + '" cy="' + y(series[series.length - 1].ctl) + '" r="4" class="p-tdot"/>';
+  svg += '<text x="' + tx + '" y="' + (PAD - 1) + '" class="p-axis is-gold" text-anchor="end">' + TARGET.name + '</text>';
+
+  // Hover elements (hidden by default)
+  svg += '<line id="p-crossline" x1="0" x2="0" y1="' + PAD + '" y2="' + BASE + '" class="p-cross" style="display:none"/>';
+  svg += '<circle id="p-dot-ctl" r="3.5" class="p-dot" style="display:none"/>';
+  svg += '<circle id="p-dot-atl" r="3.5" class="p-dot is-hot" style="display:none"/>';
+
+  // Invisible hover target
+  svg += '<rect x="' + PAD + '" y="' + PAD + '" width="' + (W - PAD * 2) + '" height="' + (BASE - PAD) + '" fill="transparent" style="cursor:crosshair" id="p-hover-rect"/>';
+  svg += '</svg>';
+
+  // Keys
+  var keysHtml = '<div class="p-keys">';
+  keysHtml += '<span><i class="is-fit"></i>Fitness</span>';
+  keysHtml += '<span><i class="is-fat"></i>Fatigue</span>';
+  keysHtml += '<span><i class="is-form"></i>Form</span>';
+  keysHtml += '<span class="p-note">112 days back \u00B7 ' + p.days + ' days projected on planned load</span>';
+  keysHtml += '</div>';
+
+  wrap.innerHTML = legendHtml + svg + keysHtml;
+
+  // Hover interaction
+  var svgEl = wrap.querySelector('.p-svg');
+  var hoverRect = document.getElementById('p-hover-rect');
+  var crossline = document.getElementById('p-crossline');
+  var dotCtl = document.getElementById('p-dot-ctl');
+  var dotAtl = document.getElementById('p-dot-atl');
+  var legendStats = wrap.querySelectorAll('.p-stat-v');
+
+  function onMove(evt){
+    var rect = svgEl.getBoundingClientRect();
+    var ratio = (evt.clientX - rect.left) / rect.width;
+    var i = Math.round(ratio * (series.length - 1));
+    i = Math.max(0, Math.min(series.length - 1, i));
+    var px = x(i);
+    var sv = series[i];
+
+    crossline.setAttribute('x1', px); crossline.setAttribute('x2', px); crossline.style.display = '';
+    dotCtl.setAttribute('cx', px); dotCtl.setAttribute('cy', y(sv.ctl)); dotCtl.style.display = '';
+    dotAtl.setAttribute('cx', px); dotAtl.setAttribute('cy', y(sv.atl)); dotAtl.style.display = '';
+
+    legendStats[0].textContent = Math.round(sv.ctl);
+    legendStats[1].textContent = Math.round(sv.atl);
+    legendStats[2].textContent = (sv.tsb > 0 ? '+' : '') + sv.tsb.toFixed(1);
+  }
+
+  function onLeave(){
+    crossline.style.display = 'none';
+    dotCtl.style.display = 'none';
+    dotAtl.style.display = 'none';
+    legendStats[0].textContent = Math.round(s0.ctl);
+    legendStats[1].textContent = Math.round(s0.atl);
+    legendStats[2].textContent = (s0.tsb > 0 ? '+' : '') + s0.tsb.toFixed(1);
+  }
+
+  hoverRect.addEventListener('mousemove', onMove);
+  hoverRect.addEventListener('mouseleave', onLeave);
+  hoverRect.addEventListener('touchmove', function(e){ e.preventDefault(); onMove(e.touches[0]); }, { passive: false });
+  hoverRect.addEventListener('touchend', onLeave);
+}
+
+/* ─── 02 · Peak Index ──────────────────────────────────────────── */
+function renderIndex(p){
+  var wrap = document.getElementById('index-wrap');
+  var R = 62, C = 2 * Math.PI * R;
+  var tone = p.index >= 78 ? 'good' : (p.index >= 60 ? 'mid' : 'hot');
+
+  var html = '<div class="p-idx">';
+  html += '<svg viewBox="0 0 150 150" class="p-ring">';
+  html += '<circle cx="75" cy="75" r="' + R + '" class="p-ring-t"/>';
+  html += '<circle cx="75" cy="75" r="' + R + '" class="p-ring-p is-' + tone + '" stroke-dasharray="' + (C * (p.index / 100)).toFixed(1) + ' ' + C.toFixed(1) + '"/>';
+  html += '<text x="75" y="80" class="p-ring-v" text-anchor="middle">' + p.index + '</text>';
+  html += '</svg>';
+  html += '<div class="p-tag">' + p.phase + '</div>';
+  html += '<p class="p-call">' + p.call + '</p>';
+  html += '<div class="p-read">Form on ' + TARGET.name.toLowerCase() + ': projected ' + (p.projected > 0 ? '+' : '') + p.projected + '</div>';
+  html += '</div>';
+
+  wrap.innerHTML = html;
+}
+
+/* ─── 03 · Pillars ─────────────────────────────────────────────── */
+function renderPillars(p){
+  var wrap = document.getElementById('pillars-wrap');
+  var html = '<ul class="p-pillars">';
+  p.pillars.forEach(function(pil){
+    var barCls = pil.v > 0.75 ? 'is-good' : (pil.v < 0.45 ? 'is-hot' : '');
+    html += '<li>';
+    html += '<div class="p-prow"><span class="p-pk">' + pil.k + '</span><span class="p-pw">\u00D7' + pil.w.toFixed(2) + '</span><b>' + Math.round(pil.v * 100) + '</b></div>';
+    html += '<div class="p-pbar"><div style="width:' + (pil.v * 100).toFixed(1) + '%" class="' + barCls + '"></div></div>';
+    html += '<span class="p-phint">' + pil.hint + '</span>';
+    html += '</li>';
+  });
+  html += '</ul>';
+  html += '<div class="p-read">Weighted sum \u2192 Peak Index</div>';
+  wrap.innerHTML = html;
+}
+
+/* ─── 04 · Sleep Debt ──────────────────────────────────────────── */
+function renderSleepDebt(d, p){
+  var wrap = document.getElementById('sleep-wrap');
+  var sleep = d.sleep;
+  var W = 420, H = 170, PAD = 10, MID = 92;
+  var bw = (W - PAD * 2) / sleep.length - 6;
+  var sc = 0.16;
+  var debt = sleep.slice(-7).reduce(function(a,s){ return a + Math.min(0, s.delta); }, 0);
+
+  var legendHtml = '<div class="p-legend">';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v' + (debt < -180 ? ' is-hot' : '') + '">' + Math.floor(-debt / 60) + 'h ' + ((-debt) % 60) + 'm</div><div class="p-stat-l">7-day debt</div></div>';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v">8h 00m</div><div class="p-stat-l">Target</div></div>';
+  legendHtml += '</div>';
+
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="p-svg">';
+  svg += '<line x1="' + PAD + '" x2="' + (W - PAD) + '" y1="' + MID + '" y2="' + MID + '" class="p-grid-line"/>';
+  sleep.forEach(function(s, i){
+    var h2 = Math.abs(s.delta) * sc;
+    var up = s.delta >= 0;
+    var bx = PAD + i * ((W - PAD * 2) / sleep.length);
+    var by = up ? MID - h2 : MID;
+    var cls = up ? 'p-bar is-good' : 'p-bar is-hot';
+    svg += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + Math.max(h2, 1) + '" rx="2" class="' + cls + '"/>';
+  });
+  svg += '<text x="' + PAD + '" y="' + (MID - 62) + '" class="p-axis">SURPLUS</text>';
+  svg += '<text x="' + PAD + '" y="' + (MID + 68) + '" class="p-axis is-hot">DEFICIT</text>';
+  svg += '</svg>';
+
+  wrap.innerHTML = legendHtml + svg + '<div class="p-read">Debt suppresses HRV for ~48h. It is the cheapest thing to fix.</div>';
+}
+
+/* ─── 05 · HRV Drift ───────────────────────────────────────────── */
+function renderHrvDrift(d, p){
+  var wrap = document.getElementById('hrv-wrap');
+  var hrv = d.hrv, hrvSlope = p.hrvSlope;
+  var W = 420, H = 170, PAD = 12, BASE = H - 24;
+  var vals = hrv.map(function(h){ return h.ms; });
+  var lo = Math.min.apply(null, vals) - 4, hi = Math.max.apply(null, vals) + 4;
+
+  function x(i){ return PAD + (i / (hrv.length - 1)) * (W - PAD * 2); }
+  function y(v){ return BASE - ((v - lo) / (hi - lo)) * (BASE - PAD); }
+
+  var my = vals.reduce(function(a,b){return a+b;},0) / vals.length;
+  var mx = (hrv.length - 1) / 2;
+  function fit(i){ return my + hrvSlope * (i - mx); }
+
+  var legendHtml = '<div class="p-legend">';
+  var driftTone = hrvSlope > 0 ? 'is-good' : 'is-hot';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v ' + driftTone + '">' + (hrvSlope > 0 ? '+' : '') + (hrvSlope * 30).toFixed(1) + '<span class="p-stat-u">ms/mo</span></div><div class="p-stat-l">Baseline drift</div></div>';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v">' + vals[vals.length - 1] + '<span class="p-stat-u">ms</span></div><div class="p-stat-l">Latest</div></div>';
+  legendHtml += '</div>';
+
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="p-svg">';
+  hrv.forEach(function(h, i){
+    svg += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(h.ms).toFixed(1) + '" r="1.7" class="p-pt"/>';
+  });
+  svg += '<line x1="' + x(0).toFixed(1) + '" y1="' + y(fit(0)).toFixed(1) + '" x2="' + x(hrv.length - 1).toFixed(1) + '" y2="' + y(fit(hrv.length - 1)).toFixed(1) + '" class="p-fitline"/>';
+  svg += '</svg>';
+
+  wrap.innerHTML = legendHtml + svg + '<div class="p-read">60 nights \u00B7 least-squares regression through overnight RMSSD</div>';
+}
+
+/* ─── 06 · Engine ──────────────────────────────────────────────── */
+function renderEngine(d){
+  var wrap = document.getElementById('engine-wrap');
+  var engine = d.engine;
+  var W = 420, H = 170, PAD = 14, BASE = H - 26;
+  var v = engine.map(function(e){ return e.vo2; });
+  var r = engine.map(function(e){ return e.rhr; });
+
+  function x(i){ return PAD + (i / (engine.length - 1)) * (W - PAD * 2); }
+  var vMin = Math.min.apply(null, v) - 1, vMax = Math.max.apply(null, v) + 1;
+  var rMin = Math.min.apply(null, r) - 2, rMax = Math.max.apply(null, r) + 2;
+  function yv(n){ return BASE - ((n - vMin) / (vMax - vMin)) * (BASE - PAD); }
+  function yr(n){ return BASE - ((n - rMin) / (rMax - rMin)) * (BASE - PAD); }
+
+  function pathLine(arr, fn){
+    return arr.map(function(n, i){ return (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + fn(n).toFixed(1); }).join('');
+  }
+
+  var legendHtml = '<div class="p-legend">';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v is-good">' + v[v.length - 1] + '</div><div class="p-stat-l">VO\u2082 max</div></div>';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v">' + r[r.length - 1] + '<span class="p-stat-u">bpm</span></div><div class="p-stat-l">Resting HR</div></div>';
+  legendHtml += '</div>';
+
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="p-svg">';
+  svg += '<path d="' + pathLine(v, yv) + '" class="p-fit" vector-effect="non-scaling-stroke"/>';
+  svg += '<path d="' + pathLine(r, yr) + '" class="p-rhr" vector-effect="non-scaling-stroke"/>';
+  svg += '<circle cx="' + x(v.length - 1).toFixed(1) + '" cy="' + yv(v[v.length - 1]).toFixed(1) + '" r="3.5" class="p-dot"/>';
+  svg += '</svg>';
+
+  wrap.innerHTML = legendHtml + svg + '<div class="p-read">12 weeks \u00B7 engine up, resting HR down. Both point the same way.</div>';
+}
+
+/* ─── 07 · Consistency ─────────────────────────────────────────── */
+function renderConsistency(d){
+  var wrap = document.getElementById('consist-wrap');
+  var grid = d.grid;
+  var max = 1;
+  grid.forEach(function(wk){ wk.forEach(function(c){ if(c.load > max) max = c.load; }); });
+
+  var done = 0, planned = 0;
+  grid.forEach(function(wk){ wk.forEach(function(c){
+    if(c.load > 0){ planned++; if(!c.skipped) done++; }
+  }); });
+
+  var legendHtml = '<div class="p-legend">';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v is-good">' + Math.round((done / planned) * 100) + '%</div><div class="p-stat-l">Sessions hit</div></div>';
+  var missedTone = (planned - done) > 4 ? ' is-hot' : '';
+  legendHtml += '<div class="p-stat"><div class="p-stat-v' + missedTone + '">' + (planned - done) + '</div><div class="p-stat-l">Missed</div></div>';
+  legendHtml += '</div>';
+
+  var gridHtml = '<div class="p-grid8">';
+  grid.forEach(function(wk){
+    gridHtml += '<div class="p-gcol">';
+    wk.forEach(function(c){
+      var cls = 'p-cell';
+      if(c.skipped) cls += ' is-skip';
+      var opacity = c.load ? (0.18 + (c.load / max) * 0.82).toFixed(2) : '0.06';
+      var title = c.skipped ? 'Missed' : (c.load ? 'Load ' + c.load : 'Rest');
+      gridHtml += '<span class="' + cls + '" style="opacity:' + opacity + '" title="' + title + '"></span>';
+    });
+    gridHtml += '</div>';
+  });
+  gridHtml += '</div>';
+
+  wrap.innerHTML = legendHtml + gridHtml + '<div class="p-read">8 weeks \u00B7 darker is heavier \u00B7 outlined is missed</div>';
+}
+
+/* ─── init ─────────────────────────────────────────────────────── */
+render();
+
+})();
+</script>
+</body>
+</html>

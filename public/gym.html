@@ -185,7 +185,6 @@ button{font-family:inherit;cursor:pointer;}
 </head>
 <body class="is-prime">
 
-<div style="max-width:var(--w);margin:0 auto 10px;"><a href="/" class="g-back">&#8592; Home</a></div>
 
 <div id="app"></div>
 
@@ -627,12 +626,6 @@ function render(){
   var dayNotes = gameWeek === 'fri' ? DAY_NOTES_FRI : DAY_NOTES_SAT;
   var html = '';
 
-  // GAME WEEK TOGGLE
-  html += '<div class="s-gw">';
-  html += '<span>GAME WEEK:</span>';
-  html += '<button class="'+(gameWeek==='sat'?'is-on':'')+'" data-gw="sat">SAT GAME</button>';
-  html += '<button class="'+(gameWeek==='fri'?'is-on':'')+'" data-gw="fri">FRI GAME</button>';
-  html += '</div>';
 
   // DAY SELECTOR
   html += '<nav class="s-days" role="tablist">';

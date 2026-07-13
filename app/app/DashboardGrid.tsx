@@ -343,7 +343,8 @@ export default function DashboardGrid({ userId }: DashboardGridProps) {
     fuel: '/fuel.html',
     vitals: '/health.html',
     vee: '/dashboard.html',
-    peak: '/plan.html',
+    peak: '/peak.html',
+    plan: '/plan.html',
     finance: '/finance.html',
   }
 
