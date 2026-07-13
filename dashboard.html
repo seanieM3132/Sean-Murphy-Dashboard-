@@ -437,8 +437,8 @@ var DAYS = {
 
   // TUE JULY 14 — Heavy Training + MFM
   "2026-07-14": {
-    theme:"Heavy Training + MFM Appointment",
-    mindset:"Train early. MFM midday. Get your body baseline.",
+    theme:"Heavy Training Day",
+    mindset:"Train early. Heavy compounds. Get stronger.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Shoulders & Spine", sub:"T-spine rotations \u00b7 end-range lift-offs \u00b7 seal stretch", href:"/train.html#mvmnt", steps:[
@@ -460,9 +460,6 @@ var DAYS = {
         {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:""}
       ]},
       { id:"sauna", at:600, mins:15, kind:"recover", title:"Sauna 15 min", sub:"NO ice bath \u2014 heavy gym day", href:"/train.html#recovery", steps:[{t:"Sauna 15 min. NO ice bath today \u2014 need inflammatory response for muscle growth",d:""}] },
-      { id:"mfm", at:720, mins:90, kind:"appt", title:"MFM APPOINTMENT", sub:"Body assessment, blood work, labs. Ask: supplements, deficiencies, body comp", href:"", steps:[
-        {t:"Full body assessment + blood work + labs",d:""},{t:"Ask: supplement protocol recommendations",d:""},{t:"Ask: any deficiencies found?",d:""},{t:"Ask: body composition baseline",d:""},{t:"Take notes on everything they recommend",d:""}
-      ]},
       { id:"ball", at:870, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
         {t:"Set A: 10 min Joner style",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max",d:""}
       ]},
@@ -507,7 +504,15 @@ function todayKey() {
 }
 function getDayItems(key) {
   var day = DAYS[key];
-  return day ? JSON.parse(JSON.stringify(day.items)) : [];
+  var items = day ? JSON.parse(JSON.stringify(day.items)) : [];
+  // Inject user appointments for this date
+  var appts = loadAppts().filter(function(a) { return a.date === key; });
+  appts.forEach(function(a) {
+    items.push({ id:'appt-'+a.id, at:a.at, mins:a.mins||60, kind:'appt', title:a.title, sub:a.sub||'', href:'', steps:[], added:true });
+  });
+  // Sort by time
+  items.sort(function(a, b) { return a.at - b.at; });
+  return items;
 }
 function getDayTheme(key) { var d = DAYS[key]; return d ? d.theme : ""; }
 function getDayMindset(key) { var d = DAYS[key]; return d ? d.mindset : ""; }
@@ -529,11 +534,17 @@ function loadTodos() {
 }
 function saveTodos(arr) { localStorage.setItem('v_todos', JSON.stringify(arr)); }
 
-var APPOINTMENTS = [
-  { id:"mfm", when:"WED 15 JUL \u00b7 12:00", t:"MFM \u2014 body assessment",
-    sub:"Blood work, labs, body comp baseline",
-    ask:["Supplement protocol","Deficiencies","Body comp baseline"] }
-];
+// Appointments — localStorage-backed
+function loadAppts() {
+  try { return JSON.parse(localStorage.getItem('v_appts') || '[]'); } catch(e) { return []; }
+}
+function saveAppts(arr) { localStorage.setItem('v_appts', JSON.stringify(arr)); }
+
+// Match day status — localStorage-backed
+function loadMatchStatus() {
+  try { return JSON.parse(localStorage.getItem('v_match_status') || '{}'); } catch(e) { return {}; }
+}
+function saveMatchStatus(obj) { localStorage.setItem('v_match_status', JSON.stringify(obj)); }
 
 var PERIODS = [
   { id:"morning",   label:"MORNING",   from:0,    to:720 },
@@ -552,6 +563,8 @@ var state = {
   steps: {},
   done: {},
   todos: loadTodos(),
+  appts: loadAppts(),
+  matchStatus: loadMatchStatus(),
   showPast: false
 };
 
@@ -798,18 +811,26 @@ function render() {
   h += '<aside class="d-side">';
 
   // Appointments
-  if (isToday && APPOINTMENTS.length) {
-    h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 APPOINTMENTS</p>';
-    APPOINTMENTS.forEach(function(a) {
-      h += '<article class="d-appt"><p class="d-awhen">' + esc(a.when) + '</p>';
-      h += '<h3 style="font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px">' + esc(a.t) + '</h3>';
-      h += '<p class="d-asub">' + esc(a.sub) + '</p>';
-      h += '<p class="d-alab">ASK ABOUT</p><ul class="d-ask">';
-      a.ask.forEach(function(x){ h += '<li>' + esc(x) + '</li>'; });
-      h += '</ul></article>';
+  h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 APPOINTMENTS</p>';
+  var dayAppts = state.appts.filter(function(a) { return a.date === state.selDate; });
+  if (dayAppts.length) {
+    dayAppts.forEach(function(a, i) {
+      var hh = Math.floor(a.at / 60); var mm = a.at % 60;
+      var timeStr = String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+      h += '<article class="d-appt"><p class="d-awhen">' + timeStr + ' \u00b7 ' + a.mins + ' MIN</p>';
+      h += '<h3 style="font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px">' + esc(a.title) + '</h3>';
+      if (a.sub) h += '<p class="d-asub">' + esc(a.sub) + '</p>';
+      h += '<button class="d-todo-del" data-delappt="' + a.id + '" aria-label="Delete">\u00D7</button>';
+      h += '</article>';
     });
-    h += '<h3 class="d-bt">Appointments</h3></section>';
+  } else {
+    h += '<p style="font:400 11px Inter,sans-serif;color:var(--dimmer);margin-top:8px">No appointments</p>';
   }
+  h += '<div class="d-todo-add" style="margin-top:12px"><input id="apptTitle" type="text" placeholder="Appointment name\u2026" class="d-todo-in" style="flex:2" />';
+  h += '<input id="apptTime" type="time" class="d-todo-in" style="flex:0 0 90px;text-align:center" />';
+  h += '<input id="apptMins" type="number" placeholder="min" class="d-todo-in" style="flex:0 0 54px;text-align:center" min="5" step="5" value="60" />';
+  h += '<button id="apptBtn" class="d-todo-btn">+</button></div>';
+  h += '<h3 class="d-bt">Appointments</h3></section>';
 
   // To-do list
   if (isToday) {
@@ -829,16 +850,24 @@ function render() {
   }
 
   // Week
+  var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0] || '';
+  var mStatus = state.matchStatus[matchDate] || 'game';
   h += '<section class="d-block"><p class="d-eyebrow">' + (isToday ? '04' : '02') + ' \u00b7 THE WEEK</p><div class="d-week">';
   WEEK_DATES.forEach(function(dk, i) {
     var wl = WEEK_LABELS[i];
     var isT = dk === TODAY_KEY;
     var isSel = dk === state.selDate;
     var isPast = dk < TODAY_KEY;
-    h += '<button class="d-wd is-' + wl.k + (isT ? ' is-today' : '') + (isSel ? ' is-sel' : '') + (isPast && !isSel ? ' is-past' : '') + '" data-switchday="' + dk + '">';
+    var dayK = wl.k;
+    if (dayK === 'match' && mStatus === 'bye') dayK = 'rest';
+    h += '<button class="d-wd is-' + dayK + (isT ? ' is-today' : '') + (isSel ? ' is-sel' : '') + (isPast && !isSel ? ' is-past' : '') + '" data-switchday="' + dk + '">';
     h += '<em>' + wl.d + '</em><b>' + wl.n + '</b><span></span></button>';
   });
-  h += '</div><p class="d-note">Match Saturday. Everything from here points at it.</p>';
+  h += '</div>';
+  h += '<div style="display:flex;align-items:center;gap:10px;margin-top:10px">';
+  h += '<span style="font:500 9px var(--mono);letter-spacing:.14em;color:var(--dimmer)">SATURDAY</span>';
+  h += '<button class="d-match-toggle" data-matchtoggle style="background:' + (mStatus === 'game' ? 'rgba(232,135,58,.15)' : 'rgba(255,255,255,.04)') + ';border:1px solid ' + (mStatus === 'game' ? 'rgba(232,135,58,.3)' : 'var(--line)') + ';border-radius:6px;padding:6px 14px;font:500 9px var(--mono);letter-spacing:.12em;color:' + (mStatus === 'game' ? 'var(--amber)' : 'var(--dimmer)') + ';cursor:pointer">' + (mStatus === 'game' ? 'GAME DAY' : 'BYE WEEK') + '</button>';
+  h += '</div>';
   h += '<h3 class="d-bt">The week</h3></section>';
 
   h += '</aside></main>';
@@ -949,6 +978,47 @@ function bindAll() {
       render();
     });
   });
+
+  // Appointments
+  var apptBtn = document.getElementById('apptBtn');
+  if (apptBtn) {
+    var addAppt = function() {
+      var title = document.getElementById('apptTitle').value.trim();
+      var timeVal = document.getElementById('apptTime').value;
+      var mins = parseInt(document.getElementById('apptMins').value) || 60;
+      if (!title || !timeVal) return;
+      var parts = timeVal.split(':');
+      var at = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      state.appts.push({ id: Date.now(), date: state.selDate, title: title, at: at, mins: mins, sub: '' });
+      saveAppts(state.appts);
+      state.day = getDayItems(state.selDate);
+      render();
+    };
+    apptBtn.addEventListener('click', addAppt);
+    document.getElementById('apptTitle').addEventListener('keydown', function(e){ if (e.key === 'Enter') addAppt(); });
+  }
+  document.querySelectorAll('[data-delappt]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = parseInt(this.dataset.delappt);
+      state.appts = state.appts.filter(function(a){ return a.id !== id; });
+      saveAppts(state.appts);
+      state.day = getDayItems(state.selDate);
+      render();
+    });
+  });
+
+  // Match/bye toggle
+  var mt = document.querySelector('[data-matchtoggle]');
+  if (mt) {
+    mt.addEventListener('click', function(){
+      var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0];
+      if (!matchDate) return;
+      var cur = state.matchStatus[matchDate] || 'game';
+      state.matchStatus[matchDate] = cur === 'game' ? 'bye' : 'game';
+      saveMatchStatus(state.matchStatus);
+      render();
+    });
+  }
 }
 
 // Now-line refresh
