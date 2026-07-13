@@ -113,6 +113,17 @@
 
 @media (max-width:1000px){.p-card{grid-column:span 12 !important;} .p-top{flex-direction:column;}}
 @media (max-width:560px){.p-root{padding:24px 16px 48px;} .p-legend{gap:20px;} .p-note{display:none;}}
+/* Baseline state */
+.p-baseline{max-width:1240px;margin:0 auto;text-align:center;padding:80px 20px 120px;}
+.p-baseline-ring{width:180px;height:180px;margin:0 auto 24px;border-radius:50%;border:3px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;position:relative;}
+.p-baseline-ring::after{content:'';position:absolute;inset:8px;border-radius:50%;border:2px dashed rgba(74,222,128,.15);}
+.p-baseline-pct{font-family:'Instrument Serif',serif;font-size:48px;color:var(--dimmer);}
+.p-baseline-pct em{font-style:normal;font:400 16px 'JetBrains Mono',monospace;display:block;margin-top:4px;color:var(--dim);}
+.p-baseline-label{font:500 11px 'JetBrains Mono',monospace;letter-spacing:.22em;color:var(--dim);margin-bottom:8px;}
+.p-baseline-sub{font:400 13px/1.7 'Inter',sans-serif;color:var(--dimmer);max-width:44ch;margin:0 auto;}
+.p-baseline-bar{max-width:320px;margin:24px auto 0;height:4px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.p-baseline-bar span{display:block;height:100%;background:var(--green);border-radius:3px;box-shadow:0 0 8px rgba(74,222,128,.4);}
+
 @media (prefers-reduced-motion:reduce){.p-root *{animation:none !important;transition:none !important;}}
 </style>
 </head>
@@ -266,15 +277,69 @@ var gameWeek = localStorage.getItem('gym-gameweek') || 'sat';
 
 /* ─── render ───────────────────────────────────────────────────── */
 function render(){
-  var d = buildMock();
-  var p = computePeak(d);
+  // Show baseline state by default — no fake data
+  renderBaseline(0);
 
-  // Try live data
+  // Try live data from API
   fetch('/api/peak').then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
-    if(j){ d = j; p = computePeak(d); renderPage(d, p); }
+    if(j && j.series && j.series.length >= 42){
+      var p = computePeak(j);
+      renderPage(j, p);
+    } else if(j && j.series){
+      // Not enough data yet
+      renderBaseline(j.series.length);
+    }
   }).catch(function(){});
+}
 
-  renderPage(d, p);
+function renderBaseline(daysCollected){
+  var targetDate = new Date(TARGET.date + 'T00:00:00');
+  var nowDate = new Date();
+  var days = Math.max(0, Math.round((targetDate - nowDate) / 864e5));
+  var pct = Math.min(100, Math.round((daysCollected / 42) * 100));
+
+  var html = '';
+  html += '<header class="p-top">';
+  html += '<div>';
+  html += '<a href="/" class="p-back">&#8592; Home</a>';
+  html += '<h1 class="p-title">Peak, <em>Sean</em></h1>';
+  html += '<p class="p-date">' + days + ' DAYS TO ' + TARGET.name + '</p>';
+  html += '</div>';
+  html += '<div class="p-phase">';
+  html += '<span class="p-pulse"></span>';
+  html += '<div><b>BUILDING BASELINE</b><span>' + daysCollected + ' / 42 days</span></div>';
+  html += '</div>';
+  html += '</header>';
+
+  // Game week toggle
+  html += '<div class="p-gw">';
+  html += '<span>GAME WEEK:</span>';
+  html += '<button class="' + (gameWeek === 'sat' ? 'is-on' : '') + '" data-gw="sat">SAT GAME</button>';
+  html += '<button class="' + (gameWeek === 'fri' ? 'is-on' : '') + '" data-gw="fri">FRI GAME</button>';
+  html += '</div>';
+
+  html += '<div class="p-baseline">';
+  html += '<div class="p-baseline-ring"><span class="p-baseline-pct">' + daysCollected + '<em>/ 42</em></span></div>';
+  html += '<div class="p-baseline-label">BUILDING BASELINE</div>';
+  html += '<p class="p-baseline-sub">The Banister model needs 42 days of training load to produce a reliable fitness curve. Log sessions via Garmin or the Train page and the curve will appear here.</p>';
+  html += '<div class="p-baseline-bar"><span style="width:' + pct + '%"></span></div>';
+  html += '</div>';
+
+  html += '<footer class="p-foot">';
+  html += '<span>BANISTER IMPULSE-RESPONSE \u00B7 CTL 42D / ATL 7D</span>';
+  html += '<span>GARMIN FORERUNNER 265</span>';
+  html += '</footer>';
+
+  document.getElementById('app').innerHTML = html;
+
+  // Bind game week toggle
+  document.querySelectorAll('[data-gw]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      gameWeek = this.getAttribute('data-gw');
+      localStorage.setItem('gym-gameweek', gameWeek);
+      render();
+    });
+  });
 }
 
 function renderPage(d, p){
