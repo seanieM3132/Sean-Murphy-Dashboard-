@@ -498,14 +498,11 @@ var DAYS = {
       ]},
       { id:"shake2", at:910, mins:10, kind:"fuel", title:"Post-sprint shake + banana", sub:"30-40g protein", href:"/fuel.html", steps:[{t:"Protein + banana immediately",d:""}] },
       { id:"dinner", at:1020, mins:30, kind:"fuel", title:"Dinner \u2014 EAT BIG", sub:"Starchy carbs + protein. Refuel for Monday", href:"/fuel.html", steps:[{t:"Starchy carbs + protein + veg",d:""}] },
-      { id:"plan", at:1080, mins:60, kind:"admin", title:"Weekly planning session", sub:"Review week with AI coach. Log all metrics", href:"", steps:[
-        {t:"Log: sleep, soreness, weight, gym lifts, sprint times",d:""},{t:"Log: ball mastery, juggling, long throw, weak foot accuracy",d:""},{t:"Log: meals, water, creatine compliance",d:""},{t:"Plan Mon-Sun with AI coach",d:""}
-      ]},
       PM
     ]
   },
 
-  // MON JULY 14 — Heavy Training + MFM
+  // TUE JULY 14 — Heavy Training + MFM
   "2026-07-14": {
     theme:"Heavy Training + MFM Appointment",
     mindset:"Train early. MFM midday. Get your body baseline.",
@@ -576,8 +573,8 @@ var DAYS = {
 
 var WEEK_DATES = ["2026-07-09","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-14","2026-07-15"];
 var WEEK_LABELS = [
-  {d:"WED",n:9,k:"train"},{d:"THU",n:10,k:"train"},{d:"FRI",n:11,k:"train"},
-  {d:"SAT",n:12,k:"match"},{d:"SUN",n:13,k:"rest"},{d:"MON",n:14,k:"train"},{d:"TUE",n:15,k:"train"}
+  {d:"THU",n:9,k:"train"},{d:"FRI",n:10,k:"train"},{d:"SAT",n:11,k:"match"},
+  {d:"SUN",n:12,k:"rest"},{d:"MON",n:13,k:"train"},{d:"TUE",n:14,k:"train"},{d:"WED",n:15,k:"train"}
 ];
 
 function todayKey() {
@@ -783,10 +780,7 @@ function render() {
   });
   h += '</nav>';
 
-  if (isToday) {
-    // Weekly planner (today's schedule from plan.html)
-    h += renderTodayPlan(now);
-  } else {
+  if (!isToday) {
     // Theme + mindset for other days
     if (getDayTheme(state.selDate)) {
       h += '<div class="d-coach" style="border-color:rgba(125,211,192,.3)"><div class="d-say">';
