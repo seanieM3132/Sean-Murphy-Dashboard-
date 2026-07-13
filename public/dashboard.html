@@ -405,6 +405,43 @@ var DAYS = {
       PM
     ]
   },
+  // SAT JULY 12 — Bye Week (used when match toggle = BYE)
+  "2026-07-12-bye": {
+    theme:"BYE WEEK \u2014 Build What the Game Can\u2019t",
+    mindset:"No match pressure. Attack your weaknesses \u2014 endurance and speed.",
+    items: [
+      AM(),
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Full Lower Body", sub:"Glutes, groins, hips, hammys \u2014 full session", href:"/train.html#mvmnt", steps:[
+        {t:"Dynamic Leg Lifts 3\u00d75",d:""},{t:"Tailor\u2019s Pose 3\u00d78",d:""},{t:"Hip 90/90 IR 3\u00d73\u00d75s",d:""},{t:"Banded Hamstring Stretch 3\u00d73\u00d75s",d:""},{t:"Couch Stretch 2\u00d71 min each",d:""},{t:"Horse Stance 3\u00d730s",d:""}
+      ]},
+      { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout C + Abs 2", sub:"Jump squats \u00b7 tuck jumps \u00b7 push-ups \u00b7 planks", href:"/train.html#seward", steps:[
+        {t:"Jump squats 5\u00d710",d:""},{t:"Tuck jumps 5\u00d710",d:""},{t:"Push-ups 5\u00d710",d:""},{t:"Front plank 3\u00d71 min",d:""},{t:"Side plank 3\u00d71 min each",d:""}
+      ]},
+      { id:"gym", at:520, mins:50, kind:"train", title:"Gym \u2014 Power & Speed Focus", sub:"Trap bar deadlift \u00b7 box jumps \u00b7 push press \u00b7 single-leg work", href:"/train.html#gym", steps:[
+        {t:"Trap Bar Deadlift 4\u00d75-6 @ 60kg \u2014 EXPLOSIVE",d:"Speed of action. Full range of motion to recruit glutes (Nico Gonzalez protocol)"},{t:"Box Jumps 3\u00d75 (60s rest)",d:"Vertical power for heading + takeoff"},{t:"Push Press 3\u00d75-6 @ 30kg",d:"Quarter dip + drive. Overload speed of transition"},{t:"Bulgarian Split Squat 3\u00d78 @ 12kg DBs",d:""},{t:"Single-Leg Bounds 3\u00d75 each",d:"Horizontal acceleration + ankle stiffness"},{t:"Chin-ups 3 \u00d7 max",d:""},{t:"Face Pulls 3\u00d715",d:""}
+      ]},
+      { id:"core", at:575, mins:15, kind:"train", title:"Core \u2014 Speed & Rotation", sub:"Med ball slams \u00b7 rotational throws \u00b7 Pallof press", href:"/train.html#gym", steps:[
+        {t:"Med Ball Slams (split stance) 3\u00d78",d:"Translate to running mechanics"},{t:"Rotational Throws 3\u00d78 each side",d:""},{t:"Pallof Press 3\u00d710 each",d:"Anti-rotation stiffness"}
+      ]},
+      { id:"fascia", at:590, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:""}
+      ]},
+      { id:"sauna1", at:605, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (gym day)", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response for muscle growth",d:""}
+      ]},
+      { id:"endurance", at:780, mins:40, kind:"train", title:"Endurance \u2014 Zone 2 + Threshold", sub:"80/20 rule: 30 min Z2 + 2\u00d74 min threshold intervals", href:"/train.html#seward", steps:[
+        {t:"Zone 2 run 30 min (conversational pace)",d:"80% of endurance training should be below the burn threshold. Build aerobic base \u2014 this is what stops you gassing in the second half"},{t:"Threshold interval: 4 min hard (can\u2019t talk) \u2192 3 min easy",d:"Push past lactate threshold. 20% of endurance work goes here"},{t:"Threshold interval: 4 min hard \u2192 3 min easy",d:""},{t:"5 min cool-down jog",d:""}
+      ]},
+      { id:"speed", at:840, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 20m sprints", href:"/train.html#soccer", steps:[
+        {t:"Sprint Projections: half-kneeling start 3\u00d73 each side",d:"Delay knee extension \u2014 let glutes drive horizontal force before quads take over"},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4",d:"Bypass acceleration phase, stress top-speed mechanics"},{t:"20m sprints from standing \u00d7 4",d:"Foot strikes directly beneath hips. 90\u00b0 angles at hip, knee, ankle"},{t:"Walk back = rest. Every rep 100% force",d:""}
+      ]},
+      { id:"ball", at:870, mins:45, kind:"train", title:"Ball work \u2014 Extended Technical Session", sub:"Coerver \u00b7 CM drills \u00b7 weak foot \u00b7 passing \u00b7 long throws", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (Joner style)",d:""},{t:"Coerver: Sole roll stepover, fake shot sole pull, Matthews cut, elastico 4\u00d720s each",d:""},{t:"Midfielder turns: turning the corner + half-turn receiving 5 min",d:"Spin off pressing defender, receive in space to transition forward"},{t:"Weak Foot Block 10 min (L foot only)",d:"Double the normal weak foot time \u2014 bye week is for fixing gaps"},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max",d:""}
+      ]},
+      { id:"viz", at:930, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[{t:"Eyes closed \u2014 run through game scenarios",d:""}] },
+      PM
+    ]
+  },
 
   // SUN JULY 13 — Recovery + Double Seward
   "2026-07-13": {
@@ -502,8 +539,15 @@ function todayKey() {
   var d = getMelb();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
+function resolveKey(key) {
+  // Check if this is a match day with bye status
+  var ms = loadMatchStatus();
+  if (ms[key] === 'bye' && DAYS[key + '-bye']) return key + '-bye';
+  return key;
+}
 function getDayItems(key) {
-  var day = DAYS[key];
+  var rk = resolveKey(key);
+  var day = DAYS[rk];
   var items = day ? JSON.parse(JSON.stringify(day.items)) : [];
   // Inject user appointments for this date
   var appts = loadAppts().filter(function(a) { return a.date === key; });
@@ -514,8 +558,8 @@ function getDayItems(key) {
   items.sort(function(a, b) { return a.at - b.at; });
   return items;
 }
-function getDayTheme(key) { var d = DAYS[key]; return d ? d.theme : ""; }
-function getDayMindset(key) { var d = DAYS[key]; return d ? d.mindset : ""; }
+function getDayTheme(key) { var d = DAYS[resolveKey(key)]; return d ? d.theme : ""; }
+function getDayMindset(key) { var d = DAYS[resolveKey(key)]; return d ? d.mindset : ""; }
 
 var PROPOSALS = [
   { id:"p1", signal:"SEWARD DAY 2", title:"Skip gym activation \u2014 Seward Workout B is enough",
@@ -1016,6 +1060,7 @@ function bindAll() {
       var cur = state.matchStatus[matchDate] || 'game';
       state.matchStatus[matchDate] = cur === 'game' ? 'bye' : 'game';
       saveMatchStatus(state.matchStatus);
+      state.day = getDayItems(state.selDate);
       render();
     });
   }
