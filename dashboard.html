@@ -668,7 +668,7 @@ function renderCard(it, isDone, isOpen, steps, stepState, isMinor) {
         h += '<li style="display:flex;align-items:flex-start;gap:4px"><span class="d-step-num">' + (j+1) + '</span>';
         h += '<button class="d-step' + (on ? ' is-on' : '') + '" data-stepkey="' + sk + '" aria-pressed="' + on + '" style="flex:1">';
         h += '<span class="d-box">' + (on ? '\u2713' : '') + '</span>';
-        h += '<span class="d-st"><b>' + esc(s.t) + '</b>' + (s.d ? '<em>' + esc(s.d) + '</em>' : '') + '</span></button></li>';
+        h += '<span class="d-st"><b>' + esc(s.t) + '</b></span></button></li>';
       });
       h += '</ul>';
     }
@@ -850,15 +850,14 @@ function render() {
   // Main grid
   h += '<main class="d-main"><section class="d-block"><header class="d-bh"><div>';
   h += '<p class="d-eyebrow">01 \u00b7 ' + (isToday ? 'TODAY' : WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : 'DAY') + '</p><h2>The <em>day</em></h2></div>';
-  if (isToday && unlogged.length > 0) h += '<span class="d-warn">' + unlogged.length + ' unlogged</span>';
+  // unlogged removed — user prefers no time pressure
   h += '</header>';
 
   // Past collapse bar (today only, when there are past items)
   if (isToday && past.length > 0) {
     h += '<button class="d-past" data-togglepast aria-expanded="' + !!state.showPast + '">';
     h += '<span class="d-pl-bar"><b>' + past.length + ' earlier</b>';
-    h += '<em>' + dur(pastMins) + ' of work \u00b7 ' + (past.length - unlogged.length) + ' logged</em></span>';
-    if (unlogged.length > 0) h += '<span class="d-pu">' + unlogged.length + ' unlogged</span>';
+    h += '<em>' + dur(pastMins) + ' of work</em></span>';
     h += '<span class="d-chev">' + (state.showPast ? '\u2212' : '+') + '</span></button>';
 
     if (state.showPast) {
@@ -891,37 +890,10 @@ function render() {
   // Sidebar
   h += '<aside class="d-side">';
 
-  // Appointments
-  h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 APPOINTMENTS</p>';
-  var dayAppts = state.appts.filter(function(a) { return a.date === state.selDate; });
-  if (dayAppts.length) {
-    dayAppts.forEach(function(a, i) {
-      var hh = Math.floor(a.at / 60); var mm = a.at % 60;
-      var endAt = a.at + (a.mins || 60);
-      var eh = Math.floor(endAt / 60); var em = endAt % 60;
-      var startStr = String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
-      var endStr = String(eh).padStart(2,'0') + ':' + String(em).padStart(2,'0');
-      h += '<article class="d-appt"><p class="d-awhen">' + startStr + ' \u2013 ' + endStr + ' \u00b7 ' + a.mins + ' min</p>';
-      h += '<h3 style="font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px">' + esc(a.title) + '</h3>';
-      if (a.sub) h += '<p class="d-asub">' + esc(a.sub) + '</p>';
-      h += '<button class="d-todo-del" data-delappt="' + a.id + '" aria-label="Delete">\u00D7</button>';
-      h += '</article>';
-    });
-  } else {
-    h += '<p style="font:400 12px Inter,sans-serif;color:var(--dimmer);margin-top:10px;margin-bottom:14px">No appointments</p>';
-  }
-  h += '<div style="display:flex;gap:6px;align-items:flex-end;margin-top:10px">';
-  h += '<div style="flex:2"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">NAME</label><input id="apptTitle" type="text" placeholder="e.g. MFM Doctor" class="d-todo-in" style="width:100%;box-sizing:border-box" /></div>';
-  h += '<div style="flex:0 0 64px"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">TIME</label><input id="apptTime" type="text" placeholder="12:45" class="d-todo-in" style="width:100%;box-sizing:border-box;text-align:center" maxlength="5" /></div>';
-  h += '<div style="flex:0 0 56px"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">MINS</label><input id="apptMins" type="number" placeholder="60" class="d-todo-in" style="width:100%;box-sizing:border-box;text-align:center" min="5" step="5" /></div>';
-  h += '<button id="apptBtn" class="d-todo-btn" style="margin-bottom:0">+</button>';
-  h += '</div>';
-  h += '</section>';
-
   // To-do list
   if (isToday) {
     var tdDone = state.todos.filter(function(t){return t.done;}).length;
-    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">03 \u00b7 TO-DO</p>';
+    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">02 \u00b7 TO-DO</p>';
     if (state.todos.length > 0) h += '<span style="font:400 9px var(--mono);color:var(--dim)">' + tdDone + '/' + state.todos.length + '</span>';
     h += '</header>';
     h += '<div class="d-todo-add"><input id="todoInput" type="text" placeholder="Add a task\u2026" class="d-todo-in" /><button id="todoBtn" class="d-todo-btn">+</button></div>';
@@ -941,7 +913,7 @@ function render() {
     try { rlog = JSON.parse(localStorage.getItem('recovery-log') || '[]'); } catch(e){}
     var todayLog = rlog.filter(function(r){ return r.date === TODAY_KEY; });
     if (todayLog.length > 0) {
-      var secN = state.todos.length >= 0 ? '04' : '03';
+      var secN = '03';
       h += '<section class="d-block"><p class="d-eyebrow">' + secN + ' \u00b7 RECOVERY</p>';
       h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">';
       todayLog.forEach(function(r) {
@@ -961,7 +933,7 @@ function render() {
   var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0] || '';
   var mStatus = state.matchStatus[matchDate] || 'game';
   var _rl = []; try { _rl = JSON.parse(localStorage.getItem('recovery-log') || '[]').filter(function(r){ return r.date === TODAY_KEY; }); } catch(e){}
-  var weekN = isToday ? (_rl.length > 0 ? '05' : '04') : '02';
+  var weekN = isToday ? (_rl.length > 0 ? '04' : '03') : '02';
   h += '<section class="d-block"><p class="d-eyebrow">' + weekN + ' \u00b7 THE WEEK</p><div class="d-week">';
   WEEK_DATES.forEach(function(dk, i) {
     var wl = WEEK_LABELS[i];
