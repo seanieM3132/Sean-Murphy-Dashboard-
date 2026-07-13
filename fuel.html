@@ -292,6 +292,7 @@ body {
   <span>BURN FROM GARMIN FORERUNNER 265</span>
 </footer>
 
+<script src="/food-db.js"></script>
 <script>
 (function() {
   'use strict';
@@ -465,23 +466,6 @@ body {
 
   /* ── Log food card ── */
   function renderLogFood() {
-    var FOOD_DB = [
-      { name:'Chicken breast, grilled', per:'100g', kcal:165, p:31, c:0, f:3.6 },
-      { name:'Basmati rice, cooked', per:'100g', kcal:130, p:2.7, c:28, f:0.3 },
-      { name:'Sweet potato, baked', per:'100g', kcal:90, p:2, c:21, f:0.2 },
-      { name:'Eggs, whole', per:'2 large', kcal:143, p:12.6, c:0.7, f:9.5 },
-      { name:'Beef mince 5% fat', per:'100g', kcal:137, p:21, c:0, f:5 },
-      { name:'Almonds', per:'30g', kcal:174, p:6.4, c:6.1, f:15 },
-      { name:'Banana', per:'1 medium', kcal:105, p:1.3, c:27, f:0.4 },
-      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 },
-      { name:'Protein shake (whey)', per:'1 scoop', kcal:120, p:25, c:3, f:1.5 },
-      { name:'Greek yoghurt', per:'170g', kcal:100, p:17, c:6, f:0.7 },
-      { name:'Salmon fillet', per:'150g', kcal:311, p:34, c:0, f:18.5 },
-      { name:'Pasta, cooked', per:'200g', kcal:262, p:9.4, c:50, f:1.6 },
-      { name:'Avocado', per:'1 medium', kcal:240, p:3, c:12, f:22 },
-      { name:'Peanut butter', per:'2 tbsp', kcal:188, p:7, c:6, f:16 }
-    ];
-
     var html = '<div class="u-seg" role="tablist" id="log-tabs">' +
       '<button role="tab" aria-selected="false" data-mode="photo">PHOTO</button>' +
       '<button role="tab" aria-selected="false" data-mode="barcode">BARCODE</button>' +
@@ -541,11 +525,33 @@ body {
           '';
 
         document.getElementById('barcode-btn').addEventListener('click', function() {
+          var code = document.getElementById('barcode-input').value.trim();
           var res = document.getElementById('barcode-result');
-          res.innerHTML = renderResult([
-            { name:'Vitaweat Rice Cakes', grams:30, kcal:118, p:2.4, c:24, f:1.1, conf:1 }
-          ], 'barcode');
-          bindResult(res);
+          if(!code){res.innerHTML='<p class="u-empty">Enter a barcode number.</p>';return;}
+
+          // Check local DB first
+          var local = FOOD_DB.find(function(f){return f.barcode===code;});
+          if(local){
+            res.innerHTML = renderResult([{name:local.name,grams:0,kcal:local.kcal,p:local.p,c:local.c,f:local.f,conf:1}],'barcode');
+            bindResult(res);return;
+          }
+
+          res.innerHTML='<p class="u-empty">Looking up barcode...</p>';
+          fetch('https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json')
+            .then(function(r){return r.json();})
+            .then(function(j){
+              if(j.status!==1||!j.product){res.innerHTML='<p class="u-empty">Product not found. Try another barcode or search by name.</p>';return;}
+              var p=j.product;var n=p.nutriments||{};
+              var name=p.product_name||(p.brands?p.brands:'Unknown product');
+              var serving=p.serving_size||'100g';
+              var kcal=Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
+              var pro=Math.round((n.proteins_serving||n.proteins_100g||0)*10)/10;
+              var carb=Math.round((n.carbohydrates_serving||n.carbohydrates_100g||0)*10)/10;
+              var fat=Math.round((n.fat_serving||n.fat_100g||0)*10)/10;
+              res.innerHTML=renderResult([{name:name+' ('+serving+')',grams:0,kcal:kcal,p:pro,c:carb,f:fat,conf:1}],'barcode');
+              bindResult(res);
+            })
+            .catch(function(){res.innerHTML='<p class="u-empty">Network error. Check your connection.</p>';});
         });
 
       } else {
@@ -560,26 +566,15 @@ body {
       }
     }
 
-    var FOOD_DB = [
-      { name:'Chicken breast, grilled', per:'100g', kcal:165, p:31, c:0, f:3.6 },
-      { name:'Basmati rice, cooked', per:'100g', kcal:130, p:2.7, c:28, f:0.3 },
-      { name:'Sweet potato, baked', per:'100g', kcal:90, p:2, c:21, f:0.2 },
-      { name:'Eggs, whole', per:'2 large', kcal:143, p:12.6, c:0.7, f:9.5 },
-      { name:'Beef mince 5% fat', per:'100g', kcal:137, p:21, c:0, f:5 },
-      { name:'Almonds', per:'30g', kcal:174, p:6.4, c:6.1, f:15 },
-      { name:'Banana', per:'1 medium', kcal:105, p:1.3, c:27, f:0.4 },
-      { name:'Rolled oats, GF', per:'60g', kcal:228, p:8.4, c:39, f:4.2 },
-      { name:'Protein shake (whey)', per:'1 scoop', kcal:120, p:25, c:3, f:1.5 },
-      { name:'Greek yoghurt', per:'170g', kcal:100, p:17, c:6, f:0.7 },
-      { name:'Salmon fillet', per:'150g', kcal:311, p:34, c:0, f:18.5 },
-      { name:'Pasta, cooked', per:'200g', kcal:262, p:9.4, c:50, f:1.6 },
-      { name:'Avocado', per:'1 medium', kcal:240, p:3, c:12, f:22 },
-      { name:'Peanut butter', per:'2 tbsp', kcal:188, p:7, c:6, f:16 }
-    ];
+    // FOOD_DB loaded from /food-db.js (200+ Australian foods)
 
     function renderSearchHits(q) {
       if (!q) { document.getElementById('search-hits').innerHTML = ''; return; }
-      var hits = FOOD_DB.filter(function(f) { return f.name.toLowerCase().indexOf(q.toLowerCase()) >= 0; });
+      var terms = q.toLowerCase().split(/\s+/).filter(function(t){return t.length>0;});
+      var hits = FOOD_DB.filter(function(f) {
+        var n = f.name.toLowerCase();
+        return terms.every(function(t){return n.indexOf(t)>=0;});
+      }).slice(0,20);
       var el = document.getElementById('search-hits');
       if (!hits.length) { el.innerHTML = '<p class="u-empty">No match. Try a simpler word, or log it by photo.</p>'; return; }
       el.innerHTML = hits.map(function(f) {
