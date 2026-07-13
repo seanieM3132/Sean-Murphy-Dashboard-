@@ -981,22 +981,25 @@ async function syncFromSupabase() {
 }
 
 // ── Date helpers ──
+function getMelb() { return new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'})); }
+
 function getActiveDateString() {
-  const now = new Date();
+  const now = getMelb();
   if (now.getHours() < 6) {
     now.setDate(now.getDate() - 1);
   }
-  return now.toISOString().slice(0, 10);
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 }
 
 function getTomorrowDateString() {
-  const now = new Date();
+  const now = getMelb();
   if (now.getHours() < 6) {
-    return new Date().toISOString().slice(0, 10);
+    const t = getMelb();
+    return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
   }
-  const t = new Date();
+  const t = getMelb();
   t.setDate(t.getDate() + 1);
-  return t.toISOString().slice(0, 10);
+  return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
 }
 
 function formatDate(dateStr) {
@@ -1082,7 +1085,7 @@ function interpolateColor(pct) {
 }
 
 function updateDayBar() {
-  const now = new Date();
+  const now = getMelb();
   const hours = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
   const fill = document.getElementById('dayRingFill');
   const pctEl = document.getElementById('dayPct');

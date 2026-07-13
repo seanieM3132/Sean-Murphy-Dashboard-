@@ -272,7 +272,8 @@ button,a{font-family:inherit;}
 'use strict';
 
 /* ═══ HELPERS ════════════════════════════════════════════════ */
-function getNow() { var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+function getMelb() { return new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'})); }
+function getNow() { var d = getMelb(); return d.getHours() * 60 + d.getMinutes(); }
 function hhmm(m) { return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
 function dur(m) { if(m<0)m=0; if(m>=60){var h=Math.floor(m/60),r=m%60; return h+'h'+(r?' '+r+'m':'');} return m+'m'; }
 function esc(s) { var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
@@ -580,7 +581,7 @@ var WEEK_LABELS = [
 ];
 
 function todayKey() {
-  var d = new Date();
+  var d = getMelb();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 function getDayItems(key) {
@@ -689,6 +690,38 @@ function renderCard(it, isDone, isOpen, steps, stepState) {
   return h;
 }
 
+/* ═══ TODAY'S PLAN (from weekly planner) ══════════════════════ */
+var PLAN_SCHEDULE = {
+  0: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:20',label:'112mvmnt: Hips & Hammys',color:'teal'},{time:'8:45',label:'GOATA + toe curls',color:'teal'},{time:'9:00',label:'Sauna + Cold plunge',color:'amber'},{time:'10:00-10:45',label:'Game Film Session',color:'dimmer'},{time:'1:00-1:45',label:'Ball Work',color:'green'}],
+  1: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:25',label:'112mvmnt: Shoulders & Spine',color:'teal'},{time:'8:30-10:30',label:'Gym: Lower Power + Sprint',color:'green'},{time:'10:30-10:50',label:'Sauna 15 min',color:'amber'},{time:'12:00',label:'Lunch',color:'dimmer'},{time:'1:00-1:45',label:'Ball Work',color:'green'}],
+  2: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:20',label:'112mvmnt: Calves & Ankles',color:'teal'},{time:'8:30-9:00',label:'Gym: Activation',color:'green'},{time:'9:05',label:'Cold plunge 1-3 min',color:'teal'},{time:'12:00',label:'Lunch',color:'dimmer'},{time:'5:00+',label:'Team Training',color:'amber'}],
+  3: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:20',label:'112mvmnt: Glutes & Groins',color:'teal'},{time:'9:15-10:35',label:'Gym: Upper Power + Core Speed',color:'green'},{time:'10:35-10:50',label:'Sauna',color:'amber'},{time:'12:00',label:'Lunch',color:'dimmer'},{time:'1:00-1:45',label:'Ball Work',color:'green'}],
+  4: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:20',label:'112mvmnt: Stronger Knee',color:'teal'},{time:'8:30-9:00',label:'Gym: Activation',color:'green'},{time:'9:05',label:'Cold plunge 1-3 min',color:'teal'},{time:'12:00',label:'Lunch',color:'dimmer'},{time:'5:00+',label:'Team Training',color:'amber'}],
+  5: [{time:'7:00-8:00',label:'Morning Protocol',color:'violet'},{time:'8:00-8:25',label:'112mvmnt: Lower Back + Calves',color:'teal'},{time:'9:00-10:40',label:'Gym: Speed & Acceleration',color:'green'},{time:'10:40',label:'Sauna 15 min',color:'amber'},{time:'12:00',label:'Lunch (carb-load)',color:'dimmer'},{time:'1:00-1:30',label:'Ball Work',color:'green'},{time:'9:00pm',label:'Sauna pre-bed',color:'amber'},{time:'9:30pm',label:'LIGHTS OUT',color:'violet'}],
+  6: [{time:'7:30',label:'Wake (game day)',color:'dimmer'},{time:'8:00',label:'Breakfast (carb-focused)',color:'dimmer'},{time:'12:00',label:'Lunch (3-4hr before game)',color:'dimmer'},{time:'3:30',label:'Pre-game meal',color:'amber'},{time:'4:00',label:'Caffeine',color:'teal'},{time:'5:15',label:'Pre-game warm-up',color:'green'},{time:'6:00+',label:'MATCH',color:'gold'}],
+};
+var PLAN_COLORS = {green:'#4ADE80',teal:'#7DD3C0',amber:'#E8873A',gold:'#D8B24A',violet:'#9C8ADE',dimmer:'#5F786E'};
+
+function renderTodayPlan(now) {
+  var dow = now.getDay();
+  var blocks = PLAN_SCHEDULE[dow] || [];
+  if (!blocks.length) return '';
+  var h = '<section style="margin:18px auto 0;max-width:var(--w)">';
+  h += '<p class="d-eyebrow" style="margin-bottom:10px">TODAY\'S PLAN</p>';
+  h += '<div style="display:flex;flex-direction:column;gap:5px">';
+  blocks.forEach(function(b) {
+    var c = PLAN_COLORS[b.color] || PLAN_COLORS.dimmer;
+    var isDim = b.color === 'dimmer';
+    var bg = isDim ? 'rgba(255,255,255,.03)' : c + '14';
+    h += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border-left:3px solid ' + c + ';background:' + bg + '">';
+    h += '<span style="font-family:var(--mono);font-size:10px;color:' + (isDim ? 'var(--dimmer)' : c) + ';min-width:70px;opacity:.8">' + esc(b.time) + '</span>';
+    h += '<span style="font-size:12px;font-weight:500;color:' + (isDim ? 'var(--dim)' : c) + '">' + esc(b.label) + '</span>';
+    h += '</div>';
+  });
+  h += '</div></section>';
+  return h;
+}
+
 function render() {
   var NOW = getNow();
   var pend = pending();
@@ -717,7 +750,7 @@ function render() {
   // Date
   var months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
   var dayNames = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
-  var now = new Date();
+  var now = getMelb();
   var dateStr = dayNames[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' \u00b7 ' + hhmm(NOW);
   var greeting = NOW < 720 ? 'Good morning' : NOW < 1080 ? 'Good afternoon' : 'Good evening';
 
@@ -729,11 +762,9 @@ function render() {
   h += '<p class="d-eyebrow">' + dateStr + '</p>';
   h += '<h1 class="d-title">' + (isToday ? greeting + ', <em>Sean</em>' : '<em>' + (WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : state.selDate) + '</em>') + '</h1>';
   h += '</div><div class="d-tools">';
-  if (isToday) {
-    h += '<button class="d-plan' + (pend.length ? ' is-live' : '') + '" data-plantoggle>';
-    h += kmark(22, false) + (pend.length ? 'Plan my day \u00b7 ' + pend.length : 'Day planned');
-    h += '</button>';
-  }
+  h += '<a class="d-plan" href="/plan.html" style="text-decoration:none">';
+  h += '<svg viewBox="-12 -12 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="-8" y="-9" width="16" height="18" rx="2"/><line x1="-4" y1="-4" x2="4" y2="-4"/><line x1="-4" y1="0" x2="4" y2="0"/><line x1="-4" y1="4" x2="1" y2="4"/></svg>';
+  h += ' Week Plan</a>';
   h += '<div class="d-ring"><svg viewBox="0 0 68 68" aria-hidden="true">';
   h += '<circle cx="34" cy="34" r="28" class="d-rt"/>';
   h += '<circle cx="34" cy="34" r="28" class="d-rp" stroke-dasharray="' + (C * pct / 100) + ' ' + C + '"/>';
@@ -753,40 +784,8 @@ function render() {
   h += '</nav>';
 
   if (isToday) {
-    // Signals
-    h += '<nav class="d-signals" aria-label="Signals">';
-    SIGNALS.forEach(function(s) {
-      h += '<a href="' + s.href + '" class="d-sig is-' + (s.tone || 'flat') + '">';
-      h += '<span class="d-sk">' + s.k + '</span>';
-      h += '<b>' + s.v + '</b><em>' + s.s + '</em></a>';
-    });
-    h += '</nav>';
-
-    // Coach
-    h += '<section class="d-coach"><div class="d-badge">' + kmark(52, true) + '<span class="d-name">KHABIB</span></div>';
-    h += '<div class="d-say">';
-    h += '<p class="d-good"><i>WORKING</i>Protein hit six days running and the squat went up. That is what consistent looks like.</p>';
-    h += '<p class="d-change"><i>CHANGE</i>48 g of protein short with five hours left, and you play tomorrow. Fix it at dinner, not at 10pm.</p>';
-    h += '</div></section>';
-
-    // Plan sheet
-    if (state.planOpen) {
-      h += '<section class="d-sheet"><header><div><p class="d-eyebrow">KHABIB\u2019S PLAN</p>';
-      h += '<h2>' + (pend.length ? pend.length + ' change' + (pend.length > 1 ? 's' : '') + ' to today' : 'Nothing left to change') + '</h2></div>';
-      if (pend.length > 1) h += '<button class="d-go" data-acceptall>Accept all</button>';
-      h += '</header>';
-      if (!pend.length) h += '<p class="d-none">The day stands. Go and do it.</p>';
-      h += '<ul>';
-      pend.forEach(function(p) {
-        h += '<li><div class="d-pl"><span class="d-sig-badge">' + esc(p.signal) + '</span>';
-        h += '<b>' + esc(p.title) + '</b><p>' + esc(p.why) + '</p></div>';
-        h += '<div class="d-pb"><button class="d-ghost" data-skip="' + p.id + '">Skip</button>';
-        h += '<button class="d-go" data-accept="' + p.id + '">Accept</button></div></li>';
-      });
-      h += '</ul>';
-      h += '<p class="d-fine">Khabib never edits the day silently. Every change cites the signal that produced it.</p>';
-      h += '</section>';
-    }
+    // Weekly planner (today's schedule from plan.html)
+    h += renderTodayPlan(now);
   } else {
     // Theme + mindset for other days
     if (getDayTheme(state.selDate)) {
