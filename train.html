@@ -75,6 +75,9 @@ body{
   <button role="tab" aria-selected="false" data-tab="recovery">
     <span class="t-tn">05</span>RECOVERY
   </button>
+  <button role="tab" aria-selected="false" data-tab="body">
+    <span class="t-tn">06</span>BODY
+  </button>
 </nav>
 
 <div class="t-frame" id="frame">
@@ -87,8 +90,8 @@ body{
 
   var tabs = document.querySelectorAll('[data-tab]');
   var frame = document.getElementById('content-frame');
-  var pages = { gym: '/gym.html', seward: '/seward.html', mvmnt: '/mvmnt.html', soccer: '/soccer.html', recovery: '/recovery.html' };
-  var titles = { gym: 'Gym', seward: 'Seward College Work', mvmnt: '112mvmnt', soccer: 'Soccer', recovery: 'Recovery' };
+  var pages = { gym: '/gym.html', seward: '/seward.html', mvmnt: '/mvmnt.html', soccer: '/soccer.html', recovery: '/recovery.html', body: '/body.html' };
+  var titles = { gym: 'Gym', seward: 'Seward College Work', mvmnt: '112mvmnt', soccer: 'Soccer', recovery: 'Recovery', body: 'Body Archive' };
 
   // Check URL hash for initial tab
   var hash = window.location.hash.replace('#', '');
