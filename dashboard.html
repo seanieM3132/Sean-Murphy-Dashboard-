@@ -297,10 +297,10 @@ var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down",
 /* GOATA + toe curls + lateral pelvic tilts now built into AM() morning protocol */
 
 var DAYS = {
-  // THU JULY 9 — Power & Explosive + Team Training
+  // THU JULY 9 — Upper Activation + Team Training
   "2026-07-09": {
-    theme:"Power & Explosive \u00b7 Team Training PM",
-    mindset:"Train hard in the morning, perform at team training tonight.",
+    theme:"Upper Activation \u00b7 Team Training PM",
+    mindset:"Light gym to prime the body. Save legs for team training tonight.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Glutes & Groins", sub:"Dynamic leg lifts \u00b7 tailor\u2019s pose \u00b7 horse stance", href:"/train.html#mvmnt", steps:[
@@ -309,55 +309,29 @@ var DAYS = {
       { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 2 mile run + Abs 1", sub:"First day. Set a solid time to improve on", href:"/train.html#seward", steps:[
         {t:"2 mile run \u2014 track the time",d:"Pace yourself, first day"},{t:"Abs 1: 25 crunches, 25 sit-ups, 25 scissors",d:""},{t:"3 Superman holds 5s + 25 crunches",d:""},{t:"25 pushups + 25 squats",d:"Clean form, full depth"}
       ]},
-      { id:"gym", at:520, mins:50, kind:"train", title:"Gym \u2014 Power & Explosive", sub:"Trap bar deadlift \u00b7 push press \u00b7 Bulgarian split squat", href:"/train.html#gym", steps:[
-        {t:"Trap Bar Deadlift 4\u00d75-6 @ 60kg",d:"EXPLOSIVE concentric"},{t:"Push Press 3\u00d75-6 @ 30kg",d:"Quarter dip + drive"},{t:"Bulgarian Split Squat 3\u00d78 @ 12kg DBs",d:""},{t:"Single-Arm DB Row 3\u00d78-10 @ 18kg",d:""},{t:"Incline DB Press 3\u00d78-10 @ 16kg",d:""},{t:"Chin-ups 3 \u00d7 max",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg",d:""}
+      { id:"gym", at:520, mins:40, kind:"train", title:"Gym \u2014 Upper Body + Activation", sub:"Light \u00b7 save legs for team training PM", href:"/train.html#gym", steps:[
+        {t:"Box Jumps 3\u00d73 (activation only, 90s rest)",d:"Neural priming, not fatigue"},{t:"Incline DB Press 3\u00d78-10 @ 16kg",d:""},{t:"Chin-ups 3 \u00d7 max",d:""},{t:"Single-Arm DB Row 3\u00d78-10 @ 18kg",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg",d:""},{t:"Face Pulls 3\u00d715",d:""},{t:"Band Pull-Aparts 3\u00d715",d:""}
       ]},
-      { id:"core", at:570, mins:15, kind:"train", title:"Core \u2014 Speed Focus", sub:"Med ball slams + rotational throws", href:"/train.html#gym", steps:[
-        {t:"Med Ball Slams 3\u00d78",d:"45s rest"},{t:"Rotational Throws 3\u00d78 each side",d:"45s rest"},{t:"Russian Twists 3\u00d715 @ 5-8kg",d:"30s rest"}
-      ]},
-      { id:"fascia", at:585, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
+      { id:"fascia", at:560, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
         {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:"3-4 sec tempo, 90s rest"}
       ]},
-      { id:"sauna1", at:600, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (heavy gym day)", href:"/train.html#recovery", steps:[
-        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
+      { id:"cold", at:575, mins:3, kind:"recover", title:"Cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost before team", href:"/train.html#recovery", steps:[
+        {t:"Cold plunge 1-3 min",d:"Doubles baseline dopamine for 4-6 hrs. No sauna \u2014 save recovery tools for heavy days"}
       ]},
       { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Warm-up touches + juggling \u2014 save legs for team", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut 4\u00d720s each",d:""},{t:"Juggling 5 min",d:"Save legs for team training"}
       ]},
-      { id:"team", at:1275, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
         {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // FRI JULY 10 — Seward + Mobility + Skills
+  // FRI JULY 10 — Pre-Match
   "2026-07-10": {
-    theme:"Seward AM \u00b7 Skills & Ball Work PM",
-    mindset:"No team training. Use the evening for extended ball work.",
-    items: [
-      AM(),
-      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext 3\u00d720 \u00b7 iso lunge \u00b7 slant board squat", href:"/train.html#mvmnt", steps:[
-        {t:"Banded Knee Extension 3\u00d720",d:""},{t:"Isometric Lunge Hold 3\u00d730s",d:""},{t:"Reverse Step-Up 3\u00d76",d:""},{t:"Slant Board Squat 3\u00d76-8",d:""},{t:"Reverse Nordic Curl 3\u00d75",d:""},{t:"Knee IR/ER 2\u00d75 each",d:""}
-      ]},
-      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout B + Abs 2", sub:"Walking pushups 4\u00d77 \u00b7 lunges 5\u00d710 \u00b7 planks", href:"/train.html#seward", steps:[
-        {t:"Walking pushups: 4 \u00d7 7",d:""},{t:"Lunges: 5 \u00d7 10 each leg",d:""},{t:"Front plank 3\u00d71 min",d:""},{t:"L side plank 3\u00d71 min",d:""},{t:"R side plank 3\u00d71 min",d:""}
-      ]},
-      { id:"cold", at:540, mins:3, kind:"recover", title:"Morning cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost", href:"/train.html#recovery", steps:[
-        {t:"Cold plunge 1-3 min",d:"Move limbs to break thermal layer. Doubles baseline dopamine for 4-6 hours"}
-      ]},
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Takuya sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico, Berbatov wall drill",d:"4\u00d720s each"},{t:"Weak Foot Block 5 min (L foot)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max",d:"8 min"}
-      ]},
-      { id:"sauna", at:870, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling", href:"/train.html#recovery", steps:[{t:"80-100\u00b0C for 15 min",d:""}] },
-      PM
-    ]
-  },
-
-  // FRI JULY 11 — Speed & Skills + Pre-Match
-  "2026-07-11": {
     theme:"Speed & Acceleration \u00b7 Pre-Match Prep",
-    mindset:"Train hard, then let the body settle for game tomorrow.",
+    mindset:"Train hard in the morning, then let the body settle for game tomorrow.",
     items: [
       AM(),
       { id:"mob", at:455, mins:25, kind:"train", title:"112mvmnt \u2014 Lower Back + Calves & Ankles", sub:"Forward fold \u00b7 active cobra \u00b7 slant board calf raises", href:"/train.html#mvmnt", steps:[
@@ -380,8 +354,8 @@ var DAYS = {
     ]
   },
 
-  // SAT JULY 12 — Match Day
-  "2026-07-12": {
+  // SAT JULY 11 — Match Day
+  "2026-07-11": {
     theme:"MATCH DAY",
     mindset:"PERFORM. Everything serves the game.",
     items: [
@@ -406,8 +380,8 @@ var DAYS = {
       PM
     ]
   },
-  // SAT JULY 12 — Bye Week (used when match toggle = BYE)
-  "2026-07-12-bye": {
+  // SAT JULY 11 — Bye Week (used when match toggle = BYE)
+  "2026-07-11-bye": {
     theme:"BYE WEEK \u2014 Build What the Game Can\u2019t",
     mindset:"No match pressure. Attack your weaknesses \u2014 endurance and speed.",
     items: [
@@ -444,17 +418,17 @@ var DAYS = {
     ]
   },
 
-  // SUN JULY 13 — Recovery + Double Seward
-  "2026-07-13": {
-    theme:"Recovery + Double Stacked Seward",
-    mindset:"Recover from match, then get the Seward volume done.",
+  // SUN JULY 12 — Recovery + Film Review
+  "2026-07-12": {
+    theme:"Recovery + Film Review",
+    mindset:"Recover from match. Review footage. Light movement only.",
     items: [
       AM(),
       { id:"walk", at:455, mins:20, kind:"recover", title:"Light recovery walk / foam roll", sub:"Easy movement, get blood flowing. Lymphatic system has no pump \u2014 it needs movement", href:"/train.html#recovery", steps:[{t:"Walk or foam roll 15-20 min",d:"Low-level muscular contractions move lymph fluid and reduce heavy legs"}] },
       { id:"mob", at:480, mins:20, kind:"train", title:"112mvmnt \u2014 Hips & Hammys", sub:"Full program post-match", href:"/train.html#mvmnt", steps:[
         {t:"Hip Flexor Leg Lifts 3\u00d73\u00d75s",d:""},{t:"Banded Hamstring Stretch 3\u00d73\u00d75s",d:""},{t:"Hip 90/90 IR 3\u00d73\u00d75s",d:""},{t:"Butterfly CRAC 3\u00d76\u00d710s",d:""},{t:"Couch Stretch 2\u00d71 min",d:""}
       ]},
-      { id:"seward1", at:505, mins:30, kind:"train", title:"Seward \u2014 Workout D (from Sat)", sub:"Decline push-ups \u00b7 diamond push-ups \u00b7 vertical jumps", href:"/train.html#seward", steps:[
+      { id:"seward1", at:505, mins:30, kind:"train", title:"Seward \u2014 Workout D (upper body focus)", sub:"Decline push-ups \u00b7 diamond push-ups \u00b7 calf raises", href:"/train.html#seward", steps:[
         {t:"Decline push-ups 5\u00d710",d:""},{t:"Diamond push-ups 5\u00d711",d:""},{t:"Vertical wall jumps 5\u00d720",d:""},{t:"Single leg jumps 5\u00d710 each",d:""},{t:"Calf raises (hold 5s) 10\u00d720",d:""}
       ]},
       { id:"recovery", at:540, mins:25, kind:"recover", title:"Sauna + cold plunge", sub:"15-20 min sauna \u2192 2-3 min cold", href:"/train.html#recovery", steps:[
@@ -463,20 +437,49 @@ var DAYS = {
       { id:"film", at:600, mins:45, kind:"admin", title:"Game film session", sub:"Review yesterday\u2019s match. 3 good + 3 to fix", href:"", steps:[
         {t:"3 things you did well",d:""},{t:"3 things to fix",d:""},{t:"Focus: positioning, first touch, off-ball movement",d:""}
       ]},
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + First Touch", sub:"Joner style \u00b7 first touch CM", href:"/train.html#soccer", steps:[
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + First Touch", sub:"Joner style \u00b7 first touch CM \u2014 light technical only", href:"/train.html#soccer", steps:[
         {t:"Set A: Sole drag inside push, inside-outside cut, Iniesta, V-drag, La Croqueta",d:"4\u00d720s each"},{t:"First Touch: wall pass 3\u00d710, back foot reception 3\u00d710, chest control 3\u00d78",d:""}
-      ]},
-      { id:"seward2", at:870, mins:40, kind:"train", title:"Seward \u2014 Sprint Pyramid", sub:"10-20-30-40-50-50-40-30-20-10m \u00d7 2 sets", href:"/train.html#seward", steps:[
-        {t:"Sprint pyramid: 10m to 50m and back",d:"Full speed. Recovery = distance in seconds"},{t:"5 min between sets. DO 2 SETS",d:""}
       ]},
       PM
     ]
   },
 
-  // TUE JULY 14 — Heavy Training + Team Training
+  // MON JULY 13 — Heavy Lower + Power
+  "2026-07-13": {
+    theme:"Heavy Lower \u00b7 Power & Explosive",
+    mindset:"Biggest gym day of the week. Build the engine.",
+    items: [
+      AM(),
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext 3\u00d720 \u00b7 iso lunge \u00b7 slant board squat", href:"/train.html#mvmnt", steps:[
+        {t:"Banded Knee Extension 3\u00d720",d:""},{t:"Isometric Lunge Hold 3\u00d730s",d:""},{t:"Reverse Step-Up 3\u00d76",d:""},{t:"Slant Board Squat 3\u00d76-8",d:""},{t:"Reverse Nordic Curl 3\u00d75",d:""},{t:"Knee IR/ER 2\u00d75 each",d:""}
+      ]},
+      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout A + Abs 2", sub:"Wide pushups \u00b7 burpees \u00b7 squats \u00b7 planks", href:"/train.html#seward", steps:[
+        {t:"Wide pushups 4\u00d710",d:""},{t:"Normal pushups 4\u00d710",d:""},{t:"Burpees 5\u00d710",d:""},{t:"Squats 5\u00d710",d:""},{t:"Front plank 3\u00d71 min",d:""},{t:"L+R side plank 3\u00d71 min each",d:""}
+      ]},
+      { id:"gym", at:525, mins:55, kind:"train", title:"Gym \u2014 Power & Explosive", sub:"Trap bar deadlift \u00b7 push press \u00b7 Bulgarian split squat", href:"/train.html#gym", steps:[
+        {t:"Trap Bar Deadlift 4\u00d75-6 @ 60kg",d:"EXPLOSIVE concentric"},{t:"Push Press 3\u00d75-6 @ 30kg",d:"Quarter dip + drive"},{t:"Bulgarian Split Squat 3\u00d78 @ 12kg DBs",d:""},{t:"Back Squat 3\u00d76-8 @ 50kg",d:"3-1-1 tempo"},{t:"Single-Arm DB Row 3\u00d78-10 @ 18kg",d:""},{t:"Incline DB Press 3\u00d78-10 @ 16kg",d:""},{t:"Chin-ups 3 \u00d7 max",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg",d:""}
+      ]},
+      { id:"core", at:580, mins:15, kind:"train", title:"Core \u2014 Speed Focus", sub:"Med ball slams + rotational throws", href:"/train.html#gym", steps:[
+        {t:"Med Ball Slams 3\u00d78",d:"45s rest"},{t:"Rotational Throws 3\u00d78 each side",d:"45s rest"},{t:"Russian Twists 3\u00d715 @ 5-8kg",d:"30s rest"}
+      ]},
+      { id:"fascia", at:595, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:"3-4 sec tempo, 90s rest"}
+      ]},
+      { id:"sauna1", at:610, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (heavy gym day)", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
+      ]},
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Takuya sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico, Berbatov wall drill",d:"4\u00d720s each"},{t:"Weak Foot Block 5 min (L foot)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max",d:"8 min"}
+      ]},
+      { id:"sauna2", at:870, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling", href:"/train.html#recovery", steps:[{t:"80-100\u00b0C for 15 min",d:""}] },
+      PM
+    ]
+  },
+
+  // TUE JULY 14 — Upper Activation + Team Training
   "2026-07-14": {
-    theme:"Heavy Training \u00b7 Team Training PM",
-    mindset:"Train hard in the morning, perform at team training tonight.",
+    theme:"Upper Activation \u00b7 Team Training PM",
+    mindset:"Light gym to prime the body. Save legs for team training tonight.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Shoulders & Spine", sub:"T-spine rotations \u00b7 end-range lift-offs \u00b7 seal stretch", href:"/train.html#mvmnt", steps:[
@@ -485,43 +488,62 @@ var DAYS = {
       { id:"seward", at:480, mins:30, kind:"train", title:"Seward \u2014 Workout B + Jump Rope 2 + Abs 1", sub:"Walking pushups \u00b7 lunges \u00b7 jump rope \u00b7 abs", href:"/train.html#seward", steps:[
         {t:"Walking pushups 4\u00d77",d:""},{t:"Lunges 5\u00d710 each",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps, 30s rest",d:""},{t:"Abs 1: crunches, sit-ups, scissors, supermans",d:""}
       ]},
-      { id:"plyo", at:515, mins:15, kind:"train", title:"Gym \u2014 Plyometrics", sub:"Box jumps \u00b7 broad jumps \u00b7 SL bounds", href:"/train.html#gym", steps:[
-        {t:"Box Jumps 3\u00d75 (60s rest)",d:""},{t:"Broad Jumps 3\u00d75 (60s rest)",d:""},{t:"Single-Leg Bounds 3\u00d75 each (45s rest)",d:""}
+      { id:"gym", at:515, mins:40, kind:"train", title:"Gym \u2014 Upper Body + Activation", sub:"Light \u00b7 save legs for team training PM", href:"/train.html#gym", steps:[
+        {t:"Box Jumps 3\u00d73 (activation only, 90s rest)",d:"Neural priming, not fatigue"},{t:"DB Bench Press 3\u00d78-10 @ 16kg",d:""},{t:"Barbell Row 3\u00d78-10 @ 40kg",d:""},{t:"DB Shoulder Press 3\u00d78-10 @ 14kg",d:""},{t:"Pull-ups 3 \u00d7 max",d:""},{t:"Face Pulls 3\u00d715",d:""},{t:"Band Pull-Aparts 3\u00d715",d:""}
       ]},
-      { id:"gym", at:530, mins:40, kind:"train", title:"Gym \u2014 Heavy Compounds", sub:"Back squat \u00b7 RDL \u00b7 bench press \u00b7 barbell row", href:"/train.html#gym", steps:[
-        {t:"Back Squat 4\u00d76-8 @ 50kg",d:"3-1-1 tempo"},{t:"Romanian Deadlift 4\u00d76-8 @ 45kg",d:""},{t:"Bench Press 3\u00d76-8 @ 45kg",d:""},{t:"Barbell Row 3\u00d78-10 @ 40kg",d:""},{t:"Pull-ups 3 \u00d7 max",d:""},{t:"DB Shoulder Press 3\u00d78-10 @ 14kg",d:""},{t:"Face Pulls 3\u00d715",d:""}
-      ]},
-      { id:"core", at:570, mins:10, kind:"train", title:"Core \u2014 Stiffness", sub:"Front plank \u00b7 Pallof press \u00b7 dead bugs", href:"/train.html#gym", steps:[
+      { id:"core", at:555, mins:10, kind:"train", title:"Core \u2014 Stiffness", sub:"Front plank \u00b7 Pallof press \u00b7 dead bugs", href:"/train.html#gym", steps:[
         {t:"Front Plank 3\u00d745s",d:""},{t:"Pallof Press 3\u00d710 each",d:""},{t:"Dead Bugs 3\u00d78 each",d:""}
       ]},
-      { id:"fascia", at:580, mins:15, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
+      { id:"fascia", at:565, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
         {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:""}
       ]},
-      { id:"sauna", at:600, mins:15, kind:"recover", title:"Sauna 15 min", sub:"NO ice bath \u2014 heavy gym day", href:"/train.html#recovery", steps:[{t:"Sauna 15 min. NO ice bath today \u2014 need inflammatory response for muscle growth",d:""}] },
-      { id:"team", at:1275, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+      { id:"cold", at:580, mins:3, kind:"recover", title:"Cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost before team", href:"/train.html#recovery", steps:[
+        {t:"Cold plunge 1-3 min",d:"Doubles baseline dopamine for 4-6 hrs. No sauna \u2014 save recovery tools for heavy days"}
+      ]},
+      { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Cognitive drills + first touch \u2014 save legs for team", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min",d:""},{t:"Set C: Sole drags + tennis ball catch, Coerver pull-push 4\u00d720s each",d:""},{t:"First Touch: wall pass open body 3\u00d78 R/L",d:"Save legs for team training"}
+      ]},
+      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
         {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // WED JULY 15 — Seward + Skills
+  // WED JULY 15 — Heavy Upper + Speed & Plyos
   "2026-07-15": {
-    theme:"Seward AM \u00b7 Extended Ball Work PM",
-    mindset:"No team training. Use the evening for skills and weak foot.",
+    theme:"Heavy Upper \u00b7 Speed & Plyos",
+    mindset:"Push upper body hard, build speed. No team training \u2014 go all out.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Calves & Ankles", sub:"Slant board calf raises \u00b7 tib raises \u00b7 banded ankle DF", href:"/train.html#mvmnt", steps:[
         {t:"Slant board calf raise 3\u00d78-10",d:""},{t:"Bent-leg calf raise 3\u00d78-10",d:""},{t:"Tib raises 3\u00d78-10",d:""},{t:"Foot stretch + hack squat",d:""},{t:"Banded ankle DF 2 min",d:""},{t:"Deep squat elevated 4 min",d:""},{t:"Elevated seiza 1 min",d:""}
       ]},
-      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout A + Jump Rope 2 + Abs 2", sub:"Wide pushups \u00b7 burpees \u00b7 squats \u00b7 jump rope \u00b7 planks", href:"/train.html#seward", steps:[
-        {t:"Wide pushups 4\u00d710",d:""},{t:"Normal pushups 4\u00d710",d:""},{t:"Burpees 5\u00d710",d:""},{t:"Squats 5\u00d710",d:""},{t:"Knees to Chest 3\u00d715",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps",d:""},{t:"Front plank 3\u00d71 min, L+R side plank 3\u00d71 min each",d:""}
+      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout D + Jump Rope 2 + Abs 2", sub:"Decline pushups \u00b7 diamond pushups \u00b7 jumps \u00b7 jump rope \u00b7 planks", href:"/train.html#seward", steps:[
+        {t:"Decline push-ups 5\u00d710",d:""},{t:"Diamond push-ups 5\u00d711",d:""},{t:"Vertical wall jumps 5\u00d720",d:""},{t:"Single leg jumps 5\u00d710 each",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps",d:""},{t:"Front plank 3\u00d71 min, L+R side plank 3\u00d71 min each",d:""}
       ]},
-      { id:"cold", at:540, mins:3, kind:"recover", title:"Morning cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost", href:"/train.html#recovery", steps:[{t:"Cold plunge 1-3 min",d:"Move limbs to break thermal layer. Doubles baseline dopamine for 4-6 hours"}] },
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
+      { id:"gym", at:525, mins:45, kind:"train", title:"Gym \u2014 Heavy Upper + Compounds", sub:"Bench press \u00b7 barbell row \u00b7 OHP \u00b7 RDL", href:"/train.html#gym", steps:[
+        {t:"Bench Press 3\u00d76-8 @ 45kg",d:""},{t:"Barbell Row 3\u00d78-10 @ 40kg",d:""},{t:"DB Shoulder Press 3\u00d78-10 @ 14kg",d:""},{t:"Romanian Deadlift 4\u00d76-8 @ 45kg",d:"Hamstring & posterior chain"},{t:"Pull-ups 3 \u00d7 max",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg",d:""},{t:"Face Pulls 3\u00d715",d:""}
+      ]},
+      { id:"plyo", at:570, mins:15, kind:"train", title:"Plyometrics", sub:"Box jumps \u00b7 broad jumps \u00b7 SL bounds", href:"/train.html#gym", steps:[
+        {t:"Box Jumps 3\u00d75 (60s rest)",d:""},{t:"Broad Jumps 3\u00d75 (60s rest)",d:""},{t:"Single-Leg Bounds 3\u00d75 each (45s rest)",d:""}
+      ]},
+      { id:"core", at:585, mins:10, kind:"train", title:"Core \u2014 Stiffness + Rotation", sub:"Pallof press \u00b7 dead bugs \u00b7 Russian twists", href:"/train.html#gym", steps:[
+        {t:"Pallof Press 3\u00d710 each",d:""},{t:"Dead Bugs 3\u00d78 each",d:""},{t:"Russian Twists 3\u00d715 @ 5-8kg",d:""}
+      ]},
+      { id:"fascia", at:595, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:""}
+      ]},
+      { id:"sauna1", at:610, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (gym day)", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
+      ]},
+      { id:"sprint", at:780, mins:30, kind:"train", title:"Seward \u2014 Sprint Pyramid", sub:"10-20-30-40-50-50-40-30-20-10m \u00d7 2 sets", href:"/train.html#seward", steps:[
+        {t:"Sprint pyramid: 10m to 50m and back",d:"Full speed. Recovery = distance in seconds"},{t:"5 min between sets. DO 2 SETS",d:""}
+      ]},
+      { id:"ball", at:825, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min",d:""},{t:"Set A: 10 min Joner style",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max",d:""}
       ]},
-      { id:"sauna", at:870, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling for sleep", href:"/train.html#recovery", steps:[{t:"Sauna 15 min @ 80-100\u00b0C",d:"Triggers compensatory cooling 1-2 hrs later for deeper sleep"}] },
+      { id:"sauna2", at:915, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling for sleep", href:"/train.html#recovery", steps:[{t:"Sauna 15 min @ 80-100\u00b0C",d:"Triggers compensatory cooling 1-2 hrs later for deeper sleep"}] },
       PM
     ]
   }
