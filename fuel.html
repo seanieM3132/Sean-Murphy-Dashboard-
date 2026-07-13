@@ -566,24 +566,89 @@ body {
       }
     }
 
-    // FOOD_DB loaded from /food-db.js (200+ Australian foods)
+    // FOOD_DB loaded from /food-db.js (200+ common Australian foods)
+    // Open Food Facts API provides hundreds of thousands more
+
+    var _searchTimer = null;
+    var _lastQuery = '';
 
     function renderSearchHits(q) {
-      if (!q) { document.getElementById('search-hits').innerHTML = ''; return; }
+      var el = document.getElementById('search-hits');
+      if (!q) { el.innerHTML = ''; _lastQuery = ''; return; }
+      _lastQuery = q;
+
+      // Local results first (instant)
       var terms = q.toLowerCase().split(/\s+/).filter(function(t){return t.length>0;});
-      var hits = FOOD_DB.filter(function(f) {
+      var local = FOOD_DB.filter(function(f) {
         var n = f.name.toLowerCase();
         return terms.every(function(t){return n.indexOf(t)>=0;});
-      }).slice(0,20);
+      }).slice(0,12);
+
+      renderHitsList(el, local, q.length >= 2 && local.length < 5);
+
+      // API search after short delay (debounce)
+      clearTimeout(_searchTimer);
+      if (q.length >= 2) {
+        _searchTimer = setTimeout(function(){ apiSearch(q); }, 400);
+      }
+    }
+
+    function apiSearch(q) {
+      if (q !== _lastQuery) return;
       var el = document.getElementById('search-hits');
-      if (!hits.length) { el.innerHTML = '<p class="u-empty">No match. Try a simpler word, or log it by photo.</p>'; return; }
-      el.innerHTML = hits.map(function(f) {
-        return '<li><span class="u-hn">' + f.name + '<em>' + f.per + '</em></span>' +
+      if (!el) return;
+
+      fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) +
+        '&search_simple=1&action=process&json=1&page_size=20&fields=product_name,brands,nutriments,serving_size,serving_quantity')
+        .then(function(r){return r.json();})
+        .then(function(j){
+          if (q !== _lastQuery) return;
+          var apiHits = (j.products||[]).filter(function(p){
+            return p.product_name && p.nutriments;
+          }).map(function(p){
+            var n = p.nutriments;
+            var name = p.product_name + (p.brands ? ' ('+p.brands.split(',')[0]+')' : '');
+            var serving = p.serving_size || '100g';
+            var kcal = Math.round(n['energy-kcal_serving']||n['energy-kcal_100g']||0);
+            var pro = Math.round((n.proteins_serving||n.proteins_100g||0)*10)/10;
+            var carb = Math.round((n.carbohydrates_serving||n.carbohydrates_100g||0)*10)/10;
+            var fat = Math.round((n.fat_serving||n.fat_100g||0)*10)/10;
+            return {name:name, per:serving, kcal:kcal, p:pro, c:carb, f:fat, api:true};
+          }).filter(function(h){return h.kcal>0;}).slice(0,15);
+
+          // Merge: local first, then API (dedupe by similar name)
+          var terms2 = q.toLowerCase().split(/\s+/).filter(function(t){return t.length>0;});
+          var localNow = FOOD_DB.filter(function(f){
+            var n=f.name.toLowerCase();return terms2.every(function(t){return n.indexOf(t)>=0;});
+          }).slice(0,12);
+
+          var localNames = localNow.map(function(f){return f.name.toLowerCase();});
+          var unique = apiHits.filter(function(h){
+            var ln = h.name.toLowerCase();
+            return !localNames.some(function(n){return ln.indexOf(n)>=0||n.indexOf(ln)>=0;});
+          });
+
+          var combined = localNow.concat(unique).slice(0,25);
+          renderHitsList(el, combined, false);
+        })
+        .catch(function(){});
+    }
+
+    function renderHitsList(el, hits, showLoading) {
+      if (!hits.length && !showLoading) {
+        el.innerHTML = '<p class="u-empty">No results. Try different words.</p>';
+        return;
+      }
+      var html = hits.map(function(f) {
+        var badge = f.api ? '<span style="font:500 7px var(--mono,monospace);letter-spacing:.12em;color:var(--teal,#7DD3C0);margin-left:6px">OFF</span>' : '';
+        return '<li><span class="u-hn">' + f.name + badge + '<em>' + f.per + '</em></span>' +
           '<span class="u-hm">' + f.p + 'P \u00B7 ' + f.c + 'C \u00B7 ' + f.f + 'F</span>' +
           '<b>' + f.kcal + '</b>' +
           '<button data-kcal="' + f.kcal + '" data-p="' + f.p + '" data-c="' + f.c + '" data-f="' + f.f + '" aria-label="Add ' + f.name + '">+</button></li>';
       }).join('');
-      el.querySelectorAll('button').forEach(function(btn) {
+      if (showLoading) html += '<li style="text-align:center;padding:12px;color:var(--dim,#5F786E);font:400 11px monospace">Searching more foods...</li>';
+      el.innerHTML = html;
+      el.querySelectorAll('button[data-kcal]').forEach(function(btn) {
         btn.addEventListener('click', function() {
           addFood(+this.dataset.kcal, +this.dataset.p, +this.dataset.c, +this.dataset.f);
         });
