@@ -297,10 +297,10 @@ var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down",
 /* GOATA + toe curls + lateral pelvic tilts now built into AM() morning protocol */
 
 var DAYS = {
-  // WED JULY 9 — Power & Explosive + Seward Day 1
+  // THU JULY 9 — Power & Explosive + Team Training
   "2026-07-09": {
-    theme:"Power & Explosive \u00b7 Seward Day 1",
-    mindset:"The standard you set today is the standard you\u2019ll be held to.",
+    theme:"Power & Explosive \u00b7 Team Training PM",
+    mindset:"Train hard in the morning, perform at team training tonight.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Glutes & Groins", sub:"Dynamic leg lifts \u00b7 tailor\u2019s pose \u00b7 horse stance", href:"/train.html#mvmnt", steps:[
@@ -321,17 +321,20 @@ var DAYS = {
       { id:"sauna1", at:600, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (heavy gym day)", href:"/train.html#recovery", steps:[
         {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
       ]},
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Takuya sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico, Berbatov wall drill",d:"4\u00d720s each"},{t:"Weak Foot Block 5 min (L foot)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max",d:"8 min"}
+      { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Warm-up touches + juggling \u2014 save legs for team", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut 4\u00d720s each",d:""},{t:"Juggling 5 min",d:"Save legs for team training"}
+      ]},
+      { id:"team", at:1275, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+        {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // THU JULY 10 — Team Training Day
+  // FRI JULY 10 — Seward + Mobility + Skills
   "2026-07-10": {
-    theme:"Seward AM \u00b7 Team Training PM",
-    mindset:"Activate, then perform at team training.",
+    theme:"Seward AM \u00b7 Skills & Ball Work PM",
+    mindset:"No team training. Use the evening for extended ball work.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext 3\u00d720 \u00b7 iso lunge \u00b7 slant board squat", href:"/train.html#mvmnt", steps:[
@@ -343,13 +346,11 @@ var DAYS = {
       { id:"cold", at:540, mins:3, kind:"recover", title:"Morning cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost", href:"/train.html#recovery", steps:[
         {t:"Cold plunge 1-3 min",d:"Move limbs to break thermal layer. Doubles baseline dopamine for 4-6 hours"}
       ]},
-      { id:"ball", at:780, mins:15, kind:"train", title:"Light ball touches", sub:"Warm-up touches + juggling only", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min",d:""},{t:"Juggling \u2014 aim 50+",d:"Save legs for team training"}
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Takuya sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico, Berbatov wall drill",d:"4\u00d720s each"},{t:"Weak Foot Block 5 min (L foot)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max",d:"8 min"}
       ]},
-      { id:"team", at:1020, mins:90, kind:"train", title:"Team training", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
-        {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
-      ]},
-      { id:"sauna", at:1140, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling", href:"/train.html#recovery", steps:[{t:"80-100\u00b0C for 15 min",d:""}] },
+      { id:"sauna", at:870, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling", href:"/train.html#recovery", steps:[{t:"80-100\u00b0C for 15 min",d:""}] },
+      PM
     ]
   },
 
@@ -472,10 +473,10 @@ var DAYS = {
     ]
   },
 
-  // TUE JULY 14 — Heavy Training + MFM
+  // TUE JULY 14 — Heavy Training + Team Training
   "2026-07-14": {
-    theme:"Heavy Training Day",
-    mindset:"Train early. Heavy compounds. Get stronger.",
+    theme:"Heavy Training \u00b7 Team Training PM",
+    mindset:"Train hard in the morning, perform at team training tonight.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Shoulders & Spine", sub:"T-spine rotations \u00b7 end-range lift-offs \u00b7 seal stretch", href:"/train.html#mvmnt", steps:[
@@ -497,17 +498,17 @@ var DAYS = {
         {t:"HFT Marble Swing 3\u00d730s each foot",d:""},{t:"Gait Cycle Drills 5 min",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded",d:""}
       ]},
       { id:"sauna", at:600, mins:15, kind:"recover", title:"Sauna 15 min", sub:"NO ice bath \u2014 heavy gym day", href:"/train.html#recovery", steps:[{t:"Sauna 15 min. NO ice bath today \u2014 need inflammatory response for muscle growth",d:""}] },
-      { id:"ball", at:870, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
-        {t:"Set A: 10 min Joner style",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max",d:""}
+      { id:"team", at:1275, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+        {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // WED JULY 15 — Team Training Day
+  // WED JULY 15 — Seward + Skills
   "2026-07-15": {
-    theme:"Seward AM \u00b7 Team Training PM",
-    mindset:"Full Seward effort. Skip gym \u2014 Seward is enough. Perform at team training.",
+    theme:"Seward AM \u00b7 Extended Ball Work PM",
+    mindset:"No team training. Use the evening for skills and weak foot.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Calves & Ankles", sub:"Slant board calf raises \u00b7 tib raises \u00b7 banded ankle DF", href:"/train.html#mvmnt", steps:[
@@ -517,13 +518,10 @@ var DAYS = {
         {t:"Wide pushups 4\u00d710",d:""},{t:"Normal pushups 4\u00d710",d:""},{t:"Burpees 5\u00d710",d:""},{t:"Squats 5\u00d710",d:""},{t:"Knees to Chest 3\u00d715",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps",d:""},{t:"Front plank 3\u00d71 min, L+R side plank 3\u00d71 min each",d:""}
       ]},
       { id:"cold", at:540, mins:3, kind:"recover", title:"Morning cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost", href:"/train.html#recovery", steps:[{t:"Cold plunge 1-3 min",d:"Move limbs to break thermal layer. Doubles baseline dopamine for 4-6 hours"}] },
-      { id:"ball", at:780, mins:15, kind:"train", title:"Light ball touches", sub:"Warm-up touches + juggling only", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min",d:""},{t:"Juggling \u2014 save legs for team",d:""}
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min",d:""},{t:"Set A: 10 min Joner style",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max",d:""}
       ]},
-      { id:"team", at:1020, mins:90, kind:"train", title:"Team training", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
-        {t:"PEP/ACL warm-up if time",d:""},{t:"Full team session",d:""},{t:"Cool-down + stretch",d:""}
-      ]},
-      { id:"sauna", at:1140, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling for sleep", href:"/train.html#recovery", steps:[{t:"Sauna 15 min @ 80-100\u00b0C",d:"Triggers compensatory cooling 1-2 hrs later for deeper sleep"}] },
+      { id:"sauna", at:870, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery \u00b7 compensatory cooling for sleep", href:"/train.html#recovery", steps:[{t:"Sauna 15 min @ 80-100\u00b0C",d:"Triggers compensatory cooling 1-2 hrs later for deeper sleep"}] },
       PM
     ]
   }
