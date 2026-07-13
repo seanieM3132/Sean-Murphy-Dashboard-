@@ -135,67 +135,79 @@ td.green{color:var(--green);}
 <header class="top">
   <a href="/" class="back">&#8592; Dashboard</a>
   <h1 class="title">Recovery <em>System</em></h1>
-  <p class="subtitle">Full protocol from Huberman, Galpin, Man City, and brain sources. Heat, cold, post-match, nutrition.</p>
+  <p class="subtitle">Sauna, ice bath, post-match, sleep, and nutrition protocols from Huberman, Galpin, Man City, and brain sources.</p>
 </header>
 
 <nav class="tabs" role="tablist">
   <button class="tab is-active" role="tab" data-tab="sauna" aria-selected="true">SAUNA</button>
   <button class="tab" role="tab" data-tab="cold" aria-selected="false">ICE BATH</button>
   <button class="tab" role="tab" data-tab="postmatch" aria-selected="false">POST-MATCH</button>
+  <button class="tab" role="tab" data-tab="sleep" aria-selected="false">SLEEP</button>
   <button class="tab" role="tab" data-tab="nutrition" aria-selected="false">NUTRITION</button>
 </nav>
 
-<!-- ═══ TAB 1: SAUNA ═══════════════════════════════════════════ -->
+<!-- === TAB 1: SAUNA === -->
 <section class="panel is-active" id="panel-sauna" role="tabpanel">
 
   <div class="card">
     <div class="card-header">
-      <p class="card-eyebrow">SOURCE: HUBERMAN</p>
+      <p class="card-eyebrow">SOURCE: HUBERMAN / MAN CITY</p>
       <h2>Weekly <em>Sauna Schedule</em></h2>
     </div>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>DAY</th><th>USE</th><th>DURATION</th><th>TEMP</th><th>NOTES</th></tr></thead>
+        <thead><tr><th>DAY</th><th>WHEN</th><th>DURATION</th><th>TEMP</th><th>NOTES</th></tr></thead>
         <tbody>
-          <tr><td>Sunday</td><td>Post-recovery</td><td>15-20 min</td><td class="gold">80-100C</td><td class="dim">Pair with cold plunge 2-3 min</td></tr>
-          <tr><td>Monday</td><td>Post-training</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">NO ice bath after heavy gym</td></tr>
-          <tr><td>Tuesday</td><td>Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery after team training</td></tr>
-          <tr><td>Wednesday</td><td>Post-training OR GH protocol</td><td>15-20 min or 4x30 min</td><td class="gold">80C</td><td class="dim">GH protocol = once/week max</td></tr>
-          <tr><td>Thursday</td><td>Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery</td></tr>
-          <tr><td>Friday</td><td>Pre-bed</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">Compensatory cooling for sleep. NO ice bath</td></tr>
-          <tr class="no-row"><td>Saturday</td><td>NO</td><td>—</td><td>—</td><td class="dim">Match night: eat, hydrate, sleep</td></tr>
+          <tr><td>Sunday</td><td class="green">Post-recovery (AM)</td><td>15-20 min</td><td class="gold">80-100C</td><td class="dim">Pair with cold plunge 2-3 min after</td></tr>
+          <tr><td>Monday</td><td class="green">Post-gym (AM)</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">After gym session ~10:50am. NO ice bath today.</td></tr>
+          <tr><td>Tuesday</td><td class="teal">Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery after team training. Home ~8-9pm.</td></tr>
+          <tr><td>Wednesday</td><td class="green">Post-gym (AM) OR GH protocol</td><td>15-20 min or 4x30 min</td><td class="gold">80C</td><td class="dim">GH protocol = once/week max. After gym ~10:45am.</td></tr>
+          <tr><td>Thursday</td><td class="teal">Evening (post-team)</td><td>15 min</td><td class="gold">80-100C</td><td class="dim">Recovery after team training.</td></tr>
+          <tr><td>Friday</td><td class="violet">Pre-bed (~9pm)</td><td>15 min</td><td class="gold">80-100C</td><td class="amber">Compensatory cooling for deep sleep before game. NO ice bath.</td></tr>
+          <tr class="no-row"><td>Saturday</td><td>NO</td><td>--</td><td>--</td><td class="dim">Match night: eat, hydrate, sleep. That's it.</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="alert">
+    <span class="label">TIMING SUMMARY</span>
+    <p>Mon/Wed/Sun = sauna in the MORNING (post-training). Tue/Thu = sauna in the EVENING (post-team). Fri = PRE-BED for sleep. Sat = NEVER.</p>
+  </div>
+
+  <div class="card">
+    <h3>Growth Hormone <em>Protocol</em></h3>
+    <div class="info-grid">
+      <div class="info-card gold">
+        <p><span class="stat">16x</span>Growth Hormone increase. Protocol: 4 x 30 min at 80C with 5 min cool breaks between rounds. Once per week MAX (Wednesday recommended).</p>
+      </div>
+      <div class="info-card gold">
+        <p><span class="stat">27%</span>Reduced cardiovascular mortality at 2-3x/week sauna (Huberman). You're doing 5x/week.</p>
+      </div>
+      <div class="info-card gold">
+        <p><span class="stat">50%</span>Reduced cardiovascular mortality at 4-7x/week. Both heat and cold increase mitochondrial biogenesis.</p>
+      </div>
     </div>
   </div>
 
   <div class="card">
     <h3>Key <em>Facts</em></h3>
     <div class="info-grid">
-      <div class="info-card gold">
-        <p><span class="stat">27%</span>Reduced cardiovascular mortality at 2-3x/week sauna use</p>
-      </div>
-      <div class="info-card gold">
-        <p><span class="stat">50%</span>Reduced cardiovascular mortality at 4-7x/week sauna use</p>
-      </div>
-      <div class="info-card gold">
-        <p><span class="stat">16x</span>Growth Hormone increase with protocol: 4 x 30 min at 80C, once/week max</p>
+      <div class="info-card green">
+        <p><span class="stat teal">1-3F</span>Core temp drop when sauna is done 1-2hrs before bed. Triggers compensatory cooling for deep sleep (Huberman).</p>
       </div>
       <div class="info-card green">
-        <p><span class="stat teal">1-3F</span>Core temp drop when sauna is done 1-2hrs before bed — triggers compensatory cooling for deep sleep</p>
-      </div>
-      <div class="info-card green">
-        <p>Heat acclimation improves sweat rate and fluid retention — critical for pre-season conditioning in Kansas heat</p>
+        <p>Heat acclimation improves sweat rate and fluid retention. Critical for Kansas preseason in July/August heat.</p>
       </div>
       <div class="info-card violet">
-        <p>Man City uses infrared sauna for recovery. Haaland uses red-light therapy room post-session.</p>
+        <p>Man City uses infrared sauna for recovery. Haaland uses near-infrared/red-light therapy room post-session.</p>
       </div>
     </div>
   </div>
 
 </section>
 
-<!-- ═══ TAB 2: ICE BATH ════════════════════════════════════════ -->
+<!-- === TAB 2: ICE BATH === -->
 <section class="panel" id="panel-cold" role="tabpanel">
 
   <div class="card">
@@ -206,49 +218,64 @@ td.green{color:var(--green);}
     <p style="font:500 12px var(--mono);color:var(--teal);margin-bottom:16px;">Weekly target: 11 min total, split across 2-4 sessions</p>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>DAY</th><th>EXPOSURE</th><th>DURATION</th><th>TEMP</th><th>NOTES</th></tr></thead>
+        <thead><tr><th>DAY</th><th>WHEN</th><th>DURATION</th><th>TEMP</th><th>PURPOSE</th></tr></thead>
         <tbody>
-          <tr><td>Sunday</td><td>Post-sauna</td><td>2-3 min</td><td class="teal">10-15C</td><td class="dim">Recovery day</td></tr>
-          <tr><td>Tuesday</td><td>Morning (standalone)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Dopamine boost — doubles baseline for 4-6 hours</td></tr>
-          <tr><td>Thursday</td><td>Morning (standalone)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Same</td></tr>
-          <tr class="no-row"><td>Friday</td><td>NO</td><td>—</td><td>—</td><td class="dim">Save stress for game day</td></tr>
+          <tr><td>Sunday</td><td>Post-sauna (AM)</td><td>2-3 min</td><td class="teal">10-15C</td><td class="dim">Recovery day. Pair with sauna for contrast.</td></tr>
+          <tr><td>Tuesday</td><td class="green">Morning (standalone, ~9am)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Dopamine boost. Doubles baseline for 4-6 hours. NOT after evening team training.</td></tr>
+          <tr><td>Thursday</td><td class="green">Morning (standalone, ~9am)</td><td>1-3 min</td><td class="teal">10-15C</td><td class="dim">Same as Tuesday. Morning = stacks with cortisol peak.</td></tr>
+          <tr class="no-row"><td>Monday</td><td>NO</td><td>--</td><td>--</td><td class="dim">Heavy gym day. Inflammation needed for adaptation.</td></tr>
+          <tr class="no-row"><td>Wednesday</td><td>NO</td><td>--</td><td>--</td><td class="dim">Power gym day. Same reason.</td></tr>
+          <tr class="no-row"><td>Friday</td><td>NO</td><td>--</td><td>--</td><td class="dim">Save stress response for game day.</td></tr>
+          <tr class="no-row"><td>Saturday</td><td>NO</td><td>--</td><td>--</td><td class="dim">Match night. Just eat, hydrate, sleep.</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="alert">
-    <span class="label">CRITICAL RULE</span>
-    <p>AVOID cold within 6 hours after gym. It suppresses the inflammatory response needed for muscle growth.</p>
+    <span class="label">CRITICAL RULE (HUBERMAN)</span>
+    <p>NEVER within 6 hours after hypertrophy/strength work. Cold suppresses the inflammatory response your muscles need for adaptation. Mon/Wed gym = NO cold that day.</p>
+  </div>
+
+  <div class="card">
+    <h3>Two Types of <em>Cold</em></h3>
+    <div class="info-grid">
+      <div class="info-card teal">
+        <p><span class="stat teal">Dopamine</span>Morning standalone cold (1-3 min). Doubles baseline dopamine for 4-6 hours. Best stacked with morning cortisol peak. Move limbs to break thermal layer.</p>
+      </div>
+      <div class="info-card teal">
+        <p><span class="stat teal">Recovery</span>Post-match cold plunge (10-15 min at 10-15C). Soccer-specific protocol for when you play every 3-4 days. Premier League standard. Longer duration than dopamine sessions.</p>
+      </div>
+    </div>
   </div>
 
   <div class="card">
     <h3>Key <em>Facts</em></h3>
     <div class="info-grid">
       <div class="info-card teal">
-        <p><span class="stat teal">2x</span>Doubles baseline dopamine for 4-6 hours. Morning = best timing to stack with cortisol peak.</p>
+        <p><span class="stat teal">2x</span>Doubles baseline dopamine for 4-6 hours. Morning = best timing to stack with cortisol peak for all-day energy arc.</p>
       </div>
       <div class="info-card teal">
-        <p>Move limbs to break thermal layer for stronger effect. Don't stay still — agitate the water around you.</p>
-      </div>
-      <div class="info-card teal">
-        <p>Spiking adrenaline after learning improves retention. Cold exposure post-study = better memory consolidation.</p>
-      </div>
-      <div class="info-card teal">
-        <p>Rapid cooling targets: palms, soles of feet, upper face (glabrous skin). Use these for quick cooldowns.</p>
+        <p>Move limbs to break thermal layer for stronger effect. Don't stay still. Agitate water around you.</p>
       </div>
       <div class="info-card green">
-        <p>Stress inoculation: relax mind while body is activated = raises your stress threshold over time. Builds mental toughness.</p>
+        <p>Spiking adrenaline after learning improves retention. Cold exposure post-study = better memory consolidation for game film sessions.</p>
+      </div>
+      <div class="info-card green">
+        <p>Rapid cooling targets: palms, soles of feet, upper face (glabrous skin). Use these for quick cooldowns during half-time or hot weather.</p>
+      </div>
+      <div class="info-card green">
+        <p>Stress inoculation: relax mind while body is activated = raises your stress threshold over time. Builds mental toughness for high-pressure matches.</p>
       </div>
       <div class="info-card amber">
-        <p>NEVER within 6 hours of strength/hypertrophy work — kills the inflammatory adaptation signal your muscles need to grow.</p>
+        <p>Immune support: acute cold exposure liberates adrenaline, helping immune system combat incoming infections when feeling "run down."</p>
       </div>
     </div>
   </div>
 
 </section>
 
-<!-- ═══ TAB 3: POST-MATCH ══════════════════════════════════════ -->
+<!-- === TAB 3: POST-MATCH === -->
 <section class="panel" id="panel-postmatch" role="tabpanel">
 
   <div class="card">
@@ -258,11 +285,12 @@ td.green{color:var(--green);}
     </div>
     <p style="font:400 12px var(--mono);color:var(--dim);margin-bottom:16px;">0-1 hour after final whistle</p>
     <ol class="steps">
-      <li>Light jog/walk cool-down<span class="note">5-10 min. Bring heart rate down gradually.</span></li>
-      <li>Static stretching: glutes, hammys, quads, groin, calves<span class="note">30 seconds each. 5-10 min total.</span></li>
-      <li>Cold plunge: 10-15C for 10-15 min<span class="note">Soccer-specific protocol. Longer than standalone sessions.</span></li>
-      <li>Meal within 1 hour: 3:1 carb-to-protein ratio<span class="note">E.g. rice + chicken, pasta + mince, recovery shake + banana.</span></li>
-      <li>Rehydrate: 125-150% of fluid lost<span class="note">Weigh before and after match to calculate.</span></li>
+      <li>Light jog/walk cool-down<span class="note">5-10 min. Bring heart rate down gradually. Don't just stop.</span></li>
+      <li>Static stretching: glutes, hammys, quads, groin, calves<span class="note">30 seconds each side. 5-10 min total. Address anything that feels tight.</span></li>
+      <li>Cold plunge: 10-15C for 10-15 min<span class="note">Soccer-specific protocol (longer than morning dopamine sessions). Premier League standard for match recovery.</span></li>
+      <li>Protein shake + banana immediately<span class="note">Start the rebuild process. Don't wait until you get home.</span></li>
+      <li>Meal within 1 hour: 3:1 carb-to-protein ratio<span class="note">E.g. rice + chicken, pasta + mince. Replenish glycogen ASAP.</span></li>
+      <li>Rehydrate: 125-150% of fluid lost<span class="note">Weigh before and after match. Every kg lost = 1.25-1.5L to drink back.</span></li>
     </ol>
   </div>
 
@@ -272,30 +300,43 @@ td.green{color:var(--green);}
       <div class="r-card">
         <span class="r-letter">R</span>
         <span class="r-name">REHYDRATE</span>
-        <p>125-150% of fluid weight lost. Weigh before/after.</p>
+        <p>125-150% of fluid weight lost. Weigh before/after. Electrolytes, not just water.</p>
       </div>
       <div class="r-card">
         <span class="r-letter">R</span>
         <span class="r-name">REBUILD</span>
-        <p>Protein (amino acids) within 4 hours post-match.</p>
+        <p>Protein (amino acids) within 1 hour. 30-40g. Shake or real food.</p>
       </div>
       <div class="r-card">
         <span class="r-letter">R</span>
         <span class="r-name">REPLENISH</span>
-        <p>Carbs at 3:1 carb-to-protein ratio to refill glycogen.</p>
+        <p>Carbs at 3:1 ratio to refill glycogen. Rice, pasta, potatoes.</p>
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header">
-      <h3>Next Day <em>(Sunday)</em></h3>
+      <h3>Match Night <em>Rules</em></h3>
     </div>
     <ol class="steps">
-      <li>Swimming/treading water 15-20 min<span class="note">Lymphatic drainage. Shearing action of water moves lymph.</span></li>
-      <li>Light movement for blood flow<span class="note">Walk, easy bike, nothing that creates soreness.</span></li>
-      <li>Morning cold exposure 1-3 min for dopamine<span class="note">Standalone. Not post-gym.</span></li>
-      <li>112mvmnt: Hips & Hammys routine<span class="note">Mobility focus. Restore range of motion.</span></li>
+      <li>NO sauna on match night<span class="note">You've already stressed the system enough. Just eat, hydrate, sleep.</span></li>
+      <li>NO ice bath on match night<span class="note">Already did cold plunge post-match if available. Don't stack stress.</span></li>
+      <li>Sleep supplements as normal<span class="note">Mg Threonate 145mg + Apigenin 50mg + Theanine 100-400mg.</span></li>
+      <li>Side sleeping for glymphatic clearance<span class="note">Brain waste removal maximized on your side. Nose tape if needed.</span></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Next Day <em>(Sunday Recovery)</em></h3>
+    </div>
+    <ol class="steps">
+      <li>Swimming/treading water 15-20 min<span class="note">Lymphatic drainage. Shearing action of water moves lymph. Better than static immersion for "heavy legs."</span></li>
+      <li>Light movement for blood flow<span class="note">Walk, easy bike. Nothing that creates new soreness. 7,000+ steps ideal.</span></li>
+      <li>Sauna 15-20 min + cold plunge 2-3 min<span class="note">Sunday is the one day you can do both. Recovery focus.</span></li>
+      <li>112mvmnt: Hips & Hammys routine<span class="note">Mobility focus. Restore range of motion from match demands.</span></li>
+      <li>Diaphragmatic breathing (5 min)<span class="note">Inhale until belly extends. Creates pressure differential that moves lymph from cisterna chyli back to blood.</span></li>
     </ol>
   </div>
 
@@ -306,7 +347,65 @@ td.green{color:var(--green);}
 
 </section>
 
-<!-- ═══ TAB 4: NUTRITION ═══════════════════════════════════════ -->
+<!-- === TAB 4: SLEEP === -->
+<section class="panel" id="panel-sleep" role="tabpanel">
+
+  <div class="card">
+    <div class="card-header">
+      <p class="card-eyebrow">SOURCE: HUBERMAN</p>
+      <h2>Sleep <em>Architecture</em></h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-card violet">
+        <p><span class="stat teal">9 hrs</span>Target: 10pm lights out, 7am wake. 9 hours in bed = optimal for testosterone, growth hormone, and full recovery.</p>
+      </div>
+      <div class="info-card violet">
+        <p><span class="stat teal">1-3F</span>Core temp must DROP 1-3 degrees to fall and stay deeply asleep. Sauna 1-2hrs before bed triggers compensatory cooling.</p>
+      </div>
+      <div class="info-card violet">
+        <p><span class="stat teal">50%</span>Bright light 10pm-4am suppresses dopamine by 50% for DAYS. Dim/warm lights only after 8pm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Sleep <em>Protocol</em></h3>
+    <ol class="steps">
+      <li>Sunlight anchoring: 10+ min morning light sets melatonin timer ~16 hours later<span class="note">Also get late afternoon sunlight to inoculate retina against artificial light at night.</span></li>
+      <li>Room: cool, dark, quiet<span class="note">Keep room cool. Use blankets as needed. Feet are heat-release portals.</span></li>
+      <li>Side sleeping for glymphatic clearance<span class="note">Clears brain waste most efficiently. Nose tape for nasal breathing.</span></li>
+      <li>Sauna/hot bath 1-2hrs before bed (Tue/Thu/Fri)<span class="note">Triggers compensatory cooling response. Core temp drops for deeper sleep.</span></li>
+      <li>Sleep supplements 30-60 min before bed<span class="note">Mg Threonate 145mg + Apigenin 50mg + L-Theanine 100-400mg. Myo-inositol 900mg if waking mid-night.</span></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>NSDR <em>(Non-Sleep Deep Rest)</em></h3>
+    <div class="info-grid">
+      <div class="info-card teal">
+        <p><span class="stat teal">NSDR</span>If you can't sleep within 20 min: do a 10-min NSDR protocol (YouTube "Huberman NSDR"). Don't lie there stressing. Also useful for afternoon recovery without full nap.</p>
+      </div>
+      <div class="info-card teal">
+        <p><span class="stat teal">Reveri</span>Huberman's recommended app for sleep hypnosis scripts. Free option: YouTube NSDR scripts. Use when mind is racing pre-game.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Stress <em>Management</em></h3>
+    <div class="info-grid">
+      <div class="info-card green">
+        <p><span class="stat green">Sigh</span>Physiological Sigh: double inhale (nose) + long exhale (mouth). Fastest real-time calm-down tool. Use pre-game, at half-time, before penalties.</p>
+      </div>
+      <div class="info-card green">
+        <p><span class="stat green">Vision</span>During high stress: shift from tunnel/focal vision to panoramic/dilated gaze. Signals brainstem to lower alertness. Use when anxious before kickoff.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- === TAB 5: NUTRITION === -->
 <section class="panel" id="panel-nutrition" role="tabpanel">
 
   <div class="card">
@@ -323,9 +422,9 @@ td.green{color:var(--green);}
           <tr><td>Lunch</td><td class="teal">300ml</td><td class="dim">With meal</td></tr>
           <tr><td>Afternoon</td><td class="teal">300-500ml</td><td class="dim">Plain</td></tr>
           <tr><td>Pre-training (30-60 min)</td><td class="teal">300-500ml</td><td class="dim">With electrolytes</td></tr>
-          <tr><td>During training</td><td class="teal">Sip every 15-20 min</td><td class="dim">Galpin: bodyweight(lbs)/30 = oz per 15 min</td></tr>
-          <tr><td>Post-training</td><td class="teal">125-150% of lost</td><td class="dim">Weigh before/after</td></tr>
-          <tr><td>Dinner</td><td class="teal">300ml</td><td class="dim">With meal</td></tr>
+          <tr><td>During training</td><td class="teal">Sip every 15-20 min</td><td class="dim">Galpin equation: bodyweight(lbs)/30 = oz per 15 min</td></tr>
+          <tr><td>Post-training</td><td class="teal">125-150% of lost</td><td class="dim">Weigh before/after if possible</td></tr>
+          <tr><td>Dinner</td><td class="teal">300ml</td><td class="dim">With meal. Don't overdo evening to avoid waking to piss.</td></tr>
           <tr><td><strong>Daily total</strong></td><td class="green"><strong>3-4 liters</strong></td><td class="dim">More on training/match days</td></tr>
         </tbody>
       </table>
@@ -338,11 +437,11 @@ td.green{color:var(--green);}
     </div>
 
     <div class="supp-group">
-      <h4>DAILY (EVERY DAY)</h4>
+      <h4>DAILY (EVERY DAY, NO EXCEPTIONS)</h4>
       <ul class="supp-list">
-        <li><span class="name">Creatine</span><span class="dose">5g with breakfast</span></li>
+        <li><span class="name">Creatine Monohydrate</span><span class="dose">5g with breakfast</span></li>
         <li><span class="name">Vitamin D3</span><span class="dose">1000-2000 IU</span></li>
-        <li><span class="name">Omega-3 / Fish Oil</span><span class="dose">1-2g EPA</span></li>
+        <li><span class="name">Omega-3 / Fish Oil</span><span class="dose">2-3g EPA (systemic inflammation)</span></li>
         <li><span class="name">Electrolytes</span><span class="dose">Morning + around training</span></li>
       </ul>
     </div>
@@ -350,7 +449,7 @@ td.green{color:var(--green);}
     <div class="supp-group">
       <h4>PRE-TRAINING (30-50 MIN BEFORE)</h4>
       <ul class="supp-list">
-        <li><span class="name">Caffeine</span><span class="dose">1-3mg/kg</span></li>
+        <li><span class="name">Caffeine</span><span class="dose">1-3mg/kg (delay 90 min after waking on non-game days)</span></li>
         <li><span class="name">Water + electrolytes</span><span class="dose">300-500ml</span></li>
       </ul>
     </div>
@@ -365,23 +464,57 @@ td.green{color:var(--green);}
     <div class="supp-group">
       <h4>BEFORE BED (9:30PM)</h4>
       <ul class="supp-list">
-        <li><span class="name">Magnesium Threonate</span><span class="dose">145mg</span></li>
+        <li><span class="name">Magnesium Threonate</span><span class="dose">145mg (or Bisglycinate 200mg)</span></li>
         <li><span class="name">Apigenin</span><span class="dose">50mg</span></li>
-        <li><span class="name">L-Theanine</span><span class="dose">100-400mg</span></li>
-        <li><span class="name">Myo-inositol (optional)</span><span class="dose">900mg — if waking mid-night</span></li>
+        <li><span class="name">L-Theanine</span><span class="dose">100-400mg (avoid if vivid nightmares)</span></li>
+        <li><span class="name">Myo-inositol (optional)</span><span class="dose">900mg -- if waking mid-night</span></li>
       </ul>
     </div>
 
     <div class="mfm-note">
-      <span class="label">MFM APPOINTMENT — TUESDAY JULY 15</span>
+      <span class="label">MFM APPOINTMENT -- TUESDAY JULY 15</span>
       <p>After MFM appointment (labs, body assessment, supplement protocol): Replace baseline stack with whatever they prescribe from bloods/labs.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Caffeine <em>Strategy</em></h3>
+    </div>
+    <div class="info-grid">
+      <div class="info-card amber">
+        <p><span class="stat">90 min</span>Delay caffeine 90-120 min after waking. Let natural cortisol clear adenosine first. Prevents afternoon crash. (Huberman)</p>
+      </div>
+      <div class="info-card amber">
+        <p><span class="stat">2-5 days</span>Abstain from caffeine 2-5 days before key matches. Resets adenosine receptor sensitivity. Match-day dose hits significantly harder.</p>
+      </div>
+      <div class="info-card amber">
+        <p><span class="stat">8-12 hrs</span>Half-life cutoff: avoid caffeine within 8-12 hours of bedtime. Quarter-life is 12 hours. Even afternoon coffee can wreck sleep architecture.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Recovery <em>Nutrition Timing</em></h3>
+    </div>
+    <div class="info-grid">
+      <div class="info-card green">
+        <p><span class="stat green">Lunch</span>Lower carb for alertness/dopamine during the day. Protein + veg + moderate carbs.</p>
+      </div>
+      <div class="info-card green">
+        <p><span class="stat green">Dinner</span>High-starch carbs (pasta, rice, potatoes) to increase serotonin for sleep transition. Protein + carbs + veg.</p>
+      </div>
+      <div class="info-card green">
+        <p><span class="stat green">Deload</span>Every 8 weeks: 50% reduction in training volume for 1 week while maintaining intensity. "Actualize" your adaptations. (Galpin)</p>
+      </div>
     </div>
   </div>
 
 </section>
 
 <footer class="foot">
-  <span>SOURCES: HUBERMAN / GALPIN / MAN CITY / 112MVMNT</span>
+  <span>SOURCES: HUBERMAN / GALPIN / MAN CITY / 112MVMNT / GAME-DAY-RECOVERY.MD</span>
   <span>SEAN MURPHY 2026</span>
 </footer>
 
