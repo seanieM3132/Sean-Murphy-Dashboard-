@@ -86,23 +86,6 @@ button,a{font-family:inherit;}
 .d-none{font:400 13px 'Inter',sans-serif;color:var(--dim);padding:22px 0;}
 .d-fine{font:400 10px/1.7 var(--mono);color:var(--dimmer);letter-spacing:.03em;margin-top:16px;}
 
-/* NOW card */
-.d-now{display:flex;justify-content:space-between;align-items:center;gap:32px;max-width:var(--w);margin:0 auto 20px;
-  padding:28px 30px;border-radius:20px;border:1px solid rgba(74,222,128,.32);
-  border-left:3px solid var(--green);background:rgba(74,222,128,.06);}
-.d-nl{flex:1;min-width:0;}
-.d-now h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.6vw,36px);margin-top:11px;}
-.d-nsub{font:400 12px var(--mono);color:var(--dim);margin-top:9px;letter-spacing:.03em;}
-.d-nsteps{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;padding:0;}
-.d-nsteps li{display:flex;align-items:center;gap:8px;font:400 11px 'Inter',sans-serif;color:var(--dim);
-  border:1px solid var(--line);border-radius:20px;padding:7px 13px 7px 8px;}
-.d-nsteps span{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.05);
-  display:grid;place-items:center;font:400 8px var(--mono);color:var(--dimmer);}
-.d-nr{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;flex:none;}
-.d-nring{width:96px;transform:rotate(-90deg);}
-.d-np{fill:none;stroke:var(--green);stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 7px rgba(74,222,128,.5));}
-.d-nclock{font:400 10px var(--mono);color:var(--dim);letter-spacing:.06em;}
-
 /* past collapse */
 .d-past{display:flex;align-items:center;gap:14px;width:100%;background:rgba(255,255,255,.014);
   border:1px dashed var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;margin-bottom:8px;transition:all .18s;color:inherit;}
@@ -239,7 +222,7 @@ button,a{font-family:inherit;}
   .d-say p{flex-direction:column;gap:5px;} .d-say i{width:auto;}
   .d-sheet>ul>li{flex-direction:column;align-items:stretch;gap:14px;}
   .d-pb{justify-content:flex-end;}
-  .d-now{flex-direction:column;align-items:flex-start;gap:18px;}
+
   .d-side{flex-direction:column;}
   .d-guide{padding-left:34px;}
   .d-foot{flex-direction:column;gap:8px;}
@@ -723,10 +706,6 @@ function render() {
   var pastMins = past.reduce(function(a,i){return a+i.mins;}, 0);
   var next = null;
   ahead.forEach(function(i){ if(!next && i.at > NOW && !state.done[i.id]) next = i; });
-  var focus = doing || next;
-
-  // Progress through current item
-  var through = doing ? (NOW - doing.at) / doing.mins : 0;
 
   // Date
   var months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
@@ -772,33 +751,6 @@ function render() {
       if (getDayMindset(state.selDate)) h += '<p class="d-change"><i>MINDSET</i>' + esc(getDayMindset(state.selDate)) + '</p>';
       h += '</div></div>';
     }
-  }
-
-  // NOW card — a card, not a row
-  if (isToday && focus) {
-    var fk = KIND[focus.kind] || KIND.routine;
-    var R = 2 * Math.PI * 40;
-    h += '<section class="d-now" style="border-left-color:' + fk.c + ';border-color:' + fk.c + '32">';
-    h += '<div class="d-nl">';
-    h += '<p class="d-eyebrow">' + (doing ? 'HAPPENING NOW \u00b7 ' + dur(doing.at + doing.mins - NOW) + ' LEFT' : 'NEXT \u00b7 IN ' + dur(focus.at - NOW)) + '</p>';
-    h += '<h2>' + esc(focus.title) + '</h2>';
-    h += '<p class="d-nsub">' + esc(focus.sub) + '</p>';
-    if (focus.steps && focus.steps.length) {
-      h += '<ul class="d-nsteps">';
-      focus.steps.forEach(function(s, i) {
-        h += '<li><span>' + (i+1) + '</span>' + esc(s.t) + '</li>';
-      });
-      h += '</ul>';
-    }
-    h += '</div>';
-    h += '<div class="d-nr">';
-    h += '<svg viewBox="0 0 96 96" class="d-nring" aria-hidden="true">';
-    h += '<circle cx="48" cy="48" r="40" class="d-rt"/>';
-    h += '<circle cx="48" cy="48" r="40" class="d-np" style="stroke:' + fk.c + '" stroke-dasharray="' + (R * through) + ' ' + R + '"/>';
-    h += '</svg>';
-    h += '<span class="d-nclock">' + hhmm(focus.at) + '\u2013' + hhmm(focus.at + focus.mins) + '</span>';
-    if (focus.href) h += '<a class="d-go" style="background:' + fk.c + '" href="' + focus.href + '">Open guide</a>';
-    h += '</div></section>';
   }
 
   // Main grid
