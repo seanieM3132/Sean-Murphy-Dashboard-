@@ -518,7 +518,7 @@ body {
           '<span class="u-shot-t">Take a photo of the plate</span>' +
           '<span class="u-shot-s">Or choose from library</span></label>' +
           '<div id="photo-result"></div></div>' +
-          '<div class="u-read">Portions are estimates. Weigh anything that matters.</div>';
+          '';
 
         document.getElementById('photo-input').addEventListener('change', function(e) {
           var f = e.target.files && e.target.files[0];
@@ -551,7 +551,7 @@ body {
           '<div class="u-manual"><input placeholder="Or type the barcode number" inputmode="numeric" aria-label="Barcode number" id="barcode-input">' +
           '<button id="barcode-btn">Look up</button></div>' +
           '<div id="barcode-result"></div></div>' +
-          '<div class="u-read">Portions are estimates. Weigh anything that matters.</div>';
+          '';
 
         document.getElementById('barcode-btn').addEventListener('click', function() {
           var res = document.getElementById('barcode-result');
@@ -565,7 +565,7 @@ body {
         el.innerHTML = '<div class="u-cap">' +
           '<div class="u-manual"><input placeholder="Search foods \u2014 chicken, oats, banana\u2026" aria-label="Search foods" id="search-input"></div>' +
           '<ul class="u-hits" id="search-hits"></ul></div>' +
-          '<div class="u-read">Portions are estimates. Weigh anything that matters.</div>';
+          '';
         renderSearchHits('');
         document.getElementById('search-input').addEventListener('input', function() {
           renderSearchHits(this.value);
@@ -591,7 +591,8 @@ body {
     ];
 
     function renderSearchHits(q) {
-      var hits = q ? FOOD_DB.filter(function(f) { return f.name.toLowerCase().indexOf(q.toLowerCase()) >= 0; }) : FOOD_DB.slice(0, 4);
+      if (!q) { document.getElementById('search-hits').innerHTML = ''; return; }
+      var hits = FOOD_DB.filter(function(f) { return f.name.toLowerCase().indexOf(q.toLowerCase()) >= 0; });
       var el = document.getElementById('search-hits');
       if (!hits.length) { el.innerHTML = '<p class="u-empty">No match. Try a simpler word, or log it by photo.</p>'; return; }
       el.innerHTML = hits.map(function(f) {
