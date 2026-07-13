@@ -138,22 +138,49 @@ button{font-family:inherit;cursor:pointer;}
 .s-btns button:hover{color:var(--teal);border-color:rgba(125,211,192,.3);}
 
 /* READOUT */
-.s-read{max-width:var(--w);margin:0 auto;display:flex;align-items:flex-end;gap:28px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;
-  background:rgba(16,36,27,.25);flex-wrap:wrap;}
-.s-read .fig b{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--dim);}
+.s-read{max-width:var(--w);margin:0 auto;display:flex;align-items:stretch;gap:0;
+  border:1px solid var(--line);border-radius:16px;
+  background:rgba(16,36,27,.18);overflow:hidden;flex-wrap:wrap;}
+.s-read .fig{flex:1;min-width:110px;padding:20px 22px 18px;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center;}
+.s-read .fig:last-of-type{border-right:0;}
+.s-read .fig b{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--dim);line-height:1;}
 .s-read .fig b.teal{color:var(--teal);} .s-read .fig b.green{color:var(--green);}
 .s-read .fig b small{font-style:normal;font:400 10px var(--mono);color:var(--dimmer);}
-.s-read .fig span{display:block;font:500 7px var(--mono);letter-spacing:.18em;color:var(--dimmer);margin-top:7px;}
-.s-load{flex:1;min-width:200px;}
-.s-scale{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:9px;}
-.s-scale button{flex:1;height:24px;background:none;border:0;border-right:1px solid var(--line);
-  color:var(--dimmer);font:400 9px var(--mono);}
-.s-scale button:last-child{border-right:0;}
-.s-scale button.is-on{background:rgba(216,178,74,.1);color:var(--gold);}
-.s-scale button.is-sel{background:var(--gold);color:#1A1204;font-weight:500;}
-.s-finish{background:var(--green);border:0;color:#062015;border-radius:9px;padding:13px 20px;
-  font:500 9px var(--mono);letter-spacing:.14em;}
-.s-finish:disabled{opacity:.22;cursor:not-allowed;}
+.s-read .fig span{display:block;font:500 7px var(--mono);letter-spacing:.18em;color:var(--dimmer);margin-top:8px;}
+.s-read .fig.is-empty b{color:var(--dimmer);font-size:22px;}
+.s-read .fig.is-empty span{color:rgba(59,78,71,.6);}
+
+/* RPE block */
+.s-rpe-wrap{padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+  min-width:220px;flex:1.4;border-right:1px solid var(--line);}
+.s-rpe-head{display:flex;align-items:baseline;gap:8px;}
+.s-rpe-head b{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--dim);line-height:1;}
+.s-rpe-head b.has-val{color:var(--gold);}
+.s-rpe-head span{font:500 7px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
+.s-scale{display:flex;gap:6px;}
+.s-scale button{width:34px;height:34px;border-radius:50%;background:rgba(16,36,27,.6);
+  border:1px solid var(--line);color:var(--dimmer);font:500 11px var(--mono);
+  transition:all .15s ease;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.s-scale button:hover{border-color:rgba(216,178,74,.4);color:var(--gold);}
+.s-scale button.is-on{background:rgba(216,178,74,.08);border-color:rgba(216,178,74,.25);color:var(--gold);}
+.s-scale button.is-sel{background:var(--gold);border-color:var(--gold);color:#1A1204;font-weight:600;
+  box-shadow:0 0 12px rgba(216,178,74,.35);}
+
+/* Finish button cell */
+.s-finish-wrap{display:flex;align-items:center;justify-content:center;padding:18px 22px;min-width:140px;}
+.s-finish{background:var(--green);border:0;color:#062015;border-radius:10px;padding:14px 24px;
+  font:600 10px var(--mono);letter-spacing:.14em;cursor:pointer;
+  transition:all .15s ease;box-shadow:0 0 16px rgba(74,222,128,.15);}
+.s-finish:hover{box-shadow:0 0 24px rgba(74,222,128,.3);}
+.s-finish:disabled{opacity:.18;cursor:not-allowed;box-shadow:none;}
+
+/* Empty state */
+.s-read-empty{max-width:var(--w);margin:0 auto;border:1px solid var(--line);border-radius:16px;
+  background:rgba(16,36,27,.12);padding:28px 22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.s-read-empty .s-empty-msg{font:400 12px var(--mono);color:var(--dimmer);letter-spacing:.04em;}
+.s-read-empty .s-empty-dots{display:flex;gap:4px;}
+.s-read-empty .s-empty-dots i{width:5px;height:5px;border-radius:50%;background:var(--dimmer);display:block;}
 
 /* GAME DAY MESSAGE */
 .s-gameday{max-width:var(--w);margin:0 auto;border:1px solid rgba(232,135,58,.3);border-left:3px solid var(--amber);
@@ -770,27 +797,42 @@ function render(){
   }
 
   // READOUT
-  html += '<section class="s-read">';
-  html += '<div class="fig"><b>'+totalDone+'<small>/'+totalReps+'</small></b><span>REPS</span></div>';
-  if(sprints.length>0){
-    html += '<div class="fig"><b class="teal">'+metres+'<small>m</small></b><span>\u03A3 METRES</span></div>';
-    html += '<div class="fig"><b class="green">'+(vMax?vMax.toFixed(2):'\u2014')+'<small>m/s</small></b><span>PEAK v</span></div>';
+  var hasWork = totalDone > 0;
+  if(!hasWork){
+    // Empty state — clean placeholder
+    html += '<section class="s-read-empty">';
+    html += '<span class="s-empty-dots"><i></i><i></i><i></i></span>';
+    html += '<span class="s-empty-msg">Complete reps to see session stats</span>';
+    html += '</section>';
   } else {
-    var setsLogged = lifts.reduce(function(a,e){return a+getDone(e);},0);
-    var setsTotal = lifts.reduce(function(a,e){return a+getReps(e);},0);
-    html += '<div class="fig"><b class="teal">'+setsLogged+'<small>/'+setsTotal+'</small></b><span>LIFT SETS</span></div>';
-    html += '<div class="fig"><b class="green">'+elapsed+'<small>min</small></b><span>DURATION</span></div>';
+    html += '<section class="s-read">';
+    html += '<div class="fig"><b>'+totalDone+'<small>/'+totalReps+'</small></b><span>REPS</span></div>';
+    if(sprints.length>0){
+      html += '<div class="fig"><b class="teal">'+metres+'<small>m</small></b><span>\u03A3 METRES</span></div>';
+      html += '<div class="fig"><b class="green">'+(vMax?vMax.toFixed(2):'\u2014')+'<small>m/s</small></b><span>PEAK v</span></div>';
+    } else {
+      var setsLogged = lifts.reduce(function(a,e){return a+getDone(e);},0);
+      var setsTotal = lifts.reduce(function(a,e){return a+getReps(e);},0);
+      html += '<div class="fig"><b class="teal">'+setsLogged+'<small>/'+setsTotal+'</small></b><span>LIFT SETS</span></div>';
+      html += '<div class="fig"><b class="green">'+elapsed+'<small>min</small></b><span>DURATION</span></div>';
+    }
+    // RPE scale
+    html += '<div class="s-rpe-wrap">';
+    html += '<div class="s-rpe-head"><b'+(load?' class="has-val"':'')+'>'+( load!==null?load:'\u2014')+'</b>';
+    html += '<span>RPE \u00D7 '+elapsed+' MIN</span></div>';
+    html += '<div class="s-scale">';
+    [4,5,6,7,8,9,10].forEach(function(r){
+      var cls = '';
+      if(rpe===r) cls='is-sel'; else if(rpe && r<rpe) cls='is-on';
+      html += '<button class="'+cls+'" data-rpe="'+r+'">'+r+'</button>';
+    });
+    html += '</div></div>';
+    // Finish button
+    html += '<div class="s-finish-wrap">';
+    html += '<button class="s-finish" '+((!rpe||!totalDone)?'disabled':'')+' data-finish>'+(rpe?'FINISH SESSION':'SELECT RPE')+'</button>';
+    html += '</div>';
+    html += '</section>';
   }
-  html += '<div class="s-load"><b'+(load?' class="green"':'')+'>'+( load!==null?load:'\u2014')+'</b><span>RPE \u00D7 '+elapsed+' MIN</span>';
-  html += '<div class="s-scale">';
-  [4,5,6,7,8,9,10].forEach(function(r){
-    var cls = '';
-    if(rpe===r) cls='is-sel'; else if(rpe && r<rpe) cls='is-on';
-    html += '<button class="'+cls+'" data-rpe="'+r+'">'+r+'</button>';
-  });
-  html += '</div></div>';
-  html += '<button class="s-finish" '+((!rpe||!totalDone)?'disabled':'')+' data-finish>'+(rpe?'Finish':'Rate first')+'</button>';
-  html += '</section>';
 
   document.getElementById('app').innerHTML = html;
   bindEvents();

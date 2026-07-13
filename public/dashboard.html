@@ -870,9 +870,9 @@ function render() {
   } else {
     h += '<p style="font:400 11px Inter,sans-serif;color:var(--dimmer);margin-top:8px">No appointments</p>';
   }
-  h += '<div class="d-todo-add" style="margin-top:12px"><input id="apptTitle" type="text" placeholder="Appointment name\u2026" class="d-todo-in" style="flex:2" />';
-  h += '<input id="apptTime" type="time" class="d-todo-in" style="flex:0 0 90px;text-align:center" />';
-  h += '<input id="apptMins" type="number" placeholder="min" class="d-todo-in" style="flex:0 0 54px;text-align:center" min="5" step="5" value="60" />';
+  h += '<div class="d-todo-add" style="margin-top:12px"><input id="apptTitle" type="text" placeholder="Name\u2026" class="d-todo-in" style="flex:2" />';
+  h += '<input id="apptTime" type="text" placeholder="12:45" class="d-todo-in" style="flex:0 0 64px;text-align:center" maxlength="5" />';
+  h += '<input id="apptMins" type="number" placeholder="60" class="d-todo-in" style="flex:0 0 48px;text-align:center" min="5" step="5" />';
   h += '<button id="apptBtn" class="d-todo-btn">+</button></div>';
   h += '<h3 class="d-bt">Appointments</h3></section>';
 
@@ -893,10 +893,34 @@ function render() {
     h += '</ul><h3 class="d-bt">To-do</h3></section>';
   }
 
+  // Recovery log
+  if (isToday) {
+    var rlog = [];
+    try { rlog = JSON.parse(localStorage.getItem('recovery-log') || '[]'); } catch(e){}
+    var todayLog = rlog.filter(function(r){ return r.date === TODAY_KEY; });
+    if (todayLog.length > 0) {
+      var secN = state.todos.length >= 0 ? '04' : '03';
+      h += '<section class="d-block"><p class="d-eyebrow">' + secN + ' \u00b7 RECOVERY</p>';
+      h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">';
+      todayLog.forEach(function(r) {
+        var c = r.type === 'sauna' ? 'var(--amber)' : 'var(--teal)';
+        var icon = r.type === 'sauna' ? '\u2668' : '\u2744';
+        h += '<li style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;border-left:2px solid ' + c + '">';
+        h += '<span style="font-size:16px">' + icon + '</span>';
+        h += '<span style="font:400 12px Inter,sans-serif;color:var(--ink)">' + esc(r.label) + '</span>';
+        h += '<span style="font:400 9px var(--mono);color:var(--dimmer);margin-left:auto">' + r.time + '</span>';
+        h += '</li>';
+      });
+      h += '</ul><h3 class="d-bt">Recovery</h3></section>';
+    }
+  }
+
   // Week
   var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0] || '';
   var mStatus = state.matchStatus[matchDate] || 'game';
-  h += '<section class="d-block"><p class="d-eyebrow">' + (isToday ? '04' : '02') + ' \u00b7 THE WEEK</p><div class="d-week">';
+  var _rl = []; try { _rl = JSON.parse(localStorage.getItem('recovery-log') || '[]').filter(function(r){ return r.date === TODAY_KEY; }); } catch(e){}
+  var weekN = isToday ? (_rl.length > 0 ? '05' : '04') : '02';
+  h += '<section class="d-block"><p class="d-eyebrow">' + weekN + ' \u00b7 THE WEEK</p><div class="d-week">';
   WEEK_DATES.forEach(function(dk, i) {
     var wl = WEEK_LABELS[i];
     var isT = dk === TODAY_KEY;
@@ -1028,11 +1052,17 @@ function bindAll() {
   if (apptBtn) {
     var addAppt = function() {
       var title = document.getElementById('apptTitle').value.trim();
-      var timeVal = document.getElementById('apptTime').value;
+      var timeVal = document.getElementById('apptTime').value.trim().replace('.', ':');
       var mins = parseInt(document.getElementById('apptMins').value) || 60;
       if (!title || !timeVal) return;
-      var parts = timeVal.split(':');
-      var at = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      // Parse "12:45", "1245", "9:30", "930"
+      var parts;
+      if (timeVal.indexOf(':') >= 0) { parts = timeVal.split(':'); }
+      else if (timeVal.length >= 3) { parts = [timeVal.slice(0, -2), timeVal.slice(-2)]; }
+      else return;
+      var hh = parseInt(parts[0]); var mm = parseInt(parts[1] || 0);
+      if (isNaN(hh) || hh < 0 || hh > 23 || isNaN(mm) || mm < 0 || mm > 59) return;
+      var at = hh * 60 + mm;
       state.appts.push({ id: Date.now(), date: state.selDate, title: title, at: at, mins: mins, sub: '' });
       saveAppts(state.appts);
       state.day = getDayItems(state.selDate);

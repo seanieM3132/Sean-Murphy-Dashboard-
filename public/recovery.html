@@ -110,7 +110,6 @@ button,a{font-family:inherit;}
 
 .r-side{display:flex;flex-direction:column;}
 .r-rn{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin-top:11px;}
-.r-watch{font:400 11px var(--mono);color:var(--amber);letter-spacing:.03em;margin-top:9px;}
 .r-lab{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin:24px 0 11px;}
 .r-scale{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
 .r-scale button{flex:1;padding:12px 6px;background:none;border:0;border-right:1px solid var(--line);cursor:pointer;
@@ -194,7 +193,9 @@ function loadSession(){
 function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 
 var SESSION = loadSession();
-var MATCH_IN = 1;
+var _melb = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
+var _melbDay = _melb.getDay(); // 0=Sun, 6=Sat
+var MATCH_IN = _melbDay === 6 ? 0 : (6 - _melbDay + 7) % 7;
 var BED = 22*60+30;
 var COLD_GATE = 4*60;
 
@@ -230,7 +231,7 @@ var REGIONS = {
   calves:  {view:'back', n:'Calves',          c:[[51,215,8],[69,215,8]],   tools:['roll','gun','ball']},
   feet:    {view:'back', n:'Feet & plantar',  c:[[50,259,6],[70,259,6]],   tools:['ball','press']},
   hipflex: {view:'front',n:'Hip flexors',     c:[[60,120,10]],             tools:['roll','gun','press']},
-  adduct:  {view:'front',n:'Adductors',       c:[[60,152,9]],              tools:['ball','gun','press'],watch:true},
+  adduct:  {view:'front',n:'Adductors',       c:[[60,152,9]],              tools:['ball','gun','press']},
   quads:   {view:'front',n:'Quads',           c:[[51,158,9],[69,158,9]],   tools:['roll','gun']},
   tib:     {view:'front',n:'Shins & tib ant', c:[[51,214,7],[69,214,7]],   tools:['gun','ball']}
 };
@@ -312,7 +313,7 @@ function startRunner(toolKey){
 function tickRunner(){
   if(!runner.on||!runner.seq.length) return;
   if(runner.left<=0){
-    if(runner.idx+1>=runner.seq.length){runner.on=false;render();return;}
+    if(runner.idx+1>=runner.seq.length){runner.on=false;logRecovery(runner.tool);render();return;}
     runner.idx++;runner.left=runner.seq[runner.idx].s;
   } else {
     runner.left--;
@@ -328,7 +329,20 @@ function toggleRunner(){
   render();
 }
 
+function logRecovery(toolKey){
+  if(toolKey!=='sauna'&&toolKey!=='ice'&&toolKey!=='contrast') return;
+  var t = TOOLS[toolKey];
+  var now = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
+  var dateKey = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  var hh = String(now.getHours()).padStart(2,'0'); var mm = String(now.getMinutes()).padStart(2,'0');
+  var log = []; try{log=JSON.parse(localStorage.getItem('recovery-log')||'[]');}catch(e){}
+  log.push({date:dateKey,time:hh+':'+mm,type:toolKey,label:t.n});
+  localStorage.setItem('recovery-log',JSON.stringify(log));
+}
+
 function closeRunner(){
+  // Log if the runner was started (had a startedAt timestamp)
+  if(runner.startedAt && runner.tool) logRecovery(runner.tool);
   runner.on=false;clearTimeout(runner.timer);
   state.run=null;runner={tool:null,seq:[],idx:0,left:0,on:false,startedAt:null,timer:null};
   render();
@@ -438,7 +452,6 @@ function render(){
   h += '</div><div class="r-side">';
   h += '<p class="r-eyebrow">02 \u00b7 SELECTED REGION</p>';
   h += '<h2 class="r-rn">'+esc(region.n)+'</h2>';
-  if(region.watch) h += '<p class="r-watch">Groin history. Treat it earlier than it asks.</p>';
   h += '<p class="r-lab">How does it feel</p><div class="r-scale">';
   SORE.forEach(function(s,i){
     var sel = (state.sore[state.sel]||0)===i;
