@@ -649,7 +649,9 @@ function renderCard(it, isDone, isOpen, steps, stepState, isMinor) {
   var minorCls = isMinor ? ' is-minor' : '';
   var h = '<article class="d-card' + minorCls + (isDone ? ' is-done' : '') + (isOpen ? ' is-open' : '') + '" style="border-left-color:' + k.c + '">';
   h += '<button class="d-ch" data-toggle="' + it.id + '" aria-expanded="' + isOpen + '">';
-  h += '<span class="d-time"><b>' + hhmm(it.at) + '</b><em>' + dur(it.mins) + '</em></span>';
+  var endAt = it.at + it.mins;
+  var timeLabel = it.kind === 'appt' ? hhmm(it.at) + ' \u2013 ' + hhmm(endAt) : hhmm(it.at);
+  h += '<span class="d-time"><b>' + timeLabel + '</b><em>' + dur(it.mins) + '</em></span>';
   h += '<span class="d-cbody"><span class="d-kind" style="color:' + k.c + '">' + k.label + (it.added ? '<i style="color:var(--gold);margin-left:5px">\u00b7 PLANNED</i>' : '') + '</span>';
   h += '<span class="d-dtitle">' + esc(it.title) + '</span>';
   h += '<span class="d-sub">' + esc(it.sub) + '</span></span>';
@@ -681,64 +683,79 @@ function renderCard(it, isDone, isOpen, steps, stepState, isMinor) {
 
 /* ═══ TODAY'S PLAN (from weekly planner) ══════════════════════ */
 var PLAN_SCHEDULE = {
-  0: [ // Sunday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
+  0: [ // Sunday — Recovery + Film Review
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-7:55',label:'Recovery walk / foam roll',color:'teal'},
     {time:'8:00-8:20',label:'112mvmnt: Hips & Hammys',color:'teal'},
-    {time:'8:45',label:'GOATA + toe curls',color:'teal'},
-    {time:'9:00',label:'Sauna + Cold plunge',color:'amber'},
+    {time:'8:25-8:55',label:'Seward: Workout D',color:'green'},
+    {time:'9:00-9:25',label:'Sauna + Cold plunge',color:'amber'},
     {time:'10:00-10:45',label:'Game Film Session',color:'dimmer'},
-    {time:'1:00-1:45',label:'Ball Work',color:'green'},
+    {time:'1:00-1:45',label:'Ball Work: Set A + First Touch',color:'green'},
   ],
-  1: [ // Monday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-    {time:'8:00-8:25',label:'112mvmnt: Shoulders & Spine',color:'teal'},
-    {time:'8:30-10:30',label:'Gym: Lower Power + Sprint',color:'green'},
-    {time:'10:30-10:50',label:'Sauna 15 min',color:'amber'},
-    {time:'12:00',label:'Lunch',color:'dimmer'},
-    {time:'1:00-1:45',label:'Ball Work',color:'green'},
+  1: [ // Monday — Heavy Lower + Power
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-7:55',label:'112mvmnt: Stronger Knee',color:'teal'},
+    {time:'8:00-8:40',label:'Seward: Workout A + Abs 2',color:'green'},
+    {time:'8:45-9:40',label:'Gym: Power & Explosive (HEAVY)',color:'green'},
+    {time:'9:40-9:55',label:'Core: Speed Focus',color:'green'},
+    {time:'9:55-10:05',label:'Fascia + Nordics',color:'teal'},
+    {time:'10:10-10:30',label:'Sauna (NO ice bath)',color:'amber'},
+    {time:'1:00-1:45',label:'Ball Work: Set B + Weak Foot',color:'green'},
+    {time:'2:30-2:45',label:'Sauna',color:'amber'},
   ],
-  2: [ // Tuesday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-    {time:'8:00-8:20',label:'112mvmnt: Calves & Ankles',color:'teal'},
-    {time:'8:30-9:00',label:'Gym: Activation',color:'green'},
-    {time:'9:05',label:'Cold plunge 1-3 min',color:'teal'},
-    {time:'12:00',label:'Lunch',color:'dimmer'},
-    {time:'5:00+',label:'Team Training',color:'amber'},
+  2: [ // Tuesday — Upper Activation + Team Training
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-7:55',label:'112mvmnt: Shoulders & Spine',color:'teal'},
+    {time:'8:00-8:30',label:'Seward: Workout B + Jump Rope',color:'green'},
+    {time:'8:35-9:15',label:'Gym: Upper Activation (light)',color:'green'},
+    {time:'9:15-9:25',label:'Core: Stiffness',color:'green'},
+    {time:'9:25-9:35',label:'Fascia + Nordics',color:'teal'},
+    {time:'9:40',label:'Cold plunge',color:'teal'},
+    {time:'1:00-1:30',label:'Light Ball Work: Set C',color:'green'},
+    {time:'7:15-9:00',label:'Team Training',color:'amber'},
   ],
-  3: [ // Wednesday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-    {time:'8:00-8:20',label:'112mvmnt: Glutes & Groins',color:'teal'},
-    {time:'9:15-10:35',label:'Gym: Upper Power + Core Speed',color:'green'},
-    {time:'10:35-10:50',label:'Sauna',color:'amber'},
-    {time:'12:00',label:'Lunch',color:'dimmer'},
-    {time:'1:00-1:45',label:'Ball Work',color:'green'},
+  3: [ // Wednesday — Heavy Upper + Speed & Plyos
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-7:55',label:'112mvmnt: Calves & Ankles',color:'teal'},
+    {time:'8:00-8:40',label:'Seward: Workout D + Jump Rope',color:'green'},
+    {time:'8:45-9:30',label:'Gym: Heavy Upper + Compounds',color:'green'},
+    {time:'9:30-9:45',label:'Plyometrics',color:'green'},
+    {time:'9:45-9:55',label:'Core + Fascia + Nordics',color:'teal'},
+    {time:'10:10-10:30',label:'Sauna (NO ice bath)',color:'amber'},
+    {time:'1:00-1:30',label:'Sprint Pyramid',color:'green'},
+    {time:'1:45-2:30',label:'Ball Work: Set A + Passing',color:'green'},
+    {time:'3:15-3:30',label:'Sauna',color:'amber'},
   ],
-  4: [ // Thursday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-    {time:'8:00-8:20',label:'112mvmnt: Stronger Knee',color:'teal'},
-    {time:'8:30-9:00',label:'Gym: Activation',color:'green'},
-    {time:'9:05',label:'Cold plunge 1-3 min',color:'teal'},
-    {time:'12:00',label:'Lunch',color:'dimmer'},
-    {time:'5:00+',label:'Team Training',color:'amber'},
+  4: [ // Thursday — Upper Activation + Team Training
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-7:55',label:'112mvmnt: Glutes & Groins',color:'teal'},
+    {time:'8:00-8:35',label:'Seward: 2 mile run + Abs 1',color:'green'},
+    {time:'8:40-9:20',label:'Gym: Upper Activation (light)',color:'green'},
+    {time:'9:20-9:30',label:'Fascia + Nordics',color:'teal'},
+    {time:'9:35',label:'Cold plunge',color:'teal'},
+    {time:'1:00-1:30',label:'Light Ball Work: Set B',color:'green'},
+    {time:'7:15-9:00',label:'Team Training',color:'amber'},
   ],
-  5: [ // Friday
-    {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-    {time:'8:00-8:25',label:'112mvmnt: Lower Back + Calves',color:'teal'},
-    {time:'9:00-10:40',label:'Gym: Speed & Acceleration',color:'green'},
-    {time:'10:40',label:'Sauna 15 min',color:'amber'},
-    {time:'12:00',label:'Lunch (carb-load)',color:'dimmer'},
-    {time:'1:00-1:30',label:'Ball Work',color:'green'},
-    {time:'9:00pm',label:'Sauna pre-bed',color:'amber'},
-    {time:'9:30pm',label:'LIGHTS OUT',color:'violet'},
+  5: [ // Friday — Pre-Match
+    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+    {time:'7:35-8:00',label:'112mvmnt: Lower Back + Calves',color:'teal'},
+    {time:'8:00-8:30',label:'Seward: Workout C + Abs 1',color:'green'},
+    {time:'8:35-9:05',label:'Speed & Acceleration',color:'green'},
+    {time:'9:05-9:15',label:'Fascia + toe curls',color:'teal'},
+    {time:'9:20-9:35',label:'Sauna (NO ice bath)',color:'amber'},
+    {time:'1:00-1:30',label:'Ball Work: Set C + First Touch',color:'green'},
+    {time:'6:00',label:'Kit prep',color:'dimmer'},
+    {time:'6:30',label:'Visualization',color:'violet'},
+    {time:'7:00-7:20',label:'Sauna pre-bed',color:'amber'},
   ],
-  6: [ // Saturday
+  6: [ // Saturday — Match Day
     {time:'7:30',label:'Wake (game day)',color:'dimmer'},
-    {time:'8:00',label:'Breakfast (carb-focused)',color:'dimmer'},
+    {time:'9:00',label:'Light 112mvmnt: Hips & Hammys',color:'teal'},
+    {time:'9:15',label:'Light walk + visualization',color:'violet'},
     {time:'12:00',label:'Lunch (3-4hr before game)',color:'dimmer'},
-    {time:'3:30',label:'Pre-game meal',color:'amber'},
-    {time:'4:00',label:'Caffeine',color:'teal'},
     {time:'5:15',label:'Pre-game warm-up',color:'green'},
     {time:'6:00+',label:'MATCH',color:'gold'},
+    {time:'7:30',label:'Post-game recovery',color:'amber'},
   ],
 };
 var PLAN_COLORS = {green:'#4ADE80',teal:'#7DD3C0',amber:'#E8873A',gold:'#D8B24A',violet:'#9C8ADE',dimmer:'#5F786E'};
@@ -891,13 +908,15 @@ function render() {
       h += '</article>';
     });
   } else {
-    h += '<p style="font:400 11px Inter,sans-serif;color:var(--dimmer);margin-top:8px">None</p>';
+    h += '<p style="font:400 12px Inter,sans-serif;color:var(--dimmer);margin-top:10px;margin-bottom:14px">No appointments</p>';
   }
-  h += '<div class="d-todo-add" style="margin-top:12px"><input id="apptTitle" type="text" placeholder="Name\u2026" class="d-todo-in" style="flex:2" />';
-  h += '<input id="apptTime" type="text" placeholder="12:45" class="d-todo-in" style="flex:0 0 64px;text-align:center" maxlength="5" />';
-  h += '<input id="apptMins" type="number" placeholder="60" class="d-todo-in" style="flex:0 0 48px;text-align:center" min="5" step="5" />';
-  h += '<button id="apptBtn" class="d-todo-btn">+</button></div>';
-  h += '<h3 class="d-bt">Appointments</h3></section>';
+  h += '<div style="display:flex;gap:6px;align-items:flex-end;margin-top:10px">';
+  h += '<div style="flex:2"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">NAME</label><input id="apptTitle" type="text" placeholder="e.g. MFM Doctor" class="d-todo-in" style="width:100%;box-sizing:border-box" /></div>';
+  h += '<div style="flex:0 0 64px"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">TIME</label><input id="apptTime" type="text" placeholder="12:45" class="d-todo-in" style="width:100%;box-sizing:border-box;text-align:center" maxlength="5" /></div>';
+  h += '<div style="flex:0 0 56px"><label style="font:500 8px var(--mono);letter-spacing:.12em;color:var(--dimmer);display:block;margin-bottom:4px">MINS</label><input id="apptMins" type="number" placeholder="60" class="d-todo-in" style="width:100%;box-sizing:border-box;text-align:center" min="5" step="5" /></div>';
+  h += '<button id="apptBtn" class="d-todo-btn" style="margin-bottom:0">+</button>';
+  h += '</div>';
+  h += '</section>';
 
   // To-do list
   if (isToday) {
