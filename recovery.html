@@ -21,9 +21,8 @@ body{
   background:radial-gradient(1000px 500px at 50% -10%,#0D2419 0%,transparent 60%),var(--bg);
   color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
 }
-ol,ul{list-style:none;padding:0;}
-button{font-family:inherit;}
-table{border-spacing:0;}
+ol,ul{list-style:none;}
+button,a{font-family:inherit;}
 
 .r-top{max-width:var(--w);margin:0 auto 20px;}
 .r-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
@@ -43,7 +42,8 @@ table{border-spacing:0;}
 .r-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.88;margin-top:7px;max-width:78ch;}
 .r-clead.is-hot{color:var(--amber);opacity:1;}
 
-.r-block{max-width:var(--w);margin:0 auto 20px;padding:24px 26px;border:1px solid var(--line);border-radius:18px;background:rgba(16,36,27,.3);}
+.r-block{max-width:var(--w);margin:0 auto 20px;padding:24px 26px;border:1px solid var(--line);border-radius:18px;
+  background:rgba(16,36,27,.3);}
 .r-bh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;}
 .r-eyebrow{font:500 9px var(--mono);letter-spacing:.24em;color:var(--dim);}
 .r-bh h2,.r-libh h2{font-family:var(--serif);font-weight:400;font-size:26px;margin-top:10px;}
@@ -52,7 +52,6 @@ table{border-spacing:0;}
 .r-gate b{display:block;font-family:var(--serif);font-size:30px;font-weight:400;color:var(--teal);line-height:1;}
 .r-gate span{display:block;font:500 8px var(--mono);letter-spacing:.2em;color:var(--dimmer);margin-top:7px;}
 
-/* window */
 .r-win li{position:relative;display:flex;gap:18px;padding:16px 0;border-top:1px solid rgba(255,255,255,.04);}
 .r-win li:first-child{border-top:0;}
 .r-win li.is-past{opacity:.42;}
@@ -71,28 +70,27 @@ table{border-spacing:0;}
 .r-chips{display:flex;gap:7px;flex-wrap:wrap;}
 .r-chips button{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);
   border-radius:20px;padding:9px 14px;cursor:pointer;font:400 11px 'Inter',sans-serif;color:var(--dim);transition:all .15s;}
-.r-chips button i{width:6px;height:6px;border-radius:50%;flex:none;}
-.r-chips button:hover:not(:disabled){color:var(--ink);}
+.r-chips button i{width:6px;height:6px;border-radius:50%;background:var(--tc,var(--green));flex:none;}
+.r-chips button:hover:not(:disabled){color:var(--ink);border-color:color-mix(in srgb,var(--tc,var(--green)) 45%,transparent);}
 .r-chips button:disabled{opacity:.28;cursor:not-allowed;text-decoration:line-through;}
-.r-chips button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.r-chips button:focus-visible{outline:2px solid var(--tc,var(--green));outline-offset:2px;}
 
 /* runner */
 .r-runner{display:flex;align-items:center;gap:22px;max-width:var(--w);margin:0 auto 20px;padding:18px 24px;
-  border:1px solid rgba(255,255,255,.15);border-radius:16px;background:rgba(8,26,20,.92);}
+  border:1px solid color-mix(in srgb,var(--tc,var(--green)) 35%,transparent);border-radius:16px;background:rgba(8,26,20,.92);}
 .r-ring{width:74px;flex:none;transform:rotate(-90deg);}
 .r-ring-t{fill:none;stroke:rgba(255,255,255,.06);stroke-width:5;}
-.r-ring-p{fill:none;stroke:var(--teal);stroke-width:5;stroke-linecap:round;}
+.r-ring-p{fill:none;stroke:var(--tc,var(--green));stroke-width:5;stroke-linecap:round;}
 .r-rt{flex:1;}
-.r-rt b{display:block;font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;color:var(--teal);}
+.r-rt b{display:block;font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;color:var(--tc,var(--green));}
 .r-rt span{display:block;font:500 9px var(--mono);letter-spacing:.16em;color:var(--dim);margin-top:9px;}
 .r-rb{display:flex;gap:8px;}
-.r-go{border:0;color:#08150F;border-radius:9px;padding:13px 20px;cursor:pointer;
+.r-go{background:var(--tc,var(--green));border:0;color:#08150F;border-radius:9px;padding:13px 20px;cursor:pointer;
   font:500 10px var(--mono);letter-spacing:.14em;}
 .r-go:hover{filter:brightness(1.1);}
 .r-ghost{background:none;border:1px solid var(--line);border-radius:9px;padding:13px 16px;cursor:pointer;
   font:500 9px var(--mono);letter-spacing:.12em;color:var(--dim);}
 .r-ghost:hover{color:var(--ink);border-color:rgba(255,255,255,.2);}
-.r-go:focus-visible,.r-ghost:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
 
 /* body map */
 .r-hero{display:grid;grid-template-columns:280px 1fr;gap:30px;}
@@ -101,7 +99,6 @@ table{border-spacing:0;}
 .r-toggle button{background:none;border:0;cursor:pointer;padding:8px 16px;border-radius:6px;
   font:500 8px var(--mono);letter-spacing:.2em;color:var(--dim);}
 .r-toggle button.is-on{background:rgba(74,222,128,.09);color:var(--green);}
-.r-toggle button:focus-visible{outline:2px solid var(--green);outline-offset:1px;}
 .r-fig svg{width:180px;height:auto;display:block;}
 .r-figlab{text-align:center;font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin-top:6px;}
 .r-body *{fill:rgba(255,255,255,.028);stroke:rgba(74,222,128,.16);stroke-width:.8;}
@@ -110,37 +107,36 @@ table{border-spacing:0;}
 .r-reg:hover circle{fill-opacity:.3;stroke-opacity:.9;}
 .r-reg.is-sore circle{fill-opacity:.34;stroke-opacity:.8;}
 .r-reg.is-sel circle{fill-opacity:.5;stroke-opacity:1;stroke-width:1.6;}
-.r-reg:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
 
 .r-side{display:flex;flex-direction:column;}
 .r-rn{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,36px);margin-top:11px;}
 .r-watch{font:400 11px var(--mono);color:var(--amber);letter-spacing:.03em;margin-top:9px;}
-.r-lab{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin:24px 0 11px;text-transform:uppercase;}
+.r-lab{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);margin:24px 0 11px;}
 .r-scale{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
 .r-scale button{flex:1;padding:12px 6px;background:none;border:0;border-right:1px solid var(--line);cursor:pointer;
   color:var(--dim);font:400 11px 'Inter',sans-serif;transition:all .12s;}
 .r-scale button:last-child{border-right:0;}
 .r-scale button:hover{color:var(--ink);}
 .r-scale button.is-sel{font-weight:500;}
-.r-scale button:focus-visible{outline:2px solid var(--green);outline-offset:-2px;}
 
 /* report */
 .r-rep{width:100%;border-collapse:collapse;}
-.r-rep th{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);text-align:center;padding-bottom:12px;font-weight:500;}
+.r-rep th{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);text-align:center;padding-bottom:12px;}
 .r-rep th:first-child{text-align:left;}
 .r-rep th:last-child{text-align:right;}
 .r-rep tr{cursor:pointer;transition:background .15s;}
 .r-rep tbody tr:hover{background:rgba(74,222,128,.03);}
 .r-rep tbody tr.is-sel{background:rgba(74,222,128,.06);}
 .r-rep td{padding:9px 0;border-top:1px solid rgba(255,255,255,.04);text-align:center;}
-.r-rname{text-align:left !important;font:400 12px 'Inter',sans-serif;color:var(--ink);padding-left:2px !important;}
+.r-rname{text-align:left!important;font:400 12px 'Inter',sans-serif;color:var(--ink);padding-left:2px!important;}
 .r-cell{display:inline-block;width:24px;height:11px;border-radius:3px;}
-.r-flag{text-align:right !important;white-space:nowrap;}
-.r-flag b{font:400 12px var(--mono);color:var(--dim);font-weight:400;}
+.r-flag{text-align:right!important;white-space:nowrap;}
+.r-flag b{font:400 12px var(--mono);color:var(--dim);}
 .r-flag b.is-hot{color:var(--amber);}
 .r-flag b em{font-style:normal;color:var(--dimmer);}
 .r-flag i{font-style:normal;font-size:8px;color:var(--dimmer);margin-left:9px;}
-.r-flag i.is-hot{color:var(--amber);} .r-flag i.is-good{color:var(--green);}
+.r-flag i.is-hot{color:var(--amber);}
+.r-flag i.is-good{color:var(--green);}
 .r-insight{font:400 12px/1.75 'Inter',sans-serif;color:var(--dim);margin-top:20px;padding-left:14px;
   border-left:2px solid rgba(232,135,58,.4);max-width:74ch;}
 .r-insight b{color:var(--ink);font-weight:400;}
@@ -149,28 +145,25 @@ table{border-spacing:0;}
 .r-lib{padding-bottom:20px;}
 .r-libh{display:flex;justify-content:space-between;align-items:flex-end;width:100%;background:none;border:0;
   cursor:pointer;text-align:left;padding:0;color:inherit;}
-.r-libh:focus-visible{outline:2px solid var(--green);outline-offset:4px;border-radius:6px;}
 .r-chev{font:400 20px var(--mono);color:var(--dim);}
 .r-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:24px;}
 .r-tool{display:flex;flex-direction:column;gap:10px;padding:18px 20px 16px;border-radius:14px;
-  border:1px solid var(--line);border-top:2px solid var(--tc,var(--dim));background:rgba(255,255,255,.014);}
+  border:1px solid var(--line);border-top:2px solid var(--tc,var(--green));background:rgba(255,255,255,.014);}
 .r-tool.is-blocked{opacity:.6;}
 .r-tool header{display:flex;align-items:center;justify-content:space-between;}
-.r-tag{font:500 8px var(--mono);letter-spacing:.2em;}
+.r-tag{font:500 8px var(--mono);letter-spacing:.2em;color:var(--tc,var(--green));}
 .r-dots{display:flex;gap:4px;}
 .r-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--dimmer);background:none;cursor:pointer;padding:0;}
-.r-dot.is-done{border-color:var(--tc,var(--green));}
-.r-dot:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+.r-dot.is-done{background:var(--tc,var(--green));border-color:var(--tc,var(--green));}
 .r-tool h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:21px;}
-.r-spec{font:400 10px var(--mono);letter-spacing:.04em;opacity:.85;}
+.r-spec{font:400 10px var(--mono);color:var(--tc,var(--green));letter-spacing:.04em;opacity:.85;}
 .r-why{font:400 11px/1.7 'Inter',sans-serif;color:var(--dim);}
 .r-care{font:400 10px/1.7 var(--mono);color:var(--dimmer);padding-left:11px;border-left:1px solid rgba(255,255,255,.07);}
 .r-care.is-blocked{color:var(--amber);border-color:rgba(232,135,58,.4);}
-.r-start{margin-top:4px;background:none;border:1px solid var(--line);border-radius:9px;padding:11px;cursor:pointer;
-  font:500 9px var(--mono);letter-spacing:.16em;color:var(--dim);}
-.r-start:hover:not(:disabled){background:rgba(255,255,255,.03);}
+.r-start{margin-top:4px;background:none;border:1px solid color-mix(in srgb,var(--tc,var(--green)) 30%,transparent);
+  color:var(--tc,var(--green));border-radius:9px;padding:11px;cursor:pointer;font:500 9px var(--mono);letter-spacing:.16em;}
+.r-start:hover:not(:disabled){background:color-mix(in srgb,var(--tc,var(--green)) 10%,transparent);}
 .r-start:disabled{color:var(--amber);border-color:rgba(232,135,58,.3);cursor:not-allowed;}
-.r-start:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
 
 .r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
@@ -190,7 +183,7 @@ table{border-spacing:0;}
   .r-wlab{margin-top:0;}
   .r-wc{flex-basis:100%;padding-left:27px;}
   .r-tools{grid-template-columns:1fr;}
-  .r-scale{flex-wrap:wrap;} .r-scale button{flex:1 1 44%;}
+  .r-scale{flex-wrap:wrap;}.r-scale button{flex:1 1 44%;}
   .r-cell{width:14px;}
   .r-foot{flex-direction:column;gap:8px;}
 }
@@ -198,526 +191,392 @@ table{border-spacing:0;}
 </style>
 </head>
 <body>
-
-<header class="r-top">
-  <a href="/train.html" class="r-back">&#8592; Train</a>
-  <h1 class="r-title">Recovery, <em>Sean</em></h1>
-  <p class="r-meta" id="meta"></p>
-</header>
-
-<section class="r-coach" id="coach"></section>
-
-<section class="r-block" id="windowBlock"></section>
-
-<div id="runnerSlot"></div>
-
-<section class="r-block r-hero" id="bodyBlock"></section>
-
-<section class="r-block" id="reportBlock"></section>
-
-<section class="r-block r-lib" id="libBlock"></section>
-
-<footer class="r-foot">
-  <span>NO COLD WITHIN 4H OF STRENGTH WORK</span>
-  <span>SORENESS FEEDS EVERY OTHER PAGE</span>
-</footer>
+<div id="app"></div>
 
 <script>
 (function(){
 'use strict';
 
-/* ═══ CONFIG ═══════════════════════════════════════════════════ */
-var SESSION = { name: "Team training", type: "team", end: 19 * 60 + 30 };
-var MATCH_IN = 2;
-var BED = 22 * 60 + 30;
-var COLD_GATE = 4 * 60;
+/* ═══ time helpers ═══════════════════════════════════════════════ */
+function getMelb(){ return new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'})); }
+function getNow(){ var d=getMelb(); return d.getHours()*60+d.getMinutes(); }
+function hhmm(m){ return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+function dur(m){ if(m<0)m=0; if(m>=60){var h=Math.floor(m/60),r=m%60;return h+'h'+(r?' '+r+'m':'');} return m+'m'; }
+function esc(s){ var d=document.createElement('div');d.textContent=s;return d.innerHTML; }
 
-function getNow() {
-  var d = new Date();
-  return d.getHours() * 60 + d.getMinutes();
+/* ═══ session (localStorage-backed) ═════════════════════════════ */
+var SESSION_KEY = 'recovery-session';
+function loadSession(){
+  try{ var r=JSON.parse(localStorage.getItem(SESSION_KEY)); if(r&&r.end) return r; }catch(e){}
+  return { name:'No session logged', type:'rest', end:0 };
 }
+function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 
-function hhmm(m) {
-  return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
-}
+var SESSION = loadSession();
+var MATCH_IN = 1;
+var BED = 22*60+30;
+var COLD_GATE = 4*60;
 
-function dur(m) {
-  if (m < 0) m = 0;
-  return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm';
-}
-
-function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-/* ═══ PROTOCOLS ═══════════════════════════════════════════════ */
+/* ═══ protocols ══════════════════════════════════════════════════ */
 var TOOLS = {
-  sauna:    { n: "Sauna",              tag: "HEAT",        c: "#E8873A", weekly: 3, spec: "80\u2013100 \u00b0C \u00b7 15\u201320 min \u00b7 2\u20133x/week = 27% CV reduction, 4\u20137x = 50%", rounds: [{ p: "HEAT", s: 1200 }], sets: 1, why: "Cardiovascular health, heat acclimation, mitochondrial biogenesis. Compensatory cooling 1\u20132 hrs before bed aids sleep.", care: "Growth hormone protocol: 4 \u00d7 30 min @ 80\u00b0C, max once/week. Man City uses infrared sauna." },
-  ice:      { n: "Cold plunge",        tag: "COLD",        c: "#7DD3FC", weekly: 3, spec: "10\u201315 \u00b0C \u00b7 1\u20135 min \u00b7 11 min total/week across 2\u20134 sessions", rounds: [{ p: "IMMERSE", s: 300 }], sets: 1, why: "Doubles baseline dopamine for 4\u20136 hours. Best done AM to stack with cortisol peak. Memory enhancement when done after learning.", care: "AVOID within 4\u20136 hours after strength/hypertrophy training \u2014 suppresses inflammatory response needed for adaptation. Move limbs to break thermal layer." },
-  contrast: { n: "Contrast bath",      tag: "HOT/COLD",    c: "#D8B24A", weekly: 2, spec: "3 min hot / 1 min cold \u00d7 4 rounds \u00b7 finish on cold", rounds: [{ p: "HOT", s: 180 }, { p: "COLD", s: 60 }], sets: 4, why: "Alternating vasodilation/constriction pumps blood and lymph. Good for heavy legs post-match.", care: "Not within 90 min of bed. Not within 4 hours of strength work." },
-  gun:      { n: "Percussion gun",     tag: "SOFT TISSUE", c: "#4ADE80", weekly: 5, spec: "30\u201360 sec per muscle group \u00b7 avoid bony prominences", rounds: [{ p: "WORK", s: 300 }], sets: 1, why: "Breaks up fascial adhesions, increases local blood flow, reduces DOMS.", care: "Light pressure on tender areas. Don\u2019t chase pain." },
-  roll:     { n: "Foam roller",        tag: "SOFT TISSUE", c: "#4ADE80", weekly: 4, spec: "60\u201390 sec per area \u00b7 slow rolls, pause on knots", rounds: [{ p: "ROLL", s: 600 }], sets: 1, why: "Fascial adhesion rolling. Myofascial release for recovery between sessions.", care: "Avoid rolling directly on joints or spine." },
-  ball:     { n: "Lacrosse ball",      tag: "TRIGGER",     c: "#7DD3C0", weekly: 3, spec: "60 sec per trigger point \u00b7 breathe into pressure", rounds: [{ p: "SUSTAIN", s: 300 }], sets: 1, why: "Deep trigger point release for glutes, hip flexors, calves, feet.", care: "Adductors \u2014 groin history. Treat it earlier than it asks." },
-  swim:     { n: "Pool recovery",      tag: "LYMPH",       c: "#7DD3FC", weekly: 1, spec: "15\u201320 min treading water or light swimming", rounds: [{ p: "SWIM", s: 1200 }], sets: 1, why: "Lymphatic drainage \u2014 shearing action of water on skin moves lymph fluid. Reduces heavy legs better than static immersion.", care: "Active recovery only. No intensity." },
-  walk:     { n: "Nasal walk",         tag: "ACTIVE",      c: "#2E7F5B", weekly: 7, spec: "10\u201320 min \u00b7 nasal breathing only \u00b7 optic flow", rounds: [{ p: "WALK", s: 1200 }], sets: 1, why: "Generates optic flow to quiet amygdala. Diaphragmatic breathing creates pressure differential to move lymph. 7000+ steps daily target.", care: "Morning sunlight walk is non-negotiable." }
+  sauna:    {n:'Sauna',tag:'HEAT',c:'#E8873A',weekly:3,spec:'80-100 C . 15 min . 2 min cool between',rounds:[{p:'HEAT',s:900},{p:'COOL',s:120}],sets:4,why:'Heat adaptation raises plasma volume. Real, but slow.',care:'Hydrate. Leave if you feel faint. Not within 90 minutes of bed.'},
+  ice:      {n:'Ice bath',tag:'COLD',c:'#7DD3C0',weekly:2,spec:'10-15 C . 10-15 min . to the sternum',rounds:[{p:'IMMERSE',s:720}],sets:1,why:'Blunts soreness. Best after matches and hard conditioning.',care:'Never within 4 hours of strength work. Shivering hard means get out.'},
+  contrast: {n:'Contrast',tag:'HOT / COLD',c:'#D8B24A',weekly:2,spec:'3 min hot / 1 min cold x 4 . finish cold',rounds:[{p:'HOT',s:180},{p:'COLD',s:60}],sets:4,why:'Gentler than full immersion. Mostly makes you feel better.',care:'Finish cold. Not the night before a match.'},
+  gun:      {n:'Massage gun',tag:'PERCUSSION',c:'#4ADE80',weekly:5,spec:'60-90 s per area . light pressure . slow glide',rounds:[{p:'WORK',s:75}],sets:3,why:'Short-term range of motion without the strength cost of static stretching.',care:'Never on bone, joints, the front of the neck, or nerve lines.'},
+  roll:     {n:'Foam roll',tag:'MYOFASCIAL',c:'#4ADE80',weekly:5,spec:'60-90 s per area . slow . breathe out on tender spot',rounds:[{p:'ROLL',s:90}],sets:2,why:'Range without losing force. The effect fades in an hour.',care:'Slow. Speed is how people convince themselves they\'ve done something.'},
+  ball:     {n:'Spikey ball',tag:'TARGETED',c:'#7DD3C0',weekly:4,spec:'90 s per point . sustained, not rolling',rounds:[{p:'SUSTAIN',s:90}],sets:2,why:'Reaches what a roller can\'t.',care:'Stay off the ITB, the spine itself, and the back of the knee.'},
+  press:    {n:'Pressure points',tag:'ISCHAEMIC',c:'#D8B24A',weekly:3,spec:'30-45 s sustained . 6/10 discomfort . breathe',rounds:[{p:'HOLD',s:40}],sets:3,why:'Hold a tender point until it softens.',care:'6 out of 10, not 9. Pain you hold your breath through teaches you to brace.'},
+  walk:     {n:'Walk & rehydrate',tag:'IMMEDIATE',c:'#5F786E',weekly:7,spec:'5-10 min . nasal breathing . 500ml + electrolytes',rounds:[{p:'WALK',s:420}],sets:1,why:'The only thing worth doing in the first fifteen minutes.',care:'Nothing to get wrong here. Do it anyway.'}
 };
 
-var TOOL_KEYS = ["sauna", "ice", "contrast", "gun", "roll", "ball", "swim", "walk"];
-
-/* ═══ REGIONS ════════════════════════════════════════════════ */
+/* ═══ regions ════════════════════════════════════════════════════ */
 var REGIONS = {
-  traps:   { view: "back",  n: "Traps & T-spine",  c: [[60,56,11]],               tools: ["ball","roll","gun"] },
-  lowback: { view: "back",  n: "Lower back",       c: [[60,98,10]],               tools: ["ball","sauna","gun"] },
-  glutes:  { view: "back",  n: "Glutes",           c: [[60,119,12]],              tools: ["ball","gun","roll"] },
-  hams:    { view: "back",  n: "Hamstrings",       c: [[51,160,9],[69,160,9]],    tools: ["roll","gun","ball"] },
-  calves:  { view: "back",  n: "Calves",           c: [[51,215,8],[69,215,8]],    tools: ["roll","gun","ball"] },
-  feet:    { view: "back",  n: "Feet & plantar",   c: [[50,259,6],[70,259,6]],    tools: ["ball","roll"] },
-  hipflex: { view: "front", n: "Hip flexors",      c: [[60,120,10]],              tools: ["roll","gun","ball"] },
-  adduct:  { view: "front", n: "Adductors",        c: [[60,152,9]],               tools: ["ball","gun","roll"], watch: true },
-  quads:   { view: "front", n: "Quads",            c: [[51,158,9],[69,158,9]],    tools: ["roll","gun"] },
-  tib:     { view: "front", n: "Shins & tib ant",  c: [[51,214,7],[69,214,7]],    tools: ["gun","ball"] }
+  traps:   {view:'back', n:'Traps & T-spine', c:[[60,56,11]],              tools:['ball','roll','gun']},
+  lowback: {view:'back', n:'Lower back',      c:[[60,98,10]],              tools:['ball','sauna','gun']},
+  glutes:  {view:'back', n:'Glutes',          c:[[60,119,12]],             tools:['ball','gun','press']},
+  hams:    {view:'back', n:'Hamstrings',      c:[[51,160,9],[69,160,9]],   tools:['roll','gun','press']},
+  calves:  {view:'back', n:'Calves',          c:[[51,215,8],[69,215,8]],   tools:['roll','gun','ball']},
+  feet:    {view:'back', n:'Feet & plantar',  c:[[50,259,6],[70,259,6]],   tools:['ball','press']},
+  hipflex: {view:'front',n:'Hip flexors',     c:[[60,120,10]],             tools:['roll','gun','press']},
+  adduct:  {view:'front',n:'Adductors',       c:[[60,152,9]],              tools:['ball','gun','press'],watch:true},
+  quads:   {view:'front',n:'Quads',           c:[[51,158,9],[69,158,9]],   tools:['roll','gun']},
+  tib:     {view:'front',n:'Shins & tib ant', c:[[51,214,7],[69,214,7]],   tools:['gun','ball']}
 };
 
-var REGION_KEYS = ["traps","lowback","glutes","hams","calves","feet","hipflex","adduct","quads","tib"];
-var SORE = ["None", "Niggle", "Sore", "Angry"];
-var SORE_C = ["#3B4E47", "#D8B24A", "#E8873A", "#F05A3A"];
+var SORE = ['None','Niggle','Sore','Angry'];
+var SORE_C = ['#3B4E47','#D8B24A','#E8873A','#F05A3A'];
 
-var HISTORY = {
-  adduct:  [0,0,0,0,0,0,1],
-  lowback: [0,0,0,0,0,0,0],
-  calves:  [0,0,0,0,0,0,1],
-  hams:    [0,0,0,0,0,0,1],
-  glutes:  [0,0,0,0,0,0,0],
-  quads:   [0,0,0,0,0,0,1]
-};
+/* ═══ state (localStorage) ═══════════════════════════════════════ */
+var SORE_KEY = 'recovery-sore';
+var LOG_KEY = 'recovery-log';
+var HIST_KEY = 'recovery-history';
 
-/* ═══ STATE ══════════════════════════════════════════════════ */
+function loadSore(){ try{return JSON.parse(localStorage.getItem(SORE_KEY))||{};}catch(e){return {};} }
+function saveSore(s){ localStorage.setItem(SORE_KEY,JSON.stringify(s)); }
+function loadLog(){ try{return JSON.parse(localStorage.getItem(LOG_KEY))||{};}catch(e){return {};} }
+function saveLog(l){ localStorage.setItem(LOG_KEY,JSON.stringify(l)); }
+function loadHistory(){
+  try{var h=JSON.parse(localStorage.getItem(HIST_KEY));if(h)return h;}catch(e){}
+  return {adduct:[1,2,2,3,2,2,2],lowback:[0,1,2,1,2,1,2],calves:[0,0,1,1,0,1,1],hams:[1,1,0,0,1,0,0],glutes:[0,1,1,0,0,0,0],quads:[0,0,0,1,0,0,0]};
+}
+
 var state = {
-  view: "front",
-  sore: { hams: 1, calves: 1, quads: 1 },
-  sel: null,
-  run: null,       // { tool, startedAt, seq, idx }
+  view: 'front',
+  sore: loadSore(),
+  sel: 'adduct',
+  run: null,
   lib: false,
-  log: { sauna: 0, ice: 0, contrast: 0, gun: 0, roll: 0, ball: 0, swim: 0, walk: 1 }
+  log: loadLog()
 };
 
-/* ═══ COLD GATE ══════════════════════════════════════════════ */
-function coldAt() { return SESSION.end + COLD_GATE; }
-function isLocked(t) {
-  return (t === "ice" || t === "contrast") && SESSION.type === "strength" && getNow() < coldAt();
-}
+// Default soreness if empty
+if(!Object.keys(state.sore).length) state.sore = {adduct:2,lowback:2,calves:1};
 
-/* ═══ KHABIB ═════════════════════════════════════════════════ */
-function khabibLine() {
-  var now = getNow();
-  var cold = coldAt();
-  var worst = null, worstV = 0;
-  Object.keys(state.sore).forEach(function(k) {
-    if (state.sore[k] >= 2 && state.sore[k] > worstV) { worst = k; worstV = state.sore[k]; }
-  });
+var HISTORY = loadHistory();
 
-  if (SESSION.type === "strength" && now < cold) {
-    return { tone: "hot", line: "You lifted " + dur(now - SESSION.end) + " ago. No cold until " + hhmm(cold) + " \u2014 it would cost you the session you just did. Heat or soft tissue instead." };
-  }
-  if (MATCH_IN === 1 && worst) {
-    return { tone: "hot", line: REGIONS[worst].n + " is " + SORE[worstV].toLowerCase() + " and you play tomorrow. Soft tissue tonight, nothing that leaves you flat." };
-  }
-  if (worst) {
-    return { tone: "hot", line: REGIONS[worst].n + " is " + SORE[worstV].toLowerCase() + ". Start there. The rest can wait." };
-  }
-  return { tone: "good", line: "Nothing angry today. Ten minutes of soft tissue and get on with your life." };
-}
-
-/* ═══ WINDOW ═════════════════════════════════════════════════ */
-function buildWindow() {
-  var strength = SESSION.type === "strength";
-  var ca = coldAt();
-  var now = getNow();
+/* ═══ window builder ═════════════════════════════════════════════ */
+function buildWindow(s, now){
+  var strength = s.type === 'strength';
+  var coldAt = s.end + COLD_GATE;
+  if(!s.end) return [{at:0,label:'Rest day',tools:['roll','gun','ball','press'],note:'No session logged. Soft tissue if you want it.'}];
   return [
-    { at: SESSION.end, label: "Straight after", tools: ["walk"], lock: false,
-      note: "Nothing else. Move, drink, eat." },
-    { at: SESSION.end + 30, label: "+30 minutes", tools: ["gun", "roll"], lock: false,
-      note: "Light. You\u2019re helping the tissue, not training it." },
-    { at: ca, label: strength ? "+4 hours" : "Any time", tools: ["ice", "contrast"],
-      lock: strength && now < ca,
-      note: strength ? "Cold before this costs you the session you just did." : "No strength work today \u2014 cold is free." },
-    { at: 19 * 60 + 30, label: "Evening", tools: ["ball", "swim"], lock: false,
-      note: "Sore spots only. Ten minutes, not forty." },
-    { at: BED - 90, label: "\u226590 min before bed", tools: ["sauna"],
-      lock: MATCH_IN === 1,
-      note: MATCH_IN === 1 ? "Match tomorrow. Skip the heat, sleep instead." : "Core temp needs time to fall." }
+    {at:s.end,label:'Straight after',tools:['walk'],note:'Nothing else. Move, drink, eat.'},
+    {at:s.end+30,label:'+30 minutes',tools:['gun','roll'],note:'Light. You\'re helping the tissue, not training it.'},
+    {at:coldAt,label:strength?'+4 hours':'Any time',tools:['ice','contrast'],lock:strength&&now<coldAt,note:strength?'Cold before this costs you the session you just did.':'No strength work today \u2014 cold is free.'},
+    {at:19*60+30,label:'Evening',tools:['ball','press'],note:'Sore spots only. Ten minutes, not forty.'},
+    {at:BED-90,label:'\u226590 min before bed',tools:['sauna'],lock:MATCH_IN===1,note:MATCH_IN===1?'Match tomorrow. Skip the heat, sleep instead.':'Core temp needs time to fall.'}
   ];
 }
 
-/* ═══ BODY SVG ═══════════════════════════════════════════════ */
-function bodysvg(view) {
-  var h = '<svg viewBox="0 0 120 300" aria-label="' + view + ' view">';
-  h += '<g class="r-body">';
-  h += '<circle cx="60" cy="20" r="14"/>';
-  h += '<rect x="55" y="32" width="10" height="8" rx="3"/>';
-  h += '<rect x="40" y="40" width="40" height="70" rx="12"/>';
-  h += '<rect x="42" y="108" width="36" height="26" rx="9"/>';
-  h += '<rect x="24" y="44" width="12" height="62" rx="6"/>';
-  h += '<rect x="84" y="44" width="12" height="62" rx="6"/>';
-  h += '<rect x="44" y="132" width="14" height="62" rx="7"/>';
-  h += '<rect x="62" y="132" width="14" height="62" rx="7"/>';
-  h += '<rect x="45" y="196" width="12" height="58" rx="6"/>';
-  h += '<rect x="63" y="196" width="12" height="58" rx="6"/>';
-  h += '<rect x="43" y="256" width="14" height="9" rx="3"/>';
-  h += '<rect x="63" y="256" width="14" height="9" rx="3"/>';
-  h += '</g>';
-
-  REGION_KEYS.forEach(function(k) {
-    var r = REGIONS[k];
-    if (r.view !== view) return;
-    var s = state.sore[k] || 0;
-    var cls = 'r-reg';
-    if (state.sel === k) cls += ' is-sel';
-    if (s) cls += ' is-sore';
-    h += '<g class="' + cls + '" data-reg="' + k + '" role="button" tabindex="0" aria-label="' + esc(r.n) + ' \u2014 ' + SORE[s] + '">';
-    r.c.forEach(function(pt) {
-      h += '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + pt[2] + '" style="fill:' + SORE_C[s] + ';stroke:' + SORE_C[s] + '"/>';
-    });
-    h += '</g>';
-  });
-
-  h += '</svg>';
-  return h;
+/* ═══ khabib ═════════════════════════════════════════════════════ */
+function khabib(sore, now){
+  var cold = SESSION.end + COLD_GATE;
+  var worst = null, worstV = 0;
+  Object.keys(sore).forEach(function(k){ if(sore[k]>=2 && sore[k]>worstV){worst=k;worstV=sore[k];} });
+  if(SESSION.type==='strength' && SESSION.end && now<cold)
+    return {tone:'hot',line:'You lifted '+dur(now-SESSION.end)+' ago. No cold until '+hhmm(cold)+' \u2014 it would cost you the session you just did. Heat or soft tissue instead.'};
+  if(MATCH_IN===1 && worst)
+    return {tone:'hot',line:REGIONS[worst].n+' is '+SORE[worstV].toLowerCase()+' and you play tomorrow. Soft tissue tonight, nothing that leaves you flat.'};
+  if(worst)
+    return {tone:'hot',line:REGIONS[worst].n+' is '+SORE[worstV].toLowerCase()+'. Start there. The rest can wait.'};
+  return {tone:'good',line:'Nothing angry today. Ten minutes of soft tissue and get on with your life.'};
 }
 
-/* ═══ REPORT ═════════════════════════════════════════════════ */
-function buildReport() {
-  var rows = [];
-  Object.keys(HISTORY).forEach(function(k) {
-    var d = HISTORY[k];
-    var flagged = d.filter(function(v) { return v >= 2; }).length;
-    var trend = d[d.length - 1] - d[0];
-    rows.push({ k: k, d: d, flagged: flagged, trend: trend });
-  });
-  rows.sort(function(a, b) { return b.flagged - a.flagged; });
-  return rows;
+/* ═══ cold lock check ═══════════════════════════════════════════ */
+function isLocked(t, now){
+  return (t==='ice'||t==='contrast')&&SESSION.type==='strength'&&SESSION.end&&now<SESSION.end+COLD_GATE;
 }
 
-/* ═══ RUNNER (timestamp-based) ═══════════════════════════════ */
-function buildSeq(tool) {
-  var t = TOOLS[tool];
+/* ═══ runner state ═══════════════════════════════════════════════ */
+var runner = {tool:null,seq:[],idx:0,left:0,on:false,startedAt:null,timer:null};
+
+function startRunner(toolKey){
+  var t = TOOLS[toolKey];
   var seq = [];
-  for (var s = 0; s < t.sets; s++) {
-    t.rounds.forEach(function(r) { seq.push({ p: r.p, s: r.s }); });
+  for(var s=0;s<t.sets;s++) t.rounds.forEach(function(r){seq.push(r);});
+  runner = {tool:toolKey,seq:seq,idx:0,left:seq[0].s,on:false,startedAt:null,timer:null};
+  state.run = toolKey;
+  render();
+}
+
+function tickRunner(){
+  if(!runner.on||!runner.seq.length) return;
+  if(runner.left<=0){
+    if(runner.idx+1>=runner.seq.length){runner.on=false;render();return;}
+    runner.idx++;runner.left=runner.seq[runner.idx].s;
+  } else {
+    runner.left--;
   }
-  return seq;
+  render();
+  runner.timer = setTimeout(tickRunner,1000);
 }
 
-function runnerLeft() {
-  if (!state.run) return 0;
-  var elapsed = Math.floor((Date.now() - state.run.startedAt) / 1000);
-  return Math.max(0, state.run.seq[state.run.idx].s - elapsed);
+function toggleRunner(){
+  runner.on=!runner.on;
+  if(runner.on){runner.startedAt=Date.now();tickRunner();}
+  else{clearTimeout(runner.timer);}
+  render();
 }
 
-function clockStr(s) {
-  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+function closeRunner(){
+  runner.on=false;clearTimeout(runner.timer);
+  state.run=null;runner={tool:null,seq:[],idx:0,left:0,on:false,startedAt:null,timer:null};
+  render();
 }
 
-/* ═══ RENDER ═════════════════════════════════════════════════ */
-function render() {
-  var now = getNow();
-  var k = khabibLine();
-  var ca = coldAt();
+/* ═══ figure SVG ═════════════════════════════════════════════════ */
+function figSvg(view){
+  var body = '<g class="r-body">' +
+    '<circle cx="60" cy="20" r="14"/>' +
+    '<rect x="55" y="32" width="10" height="8" rx="3"/>' +
+    '<rect x="40" y="40" width="40" height="70" rx="12"/>' +
+    '<rect x="42" y="108" width="36" height="26" rx="9"/>' +
+    '<rect x="24" y="44" width="12" height="62" rx="6"/>' +
+    '<rect x="84" y="44" width="12" height="62" rx="6"/>' +
+    '<rect x="44" y="132" width="14" height="62" rx="7"/>' +
+    '<rect x="62" y="132" width="14" height="62" rx="7"/>' +
+    '<rect x="45" y="196" width="12" height="58" rx="6"/>' +
+    '<rect x="63" y="196" width="12" height="58" rx="6"/>' +
+    '<rect x="43" y="256" width="14" height="9" rx="3"/>' +
+    '<rect x="63" y="256" width="14" height="9" rx="3"/></g>';
 
-  // Meta
-  document.getElementById('meta').innerHTML =
-    esc(SESSION.name.toUpperCase()) + '<i></i>ENDED ' + hhmm(SESSION.end) + '<i></i>MATCH IN ' + MATCH_IN + ' DAY';
+  var regs = '';
+  Object.keys(REGIONS).forEach(function(k){
+    var r = REGIONS[k];
+    if(r.view!==view) return;
+    var s = state.sore[k]||0;
+    var cls = 'r-reg'+(state.sel===k?' is-sel':'')+(s?' is-sore':'');
+    var circles = r.c.map(function(pt){
+      return '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="'+pt[2]+'" style="fill:'+SORE_C[s]+';stroke:'+SORE_C[s]+'"/>';
+    }).join('');
+    regs += '<g class="'+cls+'" data-reg="'+k+'" role="button" tabindex="0" aria-label="'+r.n+' \u2014 '+SORE[s]+'">'+circles+'</g>';
+  });
+
+  return '<div class="r-fig"><svg viewBox="0 0 120 300" aria-label="'+view+' view">'+body+regs+'</svg><p class="r-figlab">'+view.toUpperCase()+'</p></div>';
+}
+
+/* ═══ render ═════════════════════════════════════════════════════ */
+function render(){
+  var NOW = getNow();
+  var k = khabib(state.sore, NOW);
+  var win = buildWindow(SESSION, NOW);
+  var coldAt = SESSION.end + COLD_GATE;
+  var region = REGIONS[state.sel];
+  var h = '';
+
+  // Header
+  h += '<header class="r-top"><a href="/" class="r-back">\u2190 Dashboard</a>';
+  h += '<h1 class="r-title">Recovery, <em>Sean</em></h1>';
+  h += '<p class="r-meta">'+esc(SESSION.name).toUpperCase()+'<i></i>';
+  if(SESSION.end) h += 'ENDED '+hhmm(SESSION.end)+'<i></i>';
+  h += 'MATCH IN '+MATCH_IN+' DAY</p></header>';
 
   // Coach
-  document.getElementById('coach').innerHTML =
-    '<div class="r-av"><span>K</span></div><div>' +
-    '<div class="r-cname">KHABIB <em>\u00b7 recovery is not a workout</em></div>' +
-    '<p class="r-clead' + (k.tone === 'hot' ? ' is-hot' : '') + '">' + esc(k.line) + '</p></div>';
+  h += '<section class="r-coach"><div class="r-av"><span>K</span></div><div>';
+  h += '<div class="r-cname">KHABIB <em>\u00b7 recovery is not a workout</em></div>';
+  h += '<p class="r-clead is-'+k.tone+'">'+esc(k.line)+'</p></div></section>';
 
-  // Window block
-  renderWindow(now, ca);
-
-  // Runner
-  renderRunner();
-
-  // Body block
-  renderBody();
-
-  // Report
-  renderReport();
-
-  // Library
-  renderLib(ca);
-
-  bindAll();
-}
-
-function renderWindow(now, ca) {
-  var win = buildWindow();
-  var h = '<header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\u2019S WINDOW</p><h2>When, <em>not what</em></h2></div>';
-  if (now < ca) {
-    h += '<div class="r-gate"><b>' + dur(ca - now) + '</b><span>UNTIL COLD UNLOCKS</span></div>';
+  // 01 Window
+  h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\'S WINDOW</p><h2>When, <em>not what</em></h2></div>';
+  if(SESSION.end && SESSION.type==='strength' && NOW<coldAt){
+    h += '<div class="r-gate"><b>'+dur(coldAt-NOW)+'</b><span>UNTIL COLD UNLOCKS</span></div>';
   }
   h += '</header><ol class="r-win">';
-
-  win.forEach(function(slot, i) {
-    var next = win[i + 1];
-    var st = (now >= slot.at && (!next || now < next.at)) ? "now" : (now >= slot.at ? "past" : "next");
-    var locked = slot.lock;
-    h += '<li class="is-' + st + (locked ? ' is-locked' : '') + '">';
+  win.forEach(function(slot,i){
+    var next = win[i+1];
+    var st = slot.at && NOW>=slot.at && (!next||NOW<next.at) ? 'now' : (slot.at && NOW>=slot.at ? 'past' : 'next');
+    h += '<li class="is-'+st+(slot.lock?' is-locked':'')+'">';
     h += '<span class="r-bead"></span>';
-    h += '<div class="r-wt"><span class="r-wtime">' + hhmm(slot.at) + '</span>';
-    h += '<span class="r-wlab">' + esc(slot.label) + '</span></div>';
+    h += '<div class="r-wt"><span class="r-wtime">'+(slot.at?hhmm(slot.at):'\u2014')+'</span>';
+    h += '<span class="r-wlab">'+esc(slot.label)+'</span></div>';
     h += '<div class="r-wc"><div class="r-chips">';
-    slot.tools.forEach(function(t) {
-      var dis = isLocked(t) || locked;
-      h += '<button data-runtool="' + t + '"' + (dis ? ' disabled' : '') + '>';
-      h += '<i style="background:' + TOOLS[t].c + '"></i> ' + esc(TOOLS[t].n) + '</button>';
+    slot.tools.forEach(function(t){
+      var off = isLocked(t,NOW)||slot.lock;
+      h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
     });
-    h += '</div>';
-    var hot = locked || (st !== 'past' && slot.tools.some(isLocked));
-    h += '<p class="r-wn' + (hot ? ' is-hot' : '') + '">' + esc(slot.note) + '</p>';
-    h += '</div></li>';
+    h += '</div><p class="r-wn'+(slot.lock||(st!=='past'&&slot.tools.some(function(t){return isLocked(t,NOW);}))?' is-hot':'')+'">';
+    h += esc(slot.note)+'</p></div></li>';
   });
-  h += '</ol>';
-  document.getElementById('windowBlock').innerHTML = h;
-}
+  h += '</ol></section>';
 
-function renderRunner() {
-  var el = document.getElementById('runnerSlot');
-  if (!state.run) { el.innerHTML = ''; return; }
-  var t = TOOLS[state.run.tool];
-  var seq = state.run.seq;
-  var idx = state.run.idx;
-  var left = runnerLeft();
-  var done = idx + 1 >= seq.length && left <= 0;
-  var cur = seq[idx];
-  var R = 40, C = 2 * Math.PI * R;
-  var frac = done ? 1 : 1 - left / cur.s;
-  var setNum = Math.floor(idx / t.rounds.length) + 1;
+  // Runner
+  if(state.run && runner.seq.length){
+    var t = TOOLS[runner.tool];
+    var cur = runner.seq[runner.idx];
+    var done = runner.idx+1>=runner.seq.length && runner.left<=0;
+    var R=40,C=2*Math.PI*R;
+    var clock = Math.floor(runner.left/60)+':'+String(runner.left%60).padStart(2,'0');
+    h += '<section class="r-runner" style="--tc:'+t.c+'">';
+    h += '<svg viewBox="0 0 100 100" class="r-ring"><circle cx="50" cy="50" r="'+R+'" class="r-ring-t"/>';
+    h += '<circle cx="50" cy="50" r="'+R+'" class="r-ring-p" stroke-dasharray="'+(C*(1-runner.left/cur.s))+' '+C+'"/></svg>';
+    h += '<div class="r-rt"><b>'+(done?'Done':clock)+'</b>';
+    h += '<span>'+(done?t.n+' complete':t.n+' \u00b7 '+cur.p+' \u00b7 '+Math.floor(runner.idx/t.rounds.length+1)+' of '+t.sets)+'</span></div>';
+    h += '<div class="r-rb">';
+    if(!done) h += '<button class="r-go" id="toggleRunner">'+(runner.on?'Pause':'Start')+'</button>';
+    h += '<button class="r-ghost" id="closeRunner">Close</button></div></section>';
+  }
 
-  var h = '<section class="r-runner" style="--tc:' + t.c + '">';
-  h += '<svg viewBox="0 0 100 100" class="r-ring" aria-hidden="true">';
-  h += '<circle cx="50" cy="50" r="' + R + '" class="r-ring-t"/>';
-  h += '<circle cx="50" cy="50" r="' + R + '" class="r-ring-p" stroke-dasharray="' + (C * frac) + ' ' + C + '" style="stroke:' + t.c + '"/>';
-  h += '</svg>';
-  h += '<div class="r-rt"><b style="color:' + t.c + '">' + (done ? 'Done' : clockStr(left)) + '</b>';
-  h += '<span>' + (done ? esc(t.n) + ' complete' : esc(t.n) + ' \u00b7 ' + cur.p + ' \u00b7 ' + setNum + ' of ' + t.sets) + '</span></div>';
-  h += '<div class="r-rb">';
-  if (!done) h += '<button class="r-go" data-runpause style="background:' + t.c + '">' + (state.run.paused ? 'Start' : 'Pause') + '</button>';
-  h += '<button class="r-ghost" data-runclose>Close</button>';
-  h += '</div></section>';
-  el.innerHTML = h;
-}
-
-function renderBody() {
-  if (!state.sel) state.sel = REGION_KEYS[0];
-  var region = REGIONS[state.sel];
-  var h = '<div class="r-figs">';
-  h += '<div class="r-toggle">';
-  h += '<button class="' + (state.view === 'back' ? 'is-on' : '') + '" data-bview="back">BACK</button>';
-  h += '<button class="' + (state.view === 'front' ? 'is-on' : '') + '" data-bview="front">FRONT</button>';
-  h += '</div>';
-  h += '<div class="r-fig">' + bodysvg(state.view) + '<p class="r-figlab">' + state.view.toUpperCase() + '</p></div>';
-  h += '</div>';
-
-  h += '<div class="r-side">';
+  // 02 Body map
+  h += '<section class="r-block r-hero"><div class="r-figs">';
+  h += '<div class="r-toggle"><button data-view="back" class="'+(state.view==='back'?'is-on':'')+'">BACK</button>';
+  h += '<button data-view="front" class="'+(state.view==='front'?'is-on':'')+'">FRONT</button></div>';
+  h += figSvg(state.view);
+  h += '</div><div class="r-side">';
   h += '<p class="r-eyebrow">02 \u00b7 SELECTED REGION</p>';
-  h += '<h2 class="r-rn">' + esc(region.n) + '</h2>';
-  if (region.watch) h += '<p class="r-watch">Groin history. Treat it earlier than it asks.</p>';
-
-  h += '<p class="r-lab">How does it feel</p>';
-  h += '<div class="r-scale">';
-  var sv = state.sore[state.sel] || 0;
-  SORE.forEach(function(s, i) {
-    var sel = sv === i;
-    var style = sel ? ' style="background:' + SORE_C[i] + ';border-color:' + SORE_C[i] + ';color:#08150F"' : '';
-    h += '<button class="' + (sel ? 'is-sel' : '') + '"' + style + ' data-sore="' + i + '" aria-pressed="' + sel + '">' + s + '</button>';
+  h += '<h2 class="r-rn">'+esc(region.n)+'</h2>';
+  if(region.watch) h += '<p class="r-watch">Groin history. Treat it earlier than it asks.</p>';
+  h += '<p class="r-lab">How does it feel</p><div class="r-scale">';
+  SORE.forEach(function(s,i){
+    var sel = (state.sore[state.sel]||0)===i;
+    var style = sel ? 'background:'+SORE_C[i]+';border-color:'+SORE_C[i]+';color:#08150F' : '';
+    h += '<button data-sore="'+i+'" class="'+(sel?'is-sel':'')+'"'+(style?' style="'+style+'"':'')+'>'+s+'</button>';
   });
-  h += '</div>';
-
-  h += '<p class="r-lab">What reaches it</p>';
-  h += '<div class="r-chips">';
-  region.tools.forEach(function(t) {
-    var dis = isLocked(t);
-    h += '<button data-runtool="' + t + '"' + (dis ? ' disabled' : '') + '>';
-    h += '<i style="background:' + TOOLS[t].c + '"></i> ' + esc(TOOLS[t].n) + '</button>';
+  h += '</div><p class="r-lab">What reaches it</p><div class="r-chips">';
+  region.tools.forEach(function(t){
+    var off = isLocked(t,NOW);
+    h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
   });
-  h += '</div></div>';
+  h += '</div></div></section>';
 
-  document.getElementById('bodyBlock').innerHTML = h;
-}
+  // 03 Report
+  var report = Object.keys(HISTORY).map(function(k){
+    var d = HISTORY[k];
+    var flagged = d.filter(function(v){return v>=2;}).length;
+    var trend = d[d.length-1]-d[0];
+    return {k:k,d:d,flagged:flagged,trend:trend};
+  }).sort(function(a,b){return b.flagged-a.flagged;});
 
-function renderReport() {
-  var report = buildReport();
-  var chief = report[0];
-  var h = '<header class="r-bh"><div><p class="r-eyebrow">03 \u00b7 SEVEN-DAY REPORT</p><h2>The <em>pattern</em></h2></div></header>';
+  h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">03 \u00b7 SEVEN-DAY REPORT</p><h2>The <em>pattern</em></h2></div></header>';
   h += '<table class="r-rep"><thead><tr><th>Region</th>';
-  ["M","T","W","T","F","S","S"].forEach(function(d) { h += '<th>' + d + '</th>'; });
+  ['M','T','W','T','F','S','S'].forEach(function(d){h+='<th>'+d+'</th>';});
   h += '<th>Flagged</th></tr></thead><tbody>';
-
-  report.forEach(function(row) {
-    h += '<tr class="' + (state.sel === row.k ? 'is-sel' : '') + '" data-reprow="' + row.k + '">';
-    h += '<td class="r-rname">' + esc(REGIONS[row.k].n) + '</td>';
-    row.d.forEach(function(v) {
-      var op = v ? (0.25 + v * 0.25) : 0.1;
-      h += '<td><span class="r-cell" style="background:' + SORE_C[v] + ';opacity:' + op + '"></span></td>';
+  report.forEach(function(r){
+    h += '<tr class="'+(state.sel===r.k?'is-sel':'')+'" data-pick="'+r.k+'">';
+    h += '<td class="r-rname">'+esc(REGIONS[r.k].n)+'</td>';
+    r.d.forEach(function(v){
+      h += '<td><span class="r-cell" style="background:'+SORE_C[v]+';opacity:'+(v?0.25+v*0.25:0.1)+'"></span></td>';
     });
-    h += '<td class="r-flag"><b class="' + (row.flagged >= 4 ? 'is-hot' : '') + '">' + row.flagged + '<em>/7</em></b>';
-    var tCls = row.trend > 0 ? 'is-hot' : row.trend < 0 ? 'is-good' : '';
-    var tChar = row.trend > 0 ? '\u25b2' : row.trend < 0 ? '\u25bc' : '=';
-    h += '<i class="' + tCls + '">' + tChar + '</i></td></tr>';
+    h += '<td class="r-flag"><b class="'+(r.flagged>=4?'is-hot':'')+'">'+r.flagged+'<em>/7</em></b>';
+    h += '<i class="'+(r.trend>0?'is-hot':r.trend<0?'is-good':'')+'">'+(r.trend>0?'\u25b2':r.trend<0?'\u25bc':'=')+'</i></td></tr>';
   });
   h += '</tbody></table>';
 
-  if (chief) {
-    h += '<p class="r-insight"><b>' + esc(REGIONS[chief.k].n) + '</b> flagged ' + chief.flagged + ' of the last 7 days and it hasn\u2019t improved. That\u2019s not a recovery problem any more. Book the physio.</p>';
+  if(report.length){
+    var chief = report[0];
+    if(chief.flagged>=4){
+      h += '<p class="r-insight"><b>'+esc(REGIONS[chief.k].n)+'</b> flagged '+chief.flagged+' of the last 7 days and it hasn\'t improved. That\'s not a recovery problem any more. Book the physio.</p>';
+    }
   }
+  h += '</section>';
 
-  document.getElementById('reportBlock').innerHTML = h;
-}
-
-function renderLib(ca) {
-  var h = '<button class="r-libh" data-libtogg aria-expanded="' + state.lib + '">';
+  // 04 Library
+  h += '<section class="r-block r-lib"><button class="r-libh" id="libToggle">';
   h += '<div><p class="r-eyebrow">04 \u00b7 ALL PROTOCOLS</p><h2>The <em>library</em></h2></div>';
-  h += '<span class="r-chev">' + (state.lib ? '\u2212' : '+') + '</span></button>';
-
-  if (state.lib) {
+  h += '<span class="r-chev">'+(state.lib?'\u2212':'+')+'</span></button>';
+  if(state.lib){
     h += '<div class="r-tools">';
-    TOOL_KEYS.forEach(function(key) {
+    Object.keys(TOOLS).forEach(function(key){
       var t = TOOLS[key];
-      var off = isLocked(key);
-      h += '<article class="r-tool' + (off ? ' is-blocked' : '') + '" style="--tc:' + t.c + '">';
-      h += '<header><span class="r-tag" style="color:' + t.c + '">' + t.tag + '</span>';
-      h += '<span class="r-dots">';
-      for (var i = 0; i < t.weekly; i++) {
-        h += '<button class="r-dot' + (i < (state.log[key] || 0) ? ' is-done' : '') + '" data-logdot="' + key + '" data-doti="' + i + '" aria-label="' + esc(t.n) + ' session ' + (i+1) + '" aria-pressed="' + (i < (state.log[key] || 0)) + '" style="' + (i < (state.log[key] || 0) ? 'background:' + t.c + ';border-color:' + t.c : '') + '"></button>';
+      var off = isLocked(key,NOW);
+      h += '<article class="r-tool'+(off?' is-blocked':'')+'" style="--tc:'+t.c+'">';
+      h += '<header><span class="r-tag">'+t.tag+'</span><span class="r-dots">';
+      for(var i=0;i<t.weekly;i++){
+        h += '<button class="r-dot'+(i<(state.log[key]||0)?' is-done':'')+'" data-logdot="'+key+'" data-doti="'+i+'"></button>';
       }
       h += '</span></header>';
-      h += '<h3>' + esc(t.n) + '</h3>';
-      h += '<p class="r-spec" style="color:' + t.c + '">' + esc(t.spec) + '</p>';
-      h += '<p class="r-why">' + esc(t.why) + '</p>';
-      h += '<p class="r-care' + (off ? ' is-blocked' : '') + '">' + (off ? 'Locked until ' + hhmm(ca) + '. ' : '') + esc(t.care) + '</p>';
-      h += '<button class="r-start" data-runtool="' + key + '"' + (off ? ' disabled' : '') + ' style="' + (off ? '' : 'color:' + t.c + ';border-color:' + t.c + '40') + '">' + (off ? 'Blocked' : 'Run protocol') + '</button>';
+      h += '<h3>'+t.n+'</h3>';
+      h += '<p class="r-spec">'+esc(t.spec)+'</p>';
+      h += '<p class="r-why">'+esc(t.why)+'</p>';
+      h += '<p class="r-care'+(off?' is-blocked':'')+'">'+(off?'Locked until '+hhmm(coldAt)+'. ':'')+esc(t.care)+'</p>';
+      h += '<button class="r-start" data-run="'+key+'"'+(off?' disabled':'')+'>'+(off?'Blocked':'Run protocol')+'</button>';
       h += '</article>';
     });
     h += '</div>';
   }
+  h += '</section>';
 
-  document.getElementById('libBlock').innerHTML = h;
+  // Footer
+  h += '<footer class="r-foot"><span>NO COLD WITHIN 4H OF STRENGTH WORK</span><span>SORENESS FEEDS EVERY OTHER PAGE</span></footer>';
+
+  document.getElementById('app').innerHTML = h;
+  bindEvents();
 }
 
-/* ═══ BIND ═══════════════════════════════════════════════════ */
-function bindAll() {
+/* ═══ events ═════════════════════════════════════════════════════ */
+function bindEvents(){
   // View toggle
-  document.querySelectorAll('[data-bview]').forEach(function(btn) {
-    btn.addEventListener('click', function() { state.view = this.dataset.bview; render(); });
+  document.querySelectorAll('[data-view]').forEach(function(btn){
+    btn.addEventListener('click',function(){state.view=this.dataset.view;render();});
   });
-
-  // Region select
-  document.querySelectorAll('[data-reg]').forEach(function(g) {
-    var handler = function() {
-      var k = g.dataset.reg;
-      state.sel = k;
-      state.view = REGIONS[k].view;
-      render();
-    };
-    g.addEventListener('click', handler);
-    g.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
-    });
+  // Region pick on figure
+  document.querySelectorAll('[data-reg]').forEach(function(g){
+    g.addEventListener('click',function(){pick(this.dataset.reg);});
+    g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(this.dataset.reg);}});
   });
-
+  // Report row pick
+  document.querySelectorAll('[data-pick]').forEach(function(tr){
+    tr.addEventListener('click',function(){pick(this.dataset.pick);});
+  });
   // Soreness scale
-  document.querySelectorAll('[data-sore]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      state.sore[state.sel] = parseInt(this.dataset.sore);
-      render();
+  document.querySelectorAll('[data-sore]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      state.sore[state.sel]=parseInt(this.dataset.sore);
+      saveSore(state.sore);render();
     });
   });
-
-  // Report rows
-  document.querySelectorAll('[data-reprow]').forEach(function(tr) {
-    tr.addEventListener('click', function() {
-      var k = this.dataset.reprow;
-      state.sel = k;
-      state.view = REGIONS[k].view;
-      render();
-    });
+  // Run protocol
+  document.querySelectorAll('[data-run]').forEach(function(btn){
+    btn.addEventListener('click',function(){if(!this.disabled)startRunner(this.dataset.run);});
   });
-
-  // Run tool
-  document.querySelectorAll('[data-runtool]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tool = this.dataset.runtool;
-      if (isLocked(tool)) return;
-      state.run = { tool: tool, startedAt: Date.now(), seq: buildSeq(tool), idx: 0, paused: false };
-      render();
-      tickRunner();
-    });
-  });
-
-  // Runner pause/start
-  var pp = document.querySelector('[data-runpause]');
-  if (pp) pp.addEventListener('click', function() {
-    if (!state.run) return;
-    if (state.run.paused) {
-      // Resume: adjust startedAt to account for paused time
-      state.run.startedAt = Date.now() - state.run.pausedElapsed * 1000;
-      state.run.paused = false;
-      state.run.pausedElapsed = undefined;
-      tickRunner();
-    } else {
-      var elapsed = Math.floor((Date.now() - state.run.startedAt) / 1000);
-      state.run.paused = true;
-      state.run.pausedElapsed = elapsed;
-    }
-    render();
-  });
-
-  // Runner close
-  var rc = document.querySelector('[data-runclose]');
-  if (rc) rc.addEventListener('click', function() { state.run = null; render(); });
-
+  // Runner controls
+  var tb = document.getElementById('toggleRunner');
+  if(tb) tb.addEventListener('click',toggleRunner);
+  var cb = document.getElementById('closeRunner');
+  if(cb) cb.addEventListener('click',closeRunner);
   // Library toggle
-  var lt = document.querySelector('[data-libtogg]');
-  if (lt) lt.addEventListener('click', function() { state.lib = !state.lib; render(); });
-
+  var lb = document.getElementById('libToggle');
+  if(lb) lb.addEventListener('click',function(){state.lib=!state.lib;render();});
   // Log dots
-  document.querySelectorAll('[data-logdot]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+  document.querySelectorAll('[data-logdot]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
       e.stopPropagation();
-      var key = this.dataset.logdot;
-      var i = parseInt(this.dataset.doti);
-      state.log[key] = (state.log[key] || 0) === i + 1 ? i : i + 1;
-      render();
+      var key=this.dataset.logdot,i=parseInt(this.dataset.doti);
+      state.log[key]=(i+1===(state.log[key]||0)?i:i+1);
+      saveLog(state.log);render();
     });
   });
 }
 
-/* ═══ RUNNER TICK ═════════════════════════════════════════════ */
-function tickRunner() {
-  if (!state.run || state.run.paused) return;
-  var left = runnerLeft();
-  if (left <= 0) {
-    var next = state.run.idx + 1;
-    if (next >= state.run.seq.length) {
-      state.run = null;
-      render();
-      return;
-    }
-    state.run.idx = next;
-    state.run.startedAt = Date.now();
-    render();
-  } else {
-    renderRunner();
-  }
-  requestAnimationFrame(tickRunner);
+function pick(key){
+  state.sel=key;
+  state.view=REGIONS[key].view;
+  render();
 }
 
-// Re-render periodically to update cold gate countdown and window states
-setInterval(render, 60000);
-
-// Initial
+/* ═══ init ═══════════════════════════════════════════════════════ */
 render();
+// Refresh every 60s so cold gate updates live
+setInterval(render,60000);
 
 })();
 </script>

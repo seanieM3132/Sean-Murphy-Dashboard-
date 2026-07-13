@@ -321,7 +321,12 @@ var AM = function(bfast,supps){
     {t:"Creatine 5g" + (supps||", Vitamin D3, Omega-3"),d:"Take with food"}
   ]};
 };
-/* PM evening routine removed */
+var PM = { id:"pm", at:1290, mins:20, kind:"routine", title:"Evening routine", sub:"Sleep stack \u00b7 nose tape \u00b7 lights out 10pm", href:"/health.html", steps:[
+  {t:"Wind down from 8:30 \u2014 no intense screens",d:""},
+  {t:"Sleep stack at 9:30",d:"Mg Threonate 145mg + Apigenin 50mg + Theanine"},
+  {t:"Nose tape, side sleeping position",d:""},
+  {t:"LIGHTS OUT 10:00",d:""}
+]};
 var GOATA = { id:"goata", at:490, mins:10, kind:"train", title:"GOATA + toe curls", sub:"Groundwork 5 min \u00b7 elevated toe curls 3\u00d720s", href:"/train.html#mvmnt", steps:[
   {t:"Ground Hip Stretch 45s each side",d:"All fours, cross leg, IABH"},
   {t:"Child Rocker 60s \u00d7 3",d:"Toes together, heels out, head up"},
@@ -456,6 +461,7 @@ var DAYS = {
       { id:"dinner", at:1200, mins:30, kind:"fuel", title:"Dinner within 1 hour", sub:"3:1 carb-to-protein. NO sauna/ice tonight", href:"/fuel.html", steps:[
         {t:"Rice + protein + veg. 3:1 carb-to-protein",d:""},{t:"Rehydrate 125-150% of fluid lost",d:""},{t:"NO sauna or ice bath \u2014 just eat, hydrate, sleep",d:""}
       ]},
+      PM
     ]
   },
 
@@ -555,6 +561,7 @@ var DAYS = {
       ]},
       { id:"dinner", at:1140, mins:30, kind:"fuel", title:"Dinner", sub:"3:1 carb-to-protein", href:"/fuel.html", steps:[{t:"Starchy carbs + protein + veg",d:""},{t:"Rehydrate",d:""}] },
       { id:"sauna", at:1200, mins:15, kind:"recover", title:"Sauna 15 min", sub:"Recovery", href:"/train.html#recovery", steps:[{t:"Sauna 15 min for recovery",d:""}] },
+      PM
     ]
   }
 };
