@@ -32,6 +32,10 @@ button{font-family:inherit;cursor:pointer;}
 .mono{font:500 8px var(--mono);letter-spacing:.22em;color:var(--dim);}
 .mono.is-teal{color:var(--teal);}
 
+/* BACK LINK */
+.g-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.g-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
+
 /* GAME WEEK TOGGLE */
 .s-gw{max-width:var(--w);margin:0 auto 10px;display:flex;gap:6px;align-items:center;}
 .s-gw span{font:500 8px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
@@ -180,6 +184,8 @@ button{font-family:inherit;cursor:pointer;}
 </style>
 </head>
 <body class="is-prime">
+
+<div style="max-width:var(--w);margin:0 auto 10px;"><a href="/" class="g-back">&#8592; Home</a></div>
 
 <div id="app"></div>
 

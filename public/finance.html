@@ -25,8 +25,8 @@ body {
 
 /* ── Header ── */
 .f-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;max-width:1240px;margin:0 auto 26px;}
-.f-back{font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.f-back:hover{color:var(--green);}
+.f-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.f-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
 .f-title{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(30px,3.6vw,44px);font-weight:400;font-style:italic;margin:14px 0 10px;}
 .f-title em{color:var(--green);}
 .f-hero{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}

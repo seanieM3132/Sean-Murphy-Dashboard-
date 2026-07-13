@@ -1,0 +1,44 @@
+{
+  "notebooks": [
+    {
+      "id": "24f0e262-ee6b-4156-96bc-292af6e7410c",
+      "title": "Elite Soccer Performance and Ancient Movement Mechanics",
+      "source_count": 45,
+      "domains": ["soccer-skills", "athletic-performance", "movement", "nutrition", "sleep-recovery", "mindset"]
+    },
+    {
+      "id": "0db9c78a-077b-473c-9098-2f65dc33d3c9",
+      "title": "Inner Dialogue: David Goggins on the Science of Willpower",
+      "source_count": 22,
+      "domains": ["training-protocols", "mindset", "sleep-recovery", "movement"]
+    }
+  ],
+  "brain_files": [
+    "soccer-skills.md",
+    "athletic-performance.md",
+    "movement.md",
+    "nutrition.md",
+    "sleep-recovery.md",
+    "mindset.md",
+    "training-protocols.md"
+  ],
+  "total_sources": 67,
+  "experts": [
+    "Matt Stigler (soccer athletic performance)",
+    "Andrew Huberman (neuroscience, sleep, dopamine, habits)",
+    "Andy Galpin (nutrition, supplementation)",
+    "Robert Lustig (sugar, processed food)",
+    "Wendy Suzuki (attention, memory)",
+    "GOATA / Coach Gil / Jose Boesch (natural movement)",
+    "Hyperarch / Coach Ben (fascia training)",
+    "Coerver Coaching (ball mastery)",
+    "Berbatov (technical skills)",
+    "Joner Football (ball mastery)",
+    "Thomas Gronnemark (throw-ins)",
+    "Ollie Watkins (premier league routine)",
+    "Frimpong (fullback training)",
+    "David Goggins (willpower, mental toughness)"
+  ],
+  "nlm_query_command": "nlm notebook query <notebook-id> \"your question\" --json",
+  "last_updated": "2026-07-09"
+}

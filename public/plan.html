@@ -31,8 +31,8 @@ body::before{
 /* Header */
 .header{max-width:1400px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .header-left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
-.back-link{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.back-link:hover{color:var(--green);}
+.back-link{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.back-link:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
 .title{font-family:var(--serif);font-style:italic;font-size:32px;color:var(--ink);}
 .week-dates{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.04em;}
 .header-right{display:flex;align-items:center;gap:16px;}

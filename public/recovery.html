@@ -24,8 +24,8 @@ body{
 
 /* HEADER */
 .top{max-width:var(--w);margin:0 auto 28px;}
-.back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.back:hover{color:var(--green);}
+.back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
 .title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;font-style:italic;margin:14px 0 6px;}
 .title em{color:var(--green);}
 .subtitle{font:400 13px/1.6 'Inter',sans-serif;color:var(--dim);max-width:60ch;}
