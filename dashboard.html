@@ -880,15 +880,18 @@ function render() {
   if (dayAppts.length) {
     dayAppts.forEach(function(a, i) {
       var hh = Math.floor(a.at / 60); var mm = a.at % 60;
-      var timeStr = String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
-      h += '<article class="d-appt"><p class="d-awhen">' + timeStr + ' \u00b7 ' + a.mins + ' MIN</p>';
+      var endAt = a.at + (a.mins || 60);
+      var eh = Math.floor(endAt / 60); var em = endAt % 60;
+      var startStr = String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0');
+      var endStr = String(eh).padStart(2,'0') + ':' + String(em).padStart(2,'0');
+      h += '<article class="d-appt"><p class="d-awhen">' + startStr + ' \u2013 ' + endStr + ' \u00b7 ' + a.mins + ' min</p>';
       h += '<h3 style="font-family:var(--serif);font-weight:400;font-size:20px;margin:9px 0 6px">' + esc(a.title) + '</h3>';
       if (a.sub) h += '<p class="d-asub">' + esc(a.sub) + '</p>';
       h += '<button class="d-todo-del" data-delappt="' + a.id + '" aria-label="Delete">\u00D7</button>';
       h += '</article>';
     });
   } else {
-    h += '<p style="font:400 11px Inter,sans-serif;color:var(--dimmer);margin-top:8px">No appointments</p>';
+    h += '<p style="font:400 11px Inter,sans-serif;color:var(--dimmer);margin-top:8px">None</p>';
   }
   h += '<div class="d-todo-add" style="margin-top:12px"><input id="apptTitle" type="text" placeholder="Name\u2026" class="d-todo-in" style="flex:2" />';
   h += '<input id="apptTime" type="text" placeholder="12:45" class="d-todo-in" style="flex:0 0 64px;text-align:center" maxlength="5" />';
