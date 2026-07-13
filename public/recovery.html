@@ -141,29 +141,11 @@ button,a{font-family:inherit;}
   border-left:2px solid rgba(232,135,58,.4);max-width:74ch;}
 .r-insight b{color:var(--ink);font-weight:400;}
 
-/* library */
-.r-lib{padding-bottom:20px;}
-.r-libh{display:flex;justify-content:space-between;align-items:flex-end;width:100%;background:none;border:0;
-  cursor:pointer;text-align:left;padding:0;color:inherit;}
-.r-chev{font:400 20px var(--mono);color:var(--dim);}
-.r-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:24px;}
-.r-tool{display:flex;flex-direction:column;gap:10px;padding:18px 20px 16px;border-radius:14px;
-  border:1px solid var(--line);border-top:2px solid var(--tc,var(--green));background:rgba(255,255,255,.014);}
-.r-tool.is-blocked{opacity:.6;}
-.r-tool header{display:flex;align-items:center;justify-content:space-between;}
-.r-tag{font:500 8px var(--mono);letter-spacing:.2em;color:var(--tc,var(--green));}
-.r-dots{display:flex;gap:4px;}
-.r-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--dimmer);background:none;cursor:pointer;padding:0;}
-.r-dot.is-done{background:var(--tc,var(--green));border-color:var(--tc,var(--green));}
-.r-tool h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:21px;}
-.r-spec{font:400 10px var(--mono);color:var(--tc,var(--green));letter-spacing:.04em;opacity:.85;}
-.r-why{font:400 11px/1.7 'Inter',sans-serif;color:var(--dim);}
-.r-care{font:400 10px/1.7 var(--mono);color:var(--dimmer);padding-left:11px;border-left:1px solid rgba(255,255,255,.07);}
-.r-care.is-blocked{color:var(--amber);border-color:rgba(232,135,58,.4);}
-.r-start{margin-top:4px;background:none;border:1px solid color-mix(in srgb,var(--tc,var(--green)) 30%,transparent);
-  color:var(--tc,var(--green));border-radius:9px;padding:11px;cursor:pointer;font:500 9px var(--mono);letter-spacing:.16em;}
-.r-start:hover:not(:disabled){background:color-mix(in srgb,var(--tc,var(--green)) 10%,transparent);}
-.r-start:disabled{color:var(--amber);border-color:rgba(232,135,58,.3);cursor:not-allowed;}
+
+.r-brain{display:flex;gap:14px;align-items:baseline;max-width:var(--w);margin:0 auto 18px;padding:12px 18px;
+  border-radius:10px;background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.08);}
+.r-btag{font:500 8px var(--mono);letter-spacing:.2em;color:var(--green);white-space:nowrap;}
+.r-btip{font:400 11px/1.6 'Inter',sans-serif;color:var(--dim);}
 
 .r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
@@ -182,7 +164,6 @@ button,a{font-family:inherit;}
   .r-wt{width:auto;flex:1;display:flex;gap:12px;align-items:baseline;}
   .r-wlab{margin-top:0;}
   .r-wc{flex-basis:100%;padding-left:27px;}
-  .r-tools{grid-template-columns:1fr;}
   .r-scale{flex-wrap:wrap;}.r-scale button{flex:1 1 44%;}
   .r-cell{width:14px;}
   .r-foot{flex-direction:column;gap:8px;}
@@ -229,6 +210,17 @@ var TOOLS = {
   walk:     {n:'Walk & rehydrate',tag:'IMMEDIATE',c:'#5F786E',weekly:7,spec:'5-10 min . nasal breathing . 500ml + electrolytes',rounds:[{p:'WALK',s:420}],sets:1,why:'The only thing worth doing in the first fifteen minutes.',care:'Nothing to get wrong here. Do it anyway.'}
 };
 
+/* ═══ brain knowledge ═══════════════════════════════════════════ */
+var BRAIN = [
+  {tag:'THREE Rs',tip:'After every session: Rebuild (protein within 4h), Rehydrate (125-150% fluid lost), Replenish (carbs at 3:1 ratio).'},
+  {tag:'COLD SCIENCE',tip:'Brief cold exposure doubles baseline dopamine for 4-6 hours. Best in the morning stacked with natural cortisol peak.'},
+  {tag:'HEAT ADAPTATION',tip:'Sauna 2-3x/week cuts cardiovascular mortality 27%. Once-per-week 4x30min at 80\u00b0C triggers a 16x growth hormone spike.'},
+  {tag:'SLEEP GATE',tip:'Core temp must drop 1-3\u00b0C to fall and stay asleep. Sauna 1-2h before bed triggers compensatory cooling. Side-sleep for glymphatic clearance.'},
+  {tag:'INFLAMMATION',tip:'Recovery is three phases: Inflammation \u2192 Proliferation \u2192 Remodeling. Cold too early kills the inflammatory signal your body needs to adapt.'},
+  {tag:'LYMPH DRAIN',tip:'Swimming or treading water 15-20min clears "heavy legs" better than sitting in a tub. The water shears the skin and moves lymph.'},
+  {tag:'DELOAD RULE',tip:'Every 8 weeks: one week at 50% volume, same intensity, same frequency. That\u2019s when adaptations actually land.'}
+];
+
 /* ═══ regions ════════════════════════════════════════════════════ */
 var REGIONS = {
   traps:   {view:'back', n:'Traps & T-spine', c:[[60,56,11]],              tools:['ball','roll','gun']},
@@ -257,7 +249,7 @@ function loadLog(){ try{return JSON.parse(localStorage.getItem(LOG_KEY))||{};}ca
 function saveLog(l){ localStorage.setItem(LOG_KEY,JSON.stringify(l)); }
 function loadHistory(){
   try{var h=JSON.parse(localStorage.getItem(HIST_KEY));if(h)return h;}catch(e){}
-  return {adduct:[1,2,2,3,2,2,2],lowback:[0,1,2,1,2,1,2],calves:[0,0,1,1,0,1,1],hams:[1,1,0,0,1,0,0],glutes:[0,1,1,0,0,0,0],quads:[0,0,0,1,0,0,0]};
+  return {};
 }
 
 var state = {
@@ -265,12 +257,10 @@ var state = {
   sore: loadSore(),
   sel: 'adduct',
   run: null,
-  lib: false,
   log: loadLog()
 };
 
-// Default soreness if empty
-if(!Object.keys(state.sore).length) state.sore = {adduct:2,lowback:2,calves:1};
+// No defaults — start clean, log your own soreness
 
 var HISTORY = loadHistory();
 
@@ -278,13 +268,13 @@ var HISTORY = loadHistory();
 function buildWindow(s, now){
   var strength = s.type === 'strength';
   var coldAt = s.end + COLD_GATE;
-  if(!s.end) return [{at:0,label:'Rest day',tools:['roll','gun','ball','press'],note:'No session logged. Soft tissue if you want it.'}];
+  if(!s.end) return [{at:0,label:'Rest day',tools:['roll','gun','ball','press'],note:'No session logged. Soft tissue if you want it. Walk 7,000+ steps for lymphatic drainage.'}];
   return [
-    {at:s.end,label:'Straight after',tools:['walk'],note:'Nothing else. Move, drink, eat.'},
-    {at:s.end+30,label:'+30 minutes',tools:['gun','roll'],note:'Light. You\'re helping the tissue, not training it.'},
-    {at:coldAt,label:strength?'+4 hours':'Any time',tools:['ice','contrast'],lock:strength&&now<coldAt,note:strength?'Cold before this costs you the session you just did.':'No strength work today \u2014 cold is free.'},
-    {at:19*60+30,label:'Evening',tools:['ball','press'],note:'Sore spots only. Ten minutes, not forty.'},
-    {at:BED-90,label:'\u226590 min before bed',tools:['sauna'],lock:MATCH_IN===1,note:MATCH_IN===1?'Match tomorrow. Skip the heat, sleep instead.':'Core temp needs time to fall.'}
+    {at:s.end,label:'Straight after',tools:['walk'],note:'The Three Rs: Rebuild (protein), Rehydrate (125-150% fluid lost), Replenish (carbs 3:1 ratio). Walk and drink.'},
+    {at:s.end+30,label:'+30 minutes',tools:['gun','roll'],note:'Light. Inflammation phase is active \u2014 you need it. Help the tissue, don\u2019t train it.'},
+    {at:coldAt,label:strength?'+4 hours':'Any time',tools:['ice','contrast'],lock:strength&&now<coldAt,note:strength?'Cold kills the inflammatory signal your muscles need to adapt. Heat or soft tissue instead.':'No strength work today \u2014 cold is free. 10-15\u00b0C for 10-15 min.'},
+    {at:19*60+30,label:'Evening',tools:['ball','press'],note:'Sore spots only. Ten minutes, not forty. Diaphragmatic breathing moves lymph.'},
+    {at:BED-90,label:'\u226590 min before bed',tools:['sauna'],lock:MATCH_IN===1,note:MATCH_IN===1?'Match tomorrow. Skip the heat, sleep instead.':'Triggers compensatory cooling \u2014 core temp must drop 1-3\u00b0C to sleep. Side-sleep for glymphatic clearance.'}
   ];
 }
 
@@ -396,6 +386,10 @@ function render(){
   h += '<div class="r-cname">KHABIB <em>\u00b7 recovery is not a workout</em></div>';
   h += '<p class="r-clead is-'+k.tone+'">'+esc(k.line)+'</p></div></section>';
 
+  // Brain tip (rotates daily)
+  var tip = BRAIN[getMelb().getDay()];
+  h += '<div class="r-brain"><span class="r-btag">'+tip.tag+'</span><span class="r-btip">'+esc(tip.tip)+'</span></div>';
+
   // 01 Window
   h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\'S WINDOW</p><h2>When, <em>not what</em></h2></div>';
   if(SESSION.end && SESSION.type==='strength' && NOW<coldAt){
@@ -481,6 +475,9 @@ function render(){
   });
   h += '</tbody></table>';
 
+  if(!report.length){
+    h += '<p style="font:400 12px \'Inter\',sans-serif;color:var(--dim);text-align:center;padding:20px 0;">Log soreness on the body map to start tracking patterns.</p>';
+  }
   if(report.length){
     var chief = report[0];
     if(chief.flagged>=4){
@@ -489,31 +486,6 @@ function render(){
   }
   h += '</section>';
 
-  // 04 Library
-  h += '<section class="r-block r-lib"><button class="r-libh" id="libToggle">';
-  h += '<div><p class="r-eyebrow">04 \u00b7 ALL PROTOCOLS</p><h2>The <em>library</em></h2></div>';
-  h += '<span class="r-chev">'+(state.lib?'\u2212':'+')+'</span></button>';
-  if(state.lib){
-    h += '<div class="r-tools">';
-    Object.keys(TOOLS).forEach(function(key){
-      var t = TOOLS[key];
-      var off = isLocked(key,NOW);
-      h += '<article class="r-tool'+(off?' is-blocked':'')+'" style="--tc:'+t.c+'">';
-      h += '<header><span class="r-tag">'+t.tag+'</span><span class="r-dots">';
-      for(var i=0;i<t.weekly;i++){
-        h += '<button class="r-dot'+(i<(state.log[key]||0)?' is-done':'')+'" data-logdot="'+key+'" data-doti="'+i+'"></button>';
-      }
-      h += '</span></header>';
-      h += '<h3>'+t.n+'</h3>';
-      h += '<p class="r-spec">'+esc(t.spec)+'</p>';
-      h += '<p class="r-why">'+esc(t.why)+'</p>';
-      h += '<p class="r-care'+(off?' is-blocked':'')+'">'+(off?'Locked until '+hhmm(coldAt)+'. ':'')+esc(t.care)+'</p>';
-      h += '<button class="r-start" data-run="'+key+'"'+(off?' disabled':'')+'>'+(off?'Blocked':'Run protocol')+'</button>';
-      h += '</article>';
-    });
-    h += '</div>';
-  }
-  h += '</section>';
 
   // Footer
   h += '<footer class="r-foot"><span>NO COLD WITHIN 4H OF STRENGTH WORK</span><span>SORENESS FEEDS EVERY OTHER PAGE</span></footer>';
@@ -553,18 +525,6 @@ function bindEvents(){
   if(tb) tb.addEventListener('click',toggleRunner);
   var cb = document.getElementById('closeRunner');
   if(cb) cb.addEventListener('click',closeRunner);
-  // Library toggle
-  var lb = document.getElementById('libToggle');
-  if(lb) lb.addEventListener('click',function(){state.lib=!state.lib;render();});
-  // Log dots
-  document.querySelectorAll('[data-logdot]').forEach(function(btn){
-    btn.addEventListener('click',function(e){
-      e.stopPropagation();
-      var key=this.dataset.logdot,i=parseInt(this.dataset.doti);
-      state.log[key]=(i+1===(state.log[key]||0)?i:i+1);
-      saveLog(state.log);render();
-    });
-  });
 }
 
 function pick(key){

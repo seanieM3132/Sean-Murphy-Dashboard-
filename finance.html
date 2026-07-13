@@ -25,8 +25,8 @@ body {
 
 /* ── Header ── */
 .f-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;max-width:1240px;margin:0 auto 26px;}
-.f-back{font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--dim);text-decoration:none;}
-.f-back:hover{color:var(--green);}
+.f-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
+.f-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
 .f-title{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(30px,3.6vw,44px);font-weight:400;font-style:italic;margin:14px 0 10px;}
 .f-title em{color:var(--green);}
 .f-hero{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
@@ -301,9 +301,21 @@ body {
   function renderCurveSVG() {
     var history = data.history;
     var W = 900, H = 240, PAD = 10, BASE = H - 26;
-    var top = fin.hi * 1.08, bot = fin.lo * 0.86;
-    function x(i) { return PAD + (i / (history.length - 1)) * (W - PAD * 2); }
-    function y(v) { return BASE - ((v - bot) / (top - bot)) * (BASE - PAD); }
+
+    // Empty state: <= 1 data point or all values are 0
+    if (history.length <= 1 && fin.hi === 0) {
+      return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="f-svg" id="curve-svg">' +
+        '<line x1="' + PAD + '" x2="' + (W - PAD) + '" y1="' + (BASE / 2) + '" y2="' + (BASE / 2) + '" stroke="rgba(255,255,255,.05)" stroke-width="1"/>' +
+        '<text x="' + (W / 2) + '" y="' + (BASE / 2 + 4) + '" text-anchor="middle" style="font:400 12px Inter,sans-serif;fill:var(--dim)">Add your first snapshot</text>' +
+        '</svg>' +
+        '<div class="f-read" id="curve-read">No snapshots yet</div>';
+    }
+
+    var top = fin.hi * 1.08 || 1, bot = fin.lo * 0.86;
+    var xRange = history.length > 1 ? history.length - 1 : 1;
+    var yRange = (top - bot) || 1;
+    function x(i) { return PAD + (i / xRange) * (W - PAD * 2); }
+    function y(v) { return BASE - ((v - bot) / yRange) * (BASE - PAD); }
 
     var line = history.map(function(h, i) { return (i ? 'L' : 'M') + x(i) + ',' + y(h.value); }).join('');
     var hiI = 0;
@@ -323,17 +335,29 @@ body {
       '<circle id="c-dot" r="4" class="f-dot" style="display:none"/>' +
       '<rect x="' + PAD + '" y="' + PAD + '" width="' + (W - PAD * 2) + '" height="' + (BASE - PAD) + '" fill="transparent" id="curve-hover" style="cursor:crosshair"/>' +
       '</svg>' +
-      '<div class="f-read" id="curve-read">18 monthly snapshots &middot; hover to scrub</div>';
+      '<div class="f-read" id="curve-read">' + history.length + ' monthly snapshot' + (history.length !== 1 ? 's' : '') + ' &middot; hover to scrub</div>';
     return svg;
   }
 
   /* ── 2. Donut ── */
   function renderDonut() {
     var R = 62, T = 16, C = 2 * Math.PI * R;
+
+    // Empty state: no allocations
+    if (fin.alloc.length === 0) {
+      return '<div class="f-donut">' +
+        '<svg viewBox="0 0 160 160" id="donut-svg">' +
+        '<circle cx="80" cy="80" r="' + R + '" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="' + T + '"/>' +
+        '<text x="80" y="76" class="f-dv" text-anchor="middle" id="donut-val">' + aud(0) + '</text>' +
+        '<text x="80" y="93" class="f-dl" text-anchor="middle" id="donut-label">NET WORTH</text>' +
+        '</svg>' +
+        '<p style="font:400 12px Inter,sans-serif;color:var(--dim);text-align:center">No accounts yet</p></div>';
+    }
+
     var arcs = '';
     var acc = 0;
     fin.alloc.forEach(function(a, i) {
-      var frac = a.value / fin.net;
+      var frac = fin.net ? a.value / fin.net : 0;
       var dash = (C * frac - 2) + ' ' + C;
       var off = -C * acc;
       acc += frac;
@@ -352,8 +376,9 @@ body {
       '<ul class="f-keys">';
 
     fin.alloc.forEach(function(a) {
+      var pct = fin.net ? Math.round((a.value / fin.net) * 100) : 0;
       html += '<li><i style="background:' + a.color + '"></i><span>' + a.label + '</span>' +
-        '<em>' + Math.round((a.value / fin.net) * 100) + '%</em>' +
+        '<em>' + pct + '%</em>' +
         '<b>' + aud(a.value) + '</b></li>';
     });
     html += '</ul></div>';
@@ -362,13 +387,17 @@ body {
 
   /* ── 3. Accounts ── */
   function renderAccounts() {
+    if (data.accounts.length === 0) {
+      return '<p style="font:400 12px Inter,sans-serif;color:var(--dim)">No accounts yet</p>';
+    }
     var sorted = data.accounts.slice().sort(function(a, b) { return b.value - a.value; });
-    var max = Math.max.apply(null, sorted.map(function(a) { return a.value; }));
+    var max = Math.max.apply(null, sorted.map(function(a) { return a.value; })) || 1;
     var html = '<ul class="f-accts">';
     sorted.forEach(function(a) {
+      var pct = fin.net ? ((a.value / fin.net) * 100).toFixed(1) : '0.0';
       html += '<li><span class="f-an">' + a.name + '</span>' +
         '<div class="f-abar"><div style="width:' + ((a.value / max) * 100) + '%;background:' + CLASSES[a.cls].color + '"></div></div>' +
-        '<span class="f-ap">' + ((a.value / fin.net) * 100).toFixed(1) + '%</span>' +
+        '<span class="f-ap">' + pct + '%</span>' +
         '<b>' + aud(a.value) + '</b></li>';
     });
     html += '</ul>';
@@ -388,12 +417,18 @@ body {
       };
     });
 
+    var burnPct = fin.net ? ((fin.annual / fin.net) * 100).toFixed(1) + '%' : '0.0%';
     var html = '<div class="f-legend">' +
       stat(aud(fin.monthly, 2), '/mo', 'Monthly burn', 'hot') +
       stat(aud(fin.annual), '', 'Annualised', '') +
-      stat(((fin.annual / fin.net) * 100).toFixed(1) + '%', '', 'Of net worth / yr', '') +
-      stat(Math.floor(fin.runway) + ' mo', '', 'Runway if income stops', 'good') +
+      stat(burnPct, '', 'Of net worth / yr', '') +
+      stat(fin.runway ? Math.floor(fin.runway) + ' mo' : '--', '', 'Runway if income stops', 'good') +
       '</div>';
+
+    if (data.subs.length === 0) {
+      html += '<p style="font:400 12px Inter,sans-serif;color:var(--dim)">No subscriptions tracked</p>';
+      return html;
+    }
 
     html += '<div class="f-catbar">';
     byCat.forEach(function(b) {
@@ -424,13 +459,19 @@ body {
 
   /* ── 5. Orders ── */
   function renderOrders() {
-    var maxEta = Math.max.apply(null, data.orders.map(function(o) { return o.eta; }).concat([30]));
-
+    var committedPct = fin.net ? ((fin.committed / fin.net) * 100).toFixed(1) + '%' : '0.0%';
     var html = '<div class="f-legend">' +
       stat(aud(fin.committed), '', 'Committed', 'hot') +
       stat(aud(fin.free), '', 'Free after delivery', '') +
-      stat(((fin.committed / fin.net) * 100).toFixed(1) + '%', '', 'Of net worth', '') +
+      stat(committedPct, '', 'Of net worth', '') +
       '</div>';
+
+    if (data.orders.length === 0) {
+      html += '<p style="font:400 12px Inter,sans-serif;color:var(--dim)">No orders tracked</p>';
+      return html;
+    }
+
+    var maxEta = Math.max.apply(null, data.orders.map(function(o) { return o.eta; }).concat([30]));
 
     html += '<div class="f-timeline"><div class="f-tl-axis">';
     [0, 7, 14, 21, 30].forEach(function(d) {
@@ -440,10 +481,11 @@ body {
 
     var sorted = data.orders.slice().sort(function(a, b) { return a.eta - b.eta; });
     sorted.forEach(function(o) {
+      var orderPct = fin.net ? ((o.cost / fin.net) * 100).toFixed(1) : '0.0';
       html += '<div class="f-tl-row"><span class="f-tl-name">' + o.item + '</span>' +
         '<div class="f-tl-track"><div class="f-tl-line" style="width:' + ((o.eta / maxEta) * 100) + '%"></div>' +
         '<span class="f-tl-dot" style="left:' + ((o.eta / maxEta) * 100) + '%"></span></div>' +
-        '<span class="f-tl-pct">' + ((o.cost / fin.net) * 100).toFixed(1) + '%</span>' +
+        '<span class="f-tl-pct">' + orderPct + '%</span>' +
         '<b>' + aud(o.cost) + '</b></div>';
     });
     html += '</div>';
@@ -454,7 +496,7 @@ body {
   /* ── 6. Wishlist ── */
   function renderWishlist() {
     var total = data.wishes.reduce(function(a, w) { return a + w.cost; }, 0);
-    var totalPct = (total / fin.net) * 100;
+    var totalPct = fin.net ? (total / fin.net) * 100 : 0;
 
     var html = '<div class="f-legend">' +
       stat(aud(total), '', 'Wishlist total', '') +
@@ -462,14 +504,19 @@ body {
       stat(aud(data.savingsRate), '/mo', 'Savings rate', 'good') +
       '</div>';
 
+    if (data.wishes.length === 0) {
+      html += '<p style="font:400 12px Inter,sans-serif;color:var(--dim)">Nothing on the wishlist</p>';
+      return html;
+    }
+
     var sorted = data.wishes.slice().sort(function(a, b) { return a.cost - b.cost; });
     html += '<ul class="f-wish">';
     sorted.forEach(function(w) {
-      var months = w.cost / data.savingsRate;
-      var pct = (w.cost / fin.net) * 100;
+      var months = data.savingsRate > 0 ? w.cost / data.savingsRate : Infinity;
+      var pct = fin.net ? (w.cost / fin.net) * 100 : 0;
       html += '<li><span class="f-wn">' + w.item + '</span>' +
         '<div class="f-wbar"><div style="width:' + Math.min(pct, 100) + '%" class="' + (pct > 20 ? 'is-hot' : '') + '"></div></div>' +
-        '<span class="f-wm">' + (months < 1 ? '<1 mo' : Math.ceil(months) + ' mo') + '</span>' +
+        '<span class="f-wm">' + (months === Infinity ? '--' : months < 1 ? '<1 mo' : Math.ceil(months) + ' mo') + '</span>' +
         '<span class="f-wp">' + pct.toFixed(1) + '%</span>' +
         '<b>' + aud(w.cost) + '</b></li>';
     });
@@ -515,9 +562,11 @@ body {
 
     var history = data.history;
     var W = 900, PAD = 10, BASE = 214;
-    var top = fin.hi * 1.08, bot = fin.lo * 0.86;
-    function x(i) { return PAD + (i / (history.length - 1)) * (W - PAD * 2); }
-    function y(v) { return BASE - ((v - bot) / (top - bot)) * (BASE - PAD); }
+    var top = fin.hi * 1.08 || 1, bot = fin.lo * 0.86;
+    var xRange = history.length > 1 ? history.length - 1 : 1;
+    var yRange = (top - bot) || 1;
+    function x(i) { return PAD + (i / xRange) * (W - PAD * 2); }
+    function y(v) { return BASE - ((v - bot) / yRange) * (BASE - PAD); }
 
     function show(evt) {
       var rect = svg.getBoundingClientRect();
