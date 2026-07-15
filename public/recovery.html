@@ -149,6 +149,38 @@ button,a{font-family:inherit;}
 .r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
 
+/* protocols */
+.r-proto{max-width:var(--w);margin:0 auto 20px;}
+.r-pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:16px;}
+.r-pc{border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .15s;background:rgba(16,36,27,.25);}
+.r-pc:hover{border-color:rgba(74,222,128,.2);background:rgba(16,36,27,.45);}
+.r-pc.is-on{border-color:color-mix(in srgb,var(--pc,var(--green)) 40%,transparent);border-left:3px solid var(--pc,var(--green));
+  background:linear-gradient(150deg,color-mix(in srgb,var(--pc,var(--green)) 5%,transparent),rgba(6,15,11,.5));}
+.r-pc-tag{font:500 7px var(--mono);letter-spacing:.22em;color:var(--pc,var(--green));}
+.r-pc-n{font-family:var(--serif);font-weight:400;font-size:18px;margin:6px 0 3px;}
+.r-pc-m{font:400 9px var(--mono);color:var(--dimmer);letter-spacing:.06em;}
+.r-pc-why{font:400 10px/1.5 'Inter',sans-serif;color:var(--dim);margin-top:8px;display:none;}
+.r-pc.is-on .r-pc-why{display:block;}
+.r-steps{margin-top:12px;display:none;}
+.r-pc.is-on .r-steps{display:block;}
+.r-step{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.04);}
+.r-step:first-child{border-top:0;}
+.r-step-i{width:20px;height:20px;border-radius:50%;border:1px solid var(--dimmer);display:grid;place-items:center;
+  font:400 8px var(--mono);color:var(--dimmer);flex:none;margin-top:2px;cursor:pointer;transition:all .12s;}
+.r-step-i:hover{border-color:var(--pc,var(--green));}
+.r-step.is-done .r-step-i{background:rgba(74,222,128,.15);border-color:var(--green);color:var(--green);}
+.r-step.is-done .r-step-n{opacity:.5;text-decoration:line-through;}
+.r-step-c{flex:1;min-width:0;}
+.r-step-n{font:400 11px 'Inter',sans-serif;color:var(--ink);}
+.r-step-cue{font:400 9px/1.5 'Inter',sans-serif;color:var(--dimmer);margin-top:3px;}
+.r-step-t{font:500 9px var(--mono);color:var(--pc,var(--green));flex:none;margin-top:3px;}
+
+/* routine card */
+.r-routine{margin-top:16px;padding:14px 16px;border:1px solid rgba(156,138,222,.2);border-radius:12px;
+  background:rgba(156,138,222,.03);}
+.r-routine-h{font:500 8px var(--mono);letter-spacing:.2em;color:#9C8ADE;margin-bottom:8px;}
+.r-routine-t{font:400 11px/1.7 'Inter',sans-serif;color:var(--dim);}
+
 @media(max-width:840px){
   .r-hero{grid-template-columns:1fr;gap:26px;}
   .r-figs{order:-1;}
@@ -208,32 +240,184 @@ var TOOLS = {
   roll:     {n:'Foam roll',tag:'MYOFASCIAL',c:'#4ADE80',weekly:5,spec:'60-90 s per area . slow . breathe out on tender spot',rounds:[{p:'ROLL',s:90}],sets:2,why:'Range without losing force. The effect fades in an hour.',care:'Slow. Speed is how people convince themselves they\'ve done something.'},
   ball:     {n:'Spikey ball',tag:'TARGETED',c:'#7DD3C0',weekly:4,spec:'90 s per point . sustained, not rolling',rounds:[{p:'SUSTAIN',s:90}],sets:2,why:'Reaches what a roller can\'t.',care:'Stay off the ITB, the spine itself, and the back of the knee.'},
   press:    {n:'Pressure points',tag:'ISCHAEMIC',c:'#D8B24A',weekly:3,spec:'30-45 s sustained . 6/10 discomfort . breathe',rounds:[{p:'HOLD',s:40}],sets:3,why:'Hold a tender point until it softens.',care:'6 out of 10, not 9. Pain you hold your breath through teaches you to brace.'},
-  walk:     {n:'Walk & rehydrate',tag:'IMMEDIATE',c:'#5F786E',weekly:7,spec:'5-10 min . nasal breathing . 500ml + electrolytes',rounds:[{p:'WALK',s:420}],sets:1,why:'The only thing worth doing in the first fifteen minutes.',care:'Nothing to get wrong here. Do it anyway.'}
+  walk:     {n:'Walk & rehydrate',tag:'IMMEDIATE',c:'#5F786E',weekly:7,spec:'5-10 min . nasal breathing . 500ml + electrolytes',rounds:[{p:'WALK',s:420}],sets:1,why:'The only thing worth doing in the first fifteen minutes.',care:'Nothing to get wrong here. Do it anyway.'},
+  lymph:    {n:'Lymph drain',tag:'DRAINAGE',c:'#7DD3C0',weekly:7,spec:'5 min belly breathing + 15 min nasal walk',rounds:[{p:'BREATHE',s:300},{p:'WALK',s:900}],sets:1,why:'Lymph has no pump. Breathing creates pressure differential. Walking generates the contractions.',care:'Belly extends on inhale. Nasal breathing only. 7000+ steps/day target.'},
+  fascia:   {n:'Fascia work',tag:'REMODEL',c:'#9C8ADE',weekly:3,spec:'Toe curls + marble swing + gait cycles . 18 min',rounds:[{p:'TOE CURLS',s:60},{p:'MARBLE R',s:30},{p:'REST',s:15},{p:'MARBLE L',s:30},{p:'REST',s:15},{p:'GAIT',s:180},{p:'TILTS',s:180}],sets:1,why:'Fascia remodels over 12 weeks. Starts at the feet, connects to glutes.',care:'3x/week. Toe curls daily. 12-week commitment minimum.'},
+  breath:   {n:'Physio sigh',tag:'PARASYMPATHETIC',c:'#D8B24A',weekly:7,spec:'Double inhale nose + long exhale mouth . 3 rounds',rounds:[{p:'SIGH',s:15}],sets:3,why:'Fastest real-time calm-down. Doubles as stress inoculation.',care:'1-3 reps per round. Use before sleep, during stress, between sets.'},
+  coldshower:{n:'Cold shower',tag:'COLD LITE',c:'#7DD3C0',weekly:5,spec:'Last 30-60s of shower on cold . to shoulders',rounds:[{p:'COLD',s:45}],sets:1,why:'Quick dopamine hit when ice bath isn\'t available. Not as potent but builds tolerance.',care:'Gradual. Start warm, finish cold. Breathe through it.'}
+};
+
+/* ═══ guided protocols ═════════════════════════════════════════ */
+var PROTOCOLS = {
+  morning:{
+    n:'Morning Protocol',tag:'EVERY DAY',c:'#D8B24A',mins:18,
+    why:'Sunlight anchors circadian rhythm (sets melatonin timer 16h later). Optic flow calms amygdala. Hydration replaces overnight losses. GOATA recodes movement.',
+    steps:[
+      {n:'Sunlight walk — optic flow, panoramic gaze',mins:10,cue:'Outside, no sunglasses. Forward walking. 10 min minimum, longer on cloudy days. Triggers 50% cortisol pulse increase.'},
+      {n:'Hydrate: 500ml water + electrolytes + pinch salt',mins:1,cue:'First drink of the day. Before coffee. Galpin protocol.'},
+      {n:'GOATA: Ground hip stretch',mins:2,cue:'45-60s each side. All fours, cross leg, keep Inside Ankle Bone High, head up.'},
+      {n:'GOATA: Child rocker',mins:2,cue:'3 x 60s. Toes together, heels out. As butt descends, ankle bone climbs higher.'},
+      {n:'GOATA: Toe tuck rocker',mins:2,cue:'3 x 60s. Same pattern but toes tucked under. Heels open during the rock.'},
+      {n:'Elevated toe curls',mins:1,cue:'3 x 20s, 10s rest. Over step edge. Plantar fascia strengthening. Daily.'}
+    ]
+  },
+  postTraining:{
+    n:'Post-Training Recovery',tag:'AFTER GYM / TEAM',c:'#4ADE80',mins:25,
+    why:'The Three Rs: Rebuild (protein), Rehydrate (125-150% fluid lost), Replenish (carbs 3:1 ratio). Inflammation is active — help it, don\'t fight it.',
+    steps:[
+      {n:'Walk + nasal breathe (cool-down)',mins:5,cue:'Light walk. Bring heart rate down gradually. Nasal breathing only. No sudden stops.'},
+      {n:'Static stretch: quads, hams, hip flexors, groin, calves',mins:5,cue:'30s each side, each muscle. Don\'t force. Breathe into each stretch.'},
+      {n:'Hydrate: 125-150% of fluid lost + electrolytes',mins:2,cue:'Weigh before/after if possible. Replace 125-150% of weight lost.'},
+      {n:'Protein: 30-40g shake or meal',mins:2,cue:'Within 1 hour of session end. Whey or plant-based. Add creatine 5g if not taken at breakfast.'},
+      {n:'Foam roll: focus on worked areas',mins:6,cue:'Slow, 60-90s per area. Breathe out on tender spots. Range without losing force.'},
+      {n:'Diaphragmatic breathing: belly breathe',mins:5,cue:'Belly extends on inhale. Creates pressure differential at cisterna chyli to move lymph back to blood.'}
+    ]
+  },
+  postMatch:{
+    n:'Post-Match Recovery',tag:'AFTER GAME',c:'#E8873A',mins:55,
+    why:'Match = highest stress event. Cold is ALLOWED post-match (not strength). Priority: cool-down, cold, eat, hydrate, sleep.',
+    steps:[
+      {n:'Light jog cool-down',mins:5,cue:'Gradually lower heart rate. Don\'t stop suddenly after 90 min of effort.'},
+      {n:'Static stretch: glutes, hams, quads, groin, calves',mins:5,cue:'30s each side, all major groups. Breathe deeply.'},
+      {n:'Protein shake + banana — immediately',mins:2,cue:'Start the Three Rs. Don\'t wait.'},
+      {n:'Cold plunge: 10-15\u00b0C, 10-15 min',mins:15,cue:'Post-match = green light for cold. Move limbs to break thermal layer. Stronger effect.'},
+      {n:'Meal: 3:1 carb-to-protein ratio',mins:10,cue:'Within 1 hour. Pasta/rice + chicken + veg. Glycogen replenishment.'},
+      {n:'Hydrate: 125-150% fluid lost',mins:3,cue:'Keep drinking through evening. Electrolytes in every bottle.'},
+      {n:'Diaphragmatic breathing + physiological sighs',mins:5,cue:'Parasympathetic activation. Double inhale (nose) + long exhale (mouth) x 3.'},
+      {n:'Rapid cool palms/feet/face if still hot',mins:3,cue:'Palms, soles of feet, upper face = glabrous skin = heat-release portals.'},
+      {n:'Prep for sleep: nose tape, side position',mins:2,cue:'Side-sleep for glymphatic clearance (brain waste removal). Nose breathing = better O2 exchange.'}
+    ]
+  },
+  evening:{
+    n:'Evening Wind-Down',tag:'EVERY NIGHT',c:'#9C8ADE',mins:55,
+    why:'Core temp must drop 1-3\u00b0C to sleep. Sauna triggers compensatory cooling 1-2h later. Bright light after 10pm suppresses dopamine 50% for days.',
+    steps:[
+      {n:'Dim lights \u2014 warm tones only (8pm)',mins:1,cue:'No overhead lights. Blue/white light after 10pm suppresses dopamine by 50% for days. Use lamps.'},
+      {n:'Wind down: read, visualize, calm game film',mins:15,cue:'No intense screen content. Reduce cortisol/adrenaline before sleep.'},
+      {n:'Sauna: 15-20 min at 80-100\u00b0C',mins:20,cue:'1-2 hours before bed. Triggers compensatory cooling response for deep sleep.'},
+      {n:'Massage ball: sore spots only (10 min)',mins:10,cue:'Spikey ball on worst areas. 90s sustained per point. 6/10 discomfort, not 9.'},
+      {n:'Sleep stack: Mg Threonate 145mg + Apigenin 50mg + Theanine',mins:1,cue:'30-60 min before bed. Optional: Myo-inositol 900mg if you wake mid-night.'},
+      {n:'Nose tape + side position + cool room',mins:1,cue:'Side-sleep = glymphatic clearance. Feet out of blanket if warm (heat-release portals).'},
+      {n:'NSDR if not asleep in 20 min',mins:10,cue:'Non-Sleep Deep Rest protocol. YouTube "Huberman NSDR". Don\'t lie there stressing.'}
+    ]
+  },
+  activeRecovery:{
+    n:'Active Recovery Day',tag:'SUNDAY / REST',c:'#7DD3C0',mins:55,
+    why:'Lymph has no pump. Low-level contractions \u2014 walking, swimming, rebounding \u2014 move it. Recovery IS training.',
+    steps:[
+      {n:'Morning protocol (sunlight + hydrate + GOATA)',mins:18,cue:'Same as every day. Don\'t skip because it\'s rest day.'},
+      {n:'Sauna: 15-20 min at 80-100\u00b0C',mins:20,cue:'Pair with cold plunge. Heat adaptation + cardiovascular health.'},
+      {n:'Cold plunge: 2-3 min at 10-15\u00b0C',mins:3,cue:'Post-sauna. Doubles baseline dopamine for 4-6 hours. Move limbs.'},
+      {n:'Light walk: 20+ min, nasal breathing',mins:20,cue:'7000+ steps target for the day. Optic flow. Panoramic gaze. Calm the system.'},
+      {n:'Diaphragmatic breathing: 5 min',mins:5,cue:'Belly extends on inhale. Clears cisterna chyli. Reduces swelling and heavy legs.'},
+      {n:'Swimming/treading water (if available)',mins:15,cue:'Water shears skin and moves lymph. Better than sitting in a tub. 15-20 min.'}
+    ]
+  },
+  fasciaFull:{
+    n:'Full Fascia Session',tag:'3X / WEEK',c:'#9C8ADE',mins:20,
+    why:'Fascia remodels over 12 weeks. Foot-to-glute connection starts at the feet. Elevated toe curls daily, full session 3x/week.',
+    steps:[
+      {n:'Elevated toe curls',mins:2,cue:'3 x 20s, 10s rest. Over step edge. Curl toes. Strengthen plantar fascia.'},
+      {n:'HFT marble swing \u2014 right foot',mins:2,cue:'3 x 30s, 15s rest. Hyperarch fascia training. Builds elastic recoil in foot arch.'},
+      {n:'HFT marble swing \u2014 left foot',mins:2,cue:'3 x 30s, 15s rest. Mirror right foot.'},
+      {n:'Gait cycle drills',mins:5,cue:'Walking focus: heel-away, IABH, back chain loading. Feel the spiral pattern.'},
+      {n:'Lateral pelvic tilts: side-lying',mins:2,cue:'30s each side. First position. Improves fluid movement and sensation.'},
+      {n:'Lateral pelvic tilts: half-kneeling',mins:2,cue:'30s each side. Progress from side-lying.'},
+      {n:'Lateral pelvic tilts: split squat',mins:2,cue:'30s each side. Final position. Pre-session activation.'},
+      {n:'Fascial face/neck massage',mins:2,cue:'Light pressure on neck + clavicle region. Order-specific. Encourages lymphatic drainage. Reduces puffiness.'},
+      {n:'Fascial adhesion rolling',mins:1,cue:'Roll through any fascial adhesion areas. Light pressure. Coach Chong Xie method.'}
+    ]
+  },
+  massageBallFull:{
+    n:'Full Massage Ball Routine',tag:'SOFT TISSUE',c:'#7DD3C0',mins:22,
+    why:'Reaches what a roller can\'t. Sustained pressure at 6/10 discomfort. Pain you hold your breath through teaches you to brace \u2014 that\'s not recovery.',
+    steps:[
+      {n:'Feet: spikey ball sole roll',mins:2,cue:'90s each foot. Roll sole slowly. Pause 30s on tender spots. Start here \u2014 feet connect to everything.'},
+      {n:'Calves: pin-and-stretch',mins:3,cue:'Ball under calf. Pin tender spot, flex/extend ankle 10x. 90s each leg. Gastroc + soleus.'},
+      {n:'Glutes: figure-4 position',mins:3,cue:'Sit on ball in figure-4. 90s each side. Find piriformis. Shift weight to find spots.'},
+      {n:'Hip flexors: prone position',mins:2,cue:'Face down, ball on hip flexor crease. Gentle rocking. 60s each side. NOT on bone.'},
+      {n:'Adductors: side-lying inner thigh',mins:2,cue:'Side-lying, ball on inner thigh. Sustained pressure 60s each. Breathe through it.'},
+      {n:'T-spine: double ball peanut',mins:3,cue:'Two balls in a sock. Lie on them along T-spine. Roll slowly segment by segment. 90s total.'},
+      {n:'Lower back: parasagittal',mins:3,cue:'Ball BESIDE spine, never ON it. 60s each side. Breathe into the pressure.'},
+      {n:'Neck/traps: ball against wall',mins:2,cue:'Stand with ball between wall and upper trap. Lean in. 45s each side. Jaw stays relaxed.'},
+      {n:'Pressure points: sustained hold',mins:2,cue:'Find worst spot. Hold 30-45s at 6/10 discomfort. Wait for release. Repeat.'}
+    ]
+  },
+  lymphDrain:{
+    n:'Lymphatic Flush',tag:'DRAINAGE',c:'#7DD3C0',mins:28,
+    why:'Lymph has no pump. Diaphragmatic breathing creates pressure differential at cisterna chyli. Active movement generates contractions that pump fluid.',
+    steps:[
+      {n:'Diaphragmatic breathing: belly extends',mins:5,cue:'Deep inhale through nose \u2014 belly pushes out. Long exhale mouth. Repeat. Creates pressure to move lymph.'},
+      {n:'Physiological sighs: 3 rounds',mins:2,cue:'Double inhale (nose) + long exhale (mouth). 1-3 reps per round. Fastest parasympathetic activation.'},
+      {n:'Facial lymphatic massage',mins:3,cue:'Light pressure: clavicle circles \u2192 jaw line \u2192 under ears \u2192 forehead. Reduces puffiness and brain fog.'},
+      {n:'Active walk: nasal breathing, optic flow',mins:15,cue:'Forward movement generates contractions that pump lymph. No mouth breathing. 7000+ steps/day total target.'},
+      {n:'Rebound (trampoline) or calf raises',mins:3,cue:'If trampoline available: light bouncing 3 min. Otherwise: 3 x 20 calf raises. Both pump lymph.'}
+    ]
+  },
+  saunaGH:{
+    n:'Growth Hormone Protocol',tag:'1X / WEEK MAX',c:'#E8873A',mins:150,
+    why:'4 x 30 min at 80\u00b0C = 16x increase in growth hormone. Maximum once per week. This is not a casual session \u2014 it\'s a protocol.',
+    steps:[
+      {n:'Pre-hydrate: 500ml + electrolytes',mins:2,cue:'You will sweat a lot. Start hydrated. Have water accessible.'},
+      {n:'Round 1: Sauna 30 min at 80\u00b0C',mins:30,cue:'Stay in. Breathe steady. This is the hardest round.'},
+      {n:'Cool-down 1: 5 min',mins:5,cue:'Step out. Cool water on palms, feet, face (glabrous skin = heat portals). Don\'t shower yet.'},
+      {n:'Round 2: Sauna 30 min',mins:30,cue:'Back in. It gets easier mentally. Hydrate between.'},
+      {n:'Cool-down 2: 5 min',mins:5,cue:'Same cooling pattern. Hydrate.'},
+      {n:'Round 3: Sauna 30 min',mins:30,cue:'Halfway. Mental game now. Breathe. Visualize.'},
+      {n:'Cool-down 3: 5 min',mins:5,cue:'Assess how you feel. If dizzy or faint, stop here. Safety first.'},
+      {n:'Round 4: Sauna 30 min',mins:30,cue:'Final round. The growth hormone spike is peaking now. Push through.'},
+      {n:'Final cool-down + eat',mins:10,cue:'Gradual cool. Don\'t rush. Hydrate fully. Protein + carbs within 30 min.'}
+    ]
+  },
+  mobilityAM:{
+    n:'112MVMNT Morning Mobility',tag:'ROTATE DAILY',c:'#9C8ADE',mins:20,
+    why:'112mvmnt programs rotate daily. Each targets different areas. Pairs with the day\'s training focus. 15-25 min.',
+    steps:[
+      {n:'SUN: Hips & Hammys \u2014 post-match recovery',mins:20,cue:'Hip flexor leg lifts 3x3x5s, banded hamstring stretch 3x3x5s, butterfly CRAC 3x6x10s, couch stretch 2x1min.'},
+      {n:'MON: Shoulders & Spine \u2014 pairs with heavy compounds',mins:20,cue:'Banded T-spine rotations 3x5, thoracic rotation stretch 45-60s, shoulder circles 3x5, seal stretch 60s.'},
+      {n:'TUE: Calves & Ankles \u2014 pre-team training stability',mins:20,cue:'Slant board calf raise 3x8-10, tib raises 3x8-10, banded ankle dorsiflexion 2min, deep squat 4min.'},
+      {n:'WED: Glutes & Groins \u2014 pairs with power day',mins:20,cue:'Dynamic leg lifts 3x5, tailor\'s pose 3x8-10, wall straddle 2min, horse stance iso 3x30s.'},
+      {n:'THU: Stronger Knee \u2014 ACL prevention pre-team',mins:20,cue:'Banded knee extension 3x20, iso lunge hold 3x30s, reverse step-up 3x6, slant board squat 3x6-8.'},
+      {n:'FRI: Lower Back + Calves \u2014 open up pre-game',mins:20,cue:'Active cobra 3x5x5s, seated good mornings 3x6, banded spinal rotation 1min, calf raises + dorsiflexion.'},
+      {n:'SAT: Light Hips pre-game (10 min only)',mins:10,cue:'Hip flexor lifts 2x3x5s, butterfly 2x30s, couch stretch 1x30s each. Don\'t fatigue yourself.'}
+    ]
+  }
 };
 
 /* ═══ brain knowledge ═══════════════════════════════════════════ */
 var BRAIN = [
-  {tag:'THREE Rs',tip:'After every session: Rebuild (protein within 4h), Rehydrate (125-150% fluid lost), Replenish (carbs at 3:1 ratio).'},
-  {tag:'COLD SCIENCE',tip:'Brief cold exposure doubles baseline dopamine for 4-6 hours. Best in the morning stacked with natural cortisol peak.'},
-  {tag:'HEAT ADAPTATION',tip:'Sauna 2-3x/week cuts cardiovascular mortality 27%. Once-per-week 4x30min at 80\u00b0C triggers a 16x growth hormone spike.'},
-  {tag:'SLEEP GATE',tip:'Core temp must drop 1-3\u00b0C to fall and stay asleep. Sauna 1-2h before bed triggers compensatory cooling. Side-sleep for glymphatic clearance.'},
-  {tag:'INFLAMMATION',tip:'Recovery is three phases: Inflammation \u2192 Proliferation \u2192 Remodeling. Cold too early kills the inflammatory signal your body needs to adapt.'},
-  {tag:'LYMPH DRAIN',tip:'Swimming or treading water 15-20min clears "heavy legs" better than sitting in a tub. The water shears the skin and moves lymph.'},
-  {tag:'DELOAD RULE',tip:'Every 8 weeks: one week at 50% volume, same intensity, same frequency. That\u2019s when adaptations actually land.'}
+  {tag:'THREE Rs',tip:'After every session: Rebuild (protein within 4h), Rehydrate (125-150% fluid lost), Replenish (carbs at 3:1 ratio). This is non-negotiable.'},
+  {tag:'COLD SCIENCE',tip:'Brief cold exposure doubles baseline dopamine for 4-6 hours. Best in the morning stacked with natural cortisol peak. Move limbs to break thermal layer.'},
+  {tag:'HEAT ADAPTATION',tip:'Sauna 2-3x/week cuts cardiovascular mortality 27%. 4-7x/week = 50%. Once-per-week 4x30min at 80\u00b0C triggers 16x growth hormone spike.'},
+  {tag:'SLEEP GATE',tip:'Core temp must drop 1-3\u00b0C to fall asleep. Sauna 1-2h before bed triggers compensatory cooling. Side-sleep for glymphatic clearance. Nose tape.'},
+  {tag:'INFLAMMATION',tip:'Recovery = Inflammation \u2192 Proliferation \u2192 Remodeling. NEVER cold within 4-6h of strength work. You\'d kill the signal your muscles need to grow.'},
+  {tag:'LYMPH DRAIN',tip:'Lymph has no pump. Diaphragmatic breathing creates pressure at cisterna chyli. Walking 7000+ steps, swimming, or rebounding moves fluid.'},
+  {tag:'DELOAD RULE',tip:'Every 8 weeks: one week at 50% volume, same intensity, same frequency. That\u2019s when adaptations actually land.'},
+  {tag:'FASCIA',tip:'Fascia remodels over 12 weeks. Foot-to-glute connection starts at the feet. Elevated toe curls daily, full session 3x/week. Consistency > intensity.'},
+  {tag:'CIRCADIAN',tip:'Sunlight within 30 min of waking, 10+ min, no sunglasses. Triggers 50% cortisol pulse, clears adenosine, sets melatonin timer 16h later.'},
+  {tag:'RAPID COOL',tip:'To cool down fast: palms, soles of feet, and upper face (glabrous skin) are heat-release portals. Focus cold water there.'},
+  {tag:'MORNING COLD',tip:'Ice bath in the morning = dopamine boost lasting 4-6 hours. NOT after strength work. Tue/Thu mornings for energy before team training.'},
+  {tag:'CONTRAST',tip:'3 min hot / 1 min cold \u00d7 4 rounds, finish cold. Gentler than full immersion. Good for heavy legs and general recovery.'},
+  {tag:'SIGH',tip:'Physiological sigh: double inhale (nose) \u2192 long exhale (mouth). Repeat 1-3x. Fastest real-time parasympathetic activation.'},
+  {tag:'VISION',tip:'During stress: shift from tunnel vision to panoramic/dilated gaze. Signals brain stem to lower alertness. Use during recovery and before sleep.'},
+  {tag:'NOSE TAPE',tip:'Mouth tape at night forces nasal breathing. Better O2 exchange, reduces snoring, offsets sleep apnea. Side-sleeping + nose = optimal recovery.'},
+  {tag:'SUPPLEMENTS',tip:'Tissue repair stack: Glutamine 20g daily (10g AM/PM), Omega-3 2-3g EPA, Creatine 5g daily. Sleep: Mg Threonate 145mg + Apigenin 50mg + Theanine.'},
+  {tag:'GOATA',tip:'Inside Ankle Bone High. Back Chain Dominance. Column Alignment. Heel Away. Every warm-up, every movement. Recodes natural spiral patterns.'},
+  {tag:'112MVMNT',tip:'Rotate daily: Sun=Hips, Mon=Shoulders, Tue=Calves, Wed=Glutes, Thu=Knee, Fri=Lower Back+Calves, Sat=Light Hips. 15-25 min each.'}
 ];
 
 /* ═══ regions ════════════════════════════════════════════════════ */
 var REGIONS = {
-  traps:   {view:'back', n:'Traps & T-spine', c:[[60,56,11]],              tools:['ball','roll','gun']},
-  lowback: {view:'back', n:'Lower back',      c:[[60,98,10]],              tools:['ball','sauna','gun']},
-  glutes:  {view:'back', n:'Glutes',          c:[[60,119,12]],             tools:['ball','gun','press']},
-  hams:    {view:'back', n:'Hamstrings',      c:[[51,160,9],[69,160,9]],   tools:['roll','gun','press']},
-  calves:  {view:'back', n:'Calves',          c:[[51,215,8],[69,215,8]],   tools:['roll','gun','ball']},
-  feet:    {view:'back', n:'Feet & plantar',  c:[[50,259,6],[70,259,6]],   tools:['ball','press']},
-  hipflex: {view:'front',n:'Hip flexors',     c:[[60,120,10]],             tools:['roll','gun','press']},
-  adduct:  {view:'front',n:'Adductors',       c:[[60,152,9]],              tools:['ball','gun','press']},
-  quads:   {view:'front',n:'Quads',           c:[[51,158,9],[69,158,9]],   tools:['roll','gun']},
-  tib:     {view:'front',n:'Shins & tib ant', c:[[51,214,7],[69,214,7]],   tools:['gun','ball']}
+  traps:   {view:'back', n:'Traps & T-spine', c:[[60,56,11]],              tools:['ball','roll','gun'],      routine:'Double ball peanut (2 balls in sock) on T-spine \u2014 roll slowly segment by segment, 90s. Spikey ball on upper trap against wall \u2014 lean in, 45s each side. Foam roll mid-back 60s.'},
+  lowback: {view:'back', n:'Lower back',      c:[[60,98,10]],              tools:['ball','sauna','gun'],     routine:'Spikey ball parasagittal (BESIDE spine, never ON it) \u2014 60s each side. Massage gun on erectors 60s each side, light pressure. Sauna for systemic relief.'},
+  glutes:  {view:'back', n:'Glutes',          c:[[60,119,12]],             tools:['ball','gun','press'],     routine:'Spikey ball in figure-4 position \u2014 90s each side. Find piriformis. Shift weight to locate trigger points. Pressure hold 30-45s sustained on worst spot.'},
+  hams:    {view:'back', n:'Hamstrings',      c:[[51,160,9],[69,160,9]],   tools:['roll','gun','press'],     routine:'Foam roll 90s each leg, slow passes. Spikey ball pin-and-stretch: pin tender spot, flex/extend knee 10x. Pressure point 45s on tenderest spot.'},
+  calves:  {view:'back', n:'Calves',          c:[[51,215,8],[69,215,8]],   tools:['roll','gun','ball'],      routine:'Foam roll 90s each \u2014 rotate leg in/out to hit gastroc + soleus. Cross-fiber rolling 60s. Spikey ball on soleus/gastroc junction. Massage gun on Achilles area (LIGHT).'},
+  feet:    {view:'back', n:'Feet & plantar',  c:[[50,259,6],[70,259,6]],   tools:['ball','press','fascia'],  routine:'Spikey ball roll sole slowly \u2014 90s each foot. Pause 30s on tender spots. Elevated toe curls 3x20s. Arch pressure with thumb 45s. Connects to full fascia chain.'},
+  hipflex: {view:'front',n:'Hip flexors',     c:[[60,120,10]],             tools:['roll','gun','press'],     routine:'Foam roll prone 90s each side. Spikey ball on psoas (careful \u2014 NOT on organs) 45s each. Massage gun on TFL 60s each. Couch stretch 60s each side.'},
+  adduct:  {view:'front',n:'Adductors',       c:[[60,152,9]],              tools:['ball','gun','press'],     routine:'Side-lying with spikey ball on inner thigh \u2014 60s each. Sustained pressure, not rolling. Foam roll 90s each leg. Pressure point on gracilis 45s.'},
+  quads:   {view:'front',n:'Quads',           c:[[51,158,9],[69,158,9]],   tools:['roll','gun'],             routine:'Foam roll 90s each leg. Pin-and-stretch: pin spot, bend knee 10x. Massage gun on VMO (inner quad) and rectus femoris 60s each.'},
+  tib:     {view:'front',n:'Shins & tib ant', c:[[51,214,7],[69,214,7]],   tools:['gun','ball'],             routine:'Massage gun along tibialis anterior 60s each leg. Spikey ball on lateral shin 45s each. Never directly on shin bone. Light pressure only.'}
 };
 
 var SORE = ['None','Niggle','Sore','Angry'];
@@ -258,7 +442,9 @@ var state = {
   sore: loadSore(),
   sel: 'adduct',
   run: null,
-  log: loadLog()
+  log: loadLog(),
+  openProto: null,
+  protoDone: {}
 };
 
 // No defaults — start clean, log your own soreness
@@ -269,13 +455,14 @@ var HISTORY = loadHistory();
 function buildWindow(s, now){
   var strength = s.type === 'strength';
   var coldAt = s.end + COLD_GATE;
-  if(!s.end) return [{at:0,label:'Rest day',tools:['roll','gun','ball','press'],note:'No session logged. Soft tissue if you want it. Walk 7,000+ steps for lymphatic drainage.'}];
+  if(!s.end) return [{at:0,label:'Rest day',tools:['roll','gun','ball','press','fascia','lymph','breath'],note:'No session logged. Soft tissue, fascia work, or lymphatic drainage. Walk 7,000+ steps. Use guided sessions below for full protocols.'}];
   return [
-    {at:s.end,label:'Straight after',tools:['walk'],note:'The Three Rs: Rebuild (protein), Rehydrate (125-150% fluid lost), Replenish (carbs 3:1 ratio). Walk and drink.'},
-    {at:s.end+30,label:'+30 minutes',tools:['gun','roll'],note:'Light. Inflammation phase is active \u2014 you need it. Help the tissue, don\u2019t train it.'},
-    {at:coldAt,label:strength?'+4 hours':'Any time',tools:['ice','contrast'],lock:strength&&now<coldAt,note:strength?'Cold kills the inflammatory signal your muscles need to adapt. Heat or soft tissue instead.':'No strength work today \u2014 cold is free. 10-15\u00b0C for 10-15 min.'},
-    {at:19*60+30,label:'Evening',tools:['ball','press'],note:'Sore spots only. Ten minutes, not forty. Diaphragmatic breathing moves lymph.'},
-    {at:BED-90,label:'\u226590 min before bed',tools:['sauna'],lock:MATCH_IN===1,note:MATCH_IN===1?'Match tomorrow. Skip the heat, sleep instead.':'Triggers compensatory cooling \u2014 core temp must drop 1-3\u00b0C to sleep. Side-sleep for glymphatic clearance.'}
+    {at:s.end,label:'Straight after',tools:['walk'],note:'The Three Rs: Rebuild (protein), Rehydrate (125-150% fluid lost), Replenish (carbs 3:1 ratio). Walk 5-10 min, nasal breathe, drink 500ml + electrolytes.'},
+    {at:s.end+30,label:'+30 minutes',tools:['gun','roll','lymph'],note:'Light. Inflammation phase is active \u2014 you need it. Soft tissue + diaphragmatic breathing to move lymph. Help the tissue, don\u2019t train it.'},
+    {at:coldAt,label:strength?'+4 hours':'Any time',tools:['ice','contrast','coldshower'],lock:strength&&now<coldAt,note:strength?'Cold kills the inflammatory signal your muscles need to adapt. Heat, soft tissue, or fascia work instead.':'No strength work today \u2014 cold is free. 10-15\u00b0C for 10-15 min. Move limbs to break thermal layer.'},
+    {at:16*60,label:'Afternoon',tools:['fascia','ball','press'],note:'Fascia work if Mon/Wed/Fri. Spikey ball on sore spots. Pressure points 30-45s sustained at 6/10 discomfort.'},
+    {at:19*60+30,label:'Evening',tools:['ball','press','breath','lymph'],note:'Sore spots only \u2014 ten minutes, not forty. Diaphragmatic breathing moves lymph. Physiological sighs for parasympathetic activation.'},
+    {at:BED-90,label:'\u226590 min before bed',tools:['sauna'],lock:MATCH_IN===1,note:MATCH_IN===1?'Match tomorrow. Skip the heat, sleep instead.':'Sauna 15-20 min triggers compensatory cooling \u2014 core temp must drop 1-3\u00b0C to sleep. Side-sleep + nose tape for glymphatic clearance.'}
   ];
 }
 
@@ -295,7 +482,7 @@ function khabib(sore, now){
 
 /* ═══ cold lock check ═══════════════════════════════════════════ */
 function isLocked(t, now){
-  return (t==='ice'||t==='contrast')&&SESSION.type==='strength'&&SESSION.end&&now<SESSION.end+COLD_GATE;
+  return (t==='ice'||t==='contrast'||t==='coldshower')&&SESSION.type==='strength'&&SESSION.end&&now<SESSION.end+COLD_GATE;
 }
 
 /* ═══ runner state ═══════════════════════════════════════════════ */
@@ -346,6 +533,24 @@ function closeRunner(){
   runner.on=false;clearTimeout(runner.timer);
   state.run=null;runner={tool:null,seq:[],idx:0,left:0,on:false,startedAt:null,timer:null};
   render();
+}
+
+/* ═══ protocol helpers ═══════════════════════════════════════════ */
+function toggleProto(key){
+  state.openProto = state.openProto===key ? null : key;
+  render();
+}
+function toggleProtoStep(key,idx){
+  var k = key+'-'+idx;
+  state.protoDone[k] = !state.protoDone[k];
+  render();
+}
+function getProtoProgress(key){
+  var p = PROTOCOLS[key];
+  if(!p) return {done:0,total:0};
+  var done=0;
+  for(var i=0;i<p.steps.length;i++){ if(state.protoDone[key+'-'+i]) done++; }
+  return {done:done,total:p.steps.length};
 }
 
 /* ═══ figure SVG ═════════════════════════════════════════════════ */
@@ -444,13 +649,44 @@ function render(){
     h += '<button class="r-ghost" id="closeRunner">Close</button></div></section>';
   }
 
-  // 02 Body map
+  // 02 Guided sessions
+  var PROTO_ORDER = ['morning','postTraining','postMatch','evening','activeRecovery','fasciaFull','massageBallFull','lymphDrain','saunaGH','mobilityAM'];
+  h += '<section class="r-block r-proto"><header class="r-bh"><div><p class="r-eyebrow">02 \u00b7 GUIDED SESSIONS</p>';
+  h += '<h2>Full <em>protocols</em></h2></div></header>';
+  h += '<div class="r-pgrid">';
+  PROTO_ORDER.forEach(function(key){
+    var p = PROTOCOLS[key];
+    var isOn = state.openProto===key;
+    var prog = getProtoProgress(key);
+    h += '<div class="r-pc'+(isOn?' is-on':'')+'" data-proto="'+key+'" style="--pc:'+p.c+'">';
+    h += '<p class="r-pc-tag">'+p.tag+'</p>';
+    h += '<h3 class="r-pc-n">'+esc(p.n)+'</h3>';
+    h += '<p class="r-pc-m">'+p.mins+' min'+(prog.done?' \u00b7 '+prog.done+'/'+prog.total+' done':'')+'</p>';
+    if(isOn){
+      h += '<p class="r-pc-why">'+esc(p.why)+'</p>';
+      h += '<div class="r-steps">';
+      p.steps.forEach(function(s,i){
+        var done = state.protoDone[key+'-'+i];
+        h += '<div class="r-step'+(done?' is-done':'')+'">';
+        h += '<button class="r-step-i" data-pstep="'+key+'-'+i+'">'+(done?'\u2713':(i+1))+'</button>';
+        h += '<div class="r-step-c"><p class="r-step-n">'+esc(s.n)+'</p>';
+        h += '<p class="r-step-cue">'+esc(s.cue)+'</p></div>';
+        h += '<span class="r-step-t">'+s.mins+'m</span>';
+        h += '</div>';
+      });
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += '</div></section>';
+
+  // 03 Body map
   h += '<section class="r-block r-hero"><div class="r-figs">';
   h += '<div class="r-toggle"><button data-view="back" class="'+(state.view==='back'?'is-on':'')+'">BACK</button>';
   h += '<button data-view="front" class="'+(state.view==='front'?'is-on':'')+'">FRONT</button></div>';
   h += figSvg(state.view);
   h += '</div><div class="r-side">';
-  h += '<p class="r-eyebrow">02 \u00b7 SELECTED REGION</p>';
+  h += '<p class="r-eyebrow">03 \u00b7 SELECTED REGION</p>';
   h += '<h2 class="r-rn">'+esc(region.n)+'</h2>';
   h += '<p class="r-lab">How does it feel</p><div class="r-scale">';
   SORE.forEach(function(s,i){
@@ -463,7 +699,12 @@ function render(){
     var off = isLocked(t,NOW);
     h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
   });
-  h += '</div></div></section>';
+  h += '</div>';
+  if(region.routine){
+    h += '<div class="r-routine"><p class="r-routine-h">TARGETED ROUTINE</p>';
+    h += '<p class="r-routine-t">'+esc(region.routine)+'</p></div>';
+  }
+  h += '</div></section>';
 
   // 03 Report
   var report = Object.keys(HISTORY).map(function(k){
@@ -473,7 +714,7 @@ function render(){
     return {k:k,d:d,flagged:flagged,trend:trend};
   }).sort(function(a,b){return b.flagged-a.flagged;});
 
-  h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">03 \u00b7 SEVEN-DAY REPORT</p><h2>The <em>pattern</em></h2></div></header>';
+  h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">04 \u00b7 SEVEN-DAY REPORT</p><h2>The <em>pattern</em></h2></div></header>';
   h += '<table class="r-rep"><thead><tr><th>Region</th>';
   ['M','T','W','T','F','S','S'].forEach(function(d){h+='<th>'+d+'</th>';});
   h += '<th>Flagged</th></tr></thead><tbody>';
@@ -501,7 +742,7 @@ function render(){
 
 
   // Footer
-  h += '<footer class="r-foot"><span>NO COLD WITHIN 4H OF STRENGTH WORK</span><span>SORENESS FEEDS EVERY OTHER PAGE</span></footer>';
+  h += '<footer class="r-foot"><span>NO COLD WITHIN 4H OF STRENGTH WORK \u00b7 FASCIA = 12 WEEKS \u00b7 LYMPH = EVERY DAY</span><span>SAUNA \u00b7 ICE \u00b7 FASCIA \u00b7 MASSAGE \u00b7 LYMPH \u00b7 MORNING \u00b7 EVENING</span></footer>';
 
   document.getElementById('app').innerHTML = h;
   bindEvents();
@@ -532,6 +773,22 @@ function bindEvents(){
   // Run protocol
   document.querySelectorAll('[data-run]').forEach(function(btn){
     btn.addEventListener('click',function(){if(!this.disabled)startRunner(this.dataset.run);});
+  });
+  // Guided protocols
+  document.querySelectorAll('[data-proto]').forEach(function(el){
+    el.addEventListener('click',function(e){
+      if(e.target.closest('[data-pstep]')) return;
+      toggleProto(this.dataset.proto);
+    });
+  });
+  document.querySelectorAll('[data-pstep]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var parts=this.dataset.pstep.split('-');
+      var key=parts.slice(0,-1).join('-');
+      var idx=parseInt(parts[parts.length-1]);
+      toggleProtoStep(key,idx);
+    });
   });
   // Runner controls
   var tb = document.getElementById('toggleRunner');
