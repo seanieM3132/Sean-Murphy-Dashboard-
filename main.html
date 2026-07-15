@@ -811,6 +811,7 @@ body::after {
     <div class="day-ring-status" id="dayStatus">Loading…</div>
     <div class="day-ring-remaining" id="dayRemaining">—</div>
     <div class="day-ring-range">8:00 AM – 12:00 AM</div>
+    <div class="day-ring-work" id="dayWork" style="font:500 9px 'SF Mono',monospace;letter-spacing:.06em;color:#E8873A;margin-top:4px;display:none"></div>
   </div>
 </div>
 
@@ -933,6 +934,12 @@ const ANTHROPIC_API_KEY = '';
 const WAKE_HOUR = 8;
 const SLEEP_HOUR = 24;
 const CIRC = 2 * Math.PI * 52;
+
+// Work schedule (shared with recovery/gym pages)
+function loadWork(){
+  try{return JSON.parse(localStorage.getItem('work-schedule'))||{enabled:false,start:'09:00',end:'12:00'};}
+  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+}
 
 // ── Supabase ──
 const SUPABASE_URL = 'https://lpbtgoyollrmawarnivr.supabase.co';
@@ -1137,6 +1144,23 @@ function updateDayBar() {
     phaseEl.textContent = 'PAST BEDTIME';
     statusEl.textContent = '⚠️ Past bedtime';
     remainEl.textContent = 'Sleep!';
+  }
+
+  // Work schedule indicator
+  const work = loadWork();
+  const workEl = document.getElementById('dayWork');
+  if(workEl){
+    if(work.enabled){
+      const wp = work.start.split(':'), wep = work.end.split(':');
+      const wsh = parseInt(wp[0]), wsm = parseInt(wp[1]);
+      const weh = parseInt(wep[0]), wem = parseInt(wep[1]);
+      const inWork = hours >= (wsh+wsm/60) && hours < (weh+wem/60);
+      workEl.style.display = 'block';
+      workEl.textContent = inWork ? 'WORKING ' + work.start + ' – ' + work.end : 'WORK ' + work.start + ' – ' + work.end;
+      workEl.style.color = inWork ? '#E8873A' : 'rgba(232,135,58,.5)';
+    } else {
+      workEl.style.display = 'none';
+    }
   }
 }
 

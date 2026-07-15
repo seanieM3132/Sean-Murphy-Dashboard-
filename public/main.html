@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
+<script src="topbar.js" defer></script>
 <style>
 :root {
   --text-primary: #FAFAFA;
@@ -58,10 +58,6 @@ body::after {
   pointer-events: none;
   z-index: -1;
 }
-
-/* Back Link */
-.d-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid rgba(74,222,128,.10);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:#5F786E;text-decoration:none;transition:all .2s;margin-bottom:12px;}
-.d-back:hover{color:#4ADE80;border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
 
 /* Page Title */
 .dash-title {
@@ -762,7 +758,6 @@ body::after {
 </head>
 <body>
 
-<a href="/" class="d-back">&#8592; Home</a>
 <h1 class="dash-title">My Dashboard</h1>
 
 <!-- Tab Bar -->
@@ -816,6 +811,7 @@ body::after {
     <div class="day-ring-status" id="dayStatus">Loading…</div>
     <div class="day-ring-remaining" id="dayRemaining">—</div>
     <div class="day-ring-range">8:00 AM – 12:00 AM</div>
+    <div class="day-ring-work" id="dayWork" style="font:500 9px 'SF Mono',monospace;letter-spacing:.06em;color:#E8873A;margin-top:4px;display:none"></div>
   </div>
 </div>
 
@@ -939,6 +935,12 @@ const WAKE_HOUR = 8;
 const SLEEP_HOUR = 24;
 const CIRC = 2 * Math.PI * 52;
 
+// Work schedule (shared with recovery/gym pages)
+function loadWork(){
+  try{return JSON.parse(localStorage.getItem('work-schedule'))||{enabled:false,start:'09:00',end:'12:00'};}
+  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+}
+
 // ── Supabase ──
 const SUPABASE_URL = 'https://lpbtgoyollrmawarnivr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYnRnb3lvbGxybWF3YXJuaXZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMTk2OTksImV4cCI6MjA5ODg5NTY5OX0.oPIIxKjbMrSnyVN87vW-Xuj_PndxqM63KO59k8uetFQ';
@@ -986,22 +988,25 @@ async function syncFromSupabase() {
 }
 
 // ── Date helpers ──
+function getMelb() { return new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'})); }
+
 function getActiveDateString() {
-  const now = new Date();
+  const now = getMelb();
   if (now.getHours() < 6) {
     now.setDate(now.getDate() - 1);
   }
-  return now.toISOString().slice(0, 10);
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 }
 
 function getTomorrowDateString() {
-  const now = new Date();
+  const now = getMelb();
   if (now.getHours() < 6) {
-    return new Date().toISOString().slice(0, 10);
+    const t = getMelb();
+    return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
   }
-  const t = new Date();
+  const t = getMelb();
   t.setDate(t.getDate() + 1);
-  return t.toISOString().slice(0, 10);
+  return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
 }
 
 function formatDate(dateStr) {
@@ -1087,7 +1092,7 @@ function interpolateColor(pct) {
 }
 
 function updateDayBar() {
-  const now = new Date();
+  const now = getMelb();
   const hours = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
   const fill = document.getElementById('dayRingFill');
   const pctEl = document.getElementById('dayPct');
@@ -1139,6 +1144,23 @@ function updateDayBar() {
     phaseEl.textContent = 'PAST BEDTIME';
     statusEl.textContent = '⚠️ Past bedtime';
     remainEl.textContent = 'Sleep!';
+  }
+
+  // Work schedule indicator
+  const work = loadWork();
+  const workEl = document.getElementById('dayWork');
+  if(workEl){
+    if(work.enabled){
+      const wp = work.start.split(':'), wep = work.end.split(':');
+      const wsh = parseInt(wp[0]), wsm = parseInt(wp[1]);
+      const weh = parseInt(wep[0]), wem = parseInt(wep[1]);
+      const inWork = hours >= (wsh+wsm/60) && hours < (weh+wem/60);
+      workEl.style.display = 'block';
+      workEl.textContent = inWork ? 'WORKING ' + work.start + ' – ' + work.end : 'WORK ' + work.start + ' – ' + work.end;
+      workEl.style.color = inWork ? '#E8873A' : 'rgba(232,135,58,.5)';
+    } else {
+      workEl.style.display = 'none';
+    }
   }
 }
 

@@ -149,6 +149,23 @@ button,a{font-family:inherit;}
 .r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
 
+/* work schedule */
+.r-work{max-width:var(--w);margin:0 auto 16px;display:flex;align-items:center;gap:14px;padding:12px 18px;
+  border:1px solid rgba(232,135,58,.18);border-radius:12px;background:rgba(30,20,10,.25);}
+.r-work-tag{font:500 8px var(--mono);letter-spacing:.2em;color:var(--amber);white-space:nowrap;}
+.r-work-body{flex:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.r-work-body span{font:400 11px 'Inter',sans-serif;color:var(--dim);}
+.r-work-input{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+  color:var(--ink);font:400 12px var(--mono);width:56px;text-align:center;}
+.r-work-input:focus{outline:none;border-color:rgba(232,135,58,.4);}
+.r-work-btn{background:none;border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;
+  font:500 8px var(--mono);letter-spacing:.1em;color:var(--dim);transition:all .12s;}
+.r-work-btn:hover{color:var(--amber);border-color:rgba(232,135,58,.3);}
+.r-work-btn.is-on{background:rgba(232,135,58,.1);border-color:rgba(232,135,58,.3);color:var(--amber);}
+.r-work-blocked{padding:12px 16px;border:1px solid rgba(232,135,58,.25);border-left:3px solid var(--amber);
+  border-radius:0 12px 12px 0;background:rgba(30,20,10,.3);margin-top:4px;}
+.r-work-blocked p{font:400 10px/1.6 var(--mono);color:var(--amber);letter-spacing:.04em;}
+
 /* protocols */
 .r-proto{max-width:var(--w);margin:0 auto 20px;}
 .r-pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:16px;}
@@ -423,6 +440,24 @@ var REGIONS = {
 var SORE = ['None','Niggle','Sore','Angry'];
 var SORE_C = ['#3B4E47','#D8B24A','#E8873A','#F05A3A'];
 
+/* ═══ work schedule (shared across pages) ════════════════════════ */
+var WORK_KEY = 'work-schedule';
+function loadWork(){
+  try{return JSON.parse(localStorage.getItem(WORK_KEY))||{enabled:false,start:'09:00',end:'12:00'};}
+  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+}
+function saveWork(w){ localStorage.setItem(WORK_KEY,JSON.stringify(w)); }
+var WORK = loadWork();
+
+function workMins(timeStr){
+  var p=timeStr.split(':'); return parseInt(p[0])*60+parseInt(p[1]);
+}
+function workOverlap(slotAt){
+  if(!WORK.enabled) return false;
+  var ws=workMins(WORK.start), we=workMins(WORK.end);
+  return slotAt>=ws && slotAt<we;
+}
+
 /* ═══ state (localStorage) ═══════════════════════════════════════ */
 var SORE_KEY = 'recovery-sore';
 var LOG_KEY = 'recovery-log';
@@ -609,6 +644,17 @@ function render(){
   var tip = BRAIN[getMelb().getDay()];
   h += '<div class="r-brain"><span class="r-btag">'+tip.tag+'</span><span class="r-btip">'+esc(tip.tip)+'</span></div>';
 
+  // Work schedule bar
+  h += '<div class="r-work">';
+  h += '<span class="r-work-tag">WORK</span>';
+  h += '<div class="r-work-body">';
+  h += '<span>Schedule</span>';
+  h += '<input class="r-work-input" type="time" id="workStart" value="'+WORK.start+'">';
+  h += '<span>to</span>';
+  h += '<input class="r-work-input" type="time" id="workEnd" value="'+WORK.end+'">';
+  h += '<button class="r-work-btn'+(WORK.enabled?' is-on':'')+'" id="workToggle">'+(WORK.enabled?'ON':'OFF')+'</button>';
+  h += '</div></div>';
+
   // 01 Window
   h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\'S WINDOW</p><h2>When, <em>not what</em></h2></div>';
   if(SESSION.end && SESSION.type==='strength' && NOW<coldAt){
@@ -617,18 +663,25 @@ function render(){
   h += '</header><ol class="r-win">';
   win.forEach(function(slot,i){
     var next = win[i+1];
+    var blocked = workOverlap(slot.at);
     var st = slot.at && NOW>=slot.at && (!next||NOW<next.at) ? 'now' : (slot.at && NOW>=slot.at ? 'past' : 'next');
-    h += '<li class="is-'+st+(slot.lock?' is-locked':'')+'">';
+    h += '<li class="is-'+st+(slot.lock||blocked?' is-locked':'')+'">';
     h += '<span class="r-bead"></span>';
     h += '<div class="r-wt"><span class="r-wtime">'+(slot.at?hhmm(slot.at):'\u2014')+'</span>';
-    h += '<span class="r-wlab">'+esc(slot.label)+'</span></div>';
-    h += '<div class="r-wc"><div class="r-chips">';
-    slot.tools.forEach(function(t){
-      var off = isLocked(t,NOW)||slot.lock;
-      h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
-    });
-    h += '</div><p class="r-wn'+(slot.lock||(st!=='past'&&slot.tools.some(function(t){return isLocked(t,NOW);}))?' is-hot':'')+'">';
-    h += esc(slot.note)+'</p></div></li>';
+    h += '<span class="r-wlab">'+esc(slot.label)+(blocked?' \u00b7 WORK':'')+'</span></div>';
+    h += '<div class="r-wc">';
+    if(blocked){
+      h += '<div class="r-work-blocked"><p>You\'re working '+WORK.start+' \u2013 '+WORK.end+'. This window shifts to after work.</p></div>';
+    } else {
+      h += '<div class="r-chips">';
+      slot.tools.forEach(function(t){
+        var off = isLocked(t,NOW)||slot.lock;
+        h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
+      });
+      h += '</div><p class="r-wn'+(slot.lock||(st!=='past'&&slot.tools.some(function(t){return isLocked(t,NOW);}))?' is-hot':'')+'">';
+      h += esc(slot.note)+'</p>';
+    }
+    h += '</div></li>';
   });
   h += '</ol></section>';
 
@@ -795,6 +848,13 @@ function bindEvents(){
   if(tb) tb.addEventListener('click',toggleRunner);
   var cb = document.getElementById('closeRunner');
   if(cb) cb.addEventListener('click',closeRunner);
+  // Work schedule
+  var wt = document.getElementById('workToggle');
+  if(wt) wt.addEventListener('click',function(){ WORK.enabled=!WORK.enabled; saveWork(WORK); render(); });
+  var ws = document.getElementById('workStart');
+  if(ws) ws.addEventListener('change',function(){ WORK.start=this.value; saveWork(WORK); render(); });
+  var we = document.getElementById('workEnd');
+  if(we) we.addEventListener('change',function(){ WORK.end=this.value; saveWork(WORK); render(); });
 }
 
 function pick(key){

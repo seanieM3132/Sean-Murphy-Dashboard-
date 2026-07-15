@@ -597,6 +597,23 @@ var openSec = null;
 var restState = null;
 var restTimer = null;
 
+/* work schedule awareness */
+var WORK_KEY = 'work-schedule';
+function loadWork(){
+  try{return JSON.parse(localStorage.getItem(WORK_KEY))||{enabled:false,start:'09:00',end:'12:00'};}
+  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+}
+var WORK = loadWork();
+function gymOverlapsWork(sess){
+  if(!WORK.enabled||!sess.time) return false;
+  var sp=sess.time.split(':'), sh=parseInt(sp[0])*60+parseInt(sp[1]);
+  var ws=WORK.start.split(':'), we=WORK.end.split(':');
+  var wStart=parseInt(ws[0])*60+parseInt(ws[1]), wEnd=parseInt(we[0])*60+parseInt(we[1]);
+  var totalMins=0; sess.sections.forEach(function(s){totalMins+=s.mins;});
+  var sEnd=sh+totalMins;
+  return sh<wEnd && sEnd>wStart;
+}
+
 function getSession(){ return getSessions()[currentDay]; }
 function getSections(){ return getSession().sections; }
 function getQueue(){
@@ -745,6 +762,13 @@ function render(){
   };
   html += '<p><b>KHABIB</b>'+coachMsg[currentDay]+'</p>';
   html += '</div></header>';
+
+  // Work schedule conflict
+  if(gymOverlapsWork(sess)){
+    html += '<div style="max-width:640px;margin:0 auto 12px;padding:10px 16px;border:1px solid rgba(232,135,58,.25);border-left:3px solid #E8873A;border-radius:8px;background:rgba(232,135,58,.06)">';
+    html += '<p style="font:500 10px/1.6 \'SF Mono\',monospace;color:#E8873A;letter-spacing:.04em;margin:0">';
+    html += 'WORK '+WORK.start+' \u2013 '+WORK.end+' overlaps this session ('+sess.time+'). Shift your gym earlier or later.</p></div>';
+  }
 
   // TIMELINE
   html += '<nav class="s-line" aria-label="Session timeline"><div class="s-track">';

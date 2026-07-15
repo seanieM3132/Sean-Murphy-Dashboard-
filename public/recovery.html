@@ -149,6 +149,23 @@ button,a{font-family:inherit;}
 .r-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
 
+/* work schedule */
+.r-work{max-width:var(--w);margin:0 auto 16px;display:flex;align-items:center;gap:14px;padding:12px 18px;
+  border:1px solid rgba(232,135,58,.18);border-radius:12px;background:rgba(30,20,10,.25);}
+.r-work-tag{font:500 8px var(--mono);letter-spacing:.2em;color:var(--amber);white-space:nowrap;}
+.r-work-body{flex:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.r-work-body span{font:400 11px 'Inter',sans-serif;color:var(--dim);}
+.r-work-input{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+  color:var(--ink);font:400 12px var(--mono);width:56px;text-align:center;}
+.r-work-input:focus{outline:none;border-color:rgba(232,135,58,.4);}
+.r-work-btn{background:none;border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;
+  font:500 8px var(--mono);letter-spacing:.1em;color:var(--dim);transition:all .12s;}
+.r-work-btn:hover{color:var(--amber);border-color:rgba(232,135,58,.3);}
+.r-work-btn.is-on{background:rgba(232,135,58,.1);border-color:rgba(232,135,58,.3);color:var(--amber);}
+.r-work-blocked{padding:12px 16px;border:1px solid rgba(232,135,58,.25);border-left:3px solid var(--amber);
+  border-radius:0 12px 12px 0;background:rgba(30,20,10,.3);margin-top:4px;}
+.r-work-blocked p{font:400 10px/1.6 var(--mono);color:var(--amber);letter-spacing:.04em;}
+
 /* protocols */
 .r-proto{max-width:var(--w);margin:0 auto 20px;}
 .r-pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:16px;}
@@ -227,25 +244,7 @@ function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 var SESSION = loadSession();
 var _melb = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
 var _melbDay = _melb.getDay(); // 0=Sun, 6=Sat
-var _planDow = _melbDay === 0 ? 6 : _melbDay - 1; // 0=Mon
-
-function loadGameDayCfg() {
-  try { return JSON.parse(localStorage.getItem('planner-gameday')) || {}; } catch(e) { return {}; }
-}
-
-function calcMatchIn() {
-  var cfg = loadGameDayCfg();
-  if (cfg.status === 'bye') return -1;
-  var gameDays = cfg.days || [5]; // default Saturday (planDow 5)
-  var best = 99;
-  for (var i = 0; i < gameDays.length; i++) {
-    var diff = (gameDays[i] - _planDow + 7) % 7;
-    if (diff === 0) diff = 0; // today is match day
-    if (diff < best) best = diff;
-  }
-  return best;
-}
-var MATCH_IN = calcMatchIn();
+var MATCH_IN = _melbDay === 6 ? 0 : (6 - _melbDay + 7) % 7;
 var BED = 22*60+30;
 var COLD_GATE = 4*60;
 
@@ -387,28 +386,19 @@ var PROTOCOLS = {
       {n:'Final cool-down + eat',mins:10,cue:'Gradual cool. Don\'t rush. Hydrate fully. Protein + carbs within 30 min.'}
     ]
   },
-  mobilityAM:(function(){
-    var MOBILITY_POOL = [
-      {n:'Shoulders & Spine',mins:20,cue:'Banded T-spine rotations 3x5, thoracic rotation stretch 45-60s, shoulder circles 3x5, seal stretch 60s.'},
-      {n:'Calves & Ankles',mins:20,cue:'Slant board calf raise 3x8-10, tib raises 3x8-10, banded ankle dorsiflexion 2min, deep squat 4min.'},
-      {n:'Glutes & Groins',mins:20,cue:'Dynamic leg lifts 3x5, tailor\'s pose 3x8-10, wall straddle 2min, horse stance iso 3x30s.'},
-      {n:'Stronger Knee',mins:20,cue:'Banded knee extension 3x20, iso lunge hold 3x30s, reverse step-up 3x6, slant board squat 3x6-8.'},
-      {n:'Lower Back + Calves',mins:20,cue:'Active cobra 3x5x5s, seated good mornings 3x6, banded spinal rotation 1min, calf raises + dorsiflexion.'},
-      {n:'Hips & Hammys',mins:20,cue:'Hip flexor leg lifts 3x3x5s, banded hamstring stretch 3x3x5s, butterfly CRAC 3x6x10s, couch stretch 2x1min.'},
-      {n:'Light Hips (10 min)',mins:10,cue:'Hip flexor lifts 2x3x5s, butterfly 2x30s, couch stretch 1x30s each. Don\'t fatigue yourself.'}
-    ];
-    var DAY_NAMES = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-    var steps = [];
-    for(var i=0;i<7;i++){
-      var m = MOBILITY_POOL[i % MOBILITY_POOL.length];
-      steps.push({n:DAY_NAMES[i]+': '+m.n,mins:m.mins,cue:m.cue});
-    }
-    return {
-      n:'112MVMNT Morning Mobility',tag:'ROTATE DAILY',c:'#9C8ADE',mins:20,
-      why:'112mvmnt programs rotate daily. Each targets different areas. Pairs with the day\'s training focus. 15-25 min.',
-      steps:steps
-    };
-  })()
+  mobilityAM:{
+    n:'112MVMNT Morning Mobility',tag:'ROTATE DAILY',c:'#9C8ADE',mins:20,
+    why:'112mvmnt programs rotate daily. Each targets different areas. Pairs with the day\'s training focus. 15-25 min.',
+    steps:[
+      {n:'SUN: Hips & Hammys \u2014 post-match recovery',mins:20,cue:'Hip flexor leg lifts 3x3x5s, banded hamstring stretch 3x3x5s, butterfly CRAC 3x6x10s, couch stretch 2x1min.'},
+      {n:'MON: Shoulders & Spine \u2014 pairs with heavy compounds',mins:20,cue:'Banded T-spine rotations 3x5, thoracic rotation stretch 45-60s, shoulder circles 3x5, seal stretch 60s.'},
+      {n:'TUE: Calves & Ankles \u2014 pre-team training stability',mins:20,cue:'Slant board calf raise 3x8-10, tib raises 3x8-10, banded ankle dorsiflexion 2min, deep squat 4min.'},
+      {n:'WED: Glutes & Groins \u2014 pairs with power day',mins:20,cue:'Dynamic leg lifts 3x5, tailor\'s pose 3x8-10, wall straddle 2min, horse stance iso 3x30s.'},
+      {n:'THU: Stronger Knee \u2014 ACL prevention pre-team',mins:20,cue:'Banded knee extension 3x20, iso lunge hold 3x30s, reverse step-up 3x6, slant board squat 3x6-8.'},
+      {n:'FRI: Lower Back + Calves \u2014 open up pre-game',mins:20,cue:'Active cobra 3x5x5s, seated good mornings 3x6, banded spinal rotation 1min, calf raises + dorsiflexion.'},
+      {n:'SAT: Light Hips pre-game (10 min only)',mins:10,cue:'Hip flexor lifts 2x3x5s, butterfly 2x30s, couch stretch 1x30s each. Don\'t fatigue yourself.'}
+    ]
+  }
 };
 
 /* ═══ brain knowledge ═══════════════════════════════════════════ */
@@ -423,14 +413,14 @@ var BRAIN = [
   {tag:'FASCIA',tip:'Fascia remodels over 12 weeks. Foot-to-glute connection starts at the feet. Elevated toe curls daily, full session 3x/week. Consistency > intensity.'},
   {tag:'CIRCADIAN',tip:'Sunlight within 30 min of waking, 10+ min, no sunglasses. Triggers 50% cortisol pulse, clears adenosine, sets melatonin timer 16h later.'},
   {tag:'RAPID COOL',tip:'To cool down fast: palms, soles of feet, and upper face (glabrous skin) are heat-release portals. Focus cold water there.'},
-  {tag:'MORNING COLD',tip:'Ice bath in the morning = dopamine boost lasting 4-6 hours. NOT after strength work. Best on team training mornings for energy before evening session.'},
+  {tag:'MORNING COLD',tip:'Ice bath in the morning = dopamine boost lasting 4-6 hours. NOT after strength work. Tue/Thu mornings for energy before team training.'},
   {tag:'CONTRAST',tip:'3 min hot / 1 min cold \u00d7 4 rounds, finish cold. Gentler than full immersion. Good for heavy legs and general recovery.'},
   {tag:'SIGH',tip:'Physiological sigh: double inhale (nose) \u2192 long exhale (mouth). Repeat 1-3x. Fastest real-time parasympathetic activation.'},
   {tag:'VISION',tip:'During stress: shift from tunnel vision to panoramic/dilated gaze. Signals brain stem to lower alertness. Use during recovery and before sleep.'},
   {tag:'NOSE TAPE',tip:'Mouth tape at night forces nasal breathing. Better O2 exchange, reduces snoring, offsets sleep apnea. Side-sleeping + nose = optimal recovery.'},
   {tag:'SUPPLEMENTS',tip:'Tissue repair stack: Glutamine 20g daily (10g AM/PM), Omega-3 2-3g EPA, Creatine 5g daily. Sleep: Mg Threonate 145mg + Apigenin 50mg + Theanine.'},
   {tag:'GOATA',tip:'Inside Ankle Bone High. Back Chain Dominance. Column Alignment. Heel Away. Every warm-up, every movement. Recodes natural spiral patterns.'},
-  {tag:'112MVMNT',tip:'Rotate daily through 7 programs: Shoulders & Spine, Calves & Ankles, Glutes & Groins, Stronger Knee, Lower Back + Calves, Hips & Hammys, Light Hips. 15-25 min each.'}
+  {tag:'112MVMNT',tip:'Rotate daily: Sun=Hips, Mon=Shoulders, Tue=Calves, Wed=Glutes, Thu=Knee, Fri=Lower Back+Calves, Sat=Light Hips. 15-25 min each.'}
 ];
 
 /* ═══ regions ════════════════════════════════════════════════════ */
@@ -449,6 +439,24 @@ var REGIONS = {
 
 var SORE = ['None','Niggle','Sore','Angry'];
 var SORE_C = ['#3B4E47','#D8B24A','#E8873A','#F05A3A'];
+
+/* ═══ work schedule (shared across pages) ════════════════════════ */
+var WORK_KEY = 'work-schedule';
+function loadWork(){
+  try{return JSON.parse(localStorage.getItem(WORK_KEY))||{enabled:false,start:'09:00',end:'12:00'};}
+  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+}
+function saveWork(w){ localStorage.setItem(WORK_KEY,JSON.stringify(w)); }
+var WORK = loadWork();
+
+function workMins(timeStr){
+  var p=timeStr.split(':'); return parseInt(p[0])*60+parseInt(p[1]);
+}
+function workOverlap(slotAt){
+  if(!WORK.enabled) return false;
+  var ws=workMins(WORK.start), we=workMins(WORK.end);
+  return slotAt>=ws && slotAt<we;
+}
 
 /* ═══ state (localStorage) ═══════════════════════════════════════ */
 var SORE_KEY = 'recovery-sore';
@@ -636,6 +644,17 @@ function render(){
   var tip = BRAIN[getMelb().getDay()];
   h += '<div class="r-brain"><span class="r-btag">'+tip.tag+'</span><span class="r-btip">'+esc(tip.tip)+'</span></div>';
 
+  // Work schedule bar
+  h += '<div class="r-work">';
+  h += '<span class="r-work-tag">WORK</span>';
+  h += '<div class="r-work-body">';
+  h += '<span>Schedule</span>';
+  h += '<input class="r-work-input" type="time" id="workStart" value="'+WORK.start+'">';
+  h += '<span>to</span>';
+  h += '<input class="r-work-input" type="time" id="workEnd" value="'+WORK.end+'">';
+  h += '<button class="r-work-btn'+(WORK.enabled?' is-on':'')+'" id="workToggle">'+(WORK.enabled?'ON':'OFF')+'</button>';
+  h += '</div></div>';
+
   // 01 Window
   h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\'S WINDOW</p><h2>When, <em>not what</em></h2></div>';
   if(SESSION.end && SESSION.type==='strength' && NOW<coldAt){
@@ -644,18 +663,25 @@ function render(){
   h += '</header><ol class="r-win">';
   win.forEach(function(slot,i){
     var next = win[i+1];
+    var blocked = workOverlap(slot.at);
     var st = slot.at && NOW>=slot.at && (!next||NOW<next.at) ? 'now' : (slot.at && NOW>=slot.at ? 'past' : 'next');
-    h += '<li class="is-'+st+(slot.lock?' is-locked':'')+'">';
+    h += '<li class="is-'+st+(slot.lock||blocked?' is-locked':'')+'">';
     h += '<span class="r-bead"></span>';
     h += '<div class="r-wt"><span class="r-wtime">'+(slot.at?hhmm(slot.at):'\u2014')+'</span>';
-    h += '<span class="r-wlab">'+esc(slot.label)+'</span></div>';
-    h += '<div class="r-wc"><div class="r-chips">';
-    slot.tools.forEach(function(t){
-      var off = isLocked(t,NOW)||slot.lock;
-      h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
-    });
-    h += '</div><p class="r-wn'+(slot.lock||(st!=='past'&&slot.tools.some(function(t){return isLocked(t,NOW);}))?' is-hot':'')+'">';
-    h += esc(slot.note)+'</p></div></li>';
+    h += '<span class="r-wlab">'+esc(slot.label)+(blocked?' \u00b7 WORK':'')+'</span></div>';
+    h += '<div class="r-wc">';
+    if(blocked){
+      h += '<div class="r-work-blocked"><p>You\'re working '+WORK.start+' \u2013 '+WORK.end+'. This window shifts to after work.</p></div>';
+    } else {
+      h += '<div class="r-chips">';
+      slot.tools.forEach(function(t){
+        var off = isLocked(t,NOW)||slot.lock;
+        h += '<button data-run="'+t+'"'+(off?' disabled':'')+' style="--tc:'+TOOLS[t].c+'"><i></i> '+TOOLS[t].n+'</button>';
+      });
+      h += '</div><p class="r-wn'+(slot.lock||(st!=='past'&&slot.tools.some(function(t){return isLocked(t,NOW);}))?' is-hot':'')+'">';
+      h += esc(slot.note)+'</p>';
+    }
+    h += '</div></li>';
   });
   h += '</ol></section>';
 
@@ -822,6 +848,13 @@ function bindEvents(){
   if(tb) tb.addEventListener('click',toggleRunner);
   var cb = document.getElementById('closeRunner');
   if(cb) cb.addEventListener('click',closeRunner);
+  // Work schedule
+  var wt = document.getElementById('workToggle');
+  if(wt) wt.addEventListener('click',function(){ WORK.enabled=!WORK.enabled; saveWork(WORK); render(); });
+  var ws = document.getElementById('workStart');
+  if(ws) ws.addEventListener('change',function(){ WORK.start=this.value; saveWork(WORK); render(); });
+  var we = document.getElementById('workEnd');
+  if(we) we.addEventListener('change',function(){ WORK.end=this.value; saveWork(WORK); render(); });
 }
 
 function pick(key){
