@@ -548,6 +548,7 @@ function render(){
     const workCfg = loadWork();
     if(workCfg.days.includes(i)){
       col.innerHTML += `<div class="block block--gold" style="background:rgba(216,178,74,.1);border-color:var(--gold);color:var(--gold)"><span class="block-time">${workCfg.start}-${workCfg.end}</span><span class="block-label">WORK</span></div>`;
+      col.innerHTML += `<div style="font:400 9px var(--mono);color:var(--gold);opacity:.6;padding:2px 8px;margin-bottom:4px">Training shifts around work</div>`;
     }
 
     // Template blocks from resolved day type

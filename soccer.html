@@ -199,6 +199,31 @@ input{font-family:inherit;}
 .c-foot{display:flex;justify-content:space-between;max-width:var(--w);margin:44px auto 0;padding-top:18px;
   border-top:1px solid var(--line);font:400 9px var(--mono);letter-spacing:.18em;color:var(--dimmer);}
 
+/* match editor */
+.c-medit{max-width:var(--w);margin:0 auto 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);}
+.c-medit-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-top:0;border-left:0;border-right:0;width:100%;color:inherit;font-family:inherit;}
+.c-medit-h:hover{background:rgba(255,255,255,.02);}
+.c-medit-tag{font:500 9px var(--mono);letter-spacing:.2em;color:var(--amber);}
+.c-medit-chev{font:400 14px var(--mono);color:var(--dimmer);}
+.c-medit-b{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.c-medit-f{display:flex;flex-direction:column;gap:6px;}
+.c-medit-f.is-full{grid-column:1/-1;}
+.c-medit-l{font:500 8px var(--mono);letter-spacing:.24em;color:var(--dimmer);text-transform:uppercase;}
+.c-medit-i{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+  color:var(--ink);font:400 12px 'Inter',sans-serif;width:100%;}
+.c-medit-i:focus{outline:none;border-color:rgba(232,135,58,.4);}
+.c-medit-i::placeholder{color:var(--dimmer);}
+.c-medit-row{display:flex;gap:8px;align-items:center;}
+.c-medit-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.c-medit-toggle button{flex:1;padding:9px 16px;background:none;border:0;border-right:1px solid var(--line);
+  cursor:pointer;font:400 11px 'Inter',sans-serif;color:var(--dim);transition:all .12s;}
+.c-medit-toggle button:last-child{border-right:0;}
+.c-medit-toggle button.is-on{background:rgba(232,135,58,.12);color:var(--amber);}
+.c-bye-bar{max-width:var(--w);margin:0 auto 16px;padding:14px 20px;border:1px solid rgba(232,135,58,.2);
+  border-radius:12px;background:rgba(232,135,58,.05);text-align:center;}
+.c-bye-bar p{font:500 11px var(--mono);letter-spacing:.12em;color:var(--amber);}
+.c-bye-bar span{font:400 10px 'Inter',sans-serif;color:var(--dim);display:block;margin-top:4px;}
+
 @media(max-width:760px){
   body{padding:24px 16px 48px;}
   .c-hero{flex-direction:column;align-items:flex-start;gap:20px;padding:24px;}
@@ -223,6 +248,7 @@ input{font-family:inherit;}
 </header>
 
 <section class="c-hero" id="hero"></section>
+<div id="matchEditor"></div>
 
 <section class="c-coach" id="coach"></section>
 
@@ -244,18 +270,43 @@ var TODAY = new Date().getDay(); // 0=Sun in JS
 // Convert to 0=Mon format
 TODAY = TODAY === 0 ? 6 : TODAY - 1;
 
-var MATCH = { round: 12, opponent: "Bentleigh United Cobras FC", at: "SAT 15:00", home: true, venue: "Reema Reserve" };
+/* match info — shared via localStorage across all pages */
+var MATCH_KEY = 'match-info';
+function loadMatch(){
+  try{
+    var m = JSON.parse(localStorage.getItem(MATCH_KEY));
+    if(m && m.opponent) return m;
+  }catch(e){}
+  return { round:12, opponent:'Bentleigh United Cobras FC', kickoff:'15:00', home:true, venue:'Reema Reserve', arrive:'14:00', bye:false, day:5 };
+}
+function saveMatch(m){ localStorage.setItem(MATCH_KEY, JSON.stringify(m)); }
+var MATCH = loadMatch();
 var WEAK_FOOT = 58;
 
-var WEEK = [
-  { d: "MON", kind: "rest",  label: "Rest" },
-  { d: "TUE", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "WED", kind: "solo",  label: "Individual" },
-  { d: "THU", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "FRI", kind: "solo",  label: "Individual \u00b7 light" },
-  { d: "SAT", kind: "match", label: "Round " + MATCH.round, at: "14:00" },
-  { d: "SUN", kind: "rest",  label: "Rest & mobility" }
-];
+function buildWeek(){
+  var base = [
+    { d: "MON", kind: "rest",  label: "Rest" },
+    { d: "TUE", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
+    { d: "WED", kind: "solo",  label: "Individual" },
+    { d: "THU", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
+    { d: "FRI", kind: "solo",  label: "Individual \u00b7 light" },
+    { d: "SAT", kind: "match", label: "Round " + MATCH.round, at: MATCH.kickoff || "15:00" },
+    { d: "SUN", kind: "rest",  label: "Rest & mobility" }
+  ];
+  // Move match to correct day
+  if(typeof MATCH.day==='number' && MATCH.day !== 5){
+    base[5] = { d: "SAT", kind: "rest", label: "Rest" };
+    base[MATCH.day] = { d: DAYS[MATCH.day], kind: "match", label: "Round " + MATCH.round, at: MATCH.kickoff || "15:00" };
+  }
+  // Bye week
+  if(MATCH.bye){
+    for(var i=0;i<base.length;i++){
+      if(base[i].kind==='match') base[i] = { d: base[i].d, kind: "rest", label: "Bye week" };
+    }
+  }
+  return base;
+}
+var WEEK = buildWeek();
 
 var KIND = {
   team:  { c: "#4ADE80", t: "TEAM" },
@@ -395,7 +446,8 @@ var state = {
   openProto: null, // which pre-training protocol block is expanded
   protoDone: {},   // 'blockIdx-itemIdx' -> true
   logs: {},       // i -> { themes: {}, rpe, mins }
-  match: { pos: "CDM", mins: 90, rating: 0, goals: 0, assists: 0, moments: [] }
+  match: { pos: "CDM", mins: 90, rating: 0, goals: 0, assists: 0, moments: [] },
+  matchEditOpen: false
 };
 
 // Init logs
@@ -433,26 +485,76 @@ function render() {
     'FULLBACK / CDM<i></i>WEEK LOAD ' + (wl || "\u2014") + '<i></i>WEAK FOOT ' + WEAK_FOOT + '%';
 
   // Hero
-  document.getElementById("hero").innerHTML =
-    '<svg class="c-pitch" viewBox="0 0 400 260" aria-hidden="true" preserveAspectRatio="xMidYMid slice">' +
-      '<rect x="1" y="1" width="398" height="258" rx="2"/>' +
-      '<line x1="200" y1="1" x2="200" y2="259"/>' +
-      '<circle cx="200" cy="130" r="46"/>' +
-      '<circle cx="200" cy="130" r="2.5" class="c-pitch-f"/>' +
-      '<rect x="1" y="62" width="62" height="136"/>' +
-      '<rect x="337" y="62" width="62" height="136"/>' +
-      '<rect x="1" y="100" width="22" height="60"/>' +
-      '<rect x="377" y="100" width="22" height="60"/>' +
-    '</svg>' +
-    '<div class="c-hero-l">' +
-      '<p class="c-eyebrow is-amber">ROUND ' + MATCH.round + ' \u00b7 ' + (MATCH.home ? 'HOME' : 'AWAY') + '</p>' +
-      '<h2 class="c-opp">' + esc(MATCH.opponent) + '</h2>' +
-      '<p class="c-kick">' + esc(MATCH.at) + (MATCH.venue ? ' \u00b7 ' + esc(MATCH.venue) : '') + '</p>' +
-    '</div>' +
-    '<div class="c-hero-r">' +
-      '<div class="c-count"><b>' + toMatch + '</b><span>' + (toMatch === 1 ? 'DAY' : 'DAYS') + '</span></div>' +
-      '<p class="c-left">' + sessionsLeft + ' session' + (sessionsLeft === 1 ? '' : 's') + ' before kickoff</p>' +
-    '</div>';
+  var pitchSvg = '<svg class="c-pitch" viewBox="0 0 400 260" aria-hidden="true" preserveAspectRatio="xMidYMid slice">' +
+    '<rect x="1" y="1" width="398" height="258" rx="2"/><line x1="200" y1="1" x2="200" y2="259"/>' +
+    '<circle cx="200" cy="130" r="46"/><circle cx="200" cy="130" r="2.5" class="c-pitch-f"/>' +
+    '<rect x="1" y="62" width="62" height="136"/><rect x="337" y="62" width="62" height="136"/>' +
+    '<rect x="1" y="100" width="22" height="60"/><rect x="377" y="100" width="22" height="60"/></svg>';
+
+  if(MATCH.bye){
+    document.getElementById("hero").innerHTML = pitchSvg +
+      '<div class="c-hero-l"><p class="c-eyebrow is-amber">BYE WEEK</p>' +
+      '<h2 class="c-opp">No match</h2><p class="c-kick">Extra training week. Double down on weak foot.</p></div>' +
+      '<div class="c-hero-r"><div class="c-count"><b>\u2014</b><span>BYE</span></div>' +
+      '<p class="c-left">Use this week to build</p></div>';
+  } else {
+    var kickLine = DAYS[MATCH.day||5] + ' ' + (MATCH.kickoff||'15:00');
+    if(MATCH.venue) kickLine += ' \u00b7 ' + esc(MATCH.venue);
+    if(MATCH.arrive) kickLine += ' \u00b7 arrive ' + esc(MATCH.arrive);
+    document.getElementById("hero").innerHTML = pitchSvg +
+      '<div class="c-hero-l">' +
+        '<p class="c-eyebrow is-amber">ROUND ' + MATCH.round + ' \u00b7 ' + (MATCH.home ? 'HOME' : 'AWAY') + '</p>' +
+        '<h2 class="c-opp">' + esc(MATCH.opponent) + '</h2>' +
+        '<p class="c-kick">' + esc(kickLine) + '</p>' +
+      '</div>' +
+      '<div class="c-hero-r">' +
+        '<div class="c-count"><b>' + toMatch + '</b><span>' + (toMatch === 1 ? 'DAY' : 'DAYS') + '</span></div>' +
+        '<p class="c-left">' + sessionsLeft + ' session' + (sessionsLeft === 1 ? '' : 's') + ' before kickoff</p>' +
+      '</div>';
+  }
+
+  // Match editor
+  var me = '';
+  me += '<div class="c-medit"><button class="c-medit-h" id="toggleMatchEdit">';
+  me += '<span class="c-medit-tag">PLAN WEEK</span>';
+  me += '<span class="c-medit-chev">' + (state.matchEditOpen ? '\u2212' : '+') + '</span></button>';
+  if(state.matchEditOpen){
+    me += '<div class="c-medit-b">';
+    // Bye toggle
+    me += '<div class="c-medit-f is-full"><p class="c-medit-l">WEEK TYPE</p>';
+    me += '<div class="c-medit-toggle"><button class="'+(MATCH.bye?'':'is-on')+'" data-mbye="0">Game week</button>';
+    me += '<button class="'+(MATCH.bye?'is-on':'')+'" data-mbye="1">Bye week</button></div></div>';
+    if(!MATCH.bye){
+      // Round
+      me += '<div class="c-medit-f"><p class="c-medit-l">ROUND</p>';
+      me += '<div class="c-step"><button data-mround="-1">\u2212</button><span>'+MATCH.round+'</span><button data-mround="1">+</button></div></div>';
+      // Game day
+      me += '<div class="c-medit-f"><p class="c-medit-l">GAME DAY</p>';
+      me += '<div class="c-medit-toggle">';
+      DAYS.forEach(function(d,i){
+        me += '<button class="'+((MATCH.day||5)===i?'is-on':'')+'" data-mday="'+i+'">'+d+'</button>';
+      });
+      me += '</div></div>';
+      // Opponent
+      me += '<div class="c-medit-f is-full"><p class="c-medit-l">OPPONENT</p>';
+      me += '<input class="c-medit-i" type="text" id="mOpp" value="'+esc(MATCH.opponent)+'" placeholder="Team name"></div>';
+      // Kickoff + Arrive
+      me += '<div class="c-medit-f"><p class="c-medit-l">KICKOFF</p>';
+      me += '<input class="c-medit-i" type="time" id="mKickoff" value="'+(MATCH.kickoff||'15:00')+'"></div>';
+      me += '<div class="c-medit-f"><p class="c-medit-l">ARRIVE BY</p>';
+      me += '<input class="c-medit-i" type="time" id="mArrive" value="'+(MATCH.arrive||'14:00')+'"></div>';
+      // Venue
+      me += '<div class="c-medit-f is-full"><p class="c-medit-l">VENUE / ADDRESS</p>';
+      me += '<input class="c-medit-i" type="text" id="mVenue" value="'+esc(MATCH.venue||'')+'" placeholder="Ground name or address"></div>';
+      // Home/Away
+      me += '<div class="c-medit-f"><p class="c-medit-l">HOME / AWAY</p>';
+      me += '<div class="c-medit-toggle"><button class="'+(MATCH.home?'is-on':'')+'" data-mhome="1">Home</button>';
+      me += '<button class="'+(!MATCH.home?'is-on':'')+'" data-mhome="0">Away</button></div></div>';
+    }
+    me += '</div>';
+  }
+  me += '</div>';
+  document.getElementById("matchEditor").innerHTML = me;
 
   // Coach
   document.getElementById("coach").innerHTML =
@@ -855,6 +957,40 @@ function bindAll() {
       render();
     });
   });
+
+  // Match editor toggle
+  var met = document.getElementById('toggleMatchEdit');
+  if(met) met.addEventListener('click', function(){ state.matchEditOpen = !state.matchEditOpen; render(); });
+
+  // Bye toggle
+  document.querySelectorAll('[data-mbye]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.bye = this.dataset.mbye==='1'; saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Round stepper
+  document.querySelectorAll('[data-mround]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.round = Math.max(1, MATCH.round + parseInt(this.dataset.mround)); saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Game day selector
+  document.querySelectorAll('[data-mday]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.day = parseInt(this.dataset.mday); saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Home/Away
+  document.querySelectorAll('[data-mhome]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.home = this.dataset.mhome==='1'; saveMatch(MATCH); render(); });
+  });
+
+  // Text/time inputs (save on change)
+  var mOpp = document.getElementById('mOpp');
+  if(mOpp) mOpp.addEventListener('change', function(){ MATCH.opponent = this.value.trim()||'TBD'; saveMatch(MATCH); render(); });
+  var mKick = document.getElementById('mKickoff');
+  if(mKick) mKick.addEventListener('change', function(){ MATCH.kickoff = this.value; saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  var mArr = document.getElementById('mArrive');
+  if(mArr) mArr.addEventListener('change', function(){ MATCH.arrive = this.value; saveMatch(MATCH); render(); });
+  var mVen = document.getElementById('mVenue');
+  if(mVen) mVen.addEventListener('change', function(){ MATCH.venue = this.value.trim(); saveMatch(MATCH); render(); });
 }
 
 function addMoment() {

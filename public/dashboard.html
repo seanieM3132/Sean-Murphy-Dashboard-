@@ -677,7 +677,7 @@ function getDayItems(key) {
     var mins = a.duration || 60;
     items.push({ id:'appt-'+a.id, at:at, mins:mins, kind:'appt', title:a.name || a.title || 'Appointment', sub:'', href:'', steps:[], added:true });
   });
-  // Inject work block if scheduled
+  // Inject work block and shift training around it
   var parts2 = key.split('-');
   var dd = new Date(parseInt(parts2[0]), parseInt(parts2[1])-1, parseInt(parts2[2]));
   var dow = dd.getDay();
@@ -688,6 +688,52 @@ function getDayItems(key) {
     var wAt = parseInt(ws[0])*60+parseInt(ws[1]||0);
     var wEnd = parseInt(we[0])*60+parseInt(we[1]||0);
     items.push({ id:'work', at:wAt, mins:wEnd-wAt, kind:'appt', title:'WORK', sub:workCfg.start+' \u2013 '+workCfg.end, href:'', steps:[], added:true });
+
+    // Shift training items around work hours
+    // Split into: before-work, overlapping, after-work
+    var beforeWork = [];
+    var overlapping = [];
+    var afterWork = [];
+    items.forEach(function(item) {
+      if (item.added) return; // work/appts stay fixed
+      var itemEnd = item.at + (item.mins || 0);
+      if (itemEnd <= wAt) {
+        beforeWork.push(item);
+      } else if (item.at >= wEnd) {
+        afterWork.push(item);
+      } else {
+        overlapping.push(item);
+      }
+    });
+
+    // Morning routine (AM) goes before work if possible
+    var amItem = null;
+    var trainingItems = [];
+    overlapping.forEach(function(item) {
+      if (item.id === 'am') { amItem = item; }
+      else { trainingItems.push(item); }
+    });
+
+    // Shift AM to before work
+    if (amItem) {
+      amItem.at = Math.max(wAt - (amItem.mins || 35) - 5, 300); // at least 5:00am
+      beforeWork.push(amItem);
+    }
+
+    // Stack overlapping training items after work ends
+    var cursor = wEnd + 10; // 10 min buffer after work
+    trainingItems.forEach(function(item) {
+      item.at = cursor;
+      cursor += (item.mins || 30) + 5; // 5 min gap between items
+    });
+
+    // Also check if any afterWork items now conflict with stacked items
+    afterWork.forEach(function(item) {
+      if (item.at < cursor) {
+        item.at = cursor;
+        cursor += (item.mins || 30) + 5;
+      }
+    });
   }
   items.sort(function(a, b) { return a.at - b.at; });
   return items;
