@@ -227,7 +227,25 @@ function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 var SESSION = loadSession();
 var _melb = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
 var _melbDay = _melb.getDay(); // 0=Sun, 6=Sat
-var MATCH_IN = _melbDay === 6 ? 0 : (6 - _melbDay + 7) % 7;
+var _planDow = _melbDay === 0 ? 6 : _melbDay - 1; // 0=Mon
+
+function loadGameDayCfg() {
+  try { return JSON.parse(localStorage.getItem('planner-gameday')) || {}; } catch(e) { return {}; }
+}
+
+function calcMatchIn() {
+  var cfg = loadGameDayCfg();
+  if (cfg.status === 'bye') return -1;
+  var gameDays = cfg.days || [5]; // default Saturday (planDow 5)
+  var best = 99;
+  for (var i = 0; i < gameDays.length; i++) {
+    var diff = (gameDays[i] - _planDow + 7) % 7;
+    if (diff === 0) diff = 0; // today is match day
+    if (diff < best) best = diff;
+  }
+  return best;
+}
+var MATCH_IN = calcMatchIn();
 var BED = 22*60+30;
 var COLD_GATE = 4*60;
 
@@ -369,19 +387,28 @@ var PROTOCOLS = {
       {n:'Final cool-down + eat',mins:10,cue:'Gradual cool. Don\'t rush. Hydrate fully. Protein + carbs within 30 min.'}
     ]
   },
-  mobilityAM:{
-    n:'112MVMNT Morning Mobility',tag:'ROTATE DAILY',c:'#9C8ADE',mins:20,
-    why:'112mvmnt programs rotate daily. Each targets different areas. Pairs with the day\'s training focus. 15-25 min.',
-    steps:[
-      {n:'SUN: Hips & Hammys \u2014 post-match recovery',mins:20,cue:'Hip flexor leg lifts 3x3x5s, banded hamstring stretch 3x3x5s, butterfly CRAC 3x6x10s, couch stretch 2x1min.'},
-      {n:'MON: Shoulders & Spine \u2014 pairs with heavy compounds',mins:20,cue:'Banded T-spine rotations 3x5, thoracic rotation stretch 45-60s, shoulder circles 3x5, seal stretch 60s.'},
-      {n:'TUE: Calves & Ankles \u2014 pre-team training stability',mins:20,cue:'Slant board calf raise 3x8-10, tib raises 3x8-10, banded ankle dorsiflexion 2min, deep squat 4min.'},
-      {n:'WED: Glutes & Groins \u2014 pairs with power day',mins:20,cue:'Dynamic leg lifts 3x5, tailor\'s pose 3x8-10, wall straddle 2min, horse stance iso 3x30s.'},
-      {n:'THU: Stronger Knee \u2014 ACL prevention pre-team',mins:20,cue:'Banded knee extension 3x20, iso lunge hold 3x30s, reverse step-up 3x6, slant board squat 3x6-8.'},
-      {n:'FRI: Lower Back + Calves \u2014 open up pre-game',mins:20,cue:'Active cobra 3x5x5s, seated good mornings 3x6, banded spinal rotation 1min, calf raises + dorsiflexion.'},
-      {n:'SAT: Light Hips pre-game (10 min only)',mins:10,cue:'Hip flexor lifts 2x3x5s, butterfly 2x30s, couch stretch 1x30s each. Don\'t fatigue yourself.'}
-    ]
-  }
+  mobilityAM:(function(){
+    var MOBILITY_POOL = [
+      {n:'Shoulders & Spine',mins:20,cue:'Banded T-spine rotations 3x5, thoracic rotation stretch 45-60s, shoulder circles 3x5, seal stretch 60s.'},
+      {n:'Calves & Ankles',mins:20,cue:'Slant board calf raise 3x8-10, tib raises 3x8-10, banded ankle dorsiflexion 2min, deep squat 4min.'},
+      {n:'Glutes & Groins',mins:20,cue:'Dynamic leg lifts 3x5, tailor\'s pose 3x8-10, wall straddle 2min, horse stance iso 3x30s.'},
+      {n:'Stronger Knee',mins:20,cue:'Banded knee extension 3x20, iso lunge hold 3x30s, reverse step-up 3x6, slant board squat 3x6-8.'},
+      {n:'Lower Back + Calves',mins:20,cue:'Active cobra 3x5x5s, seated good mornings 3x6, banded spinal rotation 1min, calf raises + dorsiflexion.'},
+      {n:'Hips & Hammys',mins:20,cue:'Hip flexor leg lifts 3x3x5s, banded hamstring stretch 3x3x5s, butterfly CRAC 3x6x10s, couch stretch 2x1min.'},
+      {n:'Light Hips (10 min)',mins:10,cue:'Hip flexor lifts 2x3x5s, butterfly 2x30s, couch stretch 1x30s each. Don\'t fatigue yourself.'}
+    ];
+    var DAY_NAMES = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+    var steps = [];
+    for(var i=0;i<7;i++){
+      var m = MOBILITY_POOL[i % MOBILITY_POOL.length];
+      steps.push({n:DAY_NAMES[i]+': '+m.n,mins:m.mins,cue:m.cue});
+    }
+    return {
+      n:'112MVMNT Morning Mobility',tag:'ROTATE DAILY',c:'#9C8ADE',mins:20,
+      why:'112mvmnt programs rotate daily. Each targets different areas. Pairs with the day\'s training focus. 15-25 min.',
+      steps:steps
+    };
+  })()
 };
 
 /* ═══ brain knowledge ═══════════════════════════════════════════ */
@@ -396,14 +423,14 @@ var BRAIN = [
   {tag:'FASCIA',tip:'Fascia remodels over 12 weeks. Foot-to-glute connection starts at the feet. Elevated toe curls daily, full session 3x/week. Consistency > intensity.'},
   {tag:'CIRCADIAN',tip:'Sunlight within 30 min of waking, 10+ min, no sunglasses. Triggers 50% cortisol pulse, clears adenosine, sets melatonin timer 16h later.'},
   {tag:'RAPID COOL',tip:'To cool down fast: palms, soles of feet, and upper face (glabrous skin) are heat-release portals. Focus cold water there.'},
-  {tag:'MORNING COLD',tip:'Ice bath in the morning = dopamine boost lasting 4-6 hours. NOT after strength work. Tue/Thu mornings for energy before team training.'},
+  {tag:'MORNING COLD',tip:'Ice bath in the morning = dopamine boost lasting 4-6 hours. NOT after strength work. Best on team training mornings for energy before evening session.'},
   {tag:'CONTRAST',tip:'3 min hot / 1 min cold \u00d7 4 rounds, finish cold. Gentler than full immersion. Good for heavy legs and general recovery.'},
   {tag:'SIGH',tip:'Physiological sigh: double inhale (nose) \u2192 long exhale (mouth). Repeat 1-3x. Fastest real-time parasympathetic activation.'},
   {tag:'VISION',tip:'During stress: shift from tunnel vision to panoramic/dilated gaze. Signals brain stem to lower alertness. Use during recovery and before sleep.'},
   {tag:'NOSE TAPE',tip:'Mouth tape at night forces nasal breathing. Better O2 exchange, reduces snoring, offsets sleep apnea. Side-sleeping + nose = optimal recovery.'},
   {tag:'SUPPLEMENTS',tip:'Tissue repair stack: Glutamine 20g daily (10g AM/PM), Omega-3 2-3g EPA, Creatine 5g daily. Sleep: Mg Threonate 145mg + Apigenin 50mg + Theanine.'},
   {tag:'GOATA',tip:'Inside Ankle Bone High. Back Chain Dominance. Column Alignment. Heel Away. Every warm-up, every movement. Recodes natural spiral patterns.'},
-  {tag:'112MVMNT',tip:'Rotate daily: Sun=Hips, Mon=Shoulders, Tue=Calves, Wed=Glutes, Thu=Knee, Fri=Lower Back+Calves, Sat=Light Hips. 15-25 min each.'}
+  {tag:'112MVMNT',tip:'Rotate daily through 7 programs: Shoulders & Spine, Calves & Ankles, Glutes & Groins, Stronger Knee, Lower Back + Calves, Hips & Hammys, Light Hips. 15-25 min each.'}
 ];
 
 /* ═══ regions ════════════════════════════════════════════════════ */
