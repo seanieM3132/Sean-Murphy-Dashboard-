@@ -244,18 +244,60 @@ var TODAY = new Date().getDay(); // 0=Sun in JS
 // Convert to 0=Mon format
 TODAY = TODAY === 0 ? 6 : TODAY - 1;
 
-var MATCH = { round: 12, opponent: "Bentleigh United Cobras FC", at: "SAT 15:00", home: true, venue: "Reema Reserve" };
+var MATCH = { round: 12, opponent: "Bentleigh United Cobras FC", home: true, venue: "Reema Reserve" };
 var WEAK_FOOT = 58;
 
-var WEEK = [
-  { d: "MON", kind: "rest",  label: "Rest" },
-  { d: "TUE", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "WED", kind: "solo",  label: "Individual" },
-  { d: "THU", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-  { d: "FRI", kind: "solo",  label: "Individual \u00b7 light" },
-  { d: "SAT", kind: "match", label: "Round " + MATCH.round, at: "14:00" },
-  { d: "SUN", kind: "rest",  label: "Rest & mobility" }
-];
+/* === CONFIG READERS (shared with dashboard/plan/gym) === */
+function loadGameDay() {
+  try { return JSON.parse(localStorage.getItem('planner-gameday')) || {}; } catch(e) { return {}; }
+}
+function loadTeamDays() {
+  try { return JSON.parse(localStorage.getItem('planner-teamdays')) || {}; } catch(e) { return {}; }
+}
+
+function buildWeek() {
+  var cfg = loadGameDay();
+  var teamCfg = loadTeamDays();
+  var gameDays = cfg.days || [5];
+  var isBye = cfg.status === 'bye';
+  var teamDays = teamCfg.days || [1, 3];
+  var DAY_NAMES = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+  var week = [];
+  for (var i = 0; i < 7; i++) {
+    var entry = { d: DAY_NAMES[i] };
+    if (gameDays.indexOf(i) >= 0 && !isBye) {
+      entry.kind = 'match'; entry.label = 'Round ' + MATCH.round; entry.at = '15:00';
+    } else if (gameDays.indexOf(i) >= 0 && isBye) {
+      entry.kind = 'rest'; entry.label = 'Bye Week';
+    } else if (teamDays.indexOf(i) >= 0 && !isBye) {
+      entry.kind = 'team'; entry.label = 'Team training'; entry.at = '18:00'; entry.mins = 90;
+    } else if (i === 6) {
+      entry.kind = 'rest'; entry.label = 'Rest & mobility';
+    } else {
+      // Check if prematch or recovery
+      var isPre = false, isRec = false;
+      if (!isBye) {
+        for (var g = 0; g < gameDays.length; g++) {
+          if (i === (gameDays[g] + 6) % 7) isPre = true;
+          if (i === (gameDays[g] + 1) % 7) isRec = true;
+        }
+      }
+      if (isRec) {
+        entry.kind = 'rest'; entry.label = 'Recovery';
+      } else if (isPre) {
+        entry.kind = 'solo'; entry.label = 'Individual \u00b7 light';
+      } else {
+        entry.kind = 'solo'; entry.label = 'Individual';
+      }
+    }
+    week.push(entry);
+  }
+  MATCH.at = week.find(function(w){ return w.kind === 'match'; }) ?
+    week.find(function(w){ return w.kind === 'match'; }).d + ' 15:00' : 'TBD';
+  return week;
+}
+
+var WEEK = buildWeek();
 
 var KIND = {
   team:  { c: "#4ADE80", t: "TEAM" },
@@ -344,35 +386,42 @@ var PRE_GAME = { label: 'Pre-game Warm-up Touches', mins: 5, drills: [
   { n: 'Coerver pull-push', d: '1 min' }
 ]};
 
-// SESSIONS keyed by day (0=Mon...6=Sun)
-var SESSIONS = {
-  0: { title: 'Set A + Passing & Switching + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    PASSING,
-    LONG_THROWS
+// Full individual session templates (rotate through)
+var SOLO_SESSIONS = [
+  { title: 'Set A + Passing & Switching + Long Throws', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, PASSING, LONG_THROWS
   ]},
-  1: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  2: { title: 'Set B + Weak Foot Block + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_B,
-    WEAK_FOOT_BLOCK,
-    LONG_THROWS
+  { title: 'Set B + Weak Foot Block + Long Throws', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_B, WEAK_FOOT_BLOCK, LONG_THROWS
   ]},
-  3: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  4: { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_C,
-    FIRST_TOUCH,
-    LONG_THROWS
+  { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_C, FIRST_TOUCH, LONG_THROWS
   ]},
-  5: { title: 'Pre-game Warm-up', blocks: [PRE_GAME] },
-  6: { title: 'Set A + First Touch', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    FIRST_TOUCH
+  { title: 'Set A + First Touch', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, FIRST_TOUCH
   ]}
-};
+];
+
+// Build SESSIONS dynamically based on WEEK
+function buildSessions() {
+  var sessions = {};
+  var soloIdx = 0;
+  for (var i = 0; i < 7; i++) {
+    var w = WEEK[i];
+    if (w.kind === 'team') {
+      sessions[i] = { title: 'Pre-team Touches', blocks: [PRE_TEAM] };
+    } else if (w.kind === 'match') {
+      sessions[i] = { title: 'Pre-game Warm-up', blocks: [PRE_GAME] };
+    } else if (w.kind === 'solo') {
+      sessions[i] = SOLO_SESSIONS[soloIdx % SOLO_SESSIONS.length];
+      soloIdx++;
+    } else {
+      sessions[i] = { title: 'Rest Day', blocks: [] };
+    }
+  }
+  return sessions;
+}
+var SESSIONS = buildSessions();
 
 /* ═══ Khabib ═══════════════════════════════════════════════════ */
 function khabib(today) {
