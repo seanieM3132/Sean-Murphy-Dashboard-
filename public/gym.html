@@ -552,40 +552,90 @@ friday: {
 
 }; // end SESSIONS_SAT
 
-/* --- FRIDAY GAME WEEK VARIANT --- */
-/* When game is FRIDAY: Wednesday absorbs speed work, Friday = game day rest */
+/* === CONFIG READERS (shared with dashboard/plan) === */
 
-var SESSIONS_FRI = JSON.parse(JSON.stringify(SESSIONS_SAT));
+function loadGameDay() {
+  try { return JSON.parse(localStorage.getItem('planner-gameday')) || {}; } catch(e) { return {}; }
+}
+function loadTeamDays() {
+  try { return JSON.parse(localStorage.getItem('planner-teamdays')) || {}; } catch(e) { return {}; }
+}
 
-// Wednesday gets speed drills added to POWER section
-SESSIONS_FRI.wednesday.name = 'Upper Power + Speed';
-SESSIONS_FRI.wednesday.sections[2].groups.push({
-  label:'Speed work (Fri game week)', note:'Moved from Friday', ex:[
-    { id:'wfs1', type:'sprint', n:'Standing start', reps:4, dist:10, rest:60, cue:'Low start, 45\u00B0 body angle. First 3 steps are EVERYTHING.' },
-    { id:'wfs2', type:'sprint', n:'Flying 20s', reps:3, dist:20, rest:90, cue:'Build 10m, MAX 20m. Upright, relax face/hands.' }
-  ]
-});
-SESSIONS_FRI.wednesday.sections[2].mins = 18; // power section grows
+function resolveDayType(planDow) {
+  var cfg = loadGameDay();
+  var teamCfg = loadTeamDays();
+  var gameDays = cfg.days || [5];
+  var isBye = cfg.status === 'bye';
+  var teamDays = teamCfg.days || [1, 3];
 
-// Thursday stays light (game is tomorrow night for Fri game, or Fri evening)
-SESSIONS_FRI.thursday.sections[1].note = 'Light activation only. Game TOMORROW. Keep it short and easy.';
+  if (gameDays.indexOf(planDow) >= 0) return isBye ? 'bye' : 'match';
+  if (!isBye) {
+    for (var g = 0; g < gameDays.length; g++) {
+      if (planDow === (gameDays[g] + 6) % 7) return 'prematch';
+    }
+  }
+  if (!isBye) {
+    for (var g = 0; g < gameDays.length; g++) {
+      if (planDow === (gameDays[g] + 1) % 7) return 'recovery';
+    }
+  }
+  if (planDow === 6) return 'recovery';
+  if (teamDays.indexOf(planDow) >= 0) {
+    return teamDays.indexOf(planDow) === 0 ? 'team_a' : 'team_b';
+  }
+  var heavySlot = 0;
+  for (var i = 0; i < planDow; i++) {
+    if (gameDays.indexOf(i) >= 0) continue;
+    if (i === 6) continue;
+    if (teamDays.indexOf(i) >= 0) continue;
+    var isPre = false, isRec = false;
+    if (!isBye) {
+      for (var g = 0; g < gameDays.length; g++) {
+        if (i === (gameDays[g] + 6) % 7) isPre = true;
+        if (i === (gameDays[g] + 1) % 7) isRec = true;
+      }
+    }
+    if (isPre || isRec) continue;
+    heavySlot++;
+  }
+  return heavySlot % 2 === 0 ? 'heavy_lower' : 'heavy_upper';
+}
 
-// Friday becomes game day
-SESSIONS_FRI.friday = {
-  name: 'GAME DAY', day: 'FRIDAY', time: '\u2014',
-  isGameDay: true,
-  sections: []
+/* Session templates by type */
+var SESSION_BY_TYPE = {
+  heavy_lower: SESSIONS_SAT.monday,
+  heavy_upper: SESSIONS_SAT.wednesday,
+  team_a: SESSIONS_SAT.tuesday,
+  team_b: SESSIONS_SAT.thursday,
+  prematch: SESSIONS_SAT.friday,
+  match: { name: 'GAME DAY', day: '', time: '\u2014', isGameDay: true, sections: [] },
+  recovery: { name: 'RECOVERY DAY', day: '', time: '\u2014', isRestDay: true, sections: [] },
+  bye: { name: 'BYE WEEK', day: '', time: '\u2014', isRestDay: true, sections: [] }
+};
+
+var TYPE_LABELS = {
+  heavy_lower: 'Lower Power', heavy_upper: 'Upper Power',
+  team_a: 'Activation', team_b: 'Activation',
+  prematch: 'Speed SHORT', match: 'GAME DAY',
+  recovery: 'Recovery', bye: 'Bye Week'
+};
+
+var COACH_BY_TYPE = {
+  heavy_lower: 'Sprint on lower body day = neurological crossover. Peak set then back-offs. 55 min. Earn the weight.',
+  heavy_upper: 'Athletic upper body. Impulse training, rotation rows, speed transition. Not bodybuilding.',
+  team_a: 'Save your energy for team training tonight. Light and quick.',
+  team_b: 'Save your energy for team training tonight. Light and quick.',
+  prematch: 'Keep it SHORT. 40 min. Game tomorrow. Full recovery between reps. When times drop, stop.',
+  match: 'No gym today. All energy goes to the game.',
+  recovery: 'Rest and recover. Light movement only if needed.',
+  bye: 'No game this week. Use this time wisely \u2014 full session or active recovery.'
 };
 
 /* === STATE === */
 
-var gameWeek = localStorage.getItem('gym-gameweek') || 'sat';
-function getSessions(){ return gameWeek === 'fri' ? SESSIONS_FRI : SESSIONS_SAT; }
-
 var DAYS = ['monday','tuesday','wednesday','thursday','friday'];
 var DAY_LABELS = {monday:'MON',tuesday:'TUE',wednesday:'WED',thursday:'THU',friday:'FRI'};
-var DAY_NOTES_SAT = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper Power',thursday:'Activation',friday:'Speed SHORT'};
-var DAY_NOTES_FRI = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper+Speed',thursday:'Activation',friday:'GAME DAY'};
+var PLAN_DOW = {monday:0, tuesday:1, wednesday:2, thursday:3, friday:4};
 
 var today = new Date().getDay();
 var currentDay = today>=1&&today<=5 ? DAYS[today-1] : 'friday';
@@ -597,7 +647,23 @@ var openSec = null;
 var restState = null;
 var restTimer = null;
 
-function getSession(){ return getSessions()[currentDay]; }
+function getDayType(dayKey) { return resolveDayType(PLAN_DOW[dayKey]); }
+
+var _cachedSession = null;
+var _cachedDay = null;
+
+function getSession(){
+  if(_cachedDay === currentDay && _cachedSession) return _cachedSession;
+  var type = getDayType(currentDay);
+  var template = SESSION_BY_TYPE[type];
+  var sess = JSON.parse(JSON.stringify(template));
+  sess.day = currentDay.toUpperCase();
+  sess.dayType = type;
+  _cachedSession = sess;
+  _cachedDay = currentDay;
+  return sess;
+}
+function invalidateCache(){ _cachedSession = null; _cachedDay = null; }
 function getSections(){ return getSession().sections; }
 function getQueue(){
   var q=[];
@@ -656,6 +722,7 @@ function startRestTimer(){
 
 function switchDay(day){
   currentDay = day;
+  invalidateCache();
   log = {};
   times = {};
   rpe = null;
@@ -665,46 +732,48 @@ function switchDay(day){
   render();
 }
 
-function toggleGameWeek(gw){
-  gameWeek = gw;
-  localStorage.setItem('gym-gameweek', gw);
-  log = {};
-  times = {};
-  rpe = null;
-  openSec = null;
-  restState = null;
-  clearInterval(restTimer);
-  render();
-}
+/* toggleGameWeek removed — gym now reads from planner-gameday/planner-teamdays */
 
 /* === RENDER === */
 
 function render(){
+  invalidateCache();
   var sess = getSession();
-  var dayNotes = gameWeek === 'fri' ? DAY_NOTES_FRI : DAY_NOTES_SAT;
   var html = '';
 
 
   // DAY SELECTOR
   html += '<nav class="s-days" role="tablist">';
   DAYS.forEach(function(d){
+    var dtype = getDayType(d);
     html += '<button role="tab" class="'+(d===currentDay?'is-on':'')+'" data-day="'+d+'" aria-selected="'+(d===currentDay)+'">';
-    html += DAY_LABELS[d]+'<span class="dn">'+dayNotes[d]+'</span></button>';
+    html += DAY_LABELS[d]+'<span class="dn">'+TYPE_LABELS[dtype]+'</span></button>';
   });
   html += '</nav>';
 
-  // GAME DAY MESSAGE
-  if(sess.isGameDay){
-    document.body.className = 'is-power';
+  // GAME DAY / RECOVERY / BYE MESSAGE
+  if(sess.isGameDay || sess.isRestDay){
+    document.body.className = sess.isGameDay ? 'is-power' : 'is-cool';
+    var typeLabel = sess.dayType === 'match' ? 'GAME DAY' : sess.dayType === 'recovery' ? 'RECOVERY' : 'BYE WEEK';
     html += '<header class="s-top"><div>';
     html += '<h1>Gym, <em>Sean</em></h1>';
-    html += '<p class="sub">GAME DAY \u00B7 '+sess.day+'</p>';
+    html += '<p class="sub">'+typeLabel+' \u00B7 '+sess.day+'</p>';
     html += '</div></header>';
     html += '<section class="s-gameday">';
-    html += '<h2>Game Day</h2>';
-    html += '<p>No gym today. All energy goes to the game.<br><br>';
-    html += 'See <strong>Soccer \u2192 Game Day</strong> tab for your 20-min change room protocol + team warm-up.<br><br>';
-    html += 'Speed work was moved to Wednesday this week.</p>';
+    if(sess.isGameDay){
+      html += '<h2>Game Day</h2>';
+      html += '<p>No gym today. All energy goes to the game.<br><br>';
+      html += 'See <strong>Soccer \u2192 Game Day</strong> tab for your 20-min change room protocol + team warm-up.</p>';
+    } else if(sess.dayType === 'recovery'){
+      html += '<h2>Recovery Day</h2>';
+      html += '<p>No gym today. Focus on recovery.<br><br>';
+      html += 'Light movement, stretching, sauna, ice bath \u2014 whatever helps you recover.<br><br>';
+      html += 'See <strong>Recovery</strong> tab for your full protocol.</p>';
+    } else {
+      html += '<h2>Bye Week</h2>';
+      html += '<p>No game this week. Use this time for active recovery or an extra session.<br><br>';
+      html += 'Listen to your body \u2014 if you feel good, get after it.</p>';
+    }
     html += '</section>';
     document.getElementById('app').innerHTML = html;
     bindEvents();
@@ -736,14 +805,7 @@ function render(){
   html += '</div>';
   html += '<div class="s-coach">';
   html += '<svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(74,222,128,.05)" stroke="rgba(74,222,128,.24)"/><path d="M24 20 V44 M40 20 L26 32 L41 44" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var coachMsg = {
-    monday:'Sprint on lower body day = neurological crossover. Peak set then back-offs. 55 min. Earn the weight.',
-    tuesday:'Save your energy for team training tonight. Light and quick.',
-    wednesday: gameWeek==='fri' ? 'Speed absorbed into today. Athletic upper + explosiveness + acceleration. No gym Friday.' : 'Athletic upper body. Impulse training, rotation rows, speed transition. Not bodybuilding.',
-    thursday: gameWeek==='fri' ? 'Game TOMORROW. Light activation, stay fresh.' : 'Save your energy for team training tonight. Light and quick.',
-    friday:'Keep it SHORT. 40 min. Game tomorrow. Full recovery between reps. When times drop, stop.'
-  };
-  html += '<p><b>KHABIB</b>'+coachMsg[currentDay]+'</p>';
+  html += '<p><b>KHABIB</b>'+(COACH_BY_TYPE[sess.dayType] || '')+'</p>';
   html += '</div></header>';
 
   // TIMELINE
@@ -872,9 +934,6 @@ function render(){
 /* === EVENTS === */
 
 function bindEvents(){
-  document.querySelectorAll('[data-gw]').forEach(function(btn){
-    btn.onclick = function(){ toggleGameWeek(this.getAttribute('data-gw')); };
-  });
   document.querySelectorAll('[data-day]').forEach(function(btn){
     btn.onclick = function(){ switchDay(this.getAttribute('data-day')); };
   });
