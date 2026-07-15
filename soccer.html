@@ -427,6 +427,7 @@ var SESSIONS = {
 
 /* ═══ Khabib ═══════════════════════════════════════════════════ */
 function khabib(today) {
+  if(MATCH.bye) return { tone: "good", line: "Bye week. No match pressure. Double down on weak foot (" + WEAK_FOOT + "%), long throws, and the things you can\u2019t train under fatigue." };
   var m = -1;
   for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { m = i; break; } }
   var days = m === -1 ? null : m - today;

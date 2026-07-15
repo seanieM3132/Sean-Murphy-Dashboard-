@@ -244,7 +244,10 @@ function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 var SESSION = loadSession();
 var _melb = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
 var _melbDay = _melb.getDay(); // 0=Sun, 6=Sat
-var MATCH_IN = _melbDay === 6 ? 0 : (6 - _melbDay + 7) % 7;
+// Read match info from shared localStorage (set by soccer page)
+var _matchInfo = (function(){ try{return JSON.parse(localStorage.getItem('match-info'))||{};}catch(e){return {};} })();
+var _matchJsDay = _matchInfo.bye ? -1 : (_matchInfo.day===undefined ? 6 : [1,2,3,4,5,6,0][_matchInfo.day]); // convert 0=Mon to JS 0=Sun
+var MATCH_IN = _matchInfo.bye ? 99 : (_melbDay === _matchJsDay ? 0 : (_matchJsDay - _melbDay + 7) % 7);
 var BED = 22*60+30;
 var COLD_GATE = 4*60;
 

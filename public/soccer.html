@@ -427,6 +427,7 @@ var SESSIONS = {
 
 /* ═══ Khabib ═══════════════════════════════════════════════════ */
 function khabib(today) {
+  if(MATCH.bye) return { tone: "good", line: "Bye week. No match pressure. Double down on weak foot (" + WEAK_FOOT + "%), long throws, and the things you can\u2019t train under fatigue." };
   var m = -1;
   for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { m = i; break; } }
   var days = m === -1 ? null : m - today;
@@ -957,6 +958,40 @@ function bindAll() {
       render();
     });
   });
+
+  // Match editor toggle
+  var met = document.getElementById('toggleMatchEdit');
+  if(met) met.addEventListener('click', function(){ state.matchEditOpen = !state.matchEditOpen; render(); });
+
+  // Bye toggle
+  document.querySelectorAll('[data-mbye]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.bye = this.dataset.mbye==='1'; saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Round stepper
+  document.querySelectorAll('[data-mround]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.round = Math.max(1, MATCH.round + parseInt(this.dataset.mround)); saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Game day selector
+  document.querySelectorAll('[data-mday]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.day = parseInt(this.dataset.mday); saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  });
+
+  // Home/Away
+  document.querySelectorAll('[data-mhome]').forEach(function(btn){
+    btn.addEventListener('click', function(){ MATCH.home = this.dataset.mhome==='1'; saveMatch(MATCH); render(); });
+  });
+
+  // Text/time inputs (save on change)
+  var mOpp = document.getElementById('mOpp');
+  if(mOpp) mOpp.addEventListener('change', function(){ MATCH.opponent = this.value.trim()||'TBD'; saveMatch(MATCH); render(); });
+  var mKick = document.getElementById('mKickoff');
+  if(mKick) mKick.addEventListener('change', function(){ MATCH.kickoff = this.value; saveMatch(MATCH); WEEK = buildWeek(); render(); });
+  var mArr = document.getElementById('mArrive');
+  if(mArr) mArr.addEventListener('change', function(){ MATCH.arrive = this.value; saveMatch(MATCH); render(); });
+  var mVen = document.getElementById('mVenue');
+  if(mVen) mVen.addEventListener('change', function(){ MATCH.venue = this.value.trim(); saveMatch(MATCH); render(); });
 }
 
 function addMoment() {
