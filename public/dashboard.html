@@ -577,6 +577,15 @@ function loadTeamDays() {
   return { days: [1, 3] }; // Default: Tue (1), Thu (3) — 0=Mon
 }
 
+/* ── Work schedule (localStorage) ── */
+function loadWork() {
+  try {
+    var raw = localStorage.getItem('planner-work');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { days: [], start: '09:00', end: '17:00' };
+}
+
 /* ── Day type resolver ── */
 function resolveDayType(dateStr) {
   var cfg = loadGameDay();
@@ -669,6 +678,18 @@ function getDayItems(key) {
     var mins = a.duration || 60;
     items.push({ id:'appt-'+a.id, at:at, mins:mins, kind:'appt', title:a.name || a.title || 'Appointment', sub:'', href:'', steps:[], added:true });
   });
+  // Inject work block if scheduled
+  var parts2 = key.split('-');
+  var dd = new Date(parseInt(parts2[0]), parseInt(parts2[1])-1, parseInt(parts2[2]));
+  var dow = dd.getDay();
+  var planDow = dow === 0 ? 6 : dow - 1;
+  var workCfg = loadWork();
+  if (workCfg.days.indexOf(planDow) >= 0) {
+    var ws = workCfg.start.split(':'), we = workCfg.end.split(':');
+    var wAt = parseInt(ws[0])*60+parseInt(ws[1]||0);
+    var wEnd = parseInt(we[0])*60+parseInt(we[1]||0);
+    items.push({ id:'work', at:wAt, mins:wEnd-wAt, kind:'appt', title:'WORK', sub:workCfg.start+' \u2013 '+workCfg.end, href:'', steps:[], added:true });
+  }
   items.sort(function(a, b) { return a.at - b.at; });
   return items;
 }
