@@ -297,8 +297,8 @@ var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down",
 /* GOATA + toe curls + lateral pelvic tilts now built into AM() morning protocol */
 
 var DAYS = {
-  // THU JULY 9 — Upper Activation + Team Training
-  "2026-07-09": {
+  // Team Training variant A — Glutes & Groins + 2mi run + Upper Activation
+  "team_a": {
     theme:"Upper Activation \u00b7 Team Training PM",
     mindset:"Light gym to prime the body. Save legs for team training tonight.",
     items: [
@@ -328,8 +328,8 @@ var DAYS = {
     ]
   },
 
-  // FRI JULY 10 — Pre-Match
-  "2026-07-10": {
+  // Pre-Match — Speed & Acceleration, prep for game tomorrow
+  "prematch": {
     theme:"Speed & Acceleration \u00b7 Pre-Match Prep",
     mindset:"Train hard in the morning, then let the body settle for game tomorrow.",
     items: [
@@ -354,8 +354,8 @@ var DAYS = {
     ]
   },
 
-  // SAT JULY 11 — Match Day
-  "2026-07-11": {
+  // Match Day — PERFORM
+  "match": {
     theme:"MATCH DAY",
     mindset:"PERFORM. Everything serves the game.",
     items: [
@@ -380,8 +380,8 @@ var DAYS = {
       PM
     ]
   },
-  // SAT JULY 11 — Bye Week (used when match toggle = BYE)
-  "2026-07-11-bye": {
+  // Bye Week — Build What the Game Can't
+  "bye": {
     theme:"BYE WEEK \u2014 Build What the Game Can\u2019t",
     mindset:"No match pressure. Attack your weaknesses \u2014 endurance and speed.",
     items: [
@@ -418,8 +418,8 @@ var DAYS = {
     ]
   },
 
-  // SUN JULY 12 — Recovery + Film Review
-  "2026-07-12": {
+  // Recovery + Film Review
+  "recovery": {
     theme:"Recovery + Film Review",
     mindset:"Recover from match. Review footage. Light movement only.",
     items: [
@@ -444,8 +444,8 @@ var DAYS = {
     ]
   },
 
-  // MON JULY 13 — Heavy Lower + Power
-  "2026-07-13": {
+  // Heavy Lower + Power & Explosive
+  "heavy_lower": {
     theme:"Heavy Lower \u00b7 Power & Explosive",
     mindset:"Biggest gym day of the week. Build the engine.",
     items: [
@@ -476,8 +476,8 @@ var DAYS = {
     ]
   },
 
-  // TUE JULY 14 — Upper Activation + Team Training
-  "2026-07-14": {
+  // Team Training variant B — Shoulders & Spine + Workout B + Upper Activation
+  "team_b": {
     theme:"Upper Activation \u00b7 Team Training PM",
     mindset:"Light gym to prime the body. Save legs for team training tonight.",
     items: [
@@ -510,8 +510,8 @@ var DAYS = {
     ]
   },
 
-  // WED JULY 15 — Heavy Upper + Speed & Plyos
-  "2026-07-15": {
+  // Heavy Upper + Speed & Plyos
+  "heavy_upper": {
     theme:"Heavy Upper \u00b7 Speed & Plyos",
     mindset:"Push upper body hard, build speed. No team training \u2014 go all out.",
     items: [
@@ -549,22 +549,105 @@ var DAYS = {
   }
 };
 
-var WEEK_DATES = ["2026-07-09","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-14","2026-07-15"];
+/* ── Dynamic week dates ── */
+function computeWeekDates() {
+  var d = getMelb();
+  // Find Monday of current week
+  var dow = d.getDay(); // 0=Sun
+  var diff = dow === 0 ? -6 : 1 - dow;
+  var mon = new Date(d);
+  mon.setDate(mon.getDate() + diff);
+  mon.setHours(0,0,0,0);
+  var dates = [];
+  for (var i = 0; i < 7; i++) {
+    var dd = new Date(mon);
+    dd.setDate(dd.getDate() + i);
+    dates.push(dd.getFullYear() + '-' + String(dd.getMonth()+1).padStart(2,'0') + '-' + String(dd.getDate()).padStart(2,'0'));
+  }
+  return dates;
+}
+var WEEK_DATES = computeWeekDates();
+
+/* ── Team training days (localStorage) ── */
+function loadTeamDays() {
+  try {
+    var raw = localStorage.getItem('planner-teamdays');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { days: [1, 3] }; // Default: Tue (1), Thu (3) — 0=Mon
+}
+
+/* ── Day type resolver ── */
+function resolveDayType(dateStr) {
+  var cfg = loadGameDay();
+  var teamCfg = loadTeamDays();
+  var parts = dateStr.split('-');
+  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var dow = d.getDay(); // 0=Sun
+  var planDow = dow === 0 ? 6 : dow - 1; // 0=Mon
+
+  var gameDays = cfg.days || [5];
+  var isBye = cfg.status === 'bye';
+  var teamDays = teamCfg.days || [1, 3];
+
+  // Game day?
+  if (gameDays.indexOf(planDow) >= 0) {
+    return isBye ? 'bye' : 'match';
+  }
+
+  // Day before game = pre-match (only if game, not bye)
+  if (!isBye) {
+    for (var g = 0; g < gameDays.length; g++) {
+      if (planDow === (gameDays[g] + 6) % 7) return 'prematch';
+    }
+  }
+
+  // Day after game = recovery (only if game, not bye)
+  if (!isBye) {
+    for (var g = 0; g < gameDays.length; g++) {
+      if (planDow === (gameDays[g] + 1) % 7) return 'recovery';
+    }
+  }
+
+  // Sunday = recovery
+  if (planDow === 6) return 'recovery';
+
+  // Team training day?
+  if (teamDays.indexOf(planDow) >= 0) {
+    return teamDays.indexOf(planDow) === 0 ? 'team_a' : 'team_b';
+  }
+
+  // Remaining: alternate heavy lower / heavy upper
+  var heavySlot = 0;
+  for (var i = 0; i < planDow; i++) {
+    if (gameDays.indexOf(i) >= 0) continue;
+    if (i === 6) continue;
+    if (teamDays.indexOf(i) >= 0) continue;
+    var isPre = false, isRec = false;
+    if (!isBye) {
+      for (var g = 0; g < gameDays.length; g++) {
+        if (i === (gameDays[g] + 6) % 7) isPre = true;
+        if (i === (gameDays[g] + 1) % 7) isRec = true;
+      }
+    }
+    if (isPre || isRec) continue;
+    heavySlot++;
+  }
+  return heavySlot % 2 === 0 ? 'heavy_lower' : 'heavy_upper';
+}
+
 function buildWeekLabels() {
   var dayShort = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
-  var cfg = loadGameDay();
-  // WEEK_DATES starts from Thursday July 9 (JS day 4)
   var labels = [];
   WEEK_DATES.forEach(function(dk) {
     var parts = dk.split('-');
     var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-    var jsDow = d.getDay(); // 0=Sun
-    var planDow = jsDow === 0 ? 6 : jsDow - 1; // 0=Mon
+    var jsDow = d.getDay();
+    var type = resolveDayType(dk);
     var k = 'train';
-    if (jsDow === 0) k = 'rest'; // Sunday default rest
-    if (cfg.status === 'game' && cfg.days.indexOf(planDow) >= 0) k = 'match';
-    if (cfg.status === 'bye' && cfg.days.indexOf(planDow) >= 0) k = 'rest';
-    labels.push({ d: dayShort[jsDow], n: d.getDate(), k: k });
+    if (type === 'match') k = 'match';
+    else if (type === 'recovery' || type === 'bye') k = 'rest';
+    labels.push({ d: dayShort[jsDow], n: d.getDate(), k: k, type: type });
   });
   return labels;
 }
@@ -574,15 +657,9 @@ function todayKey() {
   var d = getMelb();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
-function resolveKey(key) {
-  // Check if this is a match day with bye status from game day config
-  var cfg = loadGameDay();
-  if (cfg.status === 'bye' && DAYS[key + '-bye']) return key + '-bye';
-  return key;
-}
 function getDayItems(key) {
-  var rk = resolveKey(key);
-  var day = DAYS[rk];
+  var type = resolveDayType(key);
+  var day = DAYS[type];
   var items = day ? JSON.parse(JSON.stringify(day.items)) : [];
   // Inject appointments from Week Plan
   var appts = loadAppts().filter(function(a) { return a.date === key; });
@@ -592,12 +669,11 @@ function getDayItems(key) {
     var mins = a.duration || 60;
     items.push({ id:'appt-'+a.id, at:at, mins:mins, kind:'appt', title:a.name || a.title || 'Appointment', sub:'', href:'', steps:[], added:true });
   });
-  // Sort by time
   items.sort(function(a, b) { return a.at - b.at; });
   return items;
 }
-function getDayTheme(key) { var d = DAYS[resolveKey(key)]; return d ? d.theme : ""; }
-function getDayMindset(key) { var d = DAYS[resolveKey(key)]; return d ? d.mindset : ""; }
+function getDayTheme(key) { var d = DAYS[resolveDayType(key)]; return d ? d.theme : ""; }
+function getDayMindset(key) { var d = DAYS[resolveDayType(key)]; return d ? d.mindset : ""; }
 
 var PROPOSALS = [
   { id:"p1", signal:"SEWARD DAY 2", title:"Skip gym activation \u2014 Seward Workout B is enough",
@@ -642,8 +718,7 @@ var state = {
   handled: {},
   open: null,
   steps: {},
-  done: {},
-  showPast: false
+  done: {}
 };
 
 function switchDate(key) {
@@ -695,169 +770,11 @@ function renderCard(it, isDone, isOpen, steps, stepState, isMinor) {
   return h;
 }
 
-/* ═══ TODAY'S PLAN (from weekly planner) ══════════════════════ */
-var PLAN_SCHEDULE = {
-  0: [ // Sunday — Recovery + Film Review
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-7:55',label:'Recovery walk / foam roll',color:'teal'},
-    {time:'8:00-8:20',label:'112mvmnt: Hips & Hammys',color:'teal'},
-    {time:'8:25-8:55',label:'Seward: Workout D',color:'green'},
-    {time:'9:00-9:25',label:'Sauna + Cold plunge',color:'amber'},
-    {time:'10:00-10:45',label:'Game Film Session',color:'dimmer'},
-    {time:'1:00-1:45',label:'Ball Work: Set A + First Touch',color:'green'},
-  ],
-  1: [ // Monday — Heavy Lower + Power
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-7:55',label:'112mvmnt: Stronger Knee',color:'teal'},
-    {time:'8:00-8:40',label:'Seward: Workout A + Abs 2',color:'green'},
-    {time:'8:45-9:40',label:'Gym: Power & Explosive (HEAVY)',color:'green'},
-    {time:'9:40-9:55',label:'Core: Speed Focus',color:'green'},
-    {time:'9:55-10:05',label:'Fascia + Nordics',color:'teal'},
-    {time:'10:10-10:30',label:'Sauna (NO ice bath)',color:'amber'},
-    {time:'1:00-1:45',label:'Ball Work: Set B + Weak Foot',color:'green'},
-    {time:'2:30-2:45',label:'Sauna',color:'amber'},
-  ],
-  2: [ // Tuesday — Upper Activation + Team Training
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-7:55',label:'112mvmnt: Shoulders & Spine',color:'teal'},
-    {time:'8:00-8:30',label:'Seward: Workout B + Jump Rope',color:'green'},
-    {time:'8:35-9:15',label:'Gym: Upper Activation (light)',color:'green'},
-    {time:'9:15-9:25',label:'Core: Stiffness',color:'green'},
-    {time:'9:25-9:35',label:'Fascia + Nordics',color:'teal'},
-    {time:'9:40',label:'Cold plunge',color:'teal'},
-    {time:'1:00-1:30',label:'Light Ball Work: Set C',color:'green'},
-    {time:'7:15-9:00',label:'Team Training',color:'amber'},
-  ],
-  3: [ // Wednesday — Heavy Upper + Speed & Plyos
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-7:55',label:'112mvmnt: Calves & Ankles',color:'teal'},
-    {time:'8:00-8:40',label:'Seward: Workout D + Jump Rope',color:'green'},
-    {time:'8:45-9:30',label:'Gym: Heavy Upper + Compounds',color:'green'},
-    {time:'9:30-9:45',label:'Plyometrics',color:'green'},
-    {time:'9:45-9:55',label:'Core + Fascia + Nordics',color:'teal'},
-    {time:'10:10-10:30',label:'Sauna (NO ice bath)',color:'amber'},
-    {time:'1:00-1:30',label:'Sprint Pyramid',color:'green'},
-    {time:'1:45-2:30',label:'Ball Work: Set A + Passing',color:'green'},
-    {time:'3:15-3:30',label:'Sauna',color:'amber'},
-  ],
-  4: [ // Thursday — Upper Activation + Team Training
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-7:55',label:'112mvmnt: Glutes & Groins',color:'teal'},
-    {time:'8:00-8:35',label:'Seward: 2 mile run + Abs 1',color:'green'},
-    {time:'8:40-9:20',label:'Gym: Upper Activation (light)',color:'green'},
-    {time:'9:20-9:30',label:'Fascia + Nordics',color:'teal'},
-    {time:'9:35',label:'Cold plunge',color:'teal'},
-    {time:'1:00-1:30',label:'Light Ball Work: Set B',color:'green'},
-    {time:'7:15-9:00',label:'Team Training',color:'amber'},
-  ],
-  5: [ // Friday — Pre-Match
-    {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-    {time:'7:35-8:00',label:'112mvmnt: Lower Back + Calves',color:'teal'},
-    {time:'8:00-8:30',label:'Seward: Workout C + Abs 1',color:'green'},
-    {time:'8:35-9:05',label:'Speed & Acceleration',color:'green'},
-    {time:'9:05-9:15',label:'Fascia + toe curls',color:'teal'},
-    {time:'9:20-9:35',label:'Sauna (NO ice bath)',color:'amber'},
-    {time:'1:00-1:30',label:'Ball Work: Set C + First Touch',color:'green'},
-    {time:'6:00',label:'Kit prep',color:'dimmer'},
-    {time:'6:30',label:'Visualization',color:'violet'},
-    {time:'7:00-7:20',label:'Sauna pre-bed',color:'amber'},
-  ],
-  6: [ // Saturday — Match Day
-    {time:'7:30',label:'Wake (game day)',color:'dimmer'},
-    {time:'9:00',label:'Light 112mvmnt: Hips & Hammys',color:'teal'},
-    {time:'9:15',label:'Light walk + visualization',color:'violet'},
-    {time:'12:00',label:'Lunch (3-4hr before game)',color:'dimmer'},
-    {time:'5:15',label:'Pre-game warm-up',color:'green'},
-    {time:'6:00+',label:'MATCH',color:'gold'},
-    {time:'7:30',label:'Post-game recovery',color:'amber'},
-  ],
-};
-var PLAN_SCHEDULE_BYE = [
-  {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
-  {time:'8:00-8:20',label:'112mvmnt: Full Lower Body',color:'teal'},
-  {time:'8:30-10:30',label:'Gym: Power & Speed Focus',color:'green'},
-  {time:'10:30-10:50',label:'Core: Speed & Rotation',color:'green'},
-  {time:'10:50-11:00',label:'Fascia + Nordics',color:'teal'},
-  {time:'11:05-11:25',label:'Sauna + Cold plunge',color:'amber'},
-  {time:'1:00-1:45',label:'Ball Work + Sprint Pyramid',color:'green'},
-  {time:'3:00-3:20',label:'Sauna',color:'amber'},
-];
-
-var PLAN_SCHEDULE_PREMATCH = [
-  {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
-  {time:'7:35-8:00',label:'112mvmnt: Lower Back + Calves',color:'teal'},
-  {time:'8:00-8:30',label:'Seward: Workout C + Abs 1',color:'green'},
-  {time:'8:35-9:05',label:'Speed & Acceleration',color:'green'},
-  {time:'9:05-9:15',label:'Fascia + toe curls',color:'teal'},
-  {time:'9:20-9:35',label:'Sauna (NO ice bath)',color:'amber'},
-  {time:'1:00-1:30',label:'Ball Work: Set C + First Touch',color:'green'},
-  {time:'6:00',label:'Kit prep',color:'dimmer'},
-  {time:'6:30',label:'Visualization',color:'violet'},
-  {time:'7:00-7:20',label:'Sauna pre-bed',color:'amber'},
-];
-
-var PLAN_COLORS = {green:'#4ADE80',teal:'#7DD3C0',amber:'#E8873A',gold:'#D8B24A',violet:'#9C8ADE',dimmer:'#5F786E'};
-
-function renderTodayPlan(now) {
-  var dow = now.getDay(); // 0=Sun
-  var cfg = loadGameDay();
-  var planDow = dow === 0 ? 6 : dow - 1; // Convert to plan index (0=Mon)
-  var isGameDay = cfg.status === 'game' && cfg.days.indexOf(planDow) >= 0;
-  var isBye = cfg.status === 'bye';
-
-  // Determine which schedule to use
-  var blocks;
-  if (isGameDay) {
-    blocks = PLAN_SCHEDULE[6] || []; // Match day schedule (originally Saturday=6 in PLAN_SCHEDULE)
-  } else if (isBye && cfg.days.indexOf(planDow) >= 0) {
-    blocks = PLAN_SCHEDULE_BYE;
-  } else {
-    // Check if tomorrow is a game day — today becomes pre-match
-    var tomorrowPlanDow = (planDow + 1) % 7;
-    var isTomorrowGame = cfg.status === 'game' && cfg.days.indexOf(tomorrowPlanDow) >= 0;
-    if (isTomorrowGame) {
-      blocks = PLAN_SCHEDULE_PREMATCH;
-    } else {
-      blocks = PLAN_SCHEDULE[dow] || [];
-    }
-  }
-
-  // Inject appointments for today
-  var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
-  var appts = loadAppts().filter(function(a) { return a.date === todayStr; });
-  var apptBlocks = appts.map(function(a) {
-    var durMins = a.duration || 60;
-    var endParts = a.time ? a.time.split(':') : ['12','00'];
-    var endH = parseInt(endParts[0]);
-    var endM = parseInt(endParts[1] || 0) + durMins;
-    endH += Math.floor(endM / 60);
-    endM = endM % 60;
-    var endTime = String(endH).padStart(2,'0') + ':' + String(endM).padStart(2,'0');
-    return { time: a.time + '-' + endTime, label: a.name || 'Appointment', color: 'amber' };
-  });
-  blocks = blocks.concat(apptBlocks);
-
-  if (!blocks.length) return '';
-
-  var gameLabel = isGameDay ? ' GAME DAY' : (isBye && cfg.days.indexOf(planDow) >= 0 ? ' BYE WEEK' : '');
-  var h = '<section style="margin:18px auto 0;max-width:var(--w)">';
-  h += '<p class="d-eyebrow" style="margin-bottom:10px">TODAY\'S PLAN' + (gameLabel ? '<span style="color:' + (isGameDay ? 'var(--amber)' : 'var(--teal)') + ';margin-left:8px">' + gameLabel + '</span>' : '') + '</p>';
-  h += '<div style="display:flex;flex-direction:column;gap:5px">';
-  blocks.forEach(function(b) {
-    var c = PLAN_COLORS[b.color] || PLAN_COLORS.dimmer;
-    var isDim = b.color === 'dimmer';
-    var bg = isDim ? 'rgba(255,255,255,.03)' : c + '14';
-    h += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border-left:3px solid ' + c + ';background:' + bg + '">';
-    h += '<span style="font-family:var(--mono);font-size:10px;color:' + (isDim ? 'var(--dimmer)' : c) + ';min-width:70px;opacity:.8">' + esc(b.time) + '</span>';
-    h += '<span style="font-size:12px;font-weight:500;color:' + (isDim ? 'var(--dim)' : c) + '">' + esc(b.label) + '</span>';
-    h += '</div>';
-  });
-  h += '</div></section>';
-  return h;
-}
+/* (TODAY'S PLAN section removed — schedule shown directly in day cards) */
 
 function render() {
   WEEK_LABELS = buildWeekLabels();
+  WEEK_DATES = computeWeekDates();
   var NOW = getNow();
   var pend = pending();
   var live = state.day.filter(function(i){return !i.passive;});
@@ -868,15 +785,8 @@ function render() {
   var isToday = state.selDate === TODAY_KEY;
   var selIdx = WEEK_DATES.indexOf(state.selDate);
 
-  // Classify items
-  var past = isToday ? state.day.filter(function(i){return i.at + i.mins <= NOW;}) : [];
-  var doing = null;
-  if (isToday) state.day.forEach(function(i){ if(!doing && NOW >= i.at && NOW < i.at + i.mins && !state.done[i.id]) doing = i; });
-  var ahead = isToday ? state.day.filter(function(i){return i.at + i.mins > NOW && i !== doing;}) : state.day;
-  var unlogged = past.filter(function(i){return !state.done[i.id];});
-  var pastMins = past.reduce(function(a,i){return a+i.mins;}, 0);
-  var next = null;
-  ahead.forEach(function(i){ if(!next && i.at > NOW && !state.done[i.id]) next = i; });
+  // All items shown — no time-based filtering
+  var allItems = state.day;
 
   // Date
   var months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
@@ -885,13 +795,18 @@ function render() {
   var dateStr = dayNames[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' \u00b7 ' + hhmm(NOW);
   var greeting = NOW < 720 ? 'Good morning' : NOW < 1080 ? 'Good afternoon' : 'Good evening';
 
+  // Day type badge
+  var dayType = resolveDayType(state.selDate);
+  var typeLabels = {match:'MATCH DAY',prematch:'PRE-MATCH',recovery:'RECOVERY',bye:'BYE WEEK',heavy_lower:'HEAVY LOWER',heavy_upper:'HEAVY UPPER',team_a:'TEAM TRAINING',team_b:'TEAM TRAINING'};
+  var typeColors = {match:'var(--amber)',prematch:'var(--gold)',recovery:'var(--teal)',bye:'var(--teal)',heavy_lower:'var(--green)',heavy_upper:'var(--green)',team_a:'var(--amber)',team_b:'var(--amber)'};
+
   var h = '';
 
   // Back + Header
   h += '<a href="/" class="d-back"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Home</a>';
   h += '<header class="d-top"><div>';
   h += '<p class="d-eyebrow">' + dateStr + '</p>';
-  h += '<h1 class="d-title">' + (isToday ? greeting + ', <em>Sean</em>' : '<em>' + (WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : state.selDate) + '</em>') + '</h1>';
+  h += '<h1 class="d-title">' + (isToday ? greeting + ', <em>Sean</em>' : '<em>' + (WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' ' + now.toLocaleString('en-AU',{month:'long'}).toUpperCase() + ' ' + WEEK_LABELS[selIdx].n : state.selDate) + '</em>') + '</h1>';
   h += '</div><div class="d-tools">';
   h += '<a class="d-plan" href="/plan.html" style="text-decoration:none">';
   h += '<svg viewBox="-12 -12 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="-8" y="-9" width="16" height="18" rx="2"/><line x1="-4" y1="-4" x2="4" y2="-4"/><line x1="-4" y1="0" x2="4" y2="0"/><line x1="-4" y1="4" x2="1" y2="4"/></svg>';
@@ -914,42 +829,26 @@ function render() {
   });
   h += '</nav>';
 
-  if (!isToday) {
-    // Theme + mindset for other days
-    if (getDayTheme(state.selDate)) {
-      h += '<div class="d-coach" style="border-color:rgba(125,211,192,.3)"><div class="d-say">';
-      h += '<p class="d-good"><i>THEME</i>' + esc(getDayTheme(state.selDate)) + '</p>';
-      if (getDayMindset(state.selDate)) h += '<p class="d-change"><i>MINDSET</i>' + esc(getDayMindset(state.selDate)) + '</p>';
-      h += '</div></div>';
-    }
+  // Theme + mindset banner
+  var theme = getDayTheme(state.selDate);
+  if (theme) {
+    h += '<div class="d-coach" style="border-color:rgba(125,211,192,.3)"><div class="d-say">';
+    h += '<p class="d-good"><i>THEME</i>' + esc(theme) + '</p>';
+    var mindset = getDayMindset(state.selDate);
+    if (mindset) h += '<p class="d-change"><i>MINDSET</i>' + esc(mindset) + '</p>';
+    h += '</div></div>';
   }
 
   // Main grid
   h += '<main class="d-main"><section class="d-block"><header class="d-bh"><div>';
-  h += '<p class="d-eyebrow">01 \u00b7 ' + (isToday ? 'TODAY' : WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' JULY ' + WEEK_LABELS[selIdx].n : 'DAY') + '</p><h2>The <em>day</em></h2></div>';
-  // unlogged removed — user prefers no time pressure
+  h += '<p class="d-eyebrow">01 \u00b7 ' + (isToday ? 'TODAY' : WEEK_LABELS[selIdx] ? WEEK_LABELS[selIdx].d + ' ' + WEEK_LABELS[selIdx].n : 'DAY');
+  h += '<span style="color:' + (typeColors[dayType]||'var(--dim)') + ';margin-left:8px;font-size:8px;letter-spacing:.14em">' + (typeLabels[dayType]||'') + '</span>';
+  h += '</p><h2>The <em>day</em></h2></div>';
   h += '</header>';
 
-  // Past collapse bar (today only, when there are past items)
-  if (isToday && past.length > 0) {
-    h += '<button class="d-past" data-togglepast aria-expanded="' + !!state.showPast + '">';
-    h += '<span class="d-pl-bar"><b>' + past.length + ' earlier</b>';
-    h += '<em>' + dur(pastMins) + ' of work</em></span>';
-    h += '<span class="d-chev">' + (state.showPast ? '\u2212' : '+') + '</span></button>';
-
-    if (state.showPast) {
-      h += '<div style="margin-bottom:8px">';
-      past.forEach(function(it) {
-        var isMinor = it.mins < 20 && it.kind !== 'appt';
-        h += renderCard(it, state.done[it.id], state.open === it.id, state.steps, state.steps, isMinor);
-      });
-      h += '</div>';
-    }
-  }
-
-  // Period-grouped future items — all items are cards
+  // All items grouped by period — no time filtering, no "earlier" collapse
   PERIODS.forEach(function(p) {
-    var items = ahead.filter(function(i){return i.at >= p.from && i.at < p.to;});
+    var items = allItems.filter(function(i){return i.at >= p.from && i.at < p.to;});
     if (!items.length) return;
 
     h += '<section class="d-period"><p class="d-plabel">' + p.label + '<i></i></p>';
@@ -967,13 +866,31 @@ function render() {
   // Sidebar
   h += '<aside class="d-side">';
 
+  // TO-DO list
+  h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 TO-DO</p>';
+  h += '<div class="d-todo-add"><input class="d-todo-in" id="todo-input" placeholder="Add a task..." />';
+  h += '<button class="d-todo-btn" id="todo-add-btn">+</button></div>';
+  h += '<ul class="d-rem" id="todo-list" style="list-style:none;padding:0">';
+  var todos = [];
+  try { todos = JSON.parse(localStorage.getItem('dashboard-todos') || '[]'); } catch(e){}
+  todos.forEach(function(t, i) {
+    h += '<li style="display:flex;align-items:center;gap:10px;padding:10px 6px">';
+    h += '<button class="d-step' + (t.done ? ' is-on' : '') + '" data-todotoggle="' + i + '" style="flex:1;display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;text-align:left;color:inherit;padding:0">';
+    h += '<span class="d-box" style="width:18px;height:18px;border-radius:5px;flex:none">' + (t.done ? '\u2713' : '') + '</span>';
+    h += '<span style="font:400 12px Inter,sans-serif;color:' + (t.done ? 'var(--dimmer)' : 'var(--ink)') + ';' + (t.done ? 'text-decoration:line-through' : '') + '">' + esc(t.text) + '</span>';
+    h += '</button>';
+    h += '<button class="d-todo-del" data-tododel="' + i + '">\u00d7</button>';
+    h += '</li>';
+  });
+  h += '</ul></section>';
+
   // Recovery log
   if (isToday) {
     var rlog = [];
     try { rlog = JSON.parse(localStorage.getItem('recovery-log') || '[]'); } catch(e){}
     var todayLog = rlog.filter(function(r){ return r.date === TODAY_KEY; });
     if (todayLog.length > 0) {
-      h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 RECOVERY</p>';
+      h += '<section class="d-block"><p class="d-eyebrow">03 \u00b7 RECOVERY</p>';
       h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">';
       todayLog.forEach(function(r) {
         var c = r.type === 'sauna' ? 'var(--amber)' : 'var(--teal)';
@@ -989,11 +906,6 @@ function render() {
   }
 
   h += '</aside></main>';
-
-  // Today's Plan (below main grid)
-  if (isToday) {
-    h += renderTodayPlan(now);
-  }
 
   // Footer
   h += '<footer class="d-foot"><span>SIGNALS READ FROM PEAK \u00b7 FUEL \u00b7 VITALS \u00b7 TRAIN \u00b7 RECOVERY</span>';
@@ -1067,9 +979,40 @@ function bindAll() {
     });
   });
 
-  // Past collapse toggle
-  var pt2 = document.querySelector('[data-togglepast]');
-  if (pt2) pt2.addEventListener('click', function(){ state.showPast = !state.showPast; render(); });
+  // TODO: add
+  var todoInput = document.getElementById('todo-input');
+  var todoBtn = document.getElementById('todo-add-btn');
+  if (todoBtn) todoBtn.addEventListener('click', function(){
+    var text = todoInput ? todoInput.value.trim() : '';
+    if (!text) return;
+    var todos = []; try { todos = JSON.parse(localStorage.getItem('dashboard-todos') || '[]'); } catch(e){}
+    todos.push({text: text, done: false});
+    localStorage.setItem('dashboard-todos', JSON.stringify(todos));
+    render();
+  });
+  if (todoInput) todoInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') { if (todoBtn) todoBtn.click(); }
+  });
+
+  // TODO: toggle
+  document.querySelectorAll('[data-todotoggle]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(this.dataset.todotoggle);
+      var todos = []; try { todos = JSON.parse(localStorage.getItem('dashboard-todos') || '[]'); } catch(e){}
+      if (todos[idx]) { todos[idx].done = !todos[idx].done; localStorage.setItem('dashboard-todos', JSON.stringify(todos)); render(); }
+    });
+  });
+
+  // TODO: delete
+  document.querySelectorAll('[data-tododel]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(this.dataset.tododel);
+      var todos = []; try { todos = JSON.parse(localStorage.getItem('dashboard-todos') || '[]'); } catch(e){}
+      todos.splice(idx, 1);
+      localStorage.setItem('dashboard-todos', JSON.stringify(todos));
+      render();
+    });
+  });
 
 }
 

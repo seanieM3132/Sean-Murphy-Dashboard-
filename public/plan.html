@@ -211,6 +211,15 @@ body::before{
   <div id="gameday-config" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
 </div>
 
+<!-- Team Training Config -->
+<div class="appt-section" style="margin-top:12px">
+  <div class="appt-section-header">
+    <span class="appt-title">Team Training</span>
+    <span id="team-status" style="font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.06em"></span>
+  </div>
+  <div id="team-config" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
+</div>
+
 <!-- Modal -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
@@ -438,15 +447,19 @@ function render(){
     const isMobileVisible = i === mobileDay;
     const isGameDay = gameDayCfg.status === 'game' && gameDayCfg.days.includes(i);
     const isBye = gameDayCfg.status === 'bye';
+    const teamCfg = loadTeamDays();
+    const isTeamDay = teamCfg.days.includes(i);
 
     const col = document.createElement('div');
     col.className = 'day-col' + (isToday?' today':'') + (isMobileVisible?' visible':'');
     if(isGameDay) col.style.borderColor = 'rgba(232,135,58,.35)';
+    if(isTeamDay && !isGameDay) col.style.borderColor = 'rgba(74,222,128,.25)';
 
     // Header
     const gameBadge = isGameDay ? '<div style="font:600 8px var(--mono);color:var(--amber);letter-spacing:.1em;margin-top:2px">GAME DAY</div>' : '';
     const byeBadge = (isBye && gameDayCfg.days.includes(i)) ? '<div style="font:600 8px var(--mono);color:var(--teal);letter-spacing:.1em;margin-top:2px">BYE</div>' : '';
-    col.innerHTML = `<div class="day-header"><div class="day-name">${DAY_SHORT[i]}</div><div class="day-date">${dayDate.getDate()}</div>${gameBadge}${byeBadge}</div>`;
+    const teamBadge = (isTeamDay && !isGameDay) ? '<div style="font:600 8px var(--mono);color:var(--green);letter-spacing:.1em;margin-top:2px">TEAM</div>' : '';
+    col.innerHTML = `<div class="day-header"><div class="day-name">${DAY_SHORT[i]}</div><div class="day-date">${dayDate.getDate()}</div>${gameBadge}${byeBadge}${teamBadge}</div>`;
 
     // Template blocks — use game day schedule or bye schedule if this day is a game day
     let blocks;
@@ -732,6 +745,67 @@ function renderGameDayConfig(){
 }
 
 renderGameDayConfig();
+
+/* ── Team Training Config ── */
+const TEAMDAY_KEY = 'planner-teamdays';
+
+function loadTeamDays(){
+  try{
+    const raw = localStorage.getItem(TEAMDAY_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {days:[1,3]}; // Default: Tue (1), Thu (3) — 0=Mon
+}
+
+function saveTeamDays(config){
+  localStorage.setItem(TEAMDAY_KEY, JSON.stringify(config));
+}
+
+function renderTeamDayConfig(){
+  const config = loadTeamDays();
+  const container = document.getElementById('team-config');
+  const status = document.getElementById('team-status');
+
+  let html = '';
+  DAY_NAMES.forEach((name, i)=>{
+    const isSelected = config.days.includes(i);
+    const bg = isSelected ? 'rgba(74,222,128,.18)' : 'rgba(255,255,255,.04)';
+    const border = isSelected ? 'rgba(74,222,128,.4)' : 'var(--border)';
+    const color = isSelected ? 'var(--green)' : 'var(--dim)';
+    html += `<button data-teamday="${i}" style="background:${bg};border:1px solid ${border};border-radius:8px;padding:6px 12px;font:500 10px var(--mono);letter-spacing:.08em;color:${color};cursor:pointer;transition:all .2s">${DAY_SHORT[i]}</button>`;
+  });
+
+  container.innerHTML = html;
+
+  // Status label
+  if(config.days.length === 0){
+    status.textContent = 'NO TEAM TRAINING';
+    status.style.color = 'var(--dimmer)';
+  } else {
+    status.textContent = config.days.map(d=>DAY_SHORT[d].toUpperCase()).join(' + ');
+    status.style.color = 'var(--green)';
+  }
+
+  // Bind buttons
+  container.querySelectorAll('[data-teamday]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const d = parseInt(btn.dataset.teamday);
+      const cfg = loadTeamDays();
+      const idx = cfg.days.indexOf(d);
+      if(idx >= 0){
+        cfg.days.splice(idx, 1);
+      } else {
+        cfg.days.push(d);
+      }
+      cfg.days.sort((a,b)=>a-b);
+      saveTeamDays(cfg);
+      renderTeamDayConfig();
+      render();
+    });
+  });
+}
+
+renderTeamDayConfig();
 
 /* ── Init ── */
 render();
