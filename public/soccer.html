@@ -281,6 +281,17 @@ function loadMatch(){
 }
 function saveMatch(m){ localStorage.setItem(MATCH_KEY, JSON.stringify(m)); }
 var MATCH = loadMatch();
+
+/* sync with planner-gameday (bidirectional — plan page or soccer page can set it) */
+function loadPlannerGameDay(){
+  try{ var r = JSON.parse(localStorage.getItem('planner-gameday')); if(r) return r; }catch(e){}
+  return { days:[5], status:'game' };
+}
+function savePlannerGameDay(cfg){ localStorage.setItem('planner-gameday', JSON.stringify(cfg)); }
+var _pgd = loadPlannerGameDay();
+MATCH.bye = _pgd.status === 'bye';
+if(_pgd.days && _pgd.days.length) MATCH.day = _pgd.days[0];
+
 var WEAK_FOOT = 58;
 
 function buildWeek(){
@@ -965,7 +976,12 @@ function bindAll() {
 
   // Bye toggle
   document.querySelectorAll('[data-mbye]').forEach(function(btn){
-    btn.addEventListener('click', function(){ MATCH.bye = this.dataset.mbye==='1'; saveMatch(MATCH); WEEK = buildWeek(); render(); });
+    btn.addEventListener('click', function(){
+      MATCH.bye = this.dataset.mbye==='1';
+      saveMatch(MATCH);
+      savePlannerGameDay({days:[MATCH.day||5], status:MATCH.bye?'bye':'game'});
+      WEEK = buildWeek(); render();
+    });
   });
 
   // Round stepper
@@ -975,7 +991,12 @@ function bindAll() {
 
   // Game day selector
   document.querySelectorAll('[data-mday]').forEach(function(btn){
-    btn.addEventListener('click', function(){ MATCH.day = parseInt(this.dataset.mday); saveMatch(MATCH); WEEK = buildWeek(); render(); });
+    btn.addEventListener('click', function(){
+      MATCH.day = parseInt(this.dataset.mday);
+      saveMatch(MATCH);
+      savePlannerGameDay({days:[MATCH.day], status:MATCH.bye?'bye':'game'});
+      WEEK = buildWeek(); render();
+    });
   });
 
   // Home/Away

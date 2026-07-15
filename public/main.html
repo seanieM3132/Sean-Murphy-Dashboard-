@@ -935,10 +935,10 @@ const WAKE_HOUR = 8;
 const SLEEP_HOUR = 24;
 const CIRC = 2 * Math.PI * 52;
 
-// Work schedule (shared with recovery/gym pages)
+// Work schedule (reads planner-work from plan page)
 function loadWork(){
-  try{return JSON.parse(localStorage.getItem('work-schedule'))||{enabled:false,start:'09:00',end:'12:00'};}
-  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+  try{return JSON.parse(localStorage.getItem('planner-work'))||{days:[],start:'09:00',end:'17:00'};}
+  catch(e){return {days:[],start:'09:00',end:'17:00'};}
 }
 
 // ── Supabase ──
@@ -1150,13 +1150,15 @@ function updateDayBar() {
   const work = loadWork();
   const workEl = document.getElementById('dayWork');
   if(workEl){
-    if(work.enabled){
+    const todayPlanDow = now.getDay()===0?6:now.getDay()-1; // JS day to plan day (0=Mon)
+    const workingToday = (work.days||[]).indexOf(todayPlanDow)>=0;
+    if(workingToday){
       const wp = work.start.split(':'), wep = work.end.split(':');
       const wsh = parseInt(wp[0]), wsm = parseInt(wp[1]);
       const weh = parseInt(wep[0]), wem = parseInt(wep[1]);
       const inWork = hours >= (wsh+wsm/60) && hours < (weh+wem/60);
       workEl.style.display = 'block';
-      workEl.textContent = inWork ? 'WORKING ' + work.start + ' – ' + work.end : 'WORK ' + work.start + ' – ' + work.end;
+      workEl.textContent = inWork ? 'WORKING ' + work.start + ' \u2013 ' + work.end : 'WORK ' + work.start + ' \u2013 ' + work.end;
       workEl.style.color = inWork ? '#E8873A' : 'rgba(232,135,58,.5)';
     } else {
       workEl.style.display = 'none';

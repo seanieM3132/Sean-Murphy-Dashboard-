@@ -583,13 +583,23 @@ function loadPlannerGameDay(){
   try{return JSON.parse(localStorage.getItem('planner-gameday'))||{};}catch(e){return {};}
 }
 var _plannerGD = loadPlannerGameDay();
-var gameWeek = (_plannerGD.days||[5]).indexOf(4)>=0 ? 'fri' : 'sat';
-function getSessions(){ return gameWeek === 'fri' ? SESSIONS_FRI : SESSIONS_SAT; }
+var _isBye = _plannerGD.status === 'bye';
+var gameWeek = (!_isBye && (_plannerGD.days||[5]).indexOf(4)>=0) ? 'fri' : 'sat';
+
+/* Bye week: clone SAT sessions but Friday is NOT pre-game */
+var SESSIONS_BYE = JSON.parse(JSON.stringify(SESSIONS_SAT));
+SESSIONS_BYE.friday.name = 'Speed & Explosiveness';
+
+function getSessions(){
+  if(_isBye) return SESSIONS_BYE;
+  return gameWeek === 'fri' ? SESSIONS_FRI : SESSIONS_SAT;
+}
 
 var DAYS = ['monday','tuesday','wednesday','thursday','friday'];
 var DAY_LABELS = {monday:'MON',tuesday:'TUE',wednesday:'WED',thursday:'THU',friday:'FRI'};
 var DAY_NOTES_SAT = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper Power',thursday:'Activation',friday:'Speed SHORT'};
 var DAY_NOTES_FRI = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper+Speed',thursday:'Activation',friday:'GAME DAY'};
+var DAY_NOTES_BYE = {monday:'Lower Power',tuesday:'Activation',wednesday:'Upper Power',thursday:'Activation',friday:'Speed & Explosiveness'};
 
 var today = new Date().getDay();
 var currentDay = today>=1&&today<=5 ? DAYS[today-1] : 'friday';
@@ -694,7 +704,7 @@ function switchDay(day){
 
 function render(){
   var sess = getSession();
-  var dayNotes = gameWeek === 'fri' ? DAY_NOTES_FRI : DAY_NOTES_SAT;
+  var dayNotes = _isBye ? DAY_NOTES_BYE : (gameWeek === 'fri' ? DAY_NOTES_FRI : DAY_NOTES_SAT);
   var html = '';
 
 
@@ -754,7 +764,7 @@ function render(){
     tuesday:'Save your energy for team training tonight. Light and quick.',
     wednesday: gameWeek==='fri' ? 'Speed absorbed into today. Athletic upper + explosiveness + acceleration. No gym Friday.' : 'Athletic upper body. Impulse training, rotation rows, speed transition. Not bodybuilding.',
     thursday: gameWeek==='fri' ? 'Game TOMORROW. Light activation, stay fresh.' : 'Save your energy for team training tonight. Light and quick.',
-    friday:'Keep it SHORT. 40 min. Game tomorrow. Full recovery between reps. When times drop, stop.'
+    friday: _isBye ? 'Bye week. No game tomorrow \u2014 push the speed work harder. Full session.' : 'Keep it SHORT. 40 min. Game tomorrow. Full recovery between reps. When times drop, stop.'
   };
   html += '<p><b>KHABIB</b>'+coachMsg[currentDay]+'</p>';
   html += '</div></header>';

@@ -244,10 +244,11 @@ function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
 var SESSION = loadSession();
 var _melb = new Date(new Date().toLocaleString('en-US',{timeZone:'Australia/Melbourne'}));
 var _melbDay = _melb.getDay(); // 0=Sun, 6=Sat
-// Read match info from shared localStorage (set by soccer page)
-var _matchInfo = (function(){ try{return JSON.parse(localStorage.getItem('match-info'))||{};}catch(e){return {};} })();
-var _matchJsDay = _matchInfo.bye ? -1 : (_matchInfo.day===undefined ? 6 : [1,2,3,4,5,6,0][_matchInfo.day]); // convert 0=Mon to JS 0=Sun
-var MATCH_IN = _matchInfo.bye ? 99 : (_melbDay === _matchJsDay ? 0 : (_matchJsDay - _melbDay + 7) % 7);
+// Read game day from planner-gameday (plan page is source of truth)
+var _pgd = (function(){ try{return JSON.parse(localStorage.getItem('planner-gameday'))||{};}catch(e){return {};} })();
+var _pgdDay = (_pgd.days&&_pgd.days.length) ? _pgd.days[0] : 5; // 0=Mon format, default Sat
+var _matchJsDay = _pgd.status==='bye' ? -1 : [1,2,3,4,5,6,0][_pgdDay]; // convert to JS 0=Sun
+var MATCH_IN = _pgd.status==='bye' ? 99 : (_melbDay === _matchJsDay ? 0 : (_matchJsDay - _melbDay + 7) % 7);
 var BED = 22*60+30;
 var COLD_GATE = 4*60;
 
@@ -443,20 +444,20 @@ var REGIONS = {
 var SORE = ['None','Niggle','Sore','Angry'];
 var SORE_C = ['#3B4E47','#D8B24A','#E8873A','#F05A3A'];
 
-/* ═══ work schedule (shared across pages) ════════════════════════ */
-var WORK_KEY = 'work-schedule';
+/* ═══ work schedule (reads planner-work from plan page) ══════════ */
 function loadWork(){
-  try{return JSON.parse(localStorage.getItem(WORK_KEY))||{enabled:false,start:'09:00',end:'12:00'};}
-  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+  try{return JSON.parse(localStorage.getItem('planner-work'))||{days:[],start:'09:00',end:'17:00'};}
+  catch(e){return {days:[],start:'09:00',end:'17:00'};}
 }
-function saveWork(w){ localStorage.setItem(WORK_KEY,JSON.stringify(w)); }
 var WORK = loadWork();
+var _todayPlanDow = _melbDay===0?6:_melbDay-1; // convert JS day (0=Sun) to plan day (0=Mon)
+var WORK_TODAY = (WORK.days||[]).indexOf(_todayPlanDow)>=0;
 
 function workMins(timeStr){
   var p=timeStr.split(':'); return parseInt(p[0])*60+parseInt(p[1]);
 }
 function workOverlap(slotAt){
-  if(!WORK.enabled) return false;
+  if(!WORK_TODAY) return false;
   var ws=workMins(WORK.start), we=workMins(WORK.end);
   return slotAt>=ws && slotAt<we;
 }
@@ -636,7 +637,7 @@ function render(){
   h += '<h1 class="r-title">Recovery, <em>Sean</em></h1>';
   h += '<p class="r-meta">'+esc(SESSION.name).toUpperCase()+'<i></i>';
   if(SESSION.end) h += 'ENDED '+hhmm(SESSION.end)+'<i></i>';
-  h += 'MATCH IN '+MATCH_IN+' DAY</p></header>';
+  h += (MATCH_IN===99 ? 'BYE WEEK' : 'MATCH IN '+MATCH_IN+' DAY') + '</p></header>';
 
   // Coach
   h += '<section class="r-coach"><div class="r-av"><span>K</span></div><div>';
@@ -647,16 +648,14 @@ function render(){
   var tip = BRAIN[getMelb().getDay()];
   h += '<div class="r-brain"><span class="r-btag">'+tip.tag+'</span><span class="r-btip">'+esc(tip.tip)+'</span></div>';
 
-  // Work schedule bar
-  h += '<div class="r-work">';
-  h += '<span class="r-work-tag">WORK</span>';
-  h += '<div class="r-work-body">';
-  h += '<span>Schedule</span>';
-  h += '<input class="r-work-input" type="time" id="workStart" value="'+WORK.start+'">';
-  h += '<span>to</span>';
-  h += '<input class="r-work-input" type="time" id="workEnd" value="'+WORK.end+'">';
-  h += '<button class="r-work-btn'+(WORK.enabled?' is-on':'')+'" id="workToggle">'+(WORK.enabled?'ON':'OFF')+'</button>';
-  h += '</div></div>';
+  // Work schedule bar (reads from plan page)
+  if(WORK_TODAY){
+    h += '<div class="r-work">';
+    h += '<span class="r-work-tag">WORK</span>';
+    h += '<div class="r-work-body">';
+    h += '<span>Today '+WORK.start+' \u2013 '+WORK.end+' \u00b7 recovery windows adapt below</span>';
+    h += '</div></div>';
+  }
 
   // 01 Window
   h += '<section class="r-block"><header class="r-bh"><div><p class="r-eyebrow">01 \u00b7 TODAY\'S WINDOW</p><h2>When, <em>not what</em></h2></div>';
@@ -851,13 +850,6 @@ function bindEvents(){
   if(tb) tb.addEventListener('click',toggleRunner);
   var cb = document.getElementById('closeRunner');
   if(cb) cb.addEventListener('click',closeRunner);
-  // Work schedule
-  var wt = document.getElementById('workToggle');
-  if(wt) wt.addEventListener('click',function(){ WORK.enabled=!WORK.enabled; saveWork(WORK); render(); });
-  var ws = document.getElementById('workStart');
-  if(ws) ws.addEventListener('change',function(){ WORK.start=this.value; saveWork(WORK); render(); });
-  var we = document.getElementById('workEnd');
-  if(we) we.addEventListener('change',function(){ WORK.end=this.value; saveWork(WORK); render(); });
 }
 
 function pick(key){
