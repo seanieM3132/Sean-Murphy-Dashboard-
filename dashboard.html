@@ -550,29 +550,47 @@ var DAYS = {
 };
 
 var WEEK_DATES = ["2026-07-09","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-14","2026-07-15"];
-var WEEK_LABELS = [
-  {d:"THU",n:9,k:"train"},{d:"FRI",n:10,k:"train"},{d:"SAT",n:11,k:"match"},
-  {d:"SUN",n:12,k:"rest"},{d:"MON",n:13,k:"train"},{d:"TUE",n:14,k:"train"},{d:"WED",n:15,k:"train"}
-];
+function buildWeekLabels() {
+  var dayShort = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+  var cfg = loadGameDay();
+  // WEEK_DATES starts from Thursday July 9 (JS day 4)
+  var labels = [];
+  WEEK_DATES.forEach(function(dk) {
+    var parts = dk.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    var jsDow = d.getDay(); // 0=Sun
+    var planDow = jsDow === 0 ? 6 : jsDow - 1; // 0=Mon
+    var k = 'train';
+    if (jsDow === 0) k = 'rest'; // Sunday default rest
+    if (cfg.status === 'game' && cfg.days.indexOf(planDow) >= 0) k = 'match';
+    if (cfg.status === 'bye' && cfg.days.indexOf(planDow) >= 0) k = 'rest';
+    labels.push({ d: dayShort[jsDow], n: d.getDate(), k: k });
+  });
+  return labels;
+}
+var WEEK_LABELS = buildWeekLabels();
 
 function todayKey() {
   var d = getMelb();
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 function resolveKey(key) {
-  // Check if this is a match day with bye status
-  var ms = loadMatchStatus();
-  if (ms[key] === 'bye' && DAYS[key + '-bye']) return key + '-bye';
+  // Check if this is a match day with bye status from game day config
+  var cfg = loadGameDay();
+  if (cfg.status === 'bye' && DAYS[key + '-bye']) return key + '-bye';
   return key;
 }
 function getDayItems(key) {
   var rk = resolveKey(key);
   var day = DAYS[rk];
   var items = day ? JSON.parse(JSON.stringify(day.items)) : [];
-  // Inject user appointments for this date
+  // Inject appointments from Week Plan
   var appts = loadAppts().filter(function(a) { return a.date === key; });
   appts.forEach(function(a) {
-    items.push({ id:'appt-'+a.id, at:a.at, mins:a.mins||60, kind:'appt', title:a.title, sub:a.sub||'', href:'', steps:[], added:true });
+    var parts = a.time ? a.time.split(':') : [12, 0];
+    var at = parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+    var mins = a.duration || 60;
+    items.push({ id:'appt-'+a.id, at:at, mins:mins, kind:'appt', title:a.name || a.title || 'Appointment', sub:'', href:'', steps:[], added:true });
   });
   // Sort by time
   items.sort(function(a, b) { return a.at - b.at; });
@@ -592,23 +610,22 @@ var PROPOSALS = [
     apply: function(d){return d;} }
 ];
 
-// To-do list (localStorage-backed)
-function loadTodos() {
-  try { return JSON.parse(localStorage.getItem('v_todos') || '[]'); } catch(e) { return []; }
-}
-function saveTodos(arr) { localStorage.setItem('v_todos', JSON.stringify(arr)); }
-
-// Appointments — localStorage-backed
+// Appointments — read from plan.html's localStorage
 function loadAppts() {
-  try { return JSON.parse(localStorage.getItem('v_appts') || '[]'); } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem('planner-appointments') || '[]'); } catch(e) { return []; }
 }
-function saveAppts(arr) { localStorage.setItem('v_appts', JSON.stringify(arr)); }
 
-// Match day status — localStorage-backed
-function loadMatchStatus() {
-  try { return JSON.parse(localStorage.getItem('v_match_status') || '{}'); } catch(e) { return {}; }
+// Game day config — read from plan.html's localStorage
+function loadGameDay() {
+  try {
+    var raw = localStorage.getItem('planner-gameday');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { days: [5], status: 'game' }; // Default: Saturday game
 }
-function saveMatchStatus(obj) { localStorage.setItem('v_match_status', JSON.stringify(obj)); }
+
+// Convert plan.html day index (0=Mon) to JS day (0=Sun)
+function planDayToJS(d) { return (d + 1) % 7; }
 
 var PERIODS = [
   { id:"morning",   label:"MORNING",   from:0,    to:720 },
@@ -626,9 +643,6 @@ var state = {
   open: null,
   steps: {},
   done: {},
-  todos: loadTodos(),
-  appts: loadAppts(),
-  matchStatus: loadMatchStatus(),
   showPast: false
 };
 
@@ -758,14 +772,76 @@ var PLAN_SCHEDULE = {
     {time:'7:30',label:'Post-game recovery',color:'amber'},
   ],
 };
+var PLAN_SCHEDULE_BYE = [
+  {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
+  {time:'8:00-8:20',label:'112mvmnt: Full Lower Body',color:'teal'},
+  {time:'8:30-10:30',label:'Gym: Power & Speed Focus',color:'green'},
+  {time:'10:30-10:50',label:'Core: Speed & Rotation',color:'green'},
+  {time:'10:50-11:00',label:'Fascia + Nordics',color:'teal'},
+  {time:'11:05-11:25',label:'Sauna + Cold plunge',color:'amber'},
+  {time:'1:00-1:45',label:'Ball Work + Sprint Pyramid',color:'green'},
+  {time:'3:00-3:20',label:'Sauna',color:'amber'},
+];
+
+var PLAN_SCHEDULE_PREMATCH = [
+  {time:'7:00-7:35',label:'Morning Protocol',color:'violet'},
+  {time:'7:35-8:00',label:'112mvmnt: Lower Back + Calves',color:'teal'},
+  {time:'8:00-8:30',label:'Seward: Workout C + Abs 1',color:'green'},
+  {time:'8:35-9:05',label:'Speed & Acceleration',color:'green'},
+  {time:'9:05-9:15',label:'Fascia + toe curls',color:'teal'},
+  {time:'9:20-9:35',label:'Sauna (NO ice bath)',color:'amber'},
+  {time:'1:00-1:30',label:'Ball Work: Set C + First Touch',color:'green'},
+  {time:'6:00',label:'Kit prep',color:'dimmer'},
+  {time:'6:30',label:'Visualization',color:'violet'},
+  {time:'7:00-7:20',label:'Sauna pre-bed',color:'amber'},
+];
+
 var PLAN_COLORS = {green:'#4ADE80',teal:'#7DD3C0',amber:'#E8873A',gold:'#D8B24A',violet:'#9C8ADE',dimmer:'#5F786E'};
 
 function renderTodayPlan(now) {
   var dow = now.getDay(); // 0=Sun
-  var blocks = PLAN_SCHEDULE[dow] || [];
+  var cfg = loadGameDay();
+  var planDow = dow === 0 ? 6 : dow - 1; // Convert to plan index (0=Mon)
+  var isGameDay = cfg.status === 'game' && cfg.days.indexOf(planDow) >= 0;
+  var isBye = cfg.status === 'bye';
+
+  // Determine which schedule to use
+  var blocks;
+  if (isGameDay) {
+    blocks = PLAN_SCHEDULE[6] || []; // Match day schedule (originally Saturday=6 in PLAN_SCHEDULE)
+  } else if (isBye && cfg.days.indexOf(planDow) >= 0) {
+    blocks = PLAN_SCHEDULE_BYE;
+  } else {
+    // Check if tomorrow is a game day — today becomes pre-match
+    var tomorrowPlanDow = (planDow + 1) % 7;
+    var isTomorrowGame = cfg.status === 'game' && cfg.days.indexOf(tomorrowPlanDow) >= 0;
+    if (isTomorrowGame) {
+      blocks = PLAN_SCHEDULE_PREMATCH;
+    } else {
+      blocks = PLAN_SCHEDULE[dow] || [];
+    }
+  }
+
+  // Inject appointments for today
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  var appts = loadAppts().filter(function(a) { return a.date === todayStr; });
+  var apptBlocks = appts.map(function(a) {
+    var durMins = a.duration || 60;
+    var endParts = a.time ? a.time.split(':') : ['12','00'];
+    var endH = parseInt(endParts[0]);
+    var endM = parseInt(endParts[1] || 0) + durMins;
+    endH += Math.floor(endM / 60);
+    endM = endM % 60;
+    var endTime = String(endH).padStart(2,'0') + ':' + String(endM).padStart(2,'0');
+    return { time: a.time + '-' + endTime, label: a.name || 'Appointment', color: 'amber' };
+  });
+  blocks = blocks.concat(apptBlocks);
+
   if (!blocks.length) return '';
+
+  var gameLabel = isGameDay ? ' GAME DAY' : (isBye && cfg.days.indexOf(planDow) >= 0 ? ' BYE WEEK' : '');
   var h = '<section style="margin:18px auto 0;max-width:var(--w)">';
-  h += '<p class="d-eyebrow" style="margin-bottom:10px">TODAY\'S PLAN</p>';
+  h += '<p class="d-eyebrow" style="margin-bottom:10px">TODAY\'S PLAN' + (gameLabel ? '<span style="color:' + (isGameDay ? 'var(--amber)' : 'var(--teal)') + ';margin-left:8px">' + gameLabel + '</span>' : '') + '</p>';
   h += '<div style="display:flex;flex-direction:column;gap:5px">';
   blocks.forEach(function(b) {
     var c = PLAN_COLORS[b.color] || PLAN_COLORS.dimmer;
@@ -781,6 +857,7 @@ function renderTodayPlan(now) {
 }
 
 function render() {
+  WEEK_LABELS = buildWeekLabels();
   var NOW = getNow();
   var pend = pending();
   var live = state.day.filter(function(i){return !i.passive;});
@@ -890,31 +967,13 @@ function render() {
   // Sidebar
   h += '<aside class="d-side">';
 
-  // To-do list
-  if (isToday) {
-    var tdDone = state.todos.filter(function(t){return t.done;}).length;
-    h += '<section class="d-block"><header class="d-rh" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px"><p class="d-eyebrow">02 \u00b7 TO-DO</p>';
-    if (state.todos.length > 0) h += '<span style="font:400 9px var(--mono);color:var(--dim)">' + tdDone + '/' + state.todos.length + '</span>';
-    h += '</header>';
-    h += '<div class="d-todo-add"><input id="todoInput" type="text" placeholder="Add a task\u2026" class="d-todo-in" /><button id="todoBtn" class="d-todo-btn">+</button></div>';
-    h += '<ul class="d-rem">';
-    state.todos.forEach(function(t, i) {
-      h += '<li><button class="d-step' + (t.done ? ' is-on' : '') + '" data-todotoggle="' + i + '" aria-pressed="' + t.done + '">';
-      h += '<span class="d-box">' + (t.done ? '\u2713' : '') + '</span>';
-      h += '<span class="d-st"><b>' + esc(t.text) + '</b></span>';
-      h += '</button><button class="d-todo-del" data-tododel="' + i + '" aria-label="Delete">\u00D7</button></li>';
-    });
-    h += '</ul><h3 class="d-bt">To-do</h3></section>';
-  }
-
   // Recovery log
   if (isToday) {
     var rlog = [];
     try { rlog = JSON.parse(localStorage.getItem('recovery-log') || '[]'); } catch(e){}
     var todayLog = rlog.filter(function(r){ return r.date === TODAY_KEY; });
     if (todayLog.length > 0) {
-      var secN = '03';
-      h += '<section class="d-block"><p class="d-eyebrow">' + secN + ' \u00b7 RECOVERY</p>';
+      h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 RECOVERY</p>';
       h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">';
       todayLog.forEach(function(r) {
         var c = r.type === 'sauna' ? 'var(--amber)' : 'var(--teal)';
@@ -929,30 +988,12 @@ function render() {
     }
   }
 
-  // Week
-  var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0] || '';
-  var mStatus = state.matchStatus[matchDate] || 'game';
-  var _rl = []; try { _rl = JSON.parse(localStorage.getItem('recovery-log') || '[]').filter(function(r){ return r.date === TODAY_KEY; }); } catch(e){}
-  var weekN = isToday ? (_rl.length > 0 ? '04' : '03') : '02';
-  h += '<section class="d-block"><p class="d-eyebrow">' + weekN + ' \u00b7 THE WEEK</p><div class="d-week">';
-  WEEK_DATES.forEach(function(dk, i) {
-    var wl = WEEK_LABELS[i];
-    var isT = dk === TODAY_KEY;
-    var isSel = dk === state.selDate;
-    var isPast = dk < TODAY_KEY;
-    var dayK = wl.k;
-    if (dayK === 'match' && mStatus === 'bye') dayK = 'rest';
-    h += '<button class="d-wd is-' + dayK + (isT ? ' is-today' : '') + (isSel ? ' is-sel' : '') + (isPast && !isSel ? ' is-past' : '') + '" data-switchday="' + dk + '">';
-    h += '<em>' + wl.d + '</em><b>' + wl.n + '</b><span></span></button>';
-  });
-  h += '</div>';
-  h += '<div style="display:flex;align-items:center;gap:10px;margin-top:10px">';
-  h += '<span style="font:500 9px var(--mono);letter-spacing:.14em;color:var(--dimmer)">SATURDAY</span>';
-  h += '<button class="d-match-toggle" data-matchtoggle style="background:' + (mStatus === 'game' ? 'rgba(232,135,58,.15)' : 'rgba(255,255,255,.04)') + ';border:1px solid ' + (mStatus === 'game' ? 'rgba(232,135,58,.3)' : 'var(--line)') + ';border-radius:6px;padding:6px 14px;font:500 9px var(--mono);letter-spacing:.12em;color:' + (mStatus === 'game' ? 'var(--amber)' : 'var(--dimmer)') + ';cursor:pointer">' + (mStatus === 'game' ? 'GAME DAY' : 'BYE WEEK') + '</button>';
-  h += '</div>';
-  h += '<h3 class="d-bt">The week</h3></section>';
-
   h += '</aside></main>';
+
+  // Today's Plan (below main grid)
+  if (isToday) {
+    h += renderTodayPlan(now);
+  }
 
   // Footer
   h += '<footer class="d-foot"><span>SIGNALS READ FROM PEAK \u00b7 FUEL \u00b7 VITALS \u00b7 TRAIN \u00b7 RECOVERY</span>';
@@ -1030,84 +1071,6 @@ function bindAll() {
   var pt2 = document.querySelector('[data-togglepast]');
   if (pt2) pt2.addEventListener('click', function(){ state.showPast = !state.showPast; render(); });
 
-  // To-do list
-  var todoIn = document.getElementById('todoInput');
-  var todoBtn = document.getElementById('todoBtn');
-  if (todoBtn) {
-    var addTodo = function() {
-      var v = todoIn.value.trim();
-      if (!v) return;
-      state.todos.push({ text: v, done: false });
-      saveTodos(state.todos);
-      render();
-    };
-    todoBtn.addEventListener('click', addTodo);
-    todoIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') addTodo(); });
-  }
-  document.querySelectorAll('[data-todotoggle]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var i = parseInt(this.dataset.todotoggle);
-      state.todos[i].done = !state.todos[i].done;
-      saveTodos(state.todos);
-      render();
-    });
-  });
-  document.querySelectorAll('[data-tododel]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var i = parseInt(this.dataset.tododel);
-      state.todos.splice(i, 1);
-      saveTodos(state.todos);
-      render();
-    });
-  });
-
-  // Appointments
-  var apptBtn = document.getElementById('apptBtn');
-  if (apptBtn) {
-    var addAppt = function() {
-      var title = document.getElementById('apptTitle').value.trim();
-      var timeVal = document.getElementById('apptTime').value.trim().replace('.', ':');
-      var mins = parseInt(document.getElementById('apptMins').value) || 60;
-      if (!title || !timeVal) return;
-      // Parse "12:45", "1245", "9:30", "930"
-      var parts;
-      if (timeVal.indexOf(':') >= 0) { parts = timeVal.split(':'); }
-      else if (timeVal.length >= 3) { parts = [timeVal.slice(0, -2), timeVal.slice(-2)]; }
-      else return;
-      var hh = parseInt(parts[0]); var mm = parseInt(parts[1] || 0);
-      if (isNaN(hh) || hh < 0 || hh > 23 || isNaN(mm) || mm < 0 || mm > 59) return;
-      var at = hh * 60 + mm;
-      state.appts.push({ id: Date.now(), date: state.selDate, title: title, at: at, mins: mins, sub: '' });
-      saveAppts(state.appts);
-      state.day = getDayItems(state.selDate);
-      render();
-    };
-    apptBtn.addEventListener('click', addAppt);
-    document.getElementById('apptTitle').addEventListener('keydown', function(e){ if (e.key === 'Enter') addAppt(); });
-  }
-  document.querySelectorAll('[data-delappt]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var id = parseInt(this.dataset.delappt);
-      state.appts = state.appts.filter(function(a){ return a.id !== id; });
-      saveAppts(state.appts);
-      state.day = getDayItems(state.selDate);
-      render();
-    });
-  });
-
-  // Match/bye toggle
-  var mt = document.querySelector('[data-matchtoggle]');
-  if (mt) {
-    mt.addEventListener('click', function(){
-      var matchDate = WEEK_DATES.filter(function(dk,i){ return WEEK_LABELS[i].k === 'match'; })[0];
-      if (!matchDate) return;
-      var cur = state.matchStatus[matchDate] || 'game';
-      state.matchStatus[matchDate] = cur === 'game' ? 'bye' : 'game';
-      saveMatchStatus(state.matchStatus);
-      state.day = getDayItems(state.selDate);
-      render();
-    });
-  }
 }
 
 // Now-line refresh

@@ -202,6 +202,15 @@ body::before{
   <div class="appt-list" id="appt-list"></div>
 </div>
 
+<!-- Game Day Config -->
+<div class="appt-section" style="margin-top:12px">
+  <div class="appt-section-header">
+    <span class="appt-title">Game Day</span>
+    <span id="gameday-status" style="font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.06em"></span>
+  </div>
+  <div id="gameday-config" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
+</div>
+
 <!-- Modal -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
@@ -215,6 +224,15 @@ body::before{
     </select>
     <label>Time</label>
     <input type="time" id="appt-time" value="12:00">
+    <label>Duration</label>
+    <select id="appt-duration">
+      <option value="30">30 min</option>
+      <option value="45">45 min</option>
+      <option value="60" selected>60 min</option>
+      <option value="90">90 min</option>
+      <option value="120">2 hours</option>
+      <option value="180">3 hours</option>
+    </select>
     <label>Color</label>
     <div class="color-options" id="color-options">
       <div class="color-opt" data-color="green" style="background:var(--green)"></div>
@@ -296,6 +314,18 @@ const SCHEDULE = {
     {time:'1:00-1:45',label:'Ball Work',color:'green'},
   ],
 };
+
+const BYE_SCHEDULE = [
+  {time:'7:00-8:00',label:'Morning Protocol',color:'violet'},
+  {time:'8:00-8:20',label:'112mvmnt: Full Lower Body',color:'teal'},
+  {time:'8:30-10:30',label:'Gym: Power & Speed Focus',color:'green'},
+  {time:'10:30-10:50',label:'Core: Speed & Rotation',color:'green'},
+  {time:'10:50-11:00',label:'Fascia + Nordics',color:'teal'},
+  {time:'11:05-11:25',label:'Sauna + Cold plunge',color:'amber'},
+  {time:'12:00',label:'Lunch',color:'dimmer'},
+  {time:'1:00-1:45',label:'Ball Work + Sprint Pyramid',color:'green'},
+  {time:'3:00-3:20',label:'Sauna',color:'amber'},
+];
 
 const DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -398,21 +428,35 @@ function render(){
   const grid = document.getElementById('planner-grid');
   grid.innerHTML = '';
 
+  const gameDayCfg = loadGameDay();
+
   for(let i=0;i<7;i++){
     const dayDate = new Date(monday);
     dayDate.setDate(dayDate.getDate()+i);
     const dateStr = dayDate.toISOString().split('T')[0];
     const isToday = dateStr === todayStr;
     const isMobileVisible = i === mobileDay;
+    const isGameDay = gameDayCfg.status === 'game' && gameDayCfg.days.includes(i);
+    const isBye = gameDayCfg.status === 'bye';
 
     const col = document.createElement('div');
     col.className = 'day-col' + (isToday?' today':'') + (isMobileVisible?' visible':'');
+    if(isGameDay) col.style.borderColor = 'rgba(232,135,58,.35)';
 
     // Header
-    col.innerHTML = `<div class="day-header"><div class="day-name">${DAY_SHORT[i]}</div><div class="day-date">${dayDate.getDate()}</div></div>`;
+    const gameBadge = isGameDay ? '<div style="font:600 8px var(--mono);color:var(--amber);letter-spacing:.1em;margin-top:2px">GAME DAY</div>' : '';
+    const byeBadge = (isBye && gameDayCfg.days.includes(i)) ? '<div style="font:600 8px var(--mono);color:var(--teal);letter-spacing:.1em;margin-top:2px">BYE</div>' : '';
+    col.innerHTML = `<div class="day-header"><div class="day-name">${DAY_SHORT[i]}</div><div class="day-date">${dayDate.getDate()}</div>${gameBadge}${byeBadge}</div>`;
 
-    // Template blocks
-    const blocks = SCHEDULE[i] || [];
+    // Template blocks — use game day schedule or bye schedule if this day is a game day
+    let blocks;
+    if(isGameDay){
+      blocks = SCHEDULE[5] || []; // Use Saturday (match day) schedule
+    } else if(isBye && gameDayCfg.days.includes(i)){
+      blocks = BYE_SCHEDULE || SCHEDULE[i] || [];
+    } else {
+      blocks = SCHEDULE[i] || [];
+    }
     blocks.forEach(b=>{
       const colorClass = b.color === 'dimmer' ? '' : 'block--'+b.color;
       const dimStyle = b.color === 'dimmer' ? 'background:rgba(255,255,255,.03);border-color:var(--dimmer);color:var(--dim);' : '';
@@ -425,7 +469,8 @@ function render(){
     dayAppts.forEach(a=>{
       const colors = {green:'var(--green)',teal:'var(--teal)',amber:'var(--amber)',gold:'var(--gold)',violet:'var(--violet)'};
       const c = colors[a.color]||'var(--green)';
-      col.innerHTML += `<div class="appt-pill" style="border-color:${c};color:${c};background:${c}11;" data-id="${a.id}" onclick="window._editAppt('${a.id}')"><span style="font-size:9px;opacity:.7;">${a.time}</span> ${a.name}</div>`;
+      const durLabel = a.duration ? (a.duration >= 60 ? Math.floor(a.duration/60)+'h'+(a.duration%60?a.duration%60+'m':'') : a.duration+'m') : '';
+      col.innerHTML += `<div class="appt-pill" style="border-color:${c};color:${c};background:${c}11;" data-id="${a.id}" onclick="window._editAppt('${a.id}')"><span style="font-size:9px;opacity:.7;">${a.time}</span> ${a.name}${durLabel ? '<span style="font-size:9px;opacity:.6;margin-left:4px">'+durLabel+'</span>' : ''}</div>`;
     });
 
     // Time indicator for today
@@ -462,11 +507,12 @@ function renderApptList(){
   list.innerHTML = appts.map(a=>{
     const c = colors[a.color]||'var(--green)';
     const dayLabel = a.date ? a.date : DAY_NAMES[a.day]+' (weekly)';
+    const durStr = a.duration ? (a.duration >= 60 ? Math.floor(a.duration/60)+'h'+(a.duration%60?' '+a.duration%60+'m':'') : a.duration+' min') : '';
     return `<div class="appt-item">
       <div class="dot" style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0;"></div>
       <div class="appt-info">
         <span class="appt-name">${a.name}</span>
-        <span class="appt-meta">${dayLabel} at ${a.time}</span>
+        <span class="appt-meta">${dayLabel} at ${a.time}${durStr ? ' ('+durStr+')' : ''}</span>
       </div>
       <button class="appt-del" onclick="window._editAppt('${a.id}')" title="Edit">&#9998;</button>
       <button class="appt-del" onclick="window._deleteAppt('${a.id}')" title="Delete">&times;</button>
@@ -504,6 +550,7 @@ document.getElementById('add-appt-btn').onclick = ()=>{
   document.getElementById('modal-title').textContent = 'Add Appointment';
   document.getElementById('appt-name').value = '';
   document.getElementById('appt-time').value = '12:00';
+  document.getElementById('appt-duration').value = '60';
   document.getElementById('appt-day').value = '0';
   colorOpts.forEach(o=>o.classList.remove('selected'));
   colorOpts[0].classList.add('selected');
@@ -522,6 +569,7 @@ document.getElementById('modal-save').onclick = ()=>{
   if(!name) return;
   const day = parseInt(document.getElementById('appt-day').value);
   const time = document.getElementById('appt-time').value;
+  const duration = parseInt(document.getElementById('appt-duration').value) || 60;
   const appts = loadAppointments();
 
   if(editingApptId){
@@ -530,17 +578,16 @@ document.getElementById('modal-save').onclick = ()=>{
       appts[idx].name = name;
       appts[idx].day = day;
       appts[idx].time = time;
+      appts[idx].duration = duration;
       appts[idx].color = selectedColor;
-      // Keep date if it had one, otherwise remove
       if(!appts[idx].date) delete appts[idx].date;
     }
   } else {
     const id = 'appt-'+Date.now();
-    // Calculate the actual date for this week
     const monday = getWeekMonday();
     const apptDate = new Date(monday);
     apptDate.setDate(apptDate.getDate()+day);
-    appts.push({id,name,day,time,color:selectedColor,date:apptDate.toISOString().split('T')[0]});
+    appts.push({id,name,day,time,duration,color:selectedColor,date:apptDate.toISOString().split('T')[0]});
   }
 
   saveAppointments(appts);
@@ -557,6 +604,7 @@ window._editAppt = function(id){
   document.getElementById('appt-name').value = appt.name;
   document.getElementById('appt-day').value = appt.day;
   document.getElementById('appt-time').value = appt.time;
+  document.getElementById('appt-duration').value = appt.duration || 60;
   colorOpts.forEach(o=>{
     o.classList.remove('selected');
     if(o.dataset.color===appt.color) o.classList.add('selected');
@@ -596,6 +644,94 @@ document.addEventListener('touchend',(e)=>{
     render();
   }
 },{passive:true});
+
+/* ── Game Day Config ── */
+const GAMEDAY_KEY = 'planner-gameday';
+
+function loadGameDay(){
+  try{
+    const raw = localStorage.getItem(GAMEDAY_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {days:[5], status:'game'}; // Default: Saturday game
+}
+
+function saveGameDay(config){
+  localStorage.setItem(GAMEDAY_KEY, JSON.stringify(config));
+}
+
+function renderGameDayConfig(){
+  const config = loadGameDay();
+  const container = document.getElementById('gameday-config');
+  const status = document.getElementById('gameday-status');
+
+  let html = '';
+  // Day buttons
+  DAY_NAMES.forEach((name, i)=>{
+    const isSelected = config.days.includes(i);
+    const bg = isSelected ? 'rgba(232,135,58,.18)' : 'rgba(255,255,255,.04)';
+    const border = isSelected ? 'rgba(232,135,58,.4)' : 'var(--border)';
+    const color = isSelected ? 'var(--amber)' : 'var(--dim)';
+    html += `<button data-gameday="${i}" style="background:${bg};border:1px solid ${border};border-radius:8px;padding:6px 12px;font:500 10px var(--mono);letter-spacing:.08em;color:${color};cursor:pointer;transition:all .2s">${DAY_SHORT[i]}</button>`;
+  });
+
+  // Bye toggle
+  const isBye = config.status === 'bye';
+  html += `<span style="width:1px;height:20px;background:var(--border);margin:0 4px"></span>`;
+  html += `<button id="bye-toggle" style="background:${isBye?'rgba(125,211,192,.15)':'rgba(255,255,255,.04)'};border:1px solid ${isBye?'rgba(125,211,192,.3)':'var(--border)'};border-radius:8px;padding:6px 14px;font:500 10px var(--mono);letter-spacing:.08em;color:${isBye?'var(--teal)':'var(--dim)'};cursor:pointer;transition:all .2s">BYE</button>`;
+
+  container.innerHTML = html;
+
+  // Status label
+  if(isBye){
+    status.textContent = 'BYE WEEK';
+    status.style.color = 'var(--teal)';
+  } else if(config.days.length === 0){
+    status.textContent = 'NO GAME SET';
+    status.style.color = 'var(--dimmer)';
+  } else if(config.days.length === 1){
+    status.textContent = DAY_NAMES[config.days[0]].toUpperCase() + ' GAME DAY';
+    status.style.color = 'var(--amber)';
+  } else {
+    status.textContent = config.days.map(d=>DAY_SHORT[d].toUpperCase()).join(' + ') + ' GAME DAYS';
+    status.style.color = 'var(--amber)';
+  }
+
+  // Bind day buttons
+  container.querySelectorAll('[data-gameday]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const d = parseInt(btn.dataset.gameday);
+      const cfg = loadGameDay();
+      cfg.status = 'game';
+      const idx = cfg.days.indexOf(d);
+      if(idx >= 0){
+        cfg.days.splice(idx, 1);
+      } else {
+        if(cfg.days.length >= 2) cfg.days.shift(); // max 2 game days
+        cfg.days.push(d);
+      }
+      cfg.days.sort((a,b)=>a-b);
+      saveGameDay(cfg);
+      renderGameDayConfig();
+      render(); // re-render grid to show game day styling
+    });
+  });
+
+  // Bind bye toggle
+  document.getElementById('bye-toggle').addEventListener('click',()=>{
+    const cfg = loadGameDay();
+    if(cfg.status === 'bye'){
+      cfg.status = 'game';
+    } else {
+      cfg.status = 'bye';
+    }
+    saveGameDay(cfg);
+    renderGameDayConfig();
+    render();
+  });
+}
+
+renderGameDayConfig();
 
 /* ── Init ── */
 render();
