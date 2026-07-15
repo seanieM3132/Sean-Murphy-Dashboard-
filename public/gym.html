@@ -579,7 +579,11 @@ SESSIONS_FRI.friday = {
 
 /* === STATE === */
 
-var gameWeek = localStorage.getItem('gym-gameweek') || 'sat';
+function loadPlannerGameDay(){
+  try{return JSON.parse(localStorage.getItem('planner-gameday'))||{};}catch(e){return {};}
+}
+var _plannerGD = loadPlannerGameDay();
+var gameWeek = (_plannerGD.days||[5]).indexOf(4)>=0 ? 'fri' : 'sat';
 function getSessions(){ return gameWeek === 'fri' ? SESSIONS_FRI : SESSIONS_SAT; }
 
 var DAYS = ['monday','tuesday','wednesday','thursday','friday'];
@@ -597,15 +601,17 @@ var openSec = null;
 var restState = null;
 var restTimer = null;
 
-/* work schedule awareness */
-var WORK_KEY = 'work-schedule';
-function loadWork(){
-  try{return JSON.parse(localStorage.getItem(WORK_KEY))||{enabled:false,start:'09:00',end:'12:00'};}
-  catch(e){return {enabled:false,start:'09:00',end:'12:00'};}
+/* work schedule awareness — reads from planner-work */
+function loadPlannerWork(){
+  try{return JSON.parse(localStorage.getItem('planner-work'))||{days:[],start:'09:00',end:'12:00'};}
+  catch(e){return {days:[],start:'09:00',end:'12:00'};}
 }
-var WORK = loadWork();
+var WORK = loadPlannerWork();
 function gymOverlapsWork(sess){
-  if(!WORK.enabled||!sess.time) return false;
+  if(!sess.time) return false;
+  var today = new Date().getDay();
+  var planDow = today===0?6:today-1;
+  if((WORK.days||[]).indexOf(planDow)<0) return false;
   var sp=sess.time.split(':'), sh=parseInt(sp[0])*60+parseInt(sp[1]);
   var ws=WORK.start.split(':'), we=WORK.end.split(':');
   var wStart=parseInt(ws[0])*60+parseInt(ws[1]), wEnd=parseInt(we[0])*60+parseInt(we[1]);
@@ -682,17 +688,7 @@ function switchDay(day){
   render();
 }
 
-function toggleGameWeek(gw){
-  gameWeek = gw;
-  localStorage.setItem('gym-gameweek', gw);
-  log = {};
-  times = {};
-  rpe = null;
-  openSec = null;
-  restState = null;
-  clearInterval(restTimer);
-  render();
-}
+/* game week is now auto-detected from planner-gameday — no manual toggle */
 
 /* === RENDER === */
 
@@ -896,9 +892,7 @@ function render(){
 /* === EVENTS === */
 
 function bindEvents(){
-  document.querySelectorAll('[data-gw]').forEach(function(btn){
-    btn.onclick = function(){ toggleGameWeek(this.getAttribute('data-gw')); };
-  });
+  /* game week toggle removed — auto-detected from planner */
   document.querySelectorAll('[data-day]').forEach(function(btn){
     btn.onclick = function(){ switchDay(this.getAttribute('data-day')); };
   });
