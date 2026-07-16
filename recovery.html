@@ -863,6 +863,17 @@ render();
 // Refresh every 60s so cold gate updates live
 setInterval(render,60000);
 
+// React to plan week changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key === 'planner-gameday' || e.key === 'planner-work') {
+    _pgd = (function(){ try{return JSON.parse(localStorage.getItem('planner-gameday'))||{};}catch(ex){return {};} })();
+    _pgdDay = (_pgd.days&&_pgd.days.length) ? _pgd.days[0] : 5;
+    _matchJsDay = _pgd.status==='bye' ? -1 : [1,2,3,4,5,6,0][_pgdDay];
+    MATCH_IN = _pgd.status==='bye' ? 99 : (_melbDay === _matchJsDay ? 0 : (_matchJsDay - _melbDay + 7) % 7);
+    render();
+  }
+});
+
 })();
 </script>
 </body>

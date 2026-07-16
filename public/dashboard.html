@@ -1143,6 +1143,16 @@ function bindAll() {
 setInterval(render, 60000);
 render();
 
+// React to plan week changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key && e.key.indexOf('planner-') === 0) {
+    WEEK_DATES = computeWeekDates();
+    WEEK_LABELS = buildWeekLabels();
+    state.day = getDayItems(state.selDate);
+    render();
+  }
+});
+
 })();
 </script>
 </body>

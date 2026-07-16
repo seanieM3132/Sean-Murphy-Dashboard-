@@ -372,7 +372,16 @@ var SET_B = { label: 'Set B \u2014 Takuya Sole Skills', mins: 10, drills: [
 var SET_C = { label: 'Set C \u2014 Cognitive', mins: 10, drills: [
   { n: 'Sole drags + tennis ball catch', d: '4\u00d730s' },
   { n: 'Coerver pull-push speed test', d: '4\u00d720s' },
+  { n: 'Through & round (no-touch let ball roll past)', d: '4\u00d720s' },
+  { n: 'Cancel control (fake touch, pull back)', d: '4\u00d720s' },
   { n: 'Freestyle combo chains', d: '4\u00d730s' }
+]};
+
+var TURNS = { label: 'Midfielder Turns \u2014 CM', mins: 8, drills: [
+  { n: 'Turning the corner (outside foot)', d: '3\u00d78 R/L' },
+  { n: 'Half-turn receiving (open body)', d: '3\u00d78 R/L' },
+  { n: 'Back foot 180\u00b0 turn \u2192 play forward', d: '3\u00d76 R/L' },
+  { n: 'Cruyff turn under pressure (cone)', d: '3\u00d76 R/L' }
 ]};
 
 var FIRST_TOUCH = { label: 'First Touch \u2014 CM', mins: 8, drills: [
@@ -424,14 +433,14 @@ var FULL_SESSIONS = [
   { title: 'Set A + Passing & Switching + Long Throws', blocks: [
     { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, PASSING, LONG_THROWS
   ]},
-  { title: 'Set B + Weak Foot Block + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_B, WEAK_FOOT_BLOCK, LONG_THROWS
+  { title: 'Set B + Midfielder Turns + Weak Foot', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_B, TURNS, WEAK_FOOT_BLOCK
   ]},
   { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
     { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_C, FIRST_TOUCH, LONG_THROWS
   ]},
-  { title: 'Set A + First Touch', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, FIRST_TOUCH
+  { title: 'Set A + Turns + First Touch', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, TURNS, FIRST_TOUCH
   ]}
 ];
 
@@ -1036,6 +1045,20 @@ function addMoment() {
 
 // Initial render
 render();
+
+// React to plan week changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key === 'planner-gameday' || e.key === 'planner-teamdays' || e.key === 'match-info') {
+    _pgd = loadPlannerGameDay();
+    MATCH.bye = _pgd.status === 'bye';
+    if(_pgd.days && _pgd.days.length) MATCH.day = _pgd.days[0];
+    if (e.key === 'match-info') { try { var m = JSON.parse(e.newValue); if(m) { MATCH.round=m.round||MATCH.round; MATCH.opponent=m.opponent||MATCH.opponent; MATCH.kickoff=m.kickoff||MATCH.kickoff; MATCH.home=m.home!==undefined?m.home:MATCH.home; MATCH.venue=m.venue||MATCH.venue; MATCH.arrive=m.arrive||MATCH.arrive; } } catch(ex){} }
+    _teamCfg = loadTeamDays();
+    TEAM_DAYS = _teamCfg.days || [1, 3];
+    WEEK = buildWeek();
+    render();
+  }
+});
 
 })();
 </script>

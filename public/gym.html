@@ -943,6 +943,17 @@ function bindEvents(){
 /* === INIT === */
 render();
 
+// React to plan week changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key === 'planner-gameday' || e.key === 'planner-work') {
+    _plannerGD = loadPlannerGameDay();
+    _isBye = _plannerGD.status === 'bye';
+    gameWeek = (!_isBye && (_plannerGD.days||[5]).indexOf(4)>=0) ? 'fri' : 'sat';
+    WORK = loadPlannerWork();
+    render();
+  }
+});
+
 })();
 </script>
 </body>

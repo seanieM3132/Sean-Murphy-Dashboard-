@@ -295,26 +295,40 @@ if(_pgd.days && _pgd.days.length) MATCH.day = _pgd.days[0];
 var WEAK_FOOT = 58;
 var DAYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 
+/* sync with planner-teamdays */
+function loadTeamDays(){
+  try{ var r = JSON.parse(localStorage.getItem('planner-teamdays')); if(r) return r; }catch(e){}
+  return { days: [1, 3] };
+}
+var _teamCfg = loadTeamDays();
+var TEAM_DAYS = _teamCfg.days || [1, 3];
+
 function buildWeek(){
-  var base = [
-    { d: "MON", kind: "rest",  label: "Rest" },
-    { d: "TUE", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-    { d: "WED", kind: "solo",  label: "Individual" },
-    { d: "THU", kind: "team",  label: "Team training", at: "18:00", mins: 90 },
-    { d: "FRI", kind: "solo",  label: "Individual \u00b7 light" },
-    { d: "SAT", kind: "match", label: "Round " + MATCH.round, at: MATCH.kickoff || "15:00" },
-    { d: "SUN", kind: "rest",  label: "Rest & mobility" }
-  ];
-  // Move match to correct day
-  if(typeof MATCH.day==='number' && MATCH.day !== 5){
-    base[5] = { d: "SAT", kind: "rest", label: "Rest" };
-    base[MATCH.day] = { d: DAYS[MATCH.day], kind: "match", label: "Round " + MATCH.round, at: MATCH.kickoff || "15:00" };
+  var gameDays = _pgd.days || [5];
+  var matchDay = MATCH.day;
+  // Start all days as solo
+  var base = [];
+  for(var i=0;i<7;i++){
+    base.push({ d: DAYS[i], kind: "solo", label: "Individual" });
   }
-  // Bye week
+  // Set team training days
+  for(var t=0;t<TEAM_DAYS.length;t++){
+    var td = TEAM_DAYS[t];
+    base[td] = { d: DAYS[td], kind: "team", label: "Team training", at: "18:00", mins: 90 };
+  }
+  // Set match day
+  base[matchDay] = { d: DAYS[matchDay], kind: "match", label: "Round " + MATCH.round, at: MATCH.kickoff || "15:00" };
+  // Day before match = pre-match (solo light)
+  if(!MATCH.bye){
+    var pre = (matchDay + 6) % 7;
+    if(base[pre].kind !== 'team') base[pre] = { d: DAYS[pre], kind: "solo", label: "Individual \u00b7 light" };
+    // Day after match = rest
+    var post = (matchDay + 1) % 7;
+    base[post] = { d: DAYS[post], kind: "rest", label: "Rest & mobility" };
+  }
+  // Bye week — no match
   if(MATCH.bye){
-    for(var i=0;i<base.length;i++){
-      if(base[i].kind==='match') base[i] = { d: base[i].d, kind: "rest", label: "Bye week" };
-    }
+    base[matchDay] = { d: DAYS[matchDay], kind: "solo", label: "Bye week \u00b7 extra training" };
   }
   return base;
 }
@@ -358,7 +372,16 @@ var SET_B = { label: 'Set B \u2014 Takuya Sole Skills', mins: 10, drills: [
 var SET_C = { label: 'Set C \u2014 Cognitive', mins: 10, drills: [
   { n: 'Sole drags + tennis ball catch', d: '4\u00d730s' },
   { n: 'Coerver pull-push speed test', d: '4\u00d720s' },
+  { n: 'Through & round (no-touch let ball roll past)', d: '4\u00d720s' },
+  { n: 'Cancel control (fake touch, pull back)', d: '4\u00d720s' },
   { n: 'Freestyle combo chains', d: '4\u00d730s' }
+]};
+
+var TURNS = { label: 'Midfielder Turns \u2014 CM', mins: 8, drills: [
+  { n: 'Turning the corner (outside foot)', d: '3\u00d78 R/L' },
+  { n: 'Half-turn receiving (open body)', d: '3\u00d78 R/L' },
+  { n: 'Back foot 180\u00b0 turn \u2192 play forward', d: '3\u00d76 R/L' },
+  { n: 'Cruyff turn under pressure (cone)', d: '3\u00d76 R/L' }
 ]};
 
 var FIRST_TOUCH = { label: 'First Touch \u2014 CM', mins: 8, drills: [
@@ -405,35 +428,34 @@ var PRE_GAME = { label: 'Pre-game Warm-up Touches', mins: 5, drills: [
   { n: 'Coerver pull-push', d: '1 min' }
 ]};
 
-// SESSIONS keyed by day (0=Mon...6=Sun)
-var SESSIONS = {
-  0: { title: 'Set A + Passing & Switching + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    PASSING,
-    LONG_THROWS
+// Full individual sessions — rotated across solo/rest days
+var FULL_SESSIONS = [
+  { title: 'Set A + Passing & Switching + Long Throws', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, PASSING, LONG_THROWS
   ]},
-  1: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  2: { title: 'Set B + Weak Foot Block + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_B,
-    WEAK_FOOT_BLOCK,
-    LONG_THROWS
+  { title: 'Set B + Midfielder Turns + Weak Foot', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_B, TURNS, WEAK_FOOT_BLOCK
   ]},
-  3: { title: 'Pre-team Touches', blocks: [PRE_TEAM] },
-  4: { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_C,
-    FIRST_TOUCH,
-    LONG_THROWS
+  { title: 'Set C (Cognitive) + First Touch + Long Throws', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_C, FIRST_TOUCH, LONG_THROWS
   ]},
-  5: { title: 'Pre-game Warm-up', blocks: [PRE_GAME] },
-  6: { title: 'Set A + First Touch', blocks: [
-    { label: 'Warm-up', mins: 5, drills: WARMUP },
-    SET_A,
-    FIRST_TOUCH
+  { title: 'Set A + Turns + First Touch', blocks: [
+    { label: 'Warm-up', mins: 5, drills: WARMUP }, SET_A, TURNS, FIRST_TOUCH
   ]}
-};
+];
+
+// Dynamically assign session based on day kind from plan week
+function getSession(dayIdx) {
+  var d = WEEK[dayIdx];
+  if (d.kind === 'match') return { title: 'Pre-game Warm-up', blocks: [PRE_GAME] };
+  if (d.kind === 'team') return { title: 'Pre-team Touches', blocks: [PRE_TEAM] };
+  // For solo/rest days, rotate through full sessions
+  var soloCount = 0;
+  for (var i = 0; i < dayIdx; i++) {
+    if (WEEK[i].kind !== 'team' && WEEK[i].kind !== 'match') soloCount++;
+  }
+  return FULL_SESSIONS[soloCount % FULL_SESSIONS.length];
+}
 
 /* ═══ Khabib ═══════════════════════════════════════════════════ */
 function khabib(today) {
@@ -761,7 +783,7 @@ function renderMatch() {
 
 /* ═══ INDIVIDUAL PANEL (GUIDED DAILY SESSION) ════════════════ */
 function renderIndividualPanel() {
-  var sess = SESSIONS[TODAY];
+  var sess = getSession(TODAY);
   var totalMins = 0;
   for (var b = 0; b < sess.blocks.length; b++) { totalMins += sess.blocks[b].mins; }
 
@@ -1023,6 +1045,20 @@ function addMoment() {
 
 // Initial render
 render();
+
+// React to plan week changes from other tabs
+window.addEventListener('storage', function(e) {
+  if (e.key === 'planner-gameday' || e.key === 'planner-teamdays' || e.key === 'match-info') {
+    _pgd = loadPlannerGameDay();
+    MATCH.bye = _pgd.status === 'bye';
+    if(_pgd.days && _pgd.days.length) MATCH.day = _pgd.days[0];
+    if (e.key === 'match-info') { try { var m = JSON.parse(e.newValue); if(m) { MATCH.round=m.round||MATCH.round; MATCH.opponent=m.opponent||MATCH.opponent; MATCH.kickoff=m.kickoff||MATCH.kickoff; MATCH.home=m.home!==undefined?m.home:MATCH.home; MATCH.venue=m.venue||MATCH.venue; MATCH.arrive=m.arrive||MATCH.arrive; } } catch(ex){} }
+    _teamCfg = loadTeamDays();
+    TEAM_DAYS = _teamCfg.days || [1, 3];
+    WEEK = buildWeek();
+    render();
+  }
+});
 
 })();
 </script>
