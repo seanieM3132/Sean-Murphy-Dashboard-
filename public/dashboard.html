@@ -654,7 +654,7 @@ function buildWeekLabels() {
     var type = resolveDayType(dk);
     var k = 'train';
     if (type === 'match') k = 'match';
-    else if (type === 'recovery' || type === 'bye') k = 'rest';
+    else if (type === 'recovery') k = 'rest';
     labels.push({ d: dayShort[jsDow], n: d.getDate(), k: k, type: type });
   });
   return labels;
@@ -689,49 +689,80 @@ function getDayItems(key) {
     var wEnd = parseInt(we[0])*60+parseInt(we[1]||0);
     items.push({ id:'work', at:wAt, mins:wEnd-wAt, kind:'appt', title:'WORK', sub:workCfg.start+' \u2013 '+workCfg.end, href:'', steps:[], added:true });
 
-    // Shift training items around work hours
-    // Split into: before-work, overlapping, after-work
     var beforeWork = [];
     var overlapping = [];
     var afterWork = [];
     items.forEach(function(item) {
-      if (item.added) return; // work/appts stay fixed
+      if (item.added) return;
       var itemEnd = item.at + (item.mins || 0);
-      if (itemEnd <= wAt) {
-        beforeWork.push(item);
-      } else if (item.at >= wEnd) {
-        afterWork.push(item);
-      } else {
-        overlapping.push(item);
-      }
+      if (itemEnd <= wAt) beforeWork.push(item);
+      else if (item.at >= wEnd) afterWork.push(item);
+      else overlapping.push(item);
     });
 
-    // Morning routine (AM) goes before work if possible
+    // AM routine → before work
     var amItem = null;
-    var trainingItems = [];
+    var pmItem = null;
+    var gymBlock = [];   // mobility, seward, gym, core, fascia, plyo, speed
+    var recovery = [];   // sauna, cold
+    var pmBlock = [];     // ball work, sprints, endurance, team, film, viz, kit
     overlapping.forEach(function(item) {
-      if (item.id === 'am') { amItem = item; }
-      else { trainingItems.push(item); }
+      if (item.id === 'am') { amItem = item; return; }
+      if (item.id === 'pm') { pmItem = item; return; }
+      if (item.kind === 'recover' || item.id === 'sauna1' || item.id === 'sauna2' || item.id === 'cold') {
+        recovery.push(item); return;
+      }
+      if (item.id === 'ball' || item.id === 'sprint' || item.id === 'endurance' || item.id === 'team' || item.id === 'film' || item.id === 'viz' || item.id === 'kit') {
+        pmBlock.push(item); return;
+      }
+      gymBlock.push(item);
     });
 
-    // Shift AM to before work
     if (amItem) {
-      amItem.at = Math.max(wAt - (amItem.mins || 35) - 5, 300); // at least 5:00am
+      amItem.at = Math.max(wAt - (amItem.mins || 35) - 5, 300);
       beforeWork.push(amItem);
     }
 
-    // Stack overlapping training items after work ends
-    var cursor = wEnd + 10; // 10 min buffer after work
-    trainingItems.forEach(function(item) {
+    // After work: lunch (45 min) → gym block → recovery → break → PM block
+    var cursor = wEnd + 5;
+    items.push({ id:'lunch', at:cursor, mins:45, kind:'fuel', title:'Lunch', sub:'Protein + carbs \u00b7 recharge before training', href:'', steps:[{t:'Eat a proper meal \u2014 protein + carbs + hydrate',d:'You need fuel before training. Don\u2019t skip this.'}], added:true });
+    cursor += 50; // 45 min lunch + 5 min
+
+    // Stack gym block with 10 min gaps
+    gymBlock.forEach(function(item) {
       item.at = cursor;
-      cursor += (item.mins || 30) + 5; // 5 min gap between items
+      cursor += (item.mins || 30) + 10;
     });
 
-    // Also check if any afterWork items now conflict with stacked items
+    // Recovery (sauna/cold) after gym, not between training items
+    recovery.forEach(function(item) {
+      item.at = cursor;
+      cursor += (item.mins || 15) + 10;
+    });
+
+    // 30 min break before PM block
+    if (pmBlock.length > 0) {
+      cursor = Math.max(cursor + 30, 780); // at least 1pm for PM activities
+      pmBlock.forEach(function(item) {
+        item.at = cursor;
+        cursor += (item.mins || 30) + 10;
+      });
+    }
+
+    if (pmItem) { pmItem.at = Math.max(pmItem.at, cursor); }
+
+    // Adjust afterWork items if they now conflict
+    var pmIds = ['ball','sprint','endurance','team','film','viz','kit'];
+    afterWork.sort(function(a,b){ return a.at - b.at; });
     afterWork.forEach(function(item) {
+      if (item.id === 'pm') { item.at = Math.max(item.at, cursor); return; }
+      // Add break before PM-type activities (ball work, sprints, etc.)
+      if (pmIds.indexOf(item.id) >= 0 && cursor > wEnd) {
+        cursor = Math.max(cursor + 20, item.at);
+      }
       if (item.at < cursor) {
         item.at = cursor;
-        cursor += (item.mins || 30) + 5;
+        cursor += (item.mins || 30) + 10;
       }
     });
   }
