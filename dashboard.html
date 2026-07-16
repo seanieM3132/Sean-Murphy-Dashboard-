@@ -294,279 +294,281 @@ var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down",
 
 
 var DAYS = {
-  // Team Training variant A — Upper Activation + Team Training PM
+  // Tuesday — Team Training Day A
   "team_a": {
-    theme:"Upper Activation \u00b7 Team Training PM",
-    mindset:"Light gym to prime the body. Save legs for team training tonight.",
+    theme:"Calves & Ankles \u00b7 Team Training PM",
+    mindset:"Light morning. Save everything for team training tonight.",
     items: [
       AM(),
-      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Glutes & Groins", sub:"Dynamic leg lifts \u00b7 tailor\u2019s pose \u00b7 horse stance", href:"/train.html#mvmnt", steps:[
-        {t:"Dynamic Leg Lifts 3\u00d75 (15s rest)",d:""},{t:"Tailor\u2019s Pose 3\u00d78 (15s rest)",d:""},{t:"Kneeling Tilt 3\u00d78 (15s rest)",d:""},{t:"Elevated Pigeon 1 min (flow)",d:""},{t:"Standing Pancake 1 min (flow)",d:""},{t:"Wall Straddle 2 min (flow)",d:""},{t:"Horse Stance 3\u00d730s (15s rest)",d:""}
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Calves & Ankles", sub:"Slant board calf raises \u00b7 tib raises \u00b7 ankle DF", href:"/train.html#mvmnt", steps:[
+        {t:"Slant board calf raise 3\u00d78-10 (20s rest)",d:""},{t:"Bent-leg calf raise 3\u00d78-10 (20s rest)",d:""},{t:"Tib raises 3\u00d78-10 (20s rest)",d:""},{t:"Foot stretch + hack squat (flow)",d:""},{t:"Banded ankle DF 2 min (flow)",d:""},{t:"Deep squat elevated 2 min (flow)",d:""}
       ]},
-      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 2 mile run + Abs 1", sub:"Dynamic warm-up \u2192 Seward workout", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"2 mile run \u2014 track the time",d:"Pace yourself"},{t:"Abs 1: 25 crunches, 25 sit-ups, 25 scissors (30s rest)",d:""},{t:"3 Superman holds 5s + 25 crunches (30s rest)",d:""},{t:"25 pushups + 25 squats (30s rest)",d:"Clean form, full depth"}
+      { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program \u00b7 replaces gym activation", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if hungry (banana, toast)",d:""}
+      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+        {t:"ORS + 500ml water",d:"Rehydrate after Seward"},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"gym", at:540, mins:50, kind:"train", title:"Gym \u2014 Upper Body + Activation", sub:"Warm-up \u2192 light upper \u00b7 save legs for team PM", href:"/train.html#gym", steps:[
-        {t:"Gym warm-up: empty bar press 2\u00d78, ramp-up to working weight (5 min)",d:"Groove patterns before working sets"},{t:"Box Jumps 3\u00d73 (activation only, 90s rest)",d:"Neural priming, not fatigue"},{t:"Incline DB Press 3\u00d78-10 @ 16kg (60s rest)",d:""},{t:"Chin-ups 3 \u00d7 max (90s rest)",d:""},{t:"Single-Arm DB Row 3\u00d78-10 @ 18kg (60s rest)",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg (45s rest)",d:""},{t:"Face Pulls 3\u00d715 (45s rest)",d:""},{t:"Band Pull-Aparts 3\u00d715 (45s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min (quads, hams, hips 30s each)",d:"Non-negotiable after every session"}
+      { id:"toecurl", at:535, mins:2, kind:"train", title:"Elevated toe curls", sub:"Daily fascia foundation", href:"/train.html#mvmnt", steps:[
+        {t:"Elevated toe curls 3\u00d720s (10s rest)",d:"Plantar fascia strengthening \u2014 never skip"}
       ]},
-      { id:"fascia", at:595, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
-        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"3-4 sec tempo"}
+      { id:"cold", at:540, mins:3, kind:"recover", title:"Cold plunge 1-3 min", sub:"Morning dopamine boost \u00b7 doubles baseline 4-6h", href:"/train.html#recovery", steps:[
+        {t:"Cold plunge 1-3 min @ 10-15\u00b0C",d:"Move limbs to break thermal layer. Doubles dopamine for 4-6 hrs"}
       ]},
-      { id:"cold", at:610, mins:3, kind:"recover", title:"Cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost before team", href:"/train.html#recovery", steps:[
-        {t:"Cold plunge 1-3 min",d:"Doubles baseline dopamine for 4-6 hrs. No sauna \u2014 save recovery tools for heavy days"}
-      ]},
-      { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Warm-up touches + juggling \u2014 save legs for team", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut 4\u00d720s each (flow)",d:""},{t:"Juggling 5 min (flow)",d:"Save legs for team training"},{t:"Stretch: hips + ankles 3 min",d:""}
+      { id:"ball", at:780, mins:15, kind:"train", title:"Light ball touches", sub:"Warm-up touches + juggling only \u2014 save legs", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Juggling 5 min (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
       ]},
       { id:"fuel", at:960, mins:15, kind:"fuel", title:"Pre-team fuel + hydrate", sub:"Banana + toast + protein \u00b7 electrolytes", href:"", steps:[
-        {t:"Pre-training meal: banana + toast + small protein shake",d:"Light carbs + protein 60-90 min before"},{t:"Hydrate: 300-500ml with electrolytes",d:"No caffeine after 2pm \u2014 too close to 10pm bedtime"}
+        {t:"Pre-training meal: banana + toast + small protein shake",d:"Light carbs + protein 60-90 min before"},{t:"Hydrate: 300-500ml with electrolytes",d:"No caffeine after 2pm"}
       ]},
       { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Focus on movement quality \u00b7 posterior chain \u00b7 positioning", href:"/train.html#soccer", steps:[
-        {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
+        {t:"PEP/ACL warm-up if time (15 min)",d:"Walking lunges, single-leg bridge, plyos"},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // Pre-Match — Speed & Acceleration, prep for game tomorrow
-  "prematch": {
-    theme:"Speed & Acceleration \u00b7 Pre-Match Prep",
-    mindset:"Train hard in the morning, then let the body settle for game tomorrow.",
+  // Thursday — Team Training Day B
+  "team_b": {
+    theme:"Stronger Knee \u00b7 Team Training PM",
+    mindset:"Light morning. Seward + save legs for team tonight.",
     items: [
       AM(),
-      { id:"mob", at:455, mins:25, kind:"train", title:"112mvmnt \u2014 Lower Back + Calves & Ankles", sub:"Forward fold \u00b7 active cobra \u00b7 slant board calf raises", href:"/train.html#mvmnt", steps:[
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext \u00b7 iso lunge \u00b7 slant board squat \u00b7 ACL prevention", href:"/train.html#mvmnt", steps:[
+        {t:"Banded Knee Extension 3\u00d720 (15s rest)",d:""},{t:"Isometric Lunge Hold 3\u00d730s (15s rest)",d:""},{t:"Reverse Step-Up 3\u00d76 (15s rest)",d:""},{t:"Slant Board Squat 3\u00d76-8 (20s rest)",d:""},{t:"Reverse Nordic Curl 3\u00d75 (20s rest)",d:""},{t:"Knee IR/ER 2\u00d75 each (15s rest)",d:""}
+      ]},
+      { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program \u00b7 replaces gym activation", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
+      ]},
+      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+        {t:"ORS + 500ml water",d:"Rehydrate after Seward"},{t:"Light snack if hungry (banana, toast)",d:""}
+      ]},
+      { id:"toecurl", at:535, mins:2, kind:"train", title:"Elevated toe curls", sub:"Daily fascia foundation", href:"/train.html#mvmnt", steps:[
+        {t:"Elevated toe curls 3\u00d720s (10s rest)",d:"Plantar fascia strengthening \u2014 never skip"}
+      ]},
+      { id:"cold", at:540, mins:3, kind:"recover", title:"Cold plunge 1-3 min", sub:"Morning dopamine boost \u00b7 doubles baseline 4-6h", href:"/train.html#recovery", steps:[
+        {t:"Cold plunge 1-3 min @ 10-15\u00b0C",d:"Move limbs to break thermal layer. Doubles dopamine for 4-6 hrs"}
+      ]},
+      { id:"ball", at:780, mins:15, kind:"train", title:"Light ball touches", sub:"Warm-up touches + juggling only \u2014 save legs", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Juggling 5 min (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
+      ]},
+      { id:"fuel", at:960, mins:15, kind:"fuel", title:"Pre-team fuel + hydrate", sub:"Banana + toast + protein \u00b7 electrolytes", href:"", steps:[
+        {t:"Pre-training meal: banana + toast + small protein shake",d:"Light carbs + protein 60-90 min before"},{t:"Hydrate: 300-500ml with electrolytes",d:"No caffeine after 2pm"}
+      ]},
+      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Focus on movement quality \u00b7 posterior chain \u00b7 positioning", href:"/train.html#soccer", steps:[
+        {t:"PEP/ACL warm-up if time (15 min)",d:"Walking lunges, single-leg bridge, plyos"},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
+      ]},
+      PM
+    ]
+  },
+
+  // Friday — Pre-Match: Speed & Skills
+  "prematch": {
+    theme:"Speed & Acceleration \u00b7 Pre-Match Prep",
+    mindset:"Train hard morning, then let the body settle for game tomorrow.",
+    items: [
+      AM(),
+      { id:"mob", at:455, mins:25, kind:"train", title:"112mvmnt \u2014 Lower Back + Calves & Ankles", sub:"Two lighter programs \u00b7 keep body moving", href:"/train.html#mvmnt", steps:[
         {t:"Forward Fold 1 min (flow)",d:""},{t:"Active Cobra 3\u00d75 (15s rest)",d:""},{t:"Hamstring Extension 3\u00d730s (15s rest)",d:""},{t:"World\u2019s Greatest Stretch 1 min/side",d:""},{t:"Slant board calf raise 3\u00d78-10 (20s rest)",d:""},{t:"Tib raises 3\u00d78-10 (20s rest)",d:""},{t:"Banded ankle DF 2 min (flow)",d:""}
       ]},
-      { id:"seward", at:485, mins:35, kind:"train", title:"Seward \u2014 Workout C + Abs 1", sub:"Dynamic warm-up \u2192 clap push-ups \u00b7 calf jumps", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Clap push-ups 5\u00d715 (or max) (30s rest)",d:""},{t:"Calf jumps 1/4 squat 5\u00d730 (30s rest)",d:""},{t:"Calf jumps max height 5\u00d715 (30s rest)",d:""},{t:"Abs 1: crunches, sit-ups, scissors, supermans (30s rest)",d:""}
+      { id:"seward", at:485, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water \u00b7 breathe", href:"", steps:[
+      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water", href:"", steps:[
         {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if needed",d:""}
       ]},
-      { id:"speed", at:535, mins:30, kind:"train", title:"Speed & Acceleration Session", sub:"Sprint projections \u00b7 slow-to-fast runs \u00b7 soft starts", href:"/train.html#gym", steps:[
+      { id:"speed", at:540, mins:30, kind:"train", title:"Speed & Acceleration Session", sub:"Sprint projections \u00b7 slow-to-fast runs \u00b7 soft starts", href:"/train.html#gym", steps:[
         {t:"A-skips, B-skips, high knees 2\u00d720m each (60s rest)",d:"Sprint mechanics warm-up"},{t:"Sprint Projections: 3-10 reps each side, 1-5 steps (walk-back rest)",d:"Wk 1-2: full kneeling. Wk 3-4: half-kneeling. Wk 5-6: split stance. 100% force every rep"},{t:"Slow-to-Fast Runs: 20% speed 10yd \u2192 100% speed 40yd \u00d7 4 (walk-back rest)",d:"Explode from sub-max into top speed"},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:"Bypass acceleration phase, stress top-speed mechanics"},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 joint angles at hip, knee, ankle"},{t:"Cool-down: jog 3 min + stretch 5 min",d:""}
       ]},
-      { id:"fascia", at:570, mins:10, kind:"train", title:"Fascia + toe curls", sub:"HFT marble swing + gait cycles", href:"/train.html#gym", steps:[{t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (20s rest)",d:""}] },
-      { id:"sauna1", at:585, mins:15, kind:"recover", title:"Sauna 15 min", sub:"NO ice bath \u2014 save stress for game day", href:"/train.html#recovery", steps:[{t:"Sauna 15 min @ 80-100\u00b0C",d:""},{t:"NO ice bath today",d:""}] },
+      { id:"fascia", at:575, mins:10, kind:"train", title:"Fascia + toe curls", sub:"HFT marble swing + gait cycles", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""}
+      ]},
+      { id:"sauna1", at:590, mins:15, kind:"recover", title:"Sauna 15 min", sub:"NO ice bath \u2014 save stress for game day", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15 min @ 80-100\u00b0C",d:"Recovery + compensatory cooling for tonight\u2019s sleep"},{t:"NO ice bath today \u2014 save stress response for match",d:""}
+      ]},
       { id:"ball", at:780, mins:30, kind:"train", title:"Ball work \u2014 Set C + First Touch + Long Throws", sub:"Cognitive mastery \u00b7 first touch CM \u00b7 long throw progression", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min (flow)",d:""},{t:"Cognitive: sole drags + tennis ball catch 4\u00d730s (flow)",d:""},{t:"Coerver pull-push speed test 4\u00d720s (flow)",d:""},{t:"First Touch: wall pass open body 3\u00d710 R/L (flow)",d:""},{t:"Back foot reception 3\u00d710 R/L (flow)",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
       ]},
-      { id:"kit", at:1080, mins:15, kind:"admin", title:"Kit prep", sub:"Lay out kit, boots, water bottles, shinguards", href:"", steps:[{t:"Lay out full kit",d:""},{t:"Check boots + shinguards",d:""},{t:"Fill water bottles",d:""}] },
-      { id:"viz", at:1110, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[{t:"Eyes closed \u2014 run through game scenarios",d:""}] },
-      { id:"sauna2", at:1140, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"Compensatory cooling for deeper sleep", href:"/train.html#recovery", steps:[{t:"Sauna 15-20 min",d:""}] },
+      { id:"kit", at:1080, mins:15, kind:"admin", title:"Kit prep", sub:"Lay out kit, boots, water bottles, shinguards", href:"", steps:[
+        {t:"Lay out full kit",d:""},{t:"Check boots + shinguards",d:""},{t:"Fill water bottles",d:""}
+      ]},
+      { id:"viz", at:1110, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[
+        {t:"Eyes closed \u2014 run through game scenarios",d:"Winning duels, perfect first touch, long throws, positioning"}
+      ]},
+      { id:"sauna2", at:1140, mins:20, kind:"recover", title:"Sauna 15-20 min pre-bed", sub:"Compensatory cooling for deeper sleep", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:"Core temp rise \u2192 compensatory cooling \u2192 deeper sleep"}
+      ]},
       PM
     ]
   },
 
-  // Match Day — PERFORM
+  // Saturday — MATCH DAY
   "match": {
     theme:"MATCH DAY",
     mindset:"PERFORM. Everything serves the game.",
     items: [
       { id:"am", at:450, mins:35, kind:"routine", title:"Match day morning (7:30)", sub:"Extra sleep \u00b7 sunlight \u00b7 breakfast \u00b7 supps \u00b7 light mobility", href:"/health.html", steps:[
-        {t:"Wake 7:30 \u2014 extra 30 min sleep for match day",d:""},{t:"Hydrate: ORS + 500ml water",d:""},{t:"EAT BREAKFAST + take morning supplements",d:"Oats + banana + honey OR toast + eggs. 30-60g carbs + 20g protein. All MFM morning supps with food"},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"Elevated toe curls 3 \u00d7 20s (20s rest)",d:""}
+        {t:"Wake 7:30 \u2014 extra 30 min sleep for match day",d:""},{t:"Hydrate: ORS + 500ml water",d:""},{t:"EAT BREAKFAST + take morning supplements",d:"Oats + banana + honey OR toast + eggs. 30-60g carbs + 20g protein"},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""}
       ]},
       { id:"mob", at:540, mins:10, kind:"train", title:"Light 112mvmnt \u2014 Hips & Hammys", sub:"EASY \u2014 just open up, don\u2019t fatigue", href:"/train.html#mvmnt", steps:[
         {t:"Hip Flexor Leg Lifts light (flow)",d:""},{t:"Butterfly light (flow)",d:""},{t:"Couch Stretch 1 min each (flow)",d:""}
       ]},
       { id:"walk", at:555, mins:25, kind:"routine", title:"Light walk + visualization", sub:"Walk 15 min + visualize 10 min", href:"", steps:[
-        {t:"Light walk 15 min",d:""},{t:"Visualization 10 min \u2014 winning duels, perfect first touch, long throws",d:"Use mental snapshots: blink to stamp down visual details of positioning"}
+        {t:"Light walk 15 min",d:""},{t:"Visualization 10 min \u2014 winning duels, perfect first touch, long throws",d:"Mental snapshots: blink to stamp down positioning details"}
       ]},
-      { id:"meal", at:660, mins:30, kind:"fuel", title:"Pre-game meal (3h before kickoff)", sub:"30-60g carbs + 20g protein \u00b7 NO heavy food within 2h of game", href:"", steps:[
-        {t:"Eat: 3 eggs + toast or rice + chicken",d:"30-60g carbs + 20g protein. Heavy carbs within 2h = dizziness, cramping"},{t:"500ml fluid now, 250ml 2h before kickoff",d:"Dilute electrolyte solution for absorption"}
+      { id:"meal", at:660, mins:30, kind:"fuel", title:"Pre-game meal (3h before kickoff)", sub:"30-60g carbs + 20g protein \u00b7 NO heavy food within 2h", href:"", steps:[
+        {t:"Eat: 3 eggs + toast or rice + chicken",d:"30-60g carbs + 20g protein. Heavy carbs within 2h = dizziness"},{t:"500ml fluid now, 250ml 2h before kickoff",d:""}
       ]},
       { id:"warmup", at:1035, mins:30, kind:"train", title:"Pre-game warm-up", sub:"Dynamic warm-up \u00b7 PEP/ACL \u00b7 velocity \u00b7 ball-specific", href:"/train.html#soccer", steps:[
-        {t:"Dynamic hip openers 5 min (flow)",d:"Hip circles, leg swings, deep squat hold"},{t:"Lateral Pelvic Tilts 3 min (flow)",d:"Side-lying \u2192 half-kneeling. Fluid movement before sprints"},{t:"Aerobic: jog 3 min, side-step, backward run (continuous)",d:""},{t:"PEP/ACL activation 5 min (flow)",d:"Walking lunges, single-leg bridge, single toe raise, plyos"},{t:"4 \u00d7 explosive sprints 20m + direction changes (60s rest)",d:""},{t:"Ball-specific: passing, shooting, Coerver (flow)",d:""}
+        {t:"Dynamic hip openers 5 min (flow)",d:"Hip circles, leg swings, deep squat hold"},{t:"Lateral Pelvic Tilts 3 min (flow)",d:"Side-lying \u2192 half-kneeling"},{t:"Aerobic: jog 3 min, side-step, backward run (continuous)",d:""},{t:"PEP/ACL activation 5 min (flow)",d:"Walking lunges, single-leg bridge, plyos"},{t:"4\u00d7 explosive sprints 20m + direction changes (60s rest)",d:""},{t:"Ball-specific: passing, shooting, Coerver (flow)",d:""}
       ]},
       { id:"game", at:1080, mins:90, kind:"train", title:"GAME", sub:"Move with intent. Posterior chain, sharp turns, positioning", href:"", steps:[
-        {t:"Physiological sigh between plays if stressed",d:"Double inhale nose, long exhale mouth"},{t:"Panoramic vision to stay calm",d:"Shift from tunnel vision to wide gaze to lower alertness"},{t:"Mental snapshots: blink to stamp field positioning",d:"Volitional mental photographs improve spatial recall and reaction time"}
+        {t:"Physiological sigh between plays if stressed",d:"Double inhale nose, long exhale mouth"},{t:"Panoramic vision to stay calm",d:"Wide gaze lowers alertness"},{t:"Mental snapshots: blink to stamp field positioning",d:""}
       ]},
       { id:"postg", at:1170, mins:30, kind:"recover", title:"Post-game recovery", sub:"Three Rs: Refuel \u00b7 Rehydrate \u00b7 Repair", href:"/train.html#recovery", steps:[
-        {t:"Light jog 5 min + static stretch 5 min",d:""},{t:"Protein shake + banana immediately",d:"3:1 carb:protein ratio within 4h window"},{t:"Rehydrate 125-150% of fluid lost",d:"Weigh before and after game"},{t:"Cold plunge 10-15 min @ 10-15\u00b0C (optional)",d:"Post-match = green light for cold"},{t:"NO sauna tonight \u2014 just eat, hydrate, sleep",d:""}
+        {t:"Light jog 5 min + static stretch 5 min",d:""},{t:"Protein shake + banana immediately",d:"3:1 carb:protein ratio within 4h"},{t:"Rehydrate 125-150% of fluid lost",d:"Weigh before and after"},{t:"Cold plunge 10-15 min @ 10-15\u00b0C",d:"Post-match = green light for cold"},{t:"NO sauna tonight \u2014 just eat, hydrate, sleep",d:""}
       ]},
       PM
     ]
   },
 
-  // Bye Week — Build What the Game Can't
+  // Saturday (Bye) — Build What the Game Can't
   "bye": {
     theme:"BYE WEEK \u2014 Build What the Game Can\u2019t",
     mindset:"No match pressure. Attack your weaknesses \u2014 endurance and speed.",
     items: [
       AM(),
-      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Full Lower Body", sub:"Glutes, groins, hips, hammys \u2014 full session", href:"/train.html#mvmnt", steps:[
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Full Lower Body", sub:"Glutes \u00b7 groins \u00b7 hips \u00b7 hammys", href:"/train.html#mvmnt", steps:[
         {t:"Dynamic Leg Lifts 3\u00d75 (15s rest)",d:""},{t:"Tailor\u2019s Pose 3\u00d78 (15s rest)",d:""},{t:"Hip 90/90 IR 3\u00d73\u00d75s (15s rest)",d:""},{t:"Banded Hamstring Stretch 3\u00d73\u00d75s (15s rest)",d:""},{t:"Couch Stretch 2\u00d71 min each (15s rest)",d:""},{t:"Horse Stance 3\u00d730s (15s rest)",d:""}
       ]},
-      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout C + Abs 2", sub:"Dynamic warm-up \u2192 jump squats \u00b7 tuck jumps \u00b7 push-ups", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Jump squats 5\u00d710 (30s rest)",d:""},{t:"Tuck jumps 5\u00d710 (30s rest)",d:""},{t:"Push-ups 5\u00d710 (30s rest)",d:""},{t:"Front plank 3\u00d71 min (30s rest)",d:""},{t:"Side plank 3\u00d71 min each (30s rest)",d:""}
+      { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
         {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"gym", at:540, mins:60, kind:"train", title:"Gym \u2014 Peak + Back-off Power", sub:"Warm-up \u2192 trap bar DL peak \u00b7 push press \u00b7 split squat \u00b7 plyos", href:"/train.html#gym", steps:[
-        {t:"Gym warm-up: empty bar DL 2\u00d78, ramp-up sets to working weight (5 min)",d:"Groove patterns before peak set"},{t:"Trap Bar Deadlift: 1 PEAK set \u00d7 3-5 reps near failure (3-5 min rest)",d:"Peak + back-off method for max strength"},{t:"Trap Bar Deadlift: 2-3 back-off sets \u00d7 6-8 @ 80-85% peak (90s rest)",d:""},{t:"Box Jumps 3\u00d75 (60s rest)",d:"Vertical power for heading + takeoff"},{t:"Push Press 3\u00d75-6 @ 30kg (90s rest)",d:"Force transition"},{t:"Bulgarian Split Squat 3\u00d78 @ 12kg DBs (60s rest)",d:""},{t:"Triple Lateral Bounds 2\u00d78 each side (walk-back rest)",d:"CM-specific momentum stacking"},{t:"Chin-ups 3 \u00d7 max (90s rest)",d:""},{t:"Face Pulls 3\u00d715 (45s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
-      ]},
-      { id:"core", at:605, mins:15, kind:"train", title:"Core \u2014 Speed + CM Fluidity", sub:"Med ball throws \u00b7 Copenhagen rotation \u00b7 split-stance rotation", href:"/train.html#gym", steps:[
-        {t:"Med Ball Throws UP 3\u00d78 (45s rest)",d:"Throwing UP teaches body to unweight"},{t:"Rotational Throws 3\u00d78 each side (45s rest)",d:"CM-specific quick rotation"},{t:"Copenhagen Side Plank + Thoracic Rotation 3\u00d76 each (30s rest)",d:"Core fluidity for CM shiftiness"},{t:"Split-Stance Weighted Thoracic Rotation 3\u00d78 each @ 5kg (30s rest)",d:""}
-      ]},
-      { id:"fascia", at:625, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
-        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:""}
-      ]},
-      { id:"sauna1", at:640, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (gym day)", href:"/train.html#recovery", steps:[
-        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response for muscle growth",d:""}
-      ]},
-      { id:"endurance", at:780, mins:45, kind:"train", title:"Endurance \u2014 Zone 2 + Hard Start Intervals", sub:"30 min Z2 + 400m hard start sprints", href:"/train.html#seward", steps:[
+      { id:"endurance", at:535, mins:45, kind:"train", title:"Endurance \u2014 Zone 2 + Hard Start Intervals", sub:"30 min Z2 + 400m hard start sprints \u2014 #1 weakness", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up 5 min",d:"Jog + leg swings + hip circles"},{t:"Zone 2 run 30 min (continuous)",d:"80% of endurance below the burn threshold. Build aerobic base"},{t:"Hard Start Interval: 400m sprint \u2192 rest = your run time",d:"Stigler CM conditioning. Track your time"},{t:"Repeat: add 3-10s to previous fastest time each round",d:"Stop at 1.5x your original time"},{t:"Cool-down jog 5 min + stretch 5 min",d:""}
       ]},
-      { id:"speed", at:840, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 20m sprints", href:"/train.html#soccer", steps:[
-        {t:"Sprint Projections: half-kneeling start 3\u00d73 each side (walk-back rest)",d:"Glutes drive horizontal force before quads take over"},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:"Stress top-speed mechanics"},{t:"20m sprints from standing \u00d7 4 (walk-back rest)",d:"90\u00b0 angles at hip, knee, ankle"},{t:"Walk back = rest. Every rep 100% force",d:""}
-      ]},
-      { id:"ball", at:870, mins:45, kind:"train", title:"Ball work \u2014 Extended Technical Session", sub:"Coerver \u00b7 CM drills \u00b7 weak foot \u00b7 passing \u00b7 long throws", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (Joner style) (flow)",d:""},{t:"Coerver: Sole roll stepover, fake shot sole pull, Matthews cut, elastico 4\u00d720s each (flow)",d:""},{t:"Midfielder turns: turning the corner + half-turn receiving 5 min (flow)",d:""},{t:"Weak Foot Block 10 min (L foot only)",d:"Bye week is for fixing gaps"},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76 (flow)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles + calves 5 min",d:""}
-      ]},
-      { id:"viz", at:930, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[{t:"Eyes closed \u2014 run through game scenarios",d:""}] },
-      PM
-    ]
-  },
-
-  // Recovery + Film Review
-  "recovery": {
-    theme:"Recovery + Film Review",
-    mindset:"Recover from match. Review footage. Light movement only.",
-    items: [
-      AM(),
-      { id:"walk", at:455, mins:20, kind:"recover", title:"Light recovery walk / foam roll", sub:"Easy movement, get blood flowing", href:"/train.html#recovery", steps:[{t:"Walk or foam roll 15-20 min",d:"Low-level muscular contractions move lymph fluid and reduce heavy legs"}] },
-      { id:"mob", at:480, mins:20, kind:"train", title:"112mvmnt \u2014 Hips & Hammys", sub:"Full program post-match", href:"/train.html#mvmnt", steps:[
-        {t:"Hip Flexor Leg Lifts 3\u00d73\u00d75s (15s rest)",d:""},{t:"Banded Hamstring Stretch 3\u00d73\u00d75s (15s rest)",d:""},{t:"Hip 90/90 IR 3\u00d73\u00d75s (15s rest)",d:""},{t:"Butterfly CRAC 3\u00d76\u00d710s (15s rest)",d:""},{t:"Couch Stretch 2\u00d71 min (15s rest)",d:""}
-      ]},
-      { id:"seward1", at:510, mins:35, kind:"train", title:"Seward \u2014 Workout D (upper body focus)", sub:"Dynamic warm-up \u2192 decline push-ups \u00b7 diamond push-ups", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Decline push-ups 5\u00d710 (30s rest)",d:""},{t:"Diamond push-ups 5\u00d711 (30s rest)",d:""},{t:"Vertical wall jumps 5\u00d720 (30s rest)",d:""},{t:"Single leg jumps 5\u00d710 each (30s rest)",d:""},{t:"Calf raises (hold 5s) 10\u00d720 (30s rest)",d:""}
-      ]},
-      { id:"recovery", at:555, mins:25, kind:"recover", title:"Sauna + cold plunge", sub:"15-20 min sauna \u2192 2-3 min cold", href:"/train.html#recovery", steps:[
-        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"Cold plunge 2-3 min @ 10-15\u00b0C",d:"Recovery day \u2014 both are fine. Move limbs to break thermal layer"}
-      ]},
-      { id:"film", at:600, mins:45, kind:"admin", title:"Game film session", sub:"Review yesterday\u2019s match. 3 good + 3 to fix", href:"", steps:[
-        {t:"3 things you did well",d:""},{t:"3 things to fix",d:""},{t:"Focus: positioning, first touch, off-ball movement",d:""}
-      ]},
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + First Touch", sub:"Joner style \u00b7 first touch CM \u2014 light technical only", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set A: Sole drag inside push, inside-outside cut, Iniesta, V-drag, La Croqueta (flow)",d:"4\u00d720s each"},{t:"First Touch: wall pass 3\u00d710, back foot reception 3\u00d710, chest control 3\u00d78 (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
-      ]},
-      PM
-    ]
-  },
-
-  // Heavy Lower + Power & Explosive
-  "heavy_lower": {
-    theme:"Heavy Lower \u00b7 Power & Explosive",
-    mindset:"Biggest gym day of the week. Build the engine.",
-    items: [
-      AM(),
-      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Stronger Knee", sub:"Banded ext 3\u00d720 \u00b7 iso lunge \u00b7 slant board squat", href:"/train.html#mvmnt", steps:[
-        {t:"Banded Knee Extension 3\u00d720 (15s rest)",d:""},{t:"Isometric Lunge Hold 3\u00d730s (15s rest)",d:""},{t:"Reverse Step-Up 3\u00d76 (15s rest)",d:""},{t:"Slant Board Squat 3\u00d76-8 (20s rest)",d:""},{t:"Reverse Nordic Curl 3\u00d75 (20s rest)",d:""},{t:"Knee IR/ER 2\u00d75 each (15s rest)",d:""}
-      ]},
-      { id:"seward", at:480, mins:45, kind:"train", title:"Seward \u2014 Workout A + Abs 2", sub:"Dynamic warm-up \u2192 wide pushups \u00b7 burpees \u00b7 squats \u00b7 planks", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Wide pushups 4\u00d710 (30s rest)",d:""},{t:"Normal pushups 4\u00d710 (30s rest)",d:""},{t:"Burpees 5\u00d710 (30s rest)",d:""},{t:"Squats 5\u00d710 (30s rest)",d:""},{t:"Front plank 3\u00d71 min (30s rest)",d:""},{t:"L+R side plank 3\u00d71 min each (30s rest)",d:""}
-      ]},
-      { id:"break1", at:530, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+      { id:"break2", at:585, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
         {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"gym", at:545, mins:60, kind:"train", title:"Gym \u2014 Peak + Back-off Lower", sub:"Warm-up \u2192 trap bar DL peak \u00b7 back-offs \u00b7 squat \u00b7 push press", href:"/train.html#gym", steps:[
-        {t:"Gym warm-up: empty bar squat 2\u00d78, empty bar RDL 1\u00d78, ramp-up sets (5 min)",d:"Groove patterns before heavy sets"},{t:"Trap Bar Deadlift: 1 PEAK set \u00d7 3-5 reps near failure (3-5 min rest)",d:"Peak + back-off method (Stigler)"},{t:"Trap Bar Deadlift: 2-3 back-off sets \u00d7 6-8 @ 80-85% peak (90s rest)",d:""},{t:"Push Press 3\u00d75-6 @ 30kg (90s rest)",d:"Force transition"},{t:"Bulgarian Split Squat 3\u00d78 @ 12kg DBs (60s rest)",d:""},{t:"Back Squat 3\u00d76-8 @ 50kg (90s rest)",d:"3-1-1 tempo"},{t:"Chin-ups 3 \u00d7 max (90s rest)",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg (45s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
+      { id:"speed", at:600, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 flying 20s", href:"/train.html#gym", steps:[
+        {t:"Sprint Projections: half-kneeling start 3\u00d73 each side (walk-back rest)",d:"Glutes drive horizontal force before quads take over"},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:"Stress top-speed mechanics"},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 angles at hip, knee, ankle"},{t:"Walk back = rest. Every rep 100% force",d:""}
       ]},
-      { id:"core", at:610, mins:15, kind:"train", title:"Core \u2014 Speed + CM Fluidity", sub:"Med ball slams \u00b7 rotational throws \u00b7 Copenhagen rotations", href:"/train.html#gym", steps:[
-        {t:"Med Ball Slams (split stance) 3\u00d78 (45s rest)",d:"Throw UP to teach body to unweight"},{t:"Rotational Throws 3\u00d78 each side (45s rest)",d:"CM-specific quick rotation"},{t:"Copenhagen Side Plank + Thoracic Rotation 3\u00d76 each (30s rest)",d:"Core fluidity (Stigler)"}
+      { id:"fascia", at:630, mins:10, kind:"train", title:"Fascia + toe curls", sub:"HFT marble swing + gait cycles", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""}
       ]},
-      { id:"fascia", at:630, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
-        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"3-4 sec tempo"}
+      { id:"sauna1", at:645, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 recovery after endurance + speed", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"Cold plunge 2-3 min if feeling good",d:"No heavy gym today so cold is OK"}
       ]},
-      { id:"sauna1", at:645, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (heavy gym day)", href:"/train.html#recovery", steps:[
-        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
+      { id:"ball", at:780, mins:50, kind:"train", title:"Ball work \u2014 Extended Technical Session", sub:"Coerver \u00b7 turns \u00b7 weak foot \u00b7 passing \u00b7 long throws", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (Joner style) (flow)",d:""},{t:"Coerver: Sole roll stepover, fake shot sole pull, Matthews cut, elastico 4\u00d720s each (flow)",d:""},{t:"Midfielder turns: turning the corner + half-turn receiving 5 min (flow)",d:""},{t:"Weak Foot Block 10 min (L foot only)",d:"Bye week is for fixing gaps"},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76 (flow)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles + calves 5 min",d:""}
       ]},
-      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Takuya sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico, Berbatov wall drill (flow)",d:"4\u00d720s each"},{t:"Weak Foot Block 5 min (L foot)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:"8 min"},{t:"Stretch: hips + ankles 3 min",d:""}
+      { id:"viz", at:840, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[
+        {t:"Eyes closed \u2014 run through game scenarios",d:""}
       ]},
       PM
     ]
   },
 
-  // Team Training variant B — Shoulders & Spine + Upper Activation
-  "team_b": {
-    theme:"Upper Activation \u00b7 Team Training PM",
-    mindset:"Light gym to prime the body. Save legs for team training tonight.",
+  // Sunday — Recovery + Film Review
+  "recovery": {
+    theme:"Recovery + Film Review",
+    mindset:"Recover from match. Light movement only. No gym, no jumping.",
+    items: [
+      AM(),
+      { id:"walk", at:455, mins:20, kind:"recover", title:"Light recovery walk", sub:"Easy movement \u00b7 get blood flowing \u00b7 nasal breathing", href:"/train.html#recovery", steps:[
+        {t:"Walk or foam roll 15-20 min",d:"Low-level muscular contractions move lymph fluid and reduce heavy legs"},{t:"Nasal breathing only",d:"Better O2 exchange, calms nervous system"}
+      ]},
+      { id:"mob", at:480, mins:20, kind:"train", title:"112mvmnt \u2014 Hips & Hammys", sub:"Address tightness from match", href:"/train.html#mvmnt", steps:[
+        {t:"Hip Flexor Leg Lifts 3\u00d73\u00d75s (15s rest)",d:""},{t:"Banded Hamstring Stretch 3\u00d73\u00d75s (15s rest)",d:""},{t:"Hip 90/90 IR 3\u00d73\u00d75s (15s rest)",d:""},{t:"Butterfly CRAC 3\u00d76\u00d710s (15s rest)",d:""},{t:"Couch Stretch 2\u00d71 min (15s rest)",d:""}
+      ]},
+      { id:"seward", at:505, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program (upper body focus on recovery days)", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab \u2014 Saturday Seward moves to Sunday per brain"},{t:"Log all reps and times",d:""}
+      ]},
+      { id:"toecurl", at:545, mins:2, kind:"train", title:"Elevated toe curls", sub:"Daily fascia foundation", href:"/train.html#mvmnt", steps:[
+        {t:"Elevated toe curls 3\u00d720s (10s rest)",d:"Plantar fascia strengthening \u2014 never skip"}
+      ]},
+      { id:"recovery", at:550, mins:25, kind:"recover", title:"Sauna + cold plunge", sub:"15-20 min sauna \u2192 2-3 min cold", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"Cold plunge 2-3 min @ 10-15\u00b0C",d:"Recovery day \u2014 both are fine. Move limbs to break thermal layer"}
+      ]},
+      { id:"film", at:640, mins:45, kind:"admin", title:"Game film session", sub:"Review yesterday\u2019s match \u00b7 3 good + 3 to fix", href:"", steps:[
+        {t:"3 things you did well",d:""},{t:"3 things to fix",d:""},{t:"Focus: positioning, first touch, off-ball movement",d:""}
+      ]},
+      { id:"ball", at:780, mins:40, kind:"train", title:"Ball work \u2014 Set A + First Touch", sub:"Joner style \u00b7 first touch \u2014 light technical only", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set A: Sole drag inside push, inside-outside cut, Iniesta, V-drag, La Croqueta 4\u00d720s each (flow)",d:""},{t:"First Touch: wall pass 3\u00d710, back foot reception 3\u00d710, chest control 3\u00d78 (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
+      ]},
+      PM
+    ]
+  },
+
+  // Monday — Heavy Compound Day
+  "heavy_lower": {
+    theme:"Shoulders & Spine \u00b7 Heavy Compounds",
+    mindset:"Biggest gym day of the week. Build the engine.",
     items: [
       AM(),
       { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Shoulders & Spine", sub:"T-spine rotations \u00b7 end-range lift-offs \u00b7 seal stretch", href:"/train.html#mvmnt", steps:[
         {t:"Banded T-Spine Rotations 3\u00d75 (15s rest)",d:""},{t:"End-Range Lift-Offs 3\u00d73\u00d75s (15s rest)",d:""},{t:"Shoulder Circles 3\u00d75 (15s rest)",d:""},{t:"Pullovers 3\u00d75-8 (15s rest)",d:""},{t:"Seal Stretch 60s + Active Cobra (flow)",d:""},{t:"Thoracic Bridge 1-2\u00d730s (flow)",d:""}
       ]},
-      { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout B + Jump Rope 2 + Abs 1", sub:"Dynamic warm-up \u2192 walking pushups \u00b7 lunges \u00b7 jump rope", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Walking pushups 4\u00d77 (30s rest)",d:""},{t:"Lunges 5\u00d710 each (30s rest)",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps, 30s rest (30s rest)",d:""},{t:"Abs 1: crunches, sit-ups, scissors, supermans (30s rest)",d:""}
+      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
         {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"gym", at:535, mins:50, kind:"train", title:"Gym \u2014 Upper Body + Activation", sub:"Warm-up \u2192 light upper \u00b7 save legs for team PM", href:"/train.html#gym", steps:[
-        {t:"Gym warm-up: empty bar press 2\u00d78, ramp-up to working weight (5 min)",d:"Groove patterns before working sets"},{t:"Box Jumps 3\u00d73 (activation only, 90s rest)",d:"Neural priming, not fatigue"},{t:"DB Bench Press 3\u00d78-10 @ 16kg (90s rest)",d:""},{t:"Barbell Row 3\u00d78-10 @ 40kg (60s rest)",d:""},{t:"DB Shoulder Press 3\u00d78-10 @ 14kg (60s rest)",d:""},{t:"Pull-ups 3 \u00d7 max (90s rest)",d:""},{t:"Face Pulls 3\u00d715 (45s rest)",d:""},{t:"Band Pull-Aparts 3\u00d715 (45s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
+      { id:"plyo", at:540, mins:15, kind:"train", title:"Plyometrics (before lifts \u2014 fresh)", sub:"Box jumps \u00b7 broad jumps \u00b7 single-leg bounds", href:"/train.html#gym", steps:[
+        {t:"Box Jumps 3\u00d75 @ 50-60cm (60s rest)",d:"Explode up, land soft, step down"},{t:"Broad Jumps 3\u00d75 (60s rest)",d:"Swing arms, explode forward, stick the landing"},{t:"Single-Leg Bounds 3\u00d75 each (45s rest)",d:"Drive knee up, cover ground, land on same leg"}
       ]},
-      { id:"core", at:590, mins:10, kind:"train", title:"Core \u2014 Stiffness", sub:"Front plank \u00b7 Pallof press \u00b7 dead bugs", href:"/train.html#gym", steps:[
-        {t:"Front Plank 3\u00d745s (30s rest)",d:""},{t:"Pallof Press 3\u00d710 each (30s rest)",d:""},{t:"Dead Bugs 3\u00d78 each (30s rest)",d:""}
+      { id:"gym", at:560, mins:55, kind:"train", title:"Gym \u2014 Heavy Compounds", sub:"Squat \u00b7 RDL \u00b7 bench \u00b7 row \u00b7 accessories", href:"/train.html#gym", steps:[
+        {t:"Gym warm-up: empty bar squat 2\u00d78, empty bar RDL 1\u00d78, ramp-up sets (5 min)",d:"Groove patterns before heavy sets"},{t:"Back Squat 4\u00d76-8 @ 50kg (2-3 min rest)",d:"3-1-1 tempo. Feet shoulder width, break at hips, chest up"},{t:"Romanian Deadlift 4\u00d76-8 @ 45kg (2-3 min rest)",d:"3-1-1 tempo. Slight knee bend, hinge at hips, FLAT BACK"},{t:"Barbell Bench Press 3\u00d76-8 @ 45kg (2 min rest)",d:"Retract shoulder blades, drive up explosively"},{t:"Barbell Row 3\u00d78-10 @ 40kg (90s rest)",d:"Hinge 45\u00b0, pull to lower chest, no momentum"},{t:"Pull-ups 3\u00d7max (90s rest)",d:"Full dead hang to chin over bar"},{t:"DB Shoulder Press 3\u00d78-10 @ 14kg (90s rest)",d:""},{t:"Face Pulls 3\u00d715 (60s rest)",d:"Shoulder health"},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
       ]},
-      { id:"fascia", at:605, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
-        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:""}
+      { id:"core", at:620, mins:10, kind:"train", title:"Core \u2014 Stiffness", sub:"Front plank \u00b7 Pallof press \u00b7 dead bugs", href:"/train.html#gym", steps:[
+        {t:"Front Plank 3\u00d745s (30s rest)",d:"Squeeze glutes, no sagging. Add 10kg plate if easy"},{t:"Pallof Press 3\u00d710 each (30s rest)",d:"Press out, hold 2s, resist rotation"},{t:"Dead Bugs 3\u00d78 each (30s rest)",d:"Lower back GLUED to floor"}
       ]},
-      { id:"cold", at:620, mins:3, kind:"recover", title:"Cold plunge", sub:"1-3 min @ 10-15\u00b0C \u00b7 dopamine boost before team", href:"/train.html#recovery", steps:[
-        {t:"Cold plunge 1-3 min",d:"Doubles baseline dopamine for 4-6 hrs"}
+      { id:"fascia", at:635, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"3-4 sec tempo"}
       ]},
-      { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Cognitive drills + first touch \u2014 save legs for team", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set C: Sole drags + tennis ball catch, Coerver pull-push 4\u00d720s each (flow)",d:""},{t:"First Touch: wall pass open body 3\u00d78 R/L (flow)",d:"Save legs for team training"},{t:"Stretch: hips + ankles 3 min",d:""}
+      { id:"sauna1", at:650, mins:15, kind:"recover", title:"Sauna 15 min", sub:"80-100\u00b0C \u00b7 NO ice bath (heavy gym day)", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 heavy gym needs inflammatory response for adaptation",d:"Cold within 6h of strength work kills muscle growth"}
       ]},
-      { id:"fuel", at:960, mins:15, kind:"fuel", title:"Pre-team fuel + hydrate", sub:"Banana + toast + protein \u00b7 electrolytes", href:"", steps:[
-        {t:"Pre-training meal: banana + toast + small protein shake",d:"Light carbs + protein 60-90 min before"},{t:"Hydrate: 300-500ml with electrolytes",d:"No caffeine after 2pm \u2014 too close to 10pm bedtime"}
-      ]},
-      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Focus on movement quality \u00b7 posterior chain \u00b7 positioning", href:"/train.html#soccer", steps:[
-        {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throw progression", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set A: Sole drag inside push, inside-outside cut, Iniesta, V-drag, La Croqueta 4\u00d720s each (flow)",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76 (flow)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles + calves 5 min",d:""}
       ]},
       PM
     ]
   },
 
-  // Heavy Upper + Speed & Plyos
+  // Wednesday — Power & Explosive Day
   "heavy_upper": {
-    theme:"Heavy Upper \u00b7 Speed & Plyos",
-    mindset:"Push upper body hard, build speed. No team training \u2014 go all out.",
+    theme:"Glutes & Groins \u00b7 Power & Explosive",
+    mindset:"Second big gym day. Power and explosiveness.",
     items: [
       AM(),
-      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Calves & Ankles", sub:"Slant board calf raises \u00b7 tib raises \u00b7 banded ankle DF", href:"/train.html#mvmnt", steps:[
-        {t:"Slant board calf raise 3\u00d78-10 (20s rest)",d:""},{t:"Bent-leg calf raise 3\u00d78-10 (20s rest)",d:""},{t:"Tib raises 3\u00d78-10 (20s rest)",d:""},{t:"Foot stretch + hack squat (flow)",d:""},{t:"Banded ankle DF 2 min (flow)",d:""},{t:"Deep squat elevated 4 min (flow)",d:""},{t:"Elevated seiza 1 min (flow)",d:""}
+      { id:"mob", at:455, mins:20, kind:"train", title:"112mvmnt \u2014 Glutes & Groins", sub:"Dynamic leg lifts \u00b7 tailor\u2019s pose \u00b7 horse stance", href:"/train.html#mvmnt", steps:[
+        {t:"Dynamic Leg Lifts 3\u00d75 (15s rest)",d:""},{t:"Tailor\u2019s Pose 3\u00d78 (15s rest)",d:""},{t:"Kneeling Tilt 3\u00d78 (15s rest)",d:""},{t:"Elevated Pigeon 1 min (flow)",d:""},{t:"Standing Pancake 1 min (flow)",d:""},{t:"Wall Straddle 2 min (flow)",d:""},{t:"Horse Stance 3\u00d730s (15s rest)",d:""}
       ]},
-      { id:"seward", at:480, mins:45, kind:"train", title:"Seward \u2014 Workout D + Jump Rope 2 + Abs 2", sub:"Dynamic warm-up \u2192 decline pushups \u00b7 diamond pushups \u00b7 jumps", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Decline push-ups 5\u00d710 (30s rest)",d:""},{t:"Diamond push-ups 5\u00d711 (30s rest)",d:""},{t:"Vertical wall jumps 5\u00d720 (30s rest)",d:""},{t:"Single leg jumps 5\u00d710 each (30s rest)",d:""},{t:"Jump Rope: 3 \u00d7 100 jumps (30s rest)",d:""},{t:"Front plank 3\u00d71 min, L+R side plank 3\u00d71 min each (30s rest)",d:""}
+      { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
+        {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:530, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
+      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
         {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"gym", at:545, mins:55, kind:"train", title:"Gym \u2014 Impulse Upper + Compounds", sub:"Warm-up \u2192 alternating press/row \u00b7 push-up drop catch \u00b7 RDL", href:"/train.html#gym", steps:[
-        {t:"Gym warm-up: empty bar press 2\u00d78, ramp-up to working weight (5 min)",d:"Groove patterns before working sets"},{t:"Alternating Incline DB Press 3\u00d78 each @ 16kg (90s rest)",d:"Rib cage rotates against hips \u2014 sprint mechanics (Stigler)"},{t:"Rotation Row 3\u00d78 each @ 18kg (60s rest)",d:"Pull + rotate"},{t:"Push-up Drop Catch 3\u00d75 (60s rest)",d:"Impulse training: zero to max tension instantly"},{t:"Barbell Push Press 3\u00d75-6 @ 30kg (90s rest)",d:"Force transition"},{t:"Romanian Deadlift 3\u00d76-8 @ 45kg (90s rest)",d:"Hamstring & posterior chain"},{t:"Pull-ups 3 \u00d7 max (90s rest)",d:""},{t:"Face Pulls 3\u00d715 (45s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
+      { id:"gym", at:540, mins:55, kind:"train", title:"Gym \u2014 Power & Explosive", sub:"Trap bar DL \u00b7 push press \u00b7 split squat \u00b7 accessories", href:"/train.html#gym", steps:[
+        {t:"Gym warm-up: empty bar DL 2\u00d78, ramp-up sets (5 min)",d:"Groove patterns before power sets"},{t:"Trap Bar Deadlift 4\u00d75-6 @ 60kg (2-3 min rest)",d:"1-0-X tempo. EXPLOSIVE up. Drive through floor fast"},{t:"Push Press 3\u00d75-6 @ 30kg (2 min rest)",d:"Quarter dip, EXPLOSIVE overhead"},{t:"Bulgarian Split Squat 3\u00d78 each @ 12kg DBs (90s rest)",d:"Rear foot on bench, go deep"},{t:"Single-Arm DB Row 3\u00d78-10 each @ 18kg (60s rest)",d:"Row to hip, squeeze lat"},{t:"Incline DB Press 3\u00d78-10 @ 16kg (90s rest)",d:""},{t:"Chin-ups 3\u00d7max (90s rest)",d:""},{t:"Lateral Raises 3\u00d712-15 @ 6kg (60s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:"Non-negotiable after every session"}
       ]},
-      { id:"plyo", at:605, mins:15, kind:"train", title:"Plyometrics \u2014 Lateral Agility", sub:"Lateral bounds \u00b7 crossover bounds \u00b7 momentum stacking", href:"/train.html#gym", steps:[
-        {t:"Lateral Bounds 2\u00d710 each side (walk-back rest)",d:"Wk 1-2: single bounds. Wk 3-4: double/triple bounds"},{t:"Crossover Bounds 2\u00d710 each (walk-back rest)",d:"Match-speed redirection forces"},{t:"Single-Leg Lateral Hops 2\u00d78 each (45s rest)",d:"Land soft on balls of feet"}
+      { id:"core", at:600, mins:10, kind:"train", title:"Core \u2014 Speed + CM Fluidity", sub:"Med ball slams \u00b7 rotational throws \u00b7 Russian twists", href:"/train.html#gym", steps:[
+        {t:"Med Ball Slams 3\u00d78 (45s rest)",d:"Overhead, slam hard. Full hip hinge"},{t:"Rotational Throws 3\u00d78 each side (45s rest)",d:"Stand sideways to wall, rotate and throw. FAST"},{t:"Russian Twists 3\u00d715 each @ 5-8kg (30s rest)",d:"Feet off ground, rotate fully"}
       ]},
-      { id:"core", at:625, mins:10, kind:"train", title:"Core \u2014 CM Fluidity + Anti-Rotation", sub:"Turkish crunch \u00b7 split-stance rotation \u00b7 Pallof", href:"/train.html#gym", steps:[
-        {t:"Turkish Crunches 3\u00d76 each (30s rest)",d:"Supine core fluidity for CM shiftiness"},{t:"Split-Stance Weighted Thoracic Rotation 3\u00d78 each @ 5kg (30s rest)",d:"Quick turns"},{t:"Pallof Press 3\u00d710 each (30s rest)",d:"Anti-rotation stiffness"}
+      { id:"fascia", at:615, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#gym", steps:[
+        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"3-4 sec tempo"}
       ]},
-      { id:"fascia", at:640, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + nordics phase 1", href:"/train.html#gym", steps:[
-        {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:""}
+      { id:"sauna1", at:630, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (gym day)", href:"/train.html#recovery", steps:[
+        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response for adaptation",d:""}
       ]},
-      { id:"sauna1", at:655, mins:20, kind:"recover", title:"Sauna 15-20 min", sub:"80-100\u00b0C \u00b7 NO ice bath (gym day)", href:"/train.html#recovery", steps:[
-        {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"NO ice bath \u2014 gym needs inflammatory response",d:""}
-      ]},
-      { id:"sprint", at:780, mins:30, kind:"train", title:"Seward \u2014 Sprint Pyramid", sub:"10-20-30-40-50-50-40-30-20-10m \u00d7 2 sets", href:"/train.html#seward", steps:[
-        {t:"Dynamic warm-up 5 min",d:"Jog + leg swings + hip circles"},{t:"Sprint pyramid: 10m to 50m and back (walk-back rest)",d:"Full speed. Recovery = distance in seconds"},{t:"5 min between sets. DO 2 SETS",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:""}
-      ]},
-      { id:"ball", at:825, mins:45, kind:"train", title:"Ball work \u2014 Set A + Passing + Long Throws", sub:"Joner style \u00b7 passing & switching \u00b7 long throws", href:"/train.html#soccer", steps:[
-        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set A: 10 min Joner style (flow)",d:""},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76 (flow)",d:""},{t:"Long Throws: standing \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles + calves 5 min",d:""}
+      { id:"ball", at:780, mins:45, kind:"train", title:"Ball work \u2014 Set B + Weak Foot + Long Throws", sub:"Sole skills \u00b7 weak foot block \u00b7 long throw progression", href:"/train.html#soccer", steps:[
+        {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut, elastico 4\u00d720s each (flow)",d:""},{t:"Midfielder turns: turning the corner + half-turn receiving 5 min (flow)",d:""},{t:"Weak Foot Block 5 min (L foot only)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles 3 min",d:""}
       ]},
       PM
     ]
