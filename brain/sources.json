@@ -2,15 +2,15 @@
   "notebooks": [
     {
       "id": "24f0e262-ee6b-4156-96bc-292af6e7410c",
-      "title": "Elite Soccer Performance and Ancient Movement Mechanics",
-      "source_count": 45,
-      "domains": ["soccer-skills", "athletic-performance", "movement", "nutrition", "sleep-recovery", "mindset"]
+      "title": "Elite Soccer Performance",
+      "source_count": 40,
+      "domains": ["soccer-skills", "athletic-performance", "fascia", "nutrition", "sleep-recovery", "mindset", "speed", "gym-programming"]
     },
     {
       "id": "0db9c78a-077b-473c-9098-2f65dc33d3c9",
       "title": "Inner Dialogue: David Goggins on the Science of Willpower",
       "source_count": 22,
-      "domains": ["training-protocols", "mindset", "sleep-recovery", "movement"]
+      "domains": ["training-protocols", "mindset", "sleep-recovery"]
     }
   ],
   "brain_files": [
@@ -20,16 +20,19 @@
     "nutrition.md",
     "sleep-recovery.md",
     "mindset.md",
-    "training-protocols.md"
+    "training-protocols.md",
+    "gym-program.md",
+    "recovery-system.md",
+    "ball-work.md"
   ],
-  "total_sources": 67,
+  "total_sources": 62,
   "experts": [
-    "Matt Stigler (soccer athletic performance)",
-    "Andrew Huberman (neuroscience, sleep, dopamine, habits)",
-    "Andy Galpin (nutrition, supplementation)",
+    "Matt Stigler (soccer athletic performance, gym programming, speed, plyos, CM-specific)",
+    "Andrew Huberman (neuroscience, sleep, dopamine, habits, lymphatic system)",
+    "Andy Galpin (nutrition, supplementation, hydration)",
     "Robert Lustig (sugar, processed food)",
     "Wendy Suzuki (attention, memory)",
-    "Hyperarch / Coach Ben (fascia training)",
+    "Hyperarch / Coach Ben (fascia training, foot-to-glute connection)",
     "Coerver Coaching (ball mastery)",
     "Berbatov (technical skills)",
     "Joner Football (ball mastery)",
@@ -39,5 +42,6 @@
     "David Goggins (willpower, mental toughness)"
   ],
   "nlm_query_command": "nlm notebook query <notebook-id> \"your question\" --json",
-  "last_updated": "2026-07-09"
+  "last_updated": "2026-07-16",
+  "brain_process": "Query brain -> extract protocols -> compare with current routines -> selectively apply what improves performance. Not everything goes in - only what serves Sean's goals (start every game, fittest on team, 4-year school notice)."
 }

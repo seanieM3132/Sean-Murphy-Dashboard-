@@ -3,6 +3,32 @@
 > Sean: 19yo, ~5'10, medium/athletic build, inconsistent training history, no injuries.
 > Adjust starting weights on Day 1 — if it's too easy, go heavier. If form breaks, drop it.
 
+## Brain-Backed Methods (from NotebookLM 40 sources)
+
+### Peak + Back-off Method (Stigler)
+For main compounds (Trap Bar DL, Squat): 1 PEAK set x 3-5 reps near failure → 2-3 back-off sets x 6-8 @ 80-85% peak weight. Allows lifting heavy every session without excessive soreness. Rest 3-5 min between peak sets.
+
+### Impulse Training (Stigler)
+Push-up drop catches: drop from elevated surface, catch yourself at bottom, instantly reverse. Teaches nervous system to go from zero to max tension. Essential for bodying off opponents.
+
+### Force Transition Progression
+Barbell push press: lighten weight weekly to increase transition speed. Progress to medball scoop tosses (standing → 1-step → 2-step approach) and split-stance medball slams.
+
+### CM-Specific Core Fluidity (Stigler)
+Progression: Turkish crunches (supine) → Copenhagen side plank + thoracic rotation → split-stance weighted thoracic rotation. Builds shiftiness and quick turning ability.
+
+### Lateral Agility Plyos (Stigler)
+Lateral bounds → crossover bounds → lateral hops. Progress via momentum stacking: week 1-2 single bounds, week 3-4 double/triple bounds on same side before redirecting. 2-4 sets x 10-15 reps/side.
+
+### Periodization Blocks
+- **Accumulation**: high volume/capacity, build tissue quality
+- **Potentiation**: convert to raw strength, power, speed
+- **Realization**: low-volume deload, express new athleticism
+- **Transition** (1-3 weeks): between blocks to prevent injury
+
+### Sprint on Lower Body Day
+Sprint same day as lower body/total body lifts. Neurological crossover benefit — lift heavier AND sprint more frequently.
+
 ---
 
 ## Progressive Overload Rules
