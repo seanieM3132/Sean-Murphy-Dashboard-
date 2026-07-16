@@ -40,4 +40,4 @@ Athletes should prioritize **Whole Foods (Nova Classes 1-3)** and strictly limit
 *   **Beta-Alanine:** Take **2 to 5 grams daily** to buffer acid buildup in the muscles and delay fatigue.
 *   **Glutamine:** Take **20 grams daily** (split into 10g morning/night) to support the cleanup of dead cells and misfolded proteins during the recovery phase.
 *   **Omega-3 Fatty Acids:** Aim for **2 to 5 grams total** (with at least **1,000 mg of EPA**) to support healthy mood and manage systemic inflammation.
-*   **Sleep Stack:** If behavioral tools fail, consider **145 mg of Magnesium Threonate**, **50 mg of Apigenin**, and **100-400 mg of Theanine** 30-60 minutes before bed. Note: **900 mg of Myo-Inositol** can be added to help you fall back asleep if you wake up in the middle of the night.
+*   **MFM Sleep Protocol:** Before bed: **Magnesium Glycinate 2 capsules** (sleep + muscle relaxation), **L-theanine 1 capsule** (calming/sleep), **Relaxation Tea** (strong cup, wind-down marker). Optional: **Pepti Biotic 2nd scoop**.

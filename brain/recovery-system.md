@@ -23,7 +23,7 @@
 | Wind down | 8:00pm | 15 min | Read, visualize, calm game film. No intense screen content |
 | Sauna | ~9:00pm | 15-20 min | 80-100°C. 1-2h before bed. Triggers compensatory cooling |
 | Massage ball (sore spots) | ~9:20pm | 10 min | Spikey ball on worst areas. 90s sustained. 6/10 discomfort max |
-| Sleep stack | 9:30pm | 1 min | Mg Threonate 145mg + Apigenin 50mg + L-Theanine 100-400mg |
+| MFM sleep supps | 9:30pm | 1 min | Magnesium Glycinate 2 caps + L-theanine 1 cap. Relaxation Tea. Optional: Pepti Biotic 2nd scoop |
 | Nose tape + side position | 9:45pm | 1 min | Side-sleep = glymphatic clearance. Nose breathing = better O2 exchange |
 | NSDR if needed | 10:00pm | 10 min | If not asleep in 20 min. YouTube "Huberman NSDR". Don't lie there stressing |
 | **LIGHTS OUT** | **10:00pm** | | 9 hours before 7am wake |
@@ -273,29 +273,25 @@
 
 ---
 
-## Supplement Stack
+## MFM Supplement Protocol
 
-### Daily
-- Creatine: 5g (with breakfast — EVERY day)
-- Vitamin D3: 1000-2000 IU
-- Omega-3 / Fish Oil: 2-3g EPA (tissue repair)
-- Electrolytes: in morning water + around training
+### Morning
+- Pepti Biotic: 1 scoop (postbiotic for heartburn)
+- Creatine monohydrate: 5g (muscles)
+- Gut R powder: 7g (gut repair + skin health)
+- Floramyces: 1 capsule if needed (treat thrush)
+- Bioheme iron: 1 capsule every 2nd day with food (iron stores)
+- Spatone Iron Pouches: 1 pouch every 2nd day with food (iron)
+- Triple antibiotics: as per instructions (kill H. pylori)
 
-### Tissue Repair
-- Glutamine: 20g daily (10g morning, 10g night) — cleans up misfolded proteins
-
-### Pre-Training (30-50 min before)
-- Caffeine: 1-3mg/kg bodyweight
-- Water: 300-500ml with electrolytes
-
-### Post-Training
-- Protein: 30-40g (shake or meal within 1 hour)
+### With Exercise
+- ORS (Oral Rehydration Solution): 30 min before/after exercise
 
 ### Before Bed (9:30pm)
-- Magnesium Threonate: 145mg
-- Apigenin: 50mg
-- L-Theanine: 100-400mg
-- Optional: Myo-inositol 900mg (if waking mid-night)
+- Magnesium Glycinate: 2 capsules (sleep + muscle relaxation)
+- L-theanine: 1 capsule (calming/sleep)
+- Relaxation Tea: strong cup (wind-down marker)
+- Pepti Biotic: optional 2nd scoop
 
 ### Caffeine Rules
 - Delay 90-120 min after waking (let cortisol clear adenosine first)

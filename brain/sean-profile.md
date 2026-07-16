@@ -63,13 +63,10 @@
 - Not tracking anything
 - Decent but unstructured
 
-## Supplements
-- Creatine (inconsistent)
-- Nothing else consistent
-- **MFM appointment July 14 at 12pm** — Melbourne Functional Medicine
-  - Will get full body assessment, blood work, lab tests
-  - Will receive personalized supplement protocol after
-  - Until then: run baseline stack from brain knowledge
+## Supplements (MFM Protocol — from July 15)
+**Morning:** Pepti Biotic 1 scoop, Creatine 5g, Gut R powder 7g, Floramyces 1 cap (if needed), Bioheme iron 1 cap every 2nd day, Spatone 1 pouch every 2nd day, Triple antibiotics as directed
+**With Exercise:** ORS 30 min before/after
+**Bedtime:** Magnesium Glycinate 2 caps, L-theanine 1 cap, Relaxation Tea, Pepti Biotic 2nd scoop (optional)
 
 ## Recovery
 - Has sauna + ice bath access with an existing routine

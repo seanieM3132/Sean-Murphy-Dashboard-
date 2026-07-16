@@ -272,25 +272,31 @@ var KIND = {
 
 /* ═══ ALL DAYS ═══════════════════════════════════════════════ */
 var AM = function(){
-  return { id:"am", at:420, mins:25, kind:"routine", title:"Morning protocol", sub:"Sunlight \u00b7 hydrate \u00b7 breathe \u00b7 fascia \u00b7 mobility", href:"/health.html", steps:[
+  return { id:"am", at:420, mins:30, kind:"routine", title:"Morning protocol", sub:"Sunlight \u00b7 hydrate \u00b7 supps \u00b7 breathe \u00b7 fascia", href:"/health.html", steps:[
     {t:"Wake 7:00 \u2014 no snooze, no phone 15 min",d:"Avoid reactive dopamine spike. Let natural cortisol clear adenosine"},
-    {t:"Hydrate 500ml water + pinch of salt",d:"Rehydrate from overnight fluid loss (Galpin protocol)"},
-    {t:"Sunlight optic flow walk 10 min",d:"Outside within 30 min of waking. Panoramic vision, forward ambulation. Triggers 50% cortisol pulse, sets melatonin timer for tonight"},
-    {t:"Diaphragmatic breathing 2 min",d:"Inhale until belly extends \u2014 creates pressure differential to move lymph from cisterna chyli back to blood. Long exhale. Clears swelling, boosts HRV"},
-    {t:"Elevated toe curls 3 \u00d7 20s (10s rest)",d:"Curl toes over edge of step. Daily fascia foundation \u2014 strengthens plantar fascia, foot-to-glute connection"},
-    {t:"Lateral Pelvic Tilts \u2014 3 positions \u00d7 30s each side",d:"Side-lying \u2192 half-kneeling \u2192 split squat. Both sides. Improves fluid movement patterns"},
-    {t:"Delay caffeine 90-120 min after waking",d:"Let natural cortisol clear adenosine first. Prevents afternoon crash. Exception: caffeine OK before early AM training"}
+    {t:"Hydrate: ORS + 500ml water",d:"Oral Rehydration Solution 30 min before exercise. Rehydrate from overnight fluid loss"},
+    {t:"Morning supps with food: Pepti Biotic 1 scoop \u00b7 Creatine 5g \u00b7 Gut R 7g",d:"MFM protocol: postbiotic (heartburn), creatine (muscles), gut repair + skin health"},
+    {t:"Iron (every 2nd day with food): Bioheme 1 cap + Spatone 1 pouch",d:"MFM: improve iron stores. Take every second day, always with food"},
+    {t:"Triple antibiotics as per instructions",d:"MFM: kill H. pylori. Follow prescription exactly"},
+    {t:"Floramyces 1 capsule if needed",d:"MFM: treat thrush if present"},
+    {t:"Sunlight optic flow walk 10 min",d:"Outside within 30 min of waking. Triggers 50% cortisol pulse, sets melatonin timer for tonight"},
+    {t:"Diaphragmatic breathing 2 min",d:"Inhale until belly extends \u2014 moves lymph from cisterna chyli back to blood"},
+    {t:"Elevated toe curls 3 \u00d7 20s (10s rest)",d:"Daily fascia foundation \u2014 strengthens plantar fascia, foot-to-glute connection"},
+    {t:"Lateral Pelvic Tilts \u2014 3 positions \u00d7 30s each side",d:"Side-lying \u2192 half-kneeling \u2192 split squat. Improves fluid movement patterns"},
+    {t:"Delay caffeine 90-120 min after waking",d:"Let natural cortisol clear adenosine first. Prevents afternoon crash"}
   ]};
 };
-var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down", sub:"Dim lights \u00b7 breathe \u00b7 cool down \u00b7 nose tape \u00b7 lights out 10pm", href:"/health.html", steps:[
-  {t:"8:00 PM \u2014 Dim all lights, warm lighting only",d:"Bright light 10pm-4am suppresses dopamine by 50% for days (Huberman). Start protecting your sleep now"},
-  {t:"8:30 PM \u2014 No intense screen content",d:"Read, visualize, watch calm game film. Reduce cortisol and adrenaline before sleep"},
-  {t:"Diaphragmatic breathing 2 min",d:"Inhale belly out, long extended exhale. Clears lymphatic system, boosts HRV. 10-20 deliberate extended exhales strengthens vagal pathway"},
-  {t:"Physiological sighs if feeling wired (3-5 reps)",d:"Double inhale through nose (second one short + sharp to reinflate lung sacs) \u2192 long extended exhale through mouth. Fastest real-time calming method"},
-  {t:"9:45 PM \u2014 Nose tape for nasal breathing",d:"Medical tape over mouth. Forces nasal breathing \u2014 better oxygen exchange, reduces snoring, offsets sleep apnea"},
-  {t:"Side sleeping position",d:"Side sleeping maximizes glymphatic clearance \u2014 brain waste removal system is 60% more active during sleep. Head slightly tilted up via pillow"},
-  {t:"Room: cool/cold and very dark",d:"Body must drop 1-3\u00b0F to fall and stay deeply asleep. Feet are heat-release portals \u2014 remove socks if you wake warm"},
-  {t:"LIGHTS OUT 10:00 PM",d:"9 hours before 7am wake. If you can\u2019t sleep within 20 min, do a 10-min NSDR (Non-Sleep Deep Rest) protocol instead of lying there stressing"}
+var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down", sub:"Screens off \u00b7 relaxation tea \u00b7 supps \u00b7 flight mode \u00b7 lights out 10pm", href:"/health.html", steps:[
+  {t:"8:00 PM \u2014 Phone on FLIGHT MODE, screens off",d:"MFM protocol: screens emit blue light which stops melatonin production, making sleep harder and less restful. This is non-negotiable"},
+  {t:"8:00 PM \u2014 Dim all lights, warm lighting only",d:"Bright light 10pm-4am suppresses dopamine by 50% for days (Huberman)"},
+  {t:"Strong cup of Relaxation Tea",d:"MFM protocol: once this becomes a habit, it serves as a marker for your body to recognise it\u2019s time to wind down"},
+  {t:"Magnesium Glycinate \u2014 2 capsules",d:"MFM: sleep + muscle relaxation"},
+  {t:"L-theanine \u2014 1 capsule",d:"MFM: calming to help sleep"},
+  {t:"Pepti Biotic \u2014 2nd scoop (optional)",d:"MFM: postbiotic, take if needed for heartburn"},
+  {t:"Diaphragmatic breathing 2 min",d:"Inhale belly out, long exhale. Clears lymphatic system, boosts HRV"},
+  {t:"9:45 PM \u2014 Nose tape for nasal breathing",d:"Forces nasal breathing \u2014 better oxygen exchange, reduces snoring"},
+  {t:"Side sleeping \u00b7 room cool/cold and very dark",d:"Side sleep maximizes glymphatic clearance. Body must drop 1-3\u00b0F to stay deeply asleep"},
+  {t:"LIGHTS OUT 10:00 PM",d:"9 hours before 7am wake. If you can\u2019t sleep within 20 min, do a 10-min NSDR protocol"}
 ]};
 
 

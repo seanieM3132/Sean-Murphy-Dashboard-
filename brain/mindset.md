@@ -121,7 +121,7 @@ Effective learning is often counterintuitive and requires active **strain and ef
 - **Glymphatic Clearance:** The brain's waste clearance system is 60% more active during sleep. **Side sleeping** (either right or left) is the most efficient position for this drainage.
 - **Temperature Minimum:** Determine your **temperature minimum** (the lowest point of your 24-hour cycle), which occurs approximately **2 hours before your typical wake-up time**.
 - **Sunlight Anchors:** View sunlight within **30 minutes of waking** to trigger a cortisol pulse and set a 12-14 hour timer for melatonin release. View sunlight again in the late afternoon to "inoculate" your eyes against the negative effects of artificial light at night.
-- **The "Sleep Cocktail":** A combination of **Magnesium Threonate (or Bisglycinate)** (300-400mg), **Apigenin** (50mg), and **Theanine** (100-200mg) taken 30-60 minutes before bed can assist in falling and staying asleep.
+- **MFM Sleep Protocol:** **Magnesium Glycinate** 2 capsules + **L-theanine** 1 capsule before bed. **Relaxation Tea** (strong cup) as wind-down marker. Optional: **Pepti Biotic** 2nd scoop.
 - **Environment:** Keep the room **cool/cold** and the environment **very dark**. If you wake up in the middle of the night, keep lights dim to avoid suppressing melatonin.
 
 ---

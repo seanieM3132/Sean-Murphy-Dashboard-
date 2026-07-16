@@ -19,22 +19,18 @@
 9. Elevated toe curls -- daily, 3 x 20 sec, 10 sec rest.
 10. Cool-down after every session -- light jog 5 min + static stretch 5 min.
 11. Hydrate all day: 3-4L total. More on training/match days.
-12. Evening protocol: dim lights 8pm, wind down 8:30, sauna if scheduled, sleep stack 9:30, lights out 10pm.
-13. Sleep stack: Mg Threonate 145mg + Apigenin 50mg + Theanine 100-400mg.
+12. Evening protocol: dim lights 8pm, wind down 8:30, sauna if scheduled, MFM sleep supps 9:30, lights out 10pm.
+13. MFM sleep: Magnesium Glycinate 2 caps + L-theanine 1 cap. Relaxation Tea. Optional: Pepti Biotic 2nd scoop.
 14. Side sleeping, nose breathing (tape if needed).
 15. Log everything: gym weights, sprint times, ball work scores, sleep quality, soreness, meals, water, creatine.
 
 ### Caffeine Rule
 Delay 90-120 min after waking (until ~8:30-9:00am). Exception: match day -- take 30-50 min before kickoff. Dose: 1-3mg/kg.
 
-### Supplement Stack (Until MFM July 14 updates it)
-- Creatine: 5g daily (breakfast)
-- Vitamin D3: 1000-2000 IU
-- Omega-3 / Fish Oil: 1-2g EPA
-- Electrolytes: morning water + around training
-- Pre-training: Caffeine 1-3mg/kg + 300-500ml water w/ electrolytes
-- Post-training: 30-40g protein (shake or meal within 1 hour)
-- Before bed: Mg Threonate 145mg, Apigenin 50mg, Theanine 100-400mg
+### MFM Supplement Protocol (from July 15)
+**Morning:** Pepti Biotic 1 scoop, Creatine 5g, Gut R powder 7g, Floramyces 1 cap (if needed), Bioheme iron 1 cap every 2nd day, Spatone 1 pouch every 2nd day, Triple antibiotics as directed
+**With Exercise:** ORS 30 min before/after
+**Bedtime:** Magnesium Glycinate 2 caps, L-theanine 1 cap, Relaxation Tea, Pepti Biotic 2nd scoop (optional)
 
 ### 112mvmnt Daily Rotation
 | Day | Program |
@@ -117,7 +113,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 8:00 | Begin wind-down | Dim lights, warm lighting only |
 | 8:30 | No intense screens | Read, visualize, calm game film |
 | 9:00 | Sauna 15 min (if not done earlier) | Compensatory cooling for sleep |
-| 9:30 | Sleep stack | Mg Threonate 145mg + Apigenin 50mg + Theanine 100-400mg |
+| 9:30 | MFM sleep supps | Magnesium Glycinate 2 caps + L-theanine 1 cap. Relaxation Tea |
 | 9:45 | Nose tape, side sleeping position | |
 | 10:00 | **LIGHTS OUT** | |
 
@@ -156,7 +152,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | Home | Dinner within 1 hour | 3:1 carb-to-protein ratio for glycogen. Starchy carbs for sleep |
 | Home | Hydrate: 125-150% of fluid lost | |
 | 8:00 | Evening protocol | Sauna 15 min for recovery. Then wind-down |
-| 9:30 | Sleep stack | |
+| 9:30 | MFM sleep supps | |
 | 10:00 | **LIGHTS OUT** | |
 
 ---
@@ -196,7 +192,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 8:00 | Wind down | No intense screens |
 | 8:30 | **Caffeine strategy note:** If you want max caffeine impact tomorrow, your last caffeine should have been yesterday or today AM. The 2-day abstain resets receptors for Saturday |
 | 9:00 | Sauna 15-20 min | Compensatory cooling for deeper sleep |
-| 9:30 | Sleep stack + LIGHTS OUT | Extra 30 min sleep before game day |
+| 9:30 | MFM sleep supps + LIGHTS OUT | Extra 30 min sleep before game day |
 
 ---
 
@@ -233,7 +229,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | Home | **Dinner** within 1 hour | 3:1 carb-to-protein. Rice + protein + veg |
 | Home | Hydrate: 125-150% of fluid lost | |
 | Home | **NO sauna or ice bath tonight** | Just eat, hydrate, sleep |
-| 10:00 | **LIGHTS OUT** | Sleep stack as usual |
+| 10:00 | **LIGHTS OUT** | MFM sleep supps as usual |
 
 **If subbed early / <60 min played:** After the game, 20-min tempo run (70%) OR 6x100m with 45 sec rest. Log it.
 
@@ -270,7 +266,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 3:30 | Free time | Rest. You earned it. No extra top-up -- you've had enough volume |
 | 5:00 | **Dinner** -- EAT BIG | Starchy carbs + protein + veg. Refuel for Monday |
 | 7:00 | **WEEKLY PLANNING SESSION** | Sit down with AI coach. Review the week. Log metrics: sleep quality, soreness, weight, gym lifts, sprint times, ball mastery, juggling, long throw, weak foot accuracy, meals, water, creatine compliance. Plan Mon-Sun |
-| 8:00-10:00 | Evening protocol | Wind-down, sleep stack, lights out 10pm |
+| 8:00-10:00 | Evening protocol | Wind-down, MFM sleep supps, lights out 10pm |
 
 ---
 
@@ -445,7 +441,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:30 | Visualization 10 min | |
 | 8:30 | Caffeine note: last caffeine should be today AM for max Saturday impact | |
 | 9:00 | Sauna 15-20 min | |
-| 9:30 | Sleep stack + LIGHTS OUT | Early bed |
+| 9:30 | MFM sleep supps + LIGHTS OUT | Early bed |
 
 ---
 
@@ -641,7 +637,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 8:55 | Cool-down + stretch (10 min full body) | |
 | 9:05 | Sauna 15 min + cold plunge 2 min | Last Melbourne sauna session. Enjoy it |
 | 9:30 | Free time | |
-| 10:00 | **PACK** | Kit, boots (2 pairs), shin guards, training gear, supplements (creatine, D3, omega-3, sleep stack), foam roller if space, resistance bands, jump rope |
+| 10:00 | **PACK** | Kit, boots (2 pairs), shin guards, training gear, supplements (MFM protocol: Pepti Biotic, Creatine, Gut R, Floramyces, iron supps, Mg Glycinate, L-theanine, Relaxation Tea), foam roller if space, resistance bands, jump rope |
 | 12:00 | Lunch | |
 | 1:00 | **Final visualization session (15 min)** | Visualize: arriving at Seward, meeting the team, the fitness test, your first training session, starting your first game. See yourself succeeding |
 | 1:15 | Spend time with family | |
@@ -657,13 +653,13 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 |----------|----------|
 | 1 | Creatine 5g -- bring it in carry-on, take daily |
 | 2 | Hydrate aggressively on the flight -- 500ml every 2-3 hours, avoid alcohol |
-| 3 | Sleep stack on the plane if overnight flight |
+| 3 | MFM sleep supps on the plane if overnight flight |
 | 4 | Walk around the cabin every 2 hours -- prevent stiffness and DVT |
 | 5 | Eat protein at every meal -- don't rely on plane food alone (pack protein bars) |
 | 6 | Upon landing: get sunlight ASAP to reset circadian clock to Kansas time |
 | 7 | If there's a layover: walk, stretch, do bodyweight squats/lunges in the airport |
 | 8 | On arrival day: do 15 min of dynamic warm-up + elevated toe curls + light stretching to "wake up" the body |
-| 9 | First night in Kansas: full evening protocol. Sleep stack. Get on 10pm lights out immediately |
+| 9 | First night in Kansas: full evening protocol. MFM sleep supps. Get on 10pm lights out immediately |
 | 10 | Day before report: light jog, ball touches, visualization. Be ready for the fitness test |
 
 ---
@@ -692,7 +688,7 @@ What you bring with you:
 
 | Source | What It Contributed |
 |--------|-------------------|
-| **Huberman Lab** | Morning sunlight protocol, caffeine timing (90-120 min delay), sleep stack (Mg Threonate + Apigenin + Theanine), NSDR, dopamine management, optic flow walks, physiological sigh, cold exposure dopamine protocol, sauna protocols, 90-min work blocks, habit formation (21-day system, task-bracketing), temperature regulation for sleep |
+| **Huberman Lab** | Morning sunlight protocol, caffeine timing (90-120 min delay), MFM sleep protocol (Mg Glycinate + L-theanine), NSDR, dopamine management, optic flow walks, physiological sigh, cold exposure dopamine protocol, sauna protocols, 90-min work blocks, habit formation (21-day system, task-bracketing), temperature regulation for sleep |
 | **Dr. Andy Galpin** | Hydration equation (BW lbs / 30 = oz per 15 min), electrolyte ratios (3:1 sodium:potassium), protein targets (1g/lb BW), carb loading (7-10g/kg), post-exercise 3:1 carb:protein, 125-150% rehydration, periodization (accumulation/potentiation/realization), 80/20 training intensity rule |
 | **Matt Stigler** | Upper body routine for pitch performance, plyometric progressions (split squat jumps, weighted lateral bounds), core training (stiffness vs fluidity vs speed), push-up drop catches (impulse training), push press speed transition, periodization phases, footballer gym splits |
 | **Hyperarch Fascia Training (Coach Chong Xie)** | Elevated toe curls (daily), HFT Marble Swing, HFT Gait Cycles, lateral pelvic tilts, 12-week fascia remodeling window, tensegrity principles, foot-to-glute connection |
@@ -714,7 +710,7 @@ What you bring with you:
 | **Huberman (Learning)** | Testing as study tool, gap effects (10-30 sec pauses), post-learning adrenaline spike for memory, 13 min daily meditation for focus |
 | **Huberman (Sleep)** | Side sleeping for glymphatic clearance, nose breathing/mouth tape, core temp drop 1-3F, cool room, NSDR for insomnia, no bright light 10pm-4am (suppresses dopamine 50% for days) |
 | **Nutrition Science** | Nova food classification (avoid Class 4), fiber as "key to the kingdom," meal timing (2-3hr pre-game, starchy carbs at dinner for serotonin), priority foods (eggs, salmon, leafy greens, kiwis, Brazil nuts for selenium) |
-| **Supplement Science** | Creatine 3-5g daily (power + cognition), beta-alanine 2-5g (acid buffer), glutamine 20g (10g morning/night for cell cleanup), caffeine performance hack (2-5 day abstain before key match), myo-inositol 900mg (middle-of-night wake-up) |
+| **Supplement Science / MFM Protocol** | Creatine 5g daily (power + cognition), caffeine performance hack (2-5 day abstain before key match). MFM morning: Pepti Biotic, Gut R 7g, Floramyces, Bioheme iron + Spatone (every 2nd day), Triple antibiotics. MFM evening: Mg Glycinate 2 caps, L-theanine 1 cap, Relaxation Tea |
 
 ---
 

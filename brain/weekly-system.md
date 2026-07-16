@@ -45,7 +45,7 @@
 | 8:00 | Begin wind-down. Reduce overhead lights, use dim/warm lighting | Bright light 10pm-4am suppresses dopamine by 50% for days (Huberman) |
 | 8:30 | No intense screen content. Read, visualize, watch calm game film | Reduce cortisol/adrenaline before sleep |
 | 9:00 | Sauna 15-20 min at 80-100°C (if not done earlier) | Compensatory cooling response 1-2hrs later helps you fall asleep. Core temp must drop 1-3°F to sleep deeply (Huberman) |
-| 9:30 | Sleep supplement stack | Magnesium Threonate 145mg + Apigenin 50mg + L-Theanine 100-400mg (Huberman stack) |
+| 9:30 | MFM evening supplements | Magnesium Glycinate 2 caps + L-theanine 1 cap. Relaxation Tea (strong cup). Optional: Pepti Biotic 2nd scoop |
 | 9:45 | Nose breathing tape if needed. Side sleeping position | Side sleeping maximizes glymphatic clearance (brain waste removal). Nose breathing = better oxygen exchange |
 | 10:00 | **LIGHTS OUT** | 9 hours before 7am wake = optimal for testosterone, GH, recovery |
 
@@ -276,7 +276,7 @@ Do these BEFORE any training session. Total: ~5 min.
 | 7:30 | Visualization: 10 min eyes-closed — run through game scenarios, first touch, tackles, passing lanes, long throws |
 | 8:00 | Wind down — no intense screen content |
 | 9:00 | Sauna 15-20 min (compensatory cooling for deeper sleep) |
-| 9:30 | Sleep supplements: Mg Threonate 145mg + Apigenin 50mg + Theanine 100-400mg |
+| 9:30 | MFM sleep supps: Magnesium Glycinate 2 caps + L-theanine 1 cap |
 | 9:30 | **LIGHTS OUT** (extra 30 min sleep before game day) |
 
 **Caffeine strategy for key matches:** Abstain from caffeine Wednesday-Friday, then resume on Saturday. Resets adenosine receptor sensitivity — match-day dose hits significantly harder.
@@ -405,28 +405,25 @@ Team training is light, so full Seward effort in the AM is fine on Tue/Thu. Just
 
 ---
 
-## Baseline Supplement Stack (Until MFM July 14)
+## MFM Supplement Protocol (from July 15)
 
-**Daily:**
-- Creatine: 5g (with breakfast — BE CONSISTENT)
-- Vitamin D3: 1000-2000 IU
-- Omega-3 / Fish Oil: 1-2g EPA
-- Electrolytes: in morning water and around training
+**Morning:**
+- Pepti Biotic: 1 scoop (postbiotic for heartburn)
+- Creatine monohydrate: 5g (muscles)
+- Gut R powder: 7g (gut repair + skin health)
+- Floramyces: 1 capsule if needed (treat thrush)
+- Bioheme iron: 1 capsule every 2nd day with food (iron stores)
+- Spatone Iron Pouches: 1 pouch every 2nd day with food (iron)
+- Triple antibiotics: as per instructions (kill H. pylori)
 
-**Pre-training (30-50 min before):**
-- Caffeine: 1-3mg/kg bodyweight
-- Water: 300-500ml with electrolytes
-
-**Post-training:**
-- Protein: 30-40g (shake or meal within 1 hour)
+**With exercise:**
+- ORS (Oral Rehydration Solution): 30 min before/after exercise
 
 **Before bed (9:30pm):**
-- Magnesium Threonate: 145mg
-- Apigenin: 50mg
-- L-Theanine: 100-400mg
-- Optional: Myo-inositol 900mg (if you wake up in the middle of the night)
-
-**After MFM (July 14+):** Replace with whatever they prescribe based on your bloods and labs.
+- Magnesium Glycinate: 2 capsules (sleep + muscle relaxation)
+- L-theanine: 1 capsule (calming/sleep)
+- Relaxation Tea: strong cup (wind-down marker)
+- Pepti Biotic: optional 2nd scoop
 
 ---
 

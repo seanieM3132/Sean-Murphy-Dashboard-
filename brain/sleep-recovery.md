@@ -18,11 +18,11 @@ Quality sleep is the bedrock of mental and physical health, cognitive performanc
     *   **Side Sleeping:** Recommended for efficient **glymphatic clearance** (clearing waste from brain tissue) [15, 16].
     *   **Nose Breathing:** Use medical tape over the mouth at night to force nasal breathing, which reduces snoring and offsets sleep apnea [17, 18].
     *   **NSDR/Hypnosis:** Use Non-Sleep Deep Rest (NSDR) scripts or the **Reveri app** (sleep hypnosis) to fall asleep or return to sleep after waking [19-21].
-*   **Sleep Supplement Stack (30-60 mins before bed):**
-    *   **Magnesium Threonate:** 145mg (or Magnesium Bisglycinate 200mg) [22, 23].
-    *   **Apigenin:** 50mg [23].
-    *   **Theanine:** 100-400mg (Avoid if prone to vivid dreams/nightmares) [23, 24].
-    *   **Myo-Inositol:** 900mg (Specifically helps with falling back asleep) [25, 26].
+*   **MFM Evening Supplement Protocol (before bed):**
+    *   **Magnesium Glycinate:** 2 capsules (sleep + muscle relaxation).
+    *   **L-theanine:** 1 capsule (calming/sleep).
+    *   **Relaxation Tea:** Strong cup (wind-down marker).
+    *   **Pepti Biotic:** Optional 2nd scoop.
 
 ---
 

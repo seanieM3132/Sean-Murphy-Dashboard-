@@ -330,7 +330,7 @@ body::after{
       <div class="ring-center">
         <div class="ring-cal mono" id="calConsumed">0</div>
         <div class="ring-cal-label">calories</div>
-        <div class="ring-remaining mono" id="calRemaining">2800 left</div>
+        <div class="ring-remaining mono" id="calRemaining">eaten today</div>
       </div>
     </div>
     <div class="hero-right">
@@ -557,15 +557,21 @@ body::after{
    ═══════════════════════════════════════════════ */
 
 /* ── Constants ── */
-const DEFAULT_GOALS = { calories:2800, protein:180, carbs:350, fat:85, water:4000, weightKg:75 };
+const DEFAULT_GOALS = { calories:0, protein:180, carbs:350, fat:85, water:4000, weightKg:75 };
 
 const DEFAULT_SUPPS = [
-  { id:'s1', name:'Creatine', dose:'5g', window:'morning' },
-  { id:'s2', name:'Vitamin D3', dose:'2000 IU', window:'morning' },
-  { id:'s3', name:'Omega-3', dose:'2 caps', window:'morning' },
-  { id:'s4', name:'B-Complex', dose:'1 cap', window:'morning' },
-  { id:'s5', name:'Magnesium', dose:'400mg', window:'evening' },
-  { id:'s6', name:'Zinc', dose:'30mg', window:'evening' },
+  { id:'s1', name:'Pepti Biotic', dose:'1 scoop', window:'morning' },
+  { id:'s2', name:'Creatine Monohydrate', dose:'5g', window:'morning' },
+  { id:'s3', name:'Gut R Powder', dose:'7g', window:'morning' },
+  { id:'s4', name:'Floramyces', dose:'1 cap (if needed)', window:'morning' },
+  { id:'s5', name:'Bioheme Iron', dose:'1 cap (every 2nd day)', window:'morning' },
+  { id:'s6', name:'Spatone Iron', dose:'1 pouch (every 2nd day)', window:'morning' },
+  { id:'s7', name:'Triple Antibiotics', dose:'as prescribed', window:'morning' },
+  { id:'s8', name:'ORS', dose:'30 min before/after exercise', window:'morning' },
+  { id:'s9', name:'Magnesium Glycinate', dose:'2 caps', window:'evening' },
+  { id:'s10', name:'L-Theanine', dose:'1 cap', window:'evening' },
+  { id:'s11', name:'Relaxation Tea', dose:'1 strong cup', window:'evening' },
+  { id:'s12', name:'Pepti Biotic (optional)', dose:'2nd scoop', window:'evening' },
 ];
 
 const COMMON_FOODS = [
@@ -686,15 +692,15 @@ function render(){
 /* ── 1. Hero ── */
 function renderHero(){
   const g=goals(), t=totals();
-  const pct=Math.min(1,t.cal/g.calories);
   const circ=2*Math.PI*52;
   const ring=document.getElementById('calRing');
+  // No calorie goal — ring fills based on a reasonable day (~2500)
+  const pct=Math.min(1,t.cal/2500);
   ring.style.strokeDashoffset=circ-(circ*pct);
-  ring.style.stroke=pct>1?'#EF4444':'#6EE7B7';
+  ring.style.stroke='#6EE7B7';
 
   document.getElementById('calConsumed').textContent=t.cal.toLocaleString();
-  const rem=Math.max(0,g.calories-t.cal);
-  document.getElementById('calRemaining').textContent=rem.toLocaleString()+' left';
+  document.getElementById('calRemaining').textContent='eaten today';
 
   // Macros
   document.getElementById('protCur').textContent=t.p;
@@ -726,14 +732,12 @@ function renderCoach(){
   if(t.p<30 && h>=12) msgs.push("You're behind on protein. Add chicken, eggs, or a shake to your next meal.");
   if(t.cal<1000 && h>=14) msgs.push("Undereating alert. You need fuel for training - eat a proper meal now.");
   if(t.fib<10 && h>=17) msgs.push("Get more fiber in. Add vegetables, oats, or legumes to your next meal.");
-  if(t.p>g.protein*0.8 && t.c>g.carbs*0.7 && t.cal>g.calories*0.7) msgs.push("Looking good! You're hitting your targets today. Keep it up.");
-  if(t.cal>g.calories) msgs.push("You've exceeded your calorie target. Be mindful with remaining meals.");
+  if(t.p>g.protein*0.8 && t.c>g.carbs*0.7) msgs.push("Looking good! You're hitting your macro targets today. Keep it up.");
   if(t.p>=g.protein) msgs.push("Protein target hit! Great work on recovery fuel.");
 
   if(msgs.length===0){
-    const pctCal=Math.round((t.cal/g.calories)*100);
     const pctProt=Math.round((t.p/g.protein)*100);
-    msgs.push(`You're at ${pctCal}% calories and ${pctProt}% protein. ${t.p < g.protein*0.5 ? 'Prioritize protein in your next meal.' : 'Solid progress so far.'}`);
+    msgs.push(`You're at ${pctProt}% protein. ${t.p < g.protein*0.5 ? 'Prioritize protein in your next meal.' : 'Solid progress so far.'}`);
   }
   el.textContent=msgs[0];
 }
