@@ -293,6 +293,7 @@ MATCH.bye = _pgd.status === 'bye';
 if(_pgd.days && _pgd.days.length) MATCH.day = _pgd.days[0];
 
 var WEAK_FOOT = 58;
+var DAYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 
 function buildWeek(){
   var base = [
@@ -328,8 +329,6 @@ var KIND = {
 
 var THEMES = ["Possession", "Pressing", "Set pieces", "Shape", "Scrimmage", "Transition", "Finishing", "Crossing"];
 var POSITIONS = ["CDM", "CM", "RB", "LB", "CB"];
-
-var DAYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 
 /* ═══ BALL WORK ROTATION ══════════════════════════════════════ */
 var WARMUP = [
