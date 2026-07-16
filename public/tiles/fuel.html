@@ -337,21 +337,21 @@ body::after{
       <div class="macro-bar-row">
         <div class="macro-header">
           <div class="macro-label" style="color:#60A5FA">Protein</div>
-          <div class="macro-value mono"><span id="protCur">0</span> / <span id="protTgt">180</span>g</div>
+          <div class="macro-value mono"><span id="protCur">0</span>g</div>
         </div>
         <div class="macro-track"><div class="macro-fill protein" id="protBar" style="width:0%"></div></div>
       </div>
       <div class="macro-bar-row">
         <div class="macro-header">
           <div class="macro-label" style="color:#FBBF24">Carbs</div>
-          <div class="macro-value mono"><span id="carbCur">0</span> / <span id="carbTgt">350</span>g</div>
+          <div class="macro-value mono"><span id="carbCur">0</span>g</div>
         </div>
         <div class="macro-track"><div class="macro-fill carbs" id="carbBar" style="width:0%"></div></div>
       </div>
       <div class="macro-bar-row">
         <div class="macro-header">
           <div class="macro-label" style="color:#F472B6">Fat</div>
-          <div class="macro-value mono"><span id="fatCur">0</span> / <span id="fatTgt">85</span>g</div>
+          <div class="macro-value mono"><span id="fatCur">0</span>g</div>
         </div>
         <div class="macro-track"><div class="macro-fill fat" id="fatBar" style="width:0%"></div></div>
       </div>
@@ -704,15 +704,12 @@ function renderHero(){
 
   // Macros
   document.getElementById('protCur').textContent=t.p;
-  document.getElementById('protTgt').textContent=g.protein;
   document.getElementById('protBar').style.width=Math.min(100,(t.p/g.protein)*100)+'%';
 
   document.getElementById('carbCur').textContent=t.c;
-  document.getElementById('carbTgt').textContent=g.carbs;
   document.getElementById('carbBar').style.width=Math.min(100,(t.c/g.carbs)*100)+'%';
 
   document.getElementById('fatCur').textContent=t.f;
-  document.getElementById('fatTgt').textContent=g.fat;
   document.getElementById('fatBar').style.width=Math.min(100,(t.f/g.fat)*100)+'%';
 }
 
