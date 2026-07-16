@@ -272,14 +272,11 @@ var KIND = {
 
 /* ═══ ALL DAYS ═══════════════════════════════════════════════ */
 var AM = function(){
-  return { id:"am", at:420, mins:35, kind:"routine", title:"Morning protocol", sub:"Sunlight \u00b7 hydrate \u00b7 breathe \u00b7 GOATA \u00b7 fascia", href:"/health.html", steps:[
+  return { id:"am", at:420, mins:25, kind:"routine", title:"Morning protocol", sub:"Sunlight \u00b7 hydrate \u00b7 breathe \u00b7 fascia \u00b7 mobility", href:"/health.html", steps:[
     {t:"Wake 7:00 \u2014 no snooze, no phone 15 min",d:"Avoid reactive dopamine spike. Let natural cortisol clear adenosine"},
     {t:"Hydrate 500ml water + pinch of salt",d:"Rehydrate from overnight fluid loss (Galpin protocol)"},
     {t:"Sunlight optic flow walk 10 min",d:"Outside within 30 min of waking. Panoramic vision, forward ambulation. Triggers 50% cortisol pulse, sets melatonin timer for tonight"},
     {t:"Diaphragmatic breathing 2 min",d:"Inhale until belly extends \u2014 creates pressure differential to move lymph from cisterna chyli back to blood. Long exhale. Clears swelling, boosts HRV"},
-    {t:"GOATA Groundwork \u2014 Ground Hip Stretch 45s each side",d:"All fours, cross leg, keep IABH (inside ankle bone high), reach foot back, head up in front column"},
-    {t:"GOATA \u2014 Child Rocker 60s \u00d7 3 (15s rest)",d:"Toes together, heels out. Head ALWAYS stays up. Ankle bone climbs higher as butt descends"},
-    {t:"GOATA \u2014 Toe Tuck Rocker 60s \u00d7 3 (15s rest)",d:"Same as child rocker but toes tucked, heels open during the rock"},
     {t:"Elevated toe curls 3 \u00d7 20s (10s rest)",d:"Curl toes over edge of step. Daily fascia foundation \u2014 strengthens plantar fascia, foot-to-glute connection"},
     {t:"Lateral Pelvic Tilts \u2014 3 positions \u00d7 30s each side",d:"Side-lying \u2192 half-kneeling \u2192 split squat. Both sides. Improves fluid movement patterns"}
   ]};
@@ -294,7 +291,7 @@ var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down",
   {t:"Room: cool/cold and very dark",d:"Body must drop 1-3\u00b0F to fall and stay deeply asleep. Feet are heat-release portals \u2014 remove socks if you wake warm"},
   {t:"LIGHTS OUT 10:00 PM",d:"9 hours before 7am wake. If you can\u2019t sleep within 20 min, do a 10-min NSDR (Non-Sleep Deep Rest) protocol instead of lying there stressing"}
 ]};
-/* GOATA + toe curls + lateral pelvic tilts now built into AM() morning protocol */
+
 
 var DAYS = {
   // Team Training variant A — Glutes & Groins + 2mi run + Upper Activation
@@ -321,7 +318,7 @@ var DAYS = {
       { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Warm-up touches + juggling \u2014 save legs for team", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set B: Sole roll stepover, fake shot sole pull, Matthews cut 4\u00d720s each (flow)",d:""},{t:"Juggling 5 min (flow)",d:"Save legs for team training"}
       ]},
-      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Focus on movement quality \u00b7 posterior chain \u00b7 positioning", href:"/train.html#soccer", steps:[
         {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
@@ -360,8 +357,8 @@ var DAYS = {
     theme:"MATCH DAY",
     mindset:"PERFORM. Everything serves the game.",
     items: [
-      { id:"am", at:450, mins:35, kind:"routine", title:"Match day morning (7:30)", sub:"Extra 30 min sleep \u00b7 sunlight \u00b7 hydrate \u00b7 breathe \u00b7 light GOATA", href:"/health.html", steps:[
-        {t:"Wake 7:30 \u2014 extra 30 min sleep for match day",d:""},{t:"Hydrate 500ml water + pinch of salt",d:""},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"GOATA Groundwork \u2014 Ground Hip Stretch 45s each side (flow)",d:"Light \u2014 just open up, don\u2019t fatigue"},{t:"GOATA \u2014 Child Rocker 60s \u00d7 2",d:"Easy"},{t:"Elevated toe curls 3 \u00d7 20s (20s rest)",d:""}
+      { id:"am", at:450, mins:35, kind:"routine", title:"Match day morning (7:30)", sub:"Extra 30 min sleep \u00b7 sunlight \u00b7 hydrate \u00b7 breathe \u00b7 light mobility", href:"/health.html", steps:[
+        {t:"Wake 7:30 \u2014 extra 30 min sleep for match day",d:""},{t:"Hydrate 500ml water + pinch of salt",d:""},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"Elevated toe curls 3 \u00d7 20s (20s rest)",d:""}
       ]},
       { id:"mob", at:540, mins:10, kind:"train", title:"Light 112mvmnt \u2014 Hips & Hammys", sub:"EASY \u2014 just open up, don\u2019t fatigue", href:"/train.html#mvmnt", steps:[
         {t:"Hip Flexor Leg Lifts light (flow)",d:""},{t:"Butterfly light (flow)",d:""},{t:"Couch Stretch 1 min each (flow)",d:""}
@@ -369,10 +366,10 @@ var DAYS = {
       { id:"walk", at:555, mins:25, kind:"routine", title:"Light walk + visualization", sub:"Walk 15 min + visualize 10 min", href:"", steps:[
         {t:"Light walk 15 min",d:""},{t:"Visualization 10 min \u2014 winning duels, perfect first touch, long throws",d:""}
       ]},
-      { id:"warmup", at:1035, mins:30, kind:"train", title:"Pre-game warm-up", sub:"GOATA \u00b7 PEP/ACL \u00b7 velocity \u00b7 ball-specific", href:"/train.html#soccer", steps:[
-        {t:"GOATA Groundwork 5 min (flow)",d:""},{t:"Lateral Pelvic Tilts 3 min (flow)",d:""},{t:"Aerobic: jog 3 min, side-step, backward run (continuous)",d:""},{t:"PEP/ACL activation 5 min (flow)",d:""},{t:"4 \u00d7 explosive sprints 20m + direction changes (60s rest)",d:""},{t:"Ball-specific: passing, shooting, Coerver (flow)",d:""}
+      { id:"warmup", at:1035, mins:30, kind:"train", title:"Pre-game warm-up", sub:"Dynamic warm-up \u00b7 PEP/ACL \u00b7 velocity \u00b7 ball-specific", href:"/train.html#soccer", steps:[
+        {t:"Dynamic hip openers 5 min (flow)",d:""},{t:"Lateral Pelvic Tilts 3 min (flow)",d:""},{t:"Aerobic: jog 3 min, side-step, backward run (continuous)",d:""},{t:"PEP/ACL activation 5 min (flow)",d:""},{t:"4 \u00d7 explosive sprints 20m + direction changes (60s rest)",d:""},{t:"Ball-specific: passing, shooting, Coerver (flow)",d:""}
       ]},
-      { id:"game", at:1080, mins:90, kind:"train", title:"GAME", sub:"GOATA in every movement. IABH, back chain, column", href:"", steps:[
+      { id:"game", at:1080, mins:90, kind:"train", title:"GAME", sub:"Move with intent. Posterior chain, sharp turns, positioning", href:"", steps:[
         {t:"Physiological sigh between plays if stressed",d:"Double inhale nose, long exhale mouth"},{t:"Panoramic vision to stay calm",d:"Shift from tunnel vision to wide gaze to lower alertness"}
       ]},
       { id:"postg", at:1170, mins:30, kind:"recover", title:"Post-game recovery", sub:"Cool-down \u00b7 stretch \u00b7 cold plunge OK", href:"/train.html#recovery", steps:[
@@ -503,7 +500,7 @@ var DAYS = {
       { id:"ball", at:780, mins:30, kind:"train", title:"Light ball work", sub:"Cognitive drills + first touch \u2014 save legs for team", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min (flow)",d:""},{t:"Set C: Sole drags + tennis ball catch, Coerver pull-push 4\u00d720s each (flow)",d:""},{t:"First Touch: wall pass open body 3\u00d78 R/L (flow)",d:"Save legs for team training"}
       ]},
-      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Apply GOATA cues \u00b7 IABH \u00b7 back chain", href:"/train.html#soccer", steps:[
+      { id:"team", at:1155, mins:105, kind:"train", title:"Team training (7:15\u20139:00)", sub:"Focus on movement quality \u00b7 posterior chain \u00b7 positioning", href:"/train.html#soccer", steps:[
         {t:"PEP/ACL warm-up if time (15 min)",d:""},{t:"Full team session",d:""},{t:"Cool-down: jog 5 min + stretch 5 min",d:""}
       ]},
       PM
@@ -777,7 +774,7 @@ var PROPOSALS = [
     apply: function(d){return d.filter(function(x){return x.id!=="activation";})} },
   { id:"p2", signal:"PROTEIN NOT LOGGED", title:"Start logging meals in Fuel today",
     apply: function(d){return d;} },
-  { id:"p3", signal:"ADDUCTORS WATCH", title:"Add 2 min adductor check to GOATA warm-up",
+  { id:"p3", signal:"ADDUCTORS WATCH", title:"Add 2 min adductor check to dynamic warm-up",
     apply: function(d){return d;} },
   { id:"p4", signal:"TEAM TRAINING", title:"Hydrate 500ml extra before 4pm \u2014 evening session",
     apply: function(d){return d;} }

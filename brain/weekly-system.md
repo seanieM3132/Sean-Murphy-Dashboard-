@@ -1,6 +1,6 @@
 # Sean's Weekly Operating System
 > Every Sunday evening: plan the week ahead with AI coach. This is the master template.
-> Integrates: Seward program, 112mvmnt mobility, GOATA movement, fascia training, Huberman protocols, game-day science.
+> Integrates: Seward program, 112mvmnt mobility, fascia training, Huberman protocols, game-day science.
 > Detailed drills: see ball-work.md and gym-program.md for full exercise specs.
 
 ---
@@ -71,17 +71,17 @@ Rotate through all 7 programs across the week. Each session = 15-25 min.
 
 ---
 
-## GOATA Groundwork (Add to EVERY Warm-Up)
+## Dynamic Warm-Up (Add to EVERY Training Session)
 
-Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
+Do these BEFORE any training session. Total: ~5 min.
 
 | Exercise | Duration | Cues |
 |----------|----------|------|
-| Ground Hip Stretch | 45-60 sec each side | All fours, cross one leg over, keep Inside Ankle Bone High (IABH), head up |
-| Child Rocker | 60 sec x 3 sets | Toes together, heels out, head up, as butt goes down ankle bone climbs higher. 15 sec rest between sets |
-| Toe Tuck Rocker | 60 sec x 3 sets | Same as child rocker but toes tucked, heels open during the rock. 15 sec rest |
+| Hip Circles (all fours) | 60 sec each side | All fours, circle each hip forward then backward, full range of motion |
+| Deep Squat Hold + Rocks | 60 sec x 2 sets | Feet shoulder-width, sink below parallel, rock side to side. 15 sec rest between sets |
+| Walking Leg Swings | 60 sec x 2 sets | Forward/backward 10x each leg, then lateral 10x each leg. 15 sec rest |
 
-**GOATA principles to carry into ALL movement:** Inside Ankle Bone High, Back Chain Dominance, Column Alignment, Heel Away from midline on ground contact.
+**Movement quality cues for ALL training:** Light feet, upright posture, posterior chain engagement, smooth transitions between movements.
 
 ---
 
@@ -91,7 +91,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |----------|-----------|----------------|------|---------|
 | Elevated Toe Curls | Daily | 3 x 20 sec | 10 sec | Curl toes over edge of step. Strengthen plantar fascia |
 | HFT Marble Swing | 3x/week | 3 x 30 sec each foot | 15 sec | Hyperarch fascia training — builds elastic recoil in foot arch |
-| Gait Cycle Drills | 3x/week | 5 min walking | 0 | Focus on heel-away, IABH, back chain loading during walking |
+| Gait Cycle Drills | 3x/week | 5 min walking | 0 | Focus on light feet, posterior chain engagement, upright posture during walking |
 | Lateral Pelvic Tilts | Pre-session | 3 positions x 30 sec each | 0 | Side-lying → half-kneeling → split squat. Both sides. Improves fluid movement |
 
 **12-week remodeling window:** Fascia adapts slowly. Stay consistent for 12 weeks before expecting structural change.
@@ -106,7 +106,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | Light recovery walk (15-20 min) or foam roll |
 | 8:20 | **112mvmnt: Hips & Hammys** (20 min) — see 112mvmnt-programs.md for full exercise list |
-| 8:45 | GOATA Groundwork (5 min) |
+| 8:45 | Dynamic Warm-Up (5 min) |
 | 8:50 | Elevated toe curls: 3 x 20 sec, 10 sec rest |
 | 9:00 | Sauna 15-20 min at 80-100°C → Cold plunge 2-3 min at 10-15°C |
 | 9:30 | Post-recovery: protein shake 30-40g |
@@ -133,7 +133,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |------|----------|
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | **112mvmnt: Shoulders & Spine** (20 min) |
-| 8:20 | GOATA Groundwork (5 min) |
+| 8:20 | Dynamic Warm-Up (5 min) |
 | 8:30 | **Seward workout of the day** (see Seward mapping below) |
 | 9:15 | **Gym: Plyometrics** (15 min — box jumps 3x5, broad jumps 3x5, single-leg bounds 3x5 each) |
 | 9:30 | **Gym: Heavy Compounds** (40 min — see gym-program.md Monday) |
@@ -165,7 +165,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |------|----------|
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | **112mvmnt: Calves & Ankles** (20 min) — see 112mvmnt-programs.md |
-| 8:20 | GOATA Groundwork (5 min) |
+| 8:20 | Dynamic Warm-Up (5 min) |
 | 8:30 | **Gym: Activation only** (25-30 min — see gym-program.md Tue/Thu) |
 | | Glute Bridges: 3x12 BW, 30 sec rest |
 | | Banded Lateral Walks: 3x10 each way, 30 sec rest |
@@ -198,7 +198,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |------|----------|
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | **112mvmnt: Glutes & Groins** (20 min) |
-| 8:20 | GOATA Groundwork (5 min) |
+| 8:20 | Dynamic Warm-Up (5 min) |
 | 8:30 | **Seward workout of the day** (see mapping below) |
 | 9:15 | **Gym: Power & Explosive** (50 min — see gym-program.md Wednesday) |
 | | Trap Bar Deadlift: 4x5-6 @ 60kg start, rest 2-3 min, EXPLOSIVE |
@@ -231,7 +231,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |------|----------|
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | **112mvmnt: Stronger Knee** (20 min) |
-| 8:20 | GOATA Groundwork (5 min) |
+| 8:20 | Dynamic Warm-Up (5 min) |
 | 8:30 | **Gym: Activation only** (25-30 min — see gym-program.md Tue/Thu) |
 | 9:00 | Elevated toe curls: 3 x 20 sec, 10 sec rest |
 | 9:05 | Morning cold plunge 1-3 min (dopamine boost) |
@@ -257,7 +257,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 |------|----------|
 | 7:00-8:00 | **Morning Protocol** (see above) |
 | 8:00 | **112mvmnt: Stronger Lower Back + Calves & Ankles** (25 min) |
-| 8:25 | GOATA Groundwork (5 min) |
+| 8:25 | Dynamic Warm-Up (5 min) |
 | 8:30 | **Seward workout of the day** (if scheduled — see mapping) |
 | 9:00 | **Speed & Acceleration Session** (30 min — see gym-program.md Speed section) |
 | | Sprint mechanics warm-up: A-skips, B-skips, high knees, wall drives, falling starts (5 min) |
@@ -301,7 +301,7 @@ Do these BEFORE any training session. 45-60 seconds each. Total: ~5 min.
 | 4:30 | Hydrate: 300ml water + electrolytes |
 | 5:00 | Travel to ground |
 | 5:15 | **PRE-GAME WARM-UP** (~30 min): |
-| | 1. GOATA Groundwork (5 min): Ground Hip Stretch 45s each side, Child Rocker 60s x 2, Toe Tuck Rocker 60s x 2 |
+| | 1. Dynamic Warm-Up (5 min): Hip Circles 60s each side, Deep Squat Hold 60s x 2, Walking Leg Swings 60s x 2 |
 | | 2. Lateral pelvic tilts: side-lying 30s → half-kneeling 30s → split squat 30s, both sides (3 min) |
 | | 3. Aerobic: light jog 3 min, side-step 1 min each way, backward run 1 min (8 min) |
 | | 4. PEP/ACL activation: walking lunges 1 min, single-leg bridge 30s/side, hip flexor stretch 30s/side (5 min) |
@@ -459,7 +459,7 @@ Every Sunday during planning session, log:
 5. **Hydrate first thing** — 500ml water + electrolytes
 6. **Touch a ball** — every day, even 15 min
 7. **Creatine 5g** — daily, no skipping
-8. **GOATA Groundwork** — before every training session
+8. **Dynamic Warm-Up** — before every training session
 9. **112mvmnt mobility** — every day, rotate programs
 10. **Fascia work** — elevated toe curls daily, full fascia 3x/week
 11. **Cool-down after every session** — jog + stretch, non-negotiable

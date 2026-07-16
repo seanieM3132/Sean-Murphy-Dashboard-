@@ -10,11 +10,11 @@ export const FRIDAY_SPEED: SessionTemplate = {
       tone: 'prime', minutes: 15,
       groups: [
         {
-          label: 'Groundwork', note: 'GOATA \u00B7 every session, barefoot',
+          label: 'Groundwork', note: 'Dynamic hip openers \u00B7 every session, barefoot',
           exercises: [
-            { type: 'hold', id: 'p1', name: 'Ground hip stretch', sets: 2, secs: 50, side: true, rest: 30, cue: 'Keep IABH.' },
-            { type: 'hold', id: 'p2', name: 'Child rocker', sets: 3, secs: 60, rest: 20, cue: 'Head stays up.' },
-            { type: 'hold', id: 'p3', name: 'Toe tuck rocker', sets: 3, secs: 60, rest: 20, cue: 'Heels open.' },
+            { type: 'hold', id: 'p1', name: 'Hip opener stretch', sets: 2, secs: 50, side: true, rest: 30, cue: 'Hips square.' },
+            { type: 'hold', id: 'p2', name: 'Kneeling hip rocker', sets: 3, secs: 60, rest: 20, cue: 'Head stays up.' },
+            { type: 'hold', id: 'p3', name: 'Kneeling toe rocker', sets: 3, secs: 60, rest: 20, cue: 'Heels open.' },
             { type: 'drill', id: 'p4', name: 'Elevated toe curls', sets: 3, work: '20 curls', rest: 30, cue: 'Slow. Feel the arch.' },
           ],
         },
@@ -102,7 +102,7 @@ export const FRIDAY_SPEED: SessionTemplate = {
           label: 'Fascia', note: 'Coach Chong Xie \u00B7 Mon / Wed / Fri', locked: true,
           exercises: [
             { type: 'hold', id: 'r1', name: 'HFT marble swing', sets: 3, secs: 30, side: true, rest: 15, cue: 'Each foot.' },
-            { type: 'drill', id: 'r2', name: 'Gait cycle drills', sets: 1, work: '5 min', rest: 30, cue: 'Heel-away, IABH, back chain.' },
+            { type: 'drill', id: 'r2', name: 'Gait cycle drills', sets: 1, work: '5 min', rest: 30, cue: 'Movement quality, posterior chain loading.' },
           ],
         },
         {

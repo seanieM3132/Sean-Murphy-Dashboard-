@@ -39,14 +39,14 @@
 | Velocity phase | ~2 min | Explosive sprints, jumps, direction changes |
 | Ball-specific | ~8 min | Technical ball work, passing, shooting |
 
-### GOATA Groundwork (Joint Decompression & Patterning)
-Perform these for **45-60 seconds** each to "recode" natural movement patterns:
+### Dynamic Mobility (Joint Preparation & Activation)
+Perform these for **45-60 seconds** each to prepare the body for movement:
 
 | Exercise | Coaching Cues |
 |:---|:---|
-| **Ground Hip Stretch** | All fours; cross one leg over; keep Inside Ankle Bone High (IABH); head up |
-| **Child Rocker** | Toes together, heels out; head up; as butt goes down, ankle bone climbs higher |
-| **Toe Tuck Rocker** | Same as child rocker but with toes tucked; ensures heels open during the rock |
+| **Hip Circles (all fours)** | All fours; circle each hip 10x forward, 10x backward; full range of motion |
+| **Deep Squat Hold** | Feet shoulder-width, sink hips below knees; hold and gently rock side to side |
+| **Walking Leg Swings** | Forward/backward swings 10x each leg, then lateral swings 10x each leg |
 
 ### PEP Program (ACL Prevention -- reduces ACL injuries up to 70%)
 This is a 15-20 minute routine:

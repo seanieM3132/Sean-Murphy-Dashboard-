@@ -707,11 +707,11 @@ const BRAIN_VIDEOS = [
   { id: "DZER3GNmEwo", title: "THE 5 BEST SKILLS for WINGBACKS", channel: "Takuya", cat: "Football Skills" },
   { id: "IcQXkzMvvlQ", title: "5 Ball Mastery Drills Instagram Challenge | Joner Football", channel: "Joner Football", cat: "Football Skills" },
   { id: "-hZJ1CADebQ", title: "Football Training Video", channel: "Unknown", cat: "Football Skills" },
-  { id: "qK6Rh_XODFw", title: "Eliminate Knee Pain & Become GOATA", channel: "Mark Bell", cat: "GOATA Movement" },
-  { id: "neOoDUAjX2o", title: "Fix Faulty Movement Patterns with These GOATA Exercises!", channel: "Mark Bell", cat: "GOATA Movement" },
-  { id: "UOXD_0ctRYs", title: "Humans Are Moving Wrong, GOATA is the Answer", channel: "Mark Bell's Power Project", cat: "GOATA Movement" },
-  { id: "LNZJgbVAEKI", title: "Art of Move Podcast 55 - GOATA Founder Jose Boesch aka Coach Gil", channel: "Anthony Manuele", cat: "GOATA Movement" },
-  { id: "59qFZsNhI8s", title: "GOATA Coaches Gil Boesch, Gary Scheffler & Ricky Stanzi: Reclaim Your Birthright", channel: "Mark Bell's Power Project", cat: "GOATA Movement" },
+  { id: "qK6Rh_XODFw", title: "Eliminate Knee Pain with Movement Training", channel: "Mark Bell", cat: "Movement Quality" },
+  { id: "neOoDUAjX2o", title: "Fix Faulty Movement Patterns with These Exercises!", channel: "Mark Bell", cat: "Movement Quality" },
+  { id: "UOXD_0ctRYs", title: "Humans Are Moving Wrong - Movement Retraining", channel: "Mark Bell's Power Project", cat: "Movement Quality" },
+  { id: "LNZJgbVAEKI", title: "Art of Move Podcast 55 - Natural Movement Patterns", channel: "Anthony Manuele", cat: "Movement Quality" },
+  { id: "59qFZsNhI8s", title: "Reclaim Your Natural Movement Birthright", channel: "Mark Bell's Power Project", cat: "Movement Quality" },
   { id: "pK5jcQalrSs", title: "FIFA 11+ Complete Warm-up Program - Part I - Running Exercises", channel: "University of Iowa Health Care", cat: "Warm-up & Prehab" },
   { id: "RSJIp7e7fyY", title: 'The "11+" Warm-up: Part 1', channel: "FIFA", cat: "Warm-up & Prehab" },
   { id: "onv3QA6DC4Y", title: "Nutrition, Hydration & Health [Science of NFL Football]", channel: "National Science Foundation", cat: "Nutrition & Hydration" },
@@ -896,7 +896,7 @@ YOUR COACHING RULES:
 1. Always ground advice in the specific videos from the library. When referencing knowledge from a video, cite it with the video title and link.
 2. Be specific and actionable — give exact exercises, sets, reps, timings, protocols.
 3. Consider the athlete's profile (position, goals, injuries, schedule) when giving advice.
-4. Cross-reference across categories: combine Huberman Lab science with football training, GOATA movement with injury prevention, nutrition with performance.
+4. Cross-reference across categories: combine Huberman Lab science with football training, movement quality with injury prevention, nutrition with performance.
 5. When asked about training plans, structure them around the athlete's actual schedule.
 6. Be direct, motivating, and concise. No fluff.
 7. If a question falls outside your video library knowledge, say so honestly but still give your best advice.
@@ -965,7 +965,7 @@ function hideTyping() {
 function renderFullChat() {
   chatMessages.innerHTML = '';
   if (chatHistory.length === 0) {
-    renderMessage('assistant', "Hey! I'm your AI performance coach. I've studied all **" + BRAIN_VIDEOS.length + " videos** in your library — from Matt Stigler's football training to Huberman Lab science to GOATA movement.\n\nFill out your **Profile** tab so I can personalize every answer to your goals, position, and schedule.\n\nAsk me anything — training plans, nutrition, recovery, skills, or mindset.");
+    renderMessage('assistant', "Hey! I'm your AI performance coach. I've studied all **" + BRAIN_VIDEOS.length + " videos** in your library — from Matt Stigler's football training to Huberman Lab science to movement quality training.\n\nFill out your **Profile** tab so I can personalize every answer to your goals, position, and schedule.\n\nAsk me anything — training plans, nutrition, recovery, skills, or mindset.");
   } else {
     chatHistory.forEach(m => renderMessage(m.role, m.content));
   }

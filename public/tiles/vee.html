@@ -401,7 +401,7 @@ const QUOTES=[
 {t:"You're not training to be good enough. You're training to be undeniable.",a:"Coach Khabib"},
 {t:"Endurance is your weakness. That means endurance is your biggest opportunity.",a:"Coach Khabib"},
 {t:"Every meal is a deposit. Every sleep is a deposit. Every session is a deposit. Compound interest wins.",a:"Coach Khabib"},
-{t:"The guy who does GOATA and mobility when nobody is watching \u2014 that's the guy who stays healthy all season.",a:"Coach Khabib"},
+{t:"The guy who does mobility and movement work when nobody is watching \u2014 that's the guy who stays healthy all season.",a:"Coach Khabib"},
 {t:"July 28 is coming whether you're ready or not. Be ready.",a:"Coach Khabib"},
 ];
 
@@ -413,7 +413,7 @@ const HABITS=[
 {text:"Eat breakfast (3 eggs minimum)",time:"7:30"},
 {text:"Creatine 5g",time:"7:30"},
 {text:"Touch a ball (minimum 20 min)",time:"vary"},
-{text:"GOATA groundwork (10 min)",time:"AM"},
+{text:"Dynamic hip openers (10 min)",time:"AM"},
 {text:"112mvmnt mobility (10 min)",time:"AM"},
 {text:"Sauna / ice bath post-training",time:"post"},
 {text:"Cool-down after every session",time:"post"},
@@ -426,7 +426,7 @@ const PLANS={
 1:{name:"Speed & Acceleration Drills",duration:"75 min",intensity:4,type:"Speed",focus:["Sprint mechanics","Acceleration","Agility ladder","Reaction drills","Short shuttle runs"]},
 2:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Passing patterns","Team shape","Match prep","Coach instructions"]},
 3:{name:"Gym + Ball Work",duration:"90 min",intensity:4,type:"Strength",focus:["Compound lifts","Core stability","Ball mastery","Passing wall","Weak foot work"]},
-4:{name:"Gym + GOATA / 112mvmnt",duration:"80 min",intensity:3,type:"Movement",focus:["Strength training","GOATA groundwork","112mvmnt flows","Fascia work","Hip mobility"]},
+4:{name:"Gym + Mobility / 112mvmnt",duration:"80 min",intensity:3,type:"Movement",focus:["Strength training","Dynamic hip openers","112mvmnt flows","Fascia work","Hip mobility"]},
 5:{name:"Match Day",duration:"Full day",intensity:5,type:"Match",focus:["Pre-match routine","Hydration","Mental prep","Full 90 min","Post-match recovery"]},
 6:{name:"Melbourne Seniors Training",duration:"90 min",intensity:3,type:"Team",focus:["Tactical work","Set pieces","Positioning","CM/CDM role play","Recovery run"]},
 };
@@ -549,7 +549,7 @@ function renderReadiness(){
 
   // Compute sub-scores
   const morningHabits=[0,1,2,3,4,5]; // wake, sunlight, phone, hydrate, breakfast, creatine
-  const trainingHabits=[6,7,8,9,10]; // ball, goata, 112mvmnt, sauna, cooldown
+  const trainingHabits=[6,7,8,9,10]; // ball, hip openers, 112mvmnt, sauna, cooldown
   const recoveryHabits=[11,12]; // journal, sleep
 
   const morningPct=calcSubPct(today,morningHabits);

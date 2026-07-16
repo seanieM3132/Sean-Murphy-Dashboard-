@@ -1,6 +1,6 @@
 # Complete Recovery & Training System
 > Every protocol with exact times, durations, and logic. The single source of truth.
-> Combines: Huberman, Galpin, Matt Stigler, GOATA, 112MVMNT, Coach Chong Xie, Ollie Watkins, Man City protocols.
+> Combines: Huberman, Galpin, Matt Stigler, 112MVMNT, Coach Chong Xie, Ollie Watkins, Man City protocols.
 
 ---
 
@@ -12,9 +12,7 @@
 |------|----------|---------|-----|
 | Sunlight walk (optic flow) | 10 min | Outside, no sunglasses. Forward walking. Panoramic gaze. Longer on cloudy days | Triggers 50% cortisol pulse. Clears adenosine. Sets melatonin timer 16h later |
 | Hydrate | 1 min | 500ml water + electrolytes + pinch salt | Replace overnight losses. First drink before anything else |
-| GOATA: Ground hip stretch | 2 min | 45-60s each side. All fours, cross leg, keep IABH, head up | Recodes natural spiral movement patterns |
-| GOATA: Child rocker | 2 min | 3 x 60s. Toes together, heels out. Ankle bone climbs as butt descends | Joint decompression and patterning |
-| GOATA: Toe tuck rocker | 2 min | 3 x 60s. Toes tucked. Heels open during the rock | Fascia activation from the ground up |
+| Dynamic mobility (hip circles, leg swings, cat-cow) | 4 min | 60s each movement. Gentle, full range of motion | Wake up joints and prepare for the day |
 | Elevated toe curls | 1 min | 3 x 20s, 10s rest. Over step edge | Plantar fascia strengthening. Daily, no skipping |
 
 ### Evening Wind-Down (55 min — EVERY NIGHT)
@@ -122,7 +120,7 @@
 | Elevated toe curls | 2 min | 3 x 20s, 10s rest. Over step edge |
 | HFT marble swing — right foot | 2 min | 3 x 30s, 15s rest. Hyperarch fascia training. Elastic recoil |
 | HFT marble swing — left foot | 2 min | 3 x 30s, 15s rest. Mirror right foot |
-| Gait cycle drills | 5 min | Walking: heel-away, IABH, back chain loading. Feel the spiral |
+| Gait cycle drills | 5 min | Walking: light feet, posterior chain engagement, upright posture |
 | Lateral pelvic tilts: side-lying | 2 min | 30s each side. Improves fluid movement |
 | Lateral pelvic tilts: half-kneeling | 2 min | 30s each side. Progress from side-lying |
 | Lateral pelvic tilts: split squat | 2 min | 30s each side. Final position |

@@ -1,6 +1,6 @@
 # Sean Murphy — Complete Daily Plan: July 9 to Departure
 > Every single day planned hour-by-hour. Nothing missed.
-> Integrates: Seward program, gym programming, 112mvmnt mobility, GOATA groundwork, fascia training, ball work, long throws, speed sessions, sauna/ice bath, nutrition, supplements, sleep protocols, mindset, game film, weekly planning.
+> Integrates: Seward program, gym programming, 112mvmnt mobility, fascia training, ball work, long throws, speed sessions, sauna/ice bath, nutrition, supplements, sleep protocols, mindset, game film, weekly planning.
 > Location: Melbourne, Australia. Team training Tue/Thu evenings. Match day Saturday.
 > Fly out: ~July 24-26. Report to Seward: July 28. Fitness test Day 1 of preseason.
 
@@ -13,7 +13,7 @@
 3. Hydrate first: 500ml water + electrolytes + pinch salt.
 4. EAT BREAKFAST -- never skip. 3 eggs + toast + fruit OR oats + banana + protein shake. 30-60g carbs + 20g protein.
 5. Creatine 5g with breakfast. Every. Single. Day.
-6. GOATA Groundwork before every training session (5 min: Ground Hip Stretch 45-60s each side, Child Rocker 60s x 3, Toe Tuck Rocker 60s x 3).
+6. Dynamic Warm-Up before every training session (5 min: Hip Circles 60s each side, Deep Squat Hold 60s x 2, Walking Leg Swings 60s x 2).
 7. 112mvmnt mobility -- rotate daily per schedule below.
 8. Touch a ball -- every day, minimum 15 min.
 9. Elevated toe curls -- daily, 3 x 20 sec, 10 sec rest.
@@ -49,7 +49,7 @@ Delay 90-120 min after waking (until ~8:30-9:00am). Exception: match day -- take
 
 ### Fascia Training (Mon, Wed, Fri)
 - HFT Marble Swing: 3 x 30 sec each foot, 15 sec rest
-- Gait Cycle Drills: 5 min walking with GOATA cues (heel-away, IABH, back chain loading)
+- Gait Cycle Drills: 5 min walking with quality cues (light feet, posterior chain engagement, upright posture)
 - Lateral Pelvic Tilts: 3 positions x 30 sec each (side-lying -> half-kneeling -> split squat), both sides
 
 ### Nordic Program (Mon + Wed)
@@ -82,7 +82,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:15-7:25 | Breakfast | 3 eggs + toast + fruit. 30-60g carbs + 20g protein |
 | 7:25 | Creatine 5g, Vitamin D3, Omega-3 | Take with food |
 | 7:30 | 112mvmnt: Glutes & Groins (20 min) | Dynamic Leg Lifts 3x5, Tailor's Pose 3x8, Kneeling Tilt 3x8, Elevated Pigeon 1 min, Standing Pancake 1 min, Wall Straddle 2 min, Horse Stance 3x30s |
-| 7:50 | GOATA Groundwork (5 min) | Ground Hip Stretch 45s each side, Child Rocker 60s x 3, Toe Tuck Rocker 60s x 3 |
+| 7:50 | Dynamic Warm-Up (5 min) | Hip Circles 60s each side, Deep Squat Hold 60s x 2, Walking Leg Swings 60s x 2 |
 | 7:55 | Elevated toe curls: 3 x 20 sec, 10 sec rest | Daily fascia foundation |
 | 8:00 | Lateral Pelvic Tilts (3 min) | Side-lying 30s, half-kneeling 30s, split squat 30s -- both sides |
 | 8:05 | **SEWARD: 2 mile run** | Pace yourself -- this is the first day. Aim for a solid time you can improve on. Track the time |
@@ -135,7 +135,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | Sunlight 10 min, hydrate 500ml + electrolytes, no phone 15 min |
 | 7:25 | Breakfast | Oats + banana + protein shake. Creatine 5g, D3, Omega-3 |
 | 7:50 | 112mvmnt: Stronger Knee (20 min) | Banded Knee Extension 3x20, Iso Lunge Hold 3x30s, Reverse Step-Up 3x6, Slant Board Squat 3x6-8, Reverse Nordic 3x5, Knee IR/ER 2x5 each |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls: 3 x 20 sec | |
 | 8:20 | **SEWARD: Workout B** | Walking pushups: 4 sets x 7 (pushup, walk 90, pushup, walk back = 1 rep). Lunges: 5 sets x 10 each leg |
 | 8:50 | **SEWARD: Abs 2** | Front plank 3x1 min, Left side plank 3x1 min, Right side plank 3x1 min |
@@ -151,7 +151,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 4:15 | Caffeine: 1-3mg/kg | Coffee or pre-workout |
 | 4:30 | Hydrate: 300-500ml + electrolytes | |
 | 4:45 | PEP/ACL warm-up if time (15 min) | Jog, shuttle, backward run, flexibility, strength, plyometrics |
-| 5:00+ | **TEAM TRAINING** | Apply GOATA cues in all movement. IABH, back chain, column alignment |
+| 5:00+ | **TEAM TRAINING** | Focus on movement quality: light feet, posterior chain engagement, upright posture |
 | Post | Cool-down: light jog 5 min + static stretch 5 min | Glutes 30s, hammys 30s, quads 30s, groin 30s, calves 30s each side |
 | Home | Dinner within 1 hour | 3:1 carb-to-protein ratio for glycogen. Starchy carbs for sleep |
 | Home | Hydrate: 125-150% of fluid lost | |
@@ -171,7 +171,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | Oats + banana + honey. Creatine 5g, D3, Omega-3 |
 | 7:50 | 112mvmnt: Stronger Lower Back (15 min) + Calves & Ankles (10 min) | LB: Forward Fold 1 min, Active Cobra 3x5, Hamstring Extension 3x30s, World's Greatest Stretch 1 min/side, Banded Rotation 1 min, Seated Good Mornings 3x6, Inner Thigh Lifts 3x3x5s, Banded IR 3x3x5s, Big Twist 1 min. CA: Slant board calf raise 3x8-10, Bent-leg calf raise 3x8-10, Tib raises 3x8-10, Foot stretch + hack squat, Banded ankle DF 2 min, Deep squat elevated 4 min, Elevated seiza 1 min |
-| 8:15 | GOATA Groundwork (5 min) | |
+| 8:15 | Dynamic Warm-Up (5 min) | |
 | 8:20 | **SEWARD: Workout C + Abs 1** | Clap push-ups 5x15 (or max), Calf jumps 1/4 squat 5x30, Calf jumps max height 5x15. Then Abs 1 |
 | 8:55 | **Speed & Acceleration Session (30 min)** | |
 | | Sprint mechanics warm-up (5 min) | A-skips 2x20m, B-skips 2x20m, High knees 2x20m, Wall drives 2x8 each, Falling starts 3x15m |
@@ -221,13 +221,13 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 4:30 | Hydrate: 300ml + electrolytes | |
 | 5:00 | Travel to ground | |
 | 5:15 | **PRE-GAME WARM-UP (~30 min)** | |
-| | 1. GOATA Groundwork (5 min) | Ground Hip Stretch 45s each, Child Rocker 60s x 2, Toe Tuck Rocker 60s x 2 |
+| | 1. Dynamic Warm-Up (5 min) | Hip Circles 60s each side, Deep Squat Hold 60s x 2, Walking Leg Swings 60s x 2 |
 | | 2. Lateral Pelvic Tilts (3 min) | Side-lying 30s -> half-kneeling 30s -> split squat 30s, both sides |
 | | 3. Aerobic (8 min) | Light jog 3 min, side-step 1 min each way, backward run 1 min |
 | | 4. PEP/ACL activation (5 min) | Walking lunges 1 min, single-leg bridge 30s/side, hip flexor stretch 30s/side |
 | | 5. Velocity (4 min) | 4 x explosive sprints 20m + 2 x direction changes, 30 sec rest |
 | | 6. Ball-specific (5 min) | Passing pairs 2 min, shooting 2 min, Coerver pull-push 1 min |
-| 6:00+ | **GAME** | GOATA in every movement. IABH, back chain, column. Physiological sigh between plays if stressed. Panoramic vision to stay calm |
+| 6:00+ | **GAME** | Move with quality: light feet, upright posture, smooth transitions. Physiological sigh between plays if stressed. Panoramic vision to stay calm |
 | Post | Cool-down: light jog 5 min + static stretch 5 min | Glutes, hammys, quads, groin, calves 30s each side |
 | Post | Protein shake + banana immediately | |
 | Home | **Dinner** within 1 hour | 3:1 carb-to-protein. Rice + protein + veg |
@@ -250,7 +250,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:25 | Breakfast | Big breakfast. 3 eggs + toast + fruit + protein shake. You need fuel today |
 | 7:50 | Light recovery walk (15-20 min) or foam roll | Easy movement, get blood flowing |
 | 8:10 | 112mvmnt: Hips & Hammys (20 min) | Full program: Hip Flexor Leg Lifts 3x3x5s, Banded Hamstring Stretch 3x3x5s, Hamstring Block Crush 1x3x10s, Hip 90/90 IR 3x3x5s, Butterfly CRAC 3x6x10s, Banded Hip Flexion 1x3x10s, Lateral Hip Flexion 3x3x5s, Wall Frog + IR 3x4x5s, Couch Stretch 2x1 min |
-| 8:30 | GOATA Groundwork (5 min) | |
+| 8:30 | Dynamic Warm-Up (5 min) | |
 | 8:35 | Elevated toe curls: 3 x 20 sec | |
 | 8:40 | **SEWARD: Workout D (moved from Saturday)** | Decline push-ups 5x10, Diamond push-ups 5x11, Vertical wall jumps 5x20, Single leg jumps 5x10 each, Calf raises (hold 5s) 10x20 |
 | 9:10 | Cool-down + stretch 5 min | |
@@ -285,7 +285,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | 3 eggs + toast + fruit. Creatine 5g, D3, Omega-3 |
 | 7:50 | 112mvmnt: Shoulders & Spine (20 min) | Banded T-Spine Rotations 3x5, Thoracic Rotation Stretch 45-60s, Inverted Cat 60s, End-Range Lift-Offs 3x3x5s, Hands Behind 60s, Banded Extension IsoHolds 1x5x10s, Shoulder Circles 3x5, Barbell + Roller T-Spine 3x45s, Pullovers 3x5-8, Seal Stretch 60s, Active Cobra 3x3x5s, Thoracic Bridge 1-2x30s |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | **SEWARD: Workout B** | Walking pushups 4x7, Lunges 5x10 each |
 | 8:45 | **SEWARD: Jump Rope 2** | 3 sets x 100 jumps, 30 sec rest (no rope = do movements without) |
 | 8:55 | **SEWARD: Abs 1** | 25 crunches, 25 sit-ups, 25 scissors, 3 Supermans 5s, 25 crunches |
@@ -328,7 +328,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | Creatine 5g, D3, Omega-3 |
 | 7:50 | 112mvmnt: Calves & Ankles (20 min) | Slant board calf raise 3x8-10, Bent-leg calf raise 3x8-10, Tib raises 3x8-10, Foot stretch + hack squat, Banded ankle DF 2 min, Deep squat elevated 4 min, Elevated seiza 1 min |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls: 3 x 20 sec | |
 | 8:20 | **SEWARD: Workout A** | Wide pushups 4x10, Normal pushups 4x10, Burpees 5x10, Squats 5x10, Knees to Chest 3x15 |
 | 9:00 | **SEWARD: Jump Rope 2** | 3 x 100 jumps, 30 sec rest |
@@ -360,10 +360,10 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | Big breakfast -- sprint day needs fuel |
 | 7:50 | 112mvmnt: Glutes & Groins (20 min) | Full program |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls + Lateral Pelvic Tilts | |
 | 8:20 | Sprint mechanics warm-up (5 min) | A-skips, B-skips, high knees, wall drives, falling starts |
-| 8:25 | **SEWARD: 10x 100-yard sprints at FULL SPEED** | 30 sec to max 1 min recovery between each. FULL SEND. Apply GOATA sprint mechanics: foot strike under hips, 90 deg angles, IABH |
+| 8:25 | **SEWARD: 10x 100-yard sprints at FULL SPEED** | 30 sec to max 1 min recovery between each. FULL SEND. Apply clean sprint mechanics: foot strike under hips, 90 deg angles, drive with posterior chain |
 | 8:50 | **SEWARD: Abs 1** | |
 | 9:00 | **Gym: Power & Explosive (50 min)** | |
 | | Trap Bar Deadlift | 4x5-6, EXPLOSIVE |
@@ -395,7 +395,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | Big breakfast -- you need fuel for 2 miles today |
 | 7:50 | 112mvmnt: Stronger Knee (20 min) | Full program |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls | |
 | 8:20 | **SEWARD: 1 Mile run (TIMED -- write it down)** | Push hard. This is your baseline |
 | 8:30 | 1 min rest | |
@@ -427,7 +427,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | |
 | 7:50 | 112mvmnt: Stronger Lower Back + Calves & Ankles (25 min) | |
-| 8:15 | GOATA Groundwork (5 min) | |
+| 8:15 | Dynamic Warm-Up (5 min) | |
 | 8:20 | **SEWARD: 2 mile run** | Track time vs. July 9. Are you faster? You should be |
 | 8:40 | **SEWARD: Abs 1** | |
 | 8:50 | **SEWARD: Jump Rope 2** | 3 x 100 jumps |
@@ -467,8 +467,8 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 4:00 | Caffeine 1-3mg/kg | |
 | 4:30 | Hydrate 300ml + electrolytes | |
 | 5:00 | Travel | |
-| 5:15 | Pre-game warm-up (full protocol -- same as July 12) | GOATA, pelvic tilts, aerobic, PEP, velocity, ball-specific |
-| 6:00+ | **GAME** | Apply everything. GOATA movement. Scan before every ball. Physiological sigh if stressed |
+| 5:15 | Pre-game warm-up (full protocol -- same as July 12) | Dynamic warm-up, pelvic tilts, aerobic, PEP, velocity, ball-specific |
+| 6:00+ | **GAME** | Apply everything. Quality movement. Scan before every ball. Physiological sigh if stressed |
 | Post | Cool-down, shake + banana, dinner within 1 hr, rehydrate | |
 | Post | **NO sauna or ice bath** | |
 | 10:00 | LIGHTS OUT | |
@@ -488,7 +488,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:25 | Breakfast -- EAT BIG | You have two Seward sessions today |
 | 7:50 | Light recovery walk (15 min) or foam roll | |
 | 8:10 | 112mvmnt: Hips & Hammys (20 min) | Full program |
-| 8:30 | GOATA Groundwork (5 min) | |
+| 8:30 | Dynamic Warm-Up (5 min) | |
 | 8:35 | Elevated toe curls | |
 | 8:40 | **SEWARD: Workout A (moved from Saturday)** | Wide pushups 4x10, Normal pushups 4x10, Burpees 5x10, Squats 5x10, Knees to Chest 3x15 |
 | 9:10 | Cool-down + stretch | |
@@ -499,7 +499,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 12:00 | **Lunch -- EAT BIG** | Extra fuel for afternoon sprints |
 | 1:00 | Ball work (30-45 min) | Set B + First Touch |
 | 1:45 | Rest + hydrate + snack | |
-| 2:30 | **SEWARD: 5x40yd sprints** | 5 sprints, 30 sec between = 1 set. 5 min rest between sets. **DO 5 SETS (25 total sprints)**. Full speed. GOATA sprint cues |
+| 2:30 | **SEWARD: 5x40yd sprints** | 5 sprints, 30 sec between = 1 set. 5 min rest between sets. **DO 5 SETS (25 total sprints)**. Full speed. Clean sprint mechanics |
 | 3:15 | Cool-down + stretch | |
 | 3:25 | Post-sprint shake + banana | |
 | 3:30 | Rest | |
@@ -519,7 +519,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | |
 | 7:50 | 112mvmnt: Shoulders & Spine (20 min) | Full program |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | **SEWARD: Workout D** | Decline push-ups 5x10, Diamond push-ups 5x11, Vertical wall jumps 5x20, Single leg jumps 5x10 each, Calf raises 10x20 (hold 5s) |
 | 8:50 | **SEWARD: Abs 2** | Planks 3x1 min each position |
 | 9:05 | **Gym: Plyometrics (15 min)** | Box Jumps 3x5, Broad Jumps 3x5, Single-Leg Bounds 3x5 each |
@@ -556,7 +556,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast -- EXTRA BIG | You need maximum fuel. 4 eggs + toast + banana + protein shake |
 | 7:50 | 112mvmnt: Calves & Ankles (20 min) | |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls | |
 | 8:20 | **SEWARD: Workout B** | Walking pushups 4x7, Lunges 5x10 each |
 | 8:50 | **SEWARD: Abs 1** | |
@@ -589,7 +589,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | |
 | 7:25 | Breakfast | |
 | 7:50 | 112mvmnt: Glutes & Groins (20 min) | |
-| 8:10 | GOATA Groundwork (5 min) | |
+| 8:10 | Dynamic Warm-Up (5 min) | |
 | 8:15 | Elevated toe curls + Lateral Pelvic Tilts | |
 | 8:20 | **SEWARD: Abs 1** | 25 crunches, 25 sit-ups, 25 scissors, 3 Supermans, 25 crunches |
 | 8:30 | **SEWARD: Abs 2** | Front plank 3x1 min, L side plank 3x1 min, R side plank 3x1 min |
@@ -633,7 +633,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 7:00 | Wake. Morning protocol | Same as always -- don't break the habit now |
 | 7:25 | Breakfast | Creatine 5g -- don't miss |
 | 7:50 | 112mvmnt: Stronger Knee (15 min, light) | Maintenance only |
-| 8:05 | GOATA Groundwork (5 min) | |
+| 8:05 | Dynamic Warm-Up (5 min) | |
 | 8:10 | Elevated toe curls | |
 | 8:15 | Light jog (15 min) + dynamic stretching | Keep the body moving, don't go hard |
 | 8:30 | Light ball touches (15 min) | Juggling, sole rolls, wall passes. Just feel the ball |
@@ -662,7 +662,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 | 5 | Eat protein at every meal -- don't rely on plane food alone (pack protein bars) |
 | 6 | Upon landing: get sunlight ASAP to reset circadian clock to Kansas time |
 | 7 | If there's a layover: walk, stretch, do bodyweight squats/lunges in the airport |
-| 8 | On arrival day: do 15 min of GOATA Groundwork + elevated toe curls + light stretching to "wake up" the body |
+| 8 | On arrival day: do 15 min of dynamic warm-up + elevated toe curls + light stretching to "wake up" the body |
 | 9 | First night in Kansas: full evening protocol. Sleep stack. Get on 10pm lights out immediately |
 | 10 | Day before report: light jog, ball touches, visualization. Be ready for the fitness test |
 
@@ -674,7 +674,7 @@ Phase 1: Banded assisted nordic curls, 3-4 sets x 5-8 reps, 3-4 sec tempo, 90 se
 What you bring with you:
 - 15 days of Seward summer workout COMPLETED
 - Progressive overload gym program with logged weights
-- GOATA movement patterns embedded in how you move
+- Quality movement patterns embedded in how you move
 - Fascia training foundation started (continue at Seward)
 - Nordic hamstring program Phase 1 in progress
 - 112mvmnt mobility routine you can do anywhere
@@ -695,7 +695,6 @@ What you bring with you:
 | **Huberman Lab** | Morning sunlight protocol, caffeine timing (90-120 min delay), sleep stack (Mg Threonate + Apigenin + Theanine), NSDR, dopamine management, optic flow walks, physiological sigh, cold exposure dopamine protocol, sauna protocols, 90-min work blocks, habit formation (21-day system, task-bracketing), temperature regulation for sleep |
 | **Dr. Andy Galpin** | Hydration equation (BW lbs / 30 = oz per 15 min), electrolyte ratios (3:1 sodium:potassium), protein targets (1g/lb BW), carb loading (7-10g/kg), post-exercise 3:1 carb:protein, 125-150% rehydration, periodization (accumulation/potentiation/realization), 80/20 training intensity rule |
 | **Matt Stigler** | Upper body routine for pitch performance, plyometric progressions (split squat jumps, weighted lateral bounds), core training (stiffness vs fluidity vs speed), push-up drop catches (impulse training), push press speed transition, periodization phases, footballer gym splits |
-| **GOATA / Coach Gil** | Inside Ankle Bone High (IABH), Back Chain Dominance, Column Alignment, Heel Away, Ground Hip Stretch, Child Rocker, Toe Tuck Rocker, GOATA Wall Sit, Column Pressure Hold, sprint mechanics (foot under hips, 90-deg angles), The Bow and Corner |
 | **Hyperarch Fascia Training (Coach Chong Xie)** | Elevated toe curls (daily), HFT Marble Swing, HFT Gait Cycles, lateral pelvic tilts, 12-week fascia remodeling window, tensegrity principles, foot-to-glute connection |
 | **Coerver Coaching** | Pull-Push drill (speed test baseline), faints (1v1 skill moves), ball mastery warm-up patterns |
 | **Berbatov** | "Ball and a Wall" first touch training, dancing with the ball, reacting to bad touches |
