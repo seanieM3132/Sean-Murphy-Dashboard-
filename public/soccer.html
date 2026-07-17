@@ -250,8 +250,6 @@ input{font-family:inherit;}
 <section class="c-hero" id="hero"></section>
 <div id="matchEditor"></div>
 
-<section class="c-coach" id="coach"></section>
-
 <nav class="c-tabs" role="tablist" id="tabs"></nav>
 
 <main class="c-main" id="main"></main>
@@ -457,19 +455,6 @@ function getSession(dayIdx) {
   return FULL_SESSIONS[soloCount % FULL_SESSIONS.length];
 }
 
-/* ═══ Khabib ═══════════════════════════════════════════════════ */
-function khabib(today) {
-  if(MATCH.bye) return { tone: "good", line: "Bye week. No match pressure. Double down on weak foot (" + WEAK_FOOT + "%), long throws, and the things you can\u2019t train under fatigue." };
-  var m = -1;
-  for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { m = i; break; } }
-  var days = m === -1 ? null : m - today;
-  if (days === 0) return { tone: "hot", line: "Match today. Nothing on this page matters now. Warm up, play." };
-  if (days === 1) return { tone: "hot", line: "Match tomorrow. Keep tonight light \u2014 touch and shape, nothing that leaves you sore." };
-  if (days === 2) return { tone: "good", line: "Two days out. Sharp and short. Volume was yesterday\u2019s job." };
-  if (days === null || days < 0) return { tone: "good", line: "No match this week. Double down \u2014 weak foot is at " + WEAK_FOOT + "% and it won\u2019t fix itself in season." };
-  return { tone: "good", line: "Match in " + days + " days. Load now, sharpen later." };
-}
-
 /* ═══ STATE ═══════════════════════════════════════════════════ */
 var state = {
   tab: "team",
@@ -503,7 +488,6 @@ function weekLoad() {
 
 /* ═══ RENDER ═════════════════════════════════════════════════ */
 function render() {
-  var k = khabib(TODAY);
   var matchIdx = -1;
   for (var i = 0; i < WEEK.length; i++) { if (WEEK[i].kind === "match") { matchIdx = i; break; } }
   var toMatch = matchIdx >= 0 ? matchIdx - TODAY : 0;
@@ -588,12 +572,6 @@ function render() {
   }
   me += '</div>';
   document.getElementById("matchEditor").innerHTML = me;
-
-  // Coach
-  document.getElementById("coach").innerHTML =
-    '<div class="c-av"><span>K</span></div>' +
-    '<div><div class="c-cname">KHABIB <em>\u00b7 reads the week, not the drill</em></div>' +
-    '<p class="c-clead' + (k.tone === 'hot' ? ' is-hot' : '') + '">' + esc(k.line) + '</p></div>';
 
   // Tabs
   document.getElementById("tabs").innerHTML =

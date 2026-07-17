@@ -757,17 +757,7 @@ function render(){
   html += '<h1>Gym, <em>Sean</em></h1>';
   html += '<p class="sub">'+sess.name.toUpperCase()+' \u00B7 '+sess.day+' '+sess.time+' \u00B7 '+TOTAL+' MIN</p>';
   html += '</div>';
-  html += '<div class="s-coach">';
-  html += '<svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(74,222,128,.05)" stroke="rgba(74,222,128,.24)"/><path d="M24 20 V44 M40 20 L26 32 L41 44" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var coachMsg = {
-    monday:'Sprint on lower body day = neurological crossover. Peak set then back-offs. 55 min. Earn the weight.',
-    tuesday:'Save your energy for team training tonight. Light and quick.',
-    wednesday: gameWeek==='fri' ? 'Speed absorbed into today. Athletic upper + explosiveness + acceleration. No gym Friday.' : 'Athletic upper body. Impulse training, rotation rows, speed transition. Not bodybuilding.',
-    thursday: gameWeek==='fri' ? 'Game TOMORROW. Light activation, stay fresh.' : 'Save your energy for team training tonight. Light and quick.',
-    friday: _isBye ? 'Bye week. No game tomorrow \u2014 push the speed work harder. Full session.' : 'Keep it SHORT. 40 min. Game tomorrow. Full recovery between reps. When times drop, stop.'
-  };
-  html += '<p><b>KHABIB</b>'+coachMsg[currentDay]+'</p>';
-  html += '</div></header>';
+  html += '</header>';
 
   // Work schedule conflict
   if(gymOverlapsWork(sess)){
@@ -827,7 +817,7 @@ function render(){
       html += '<div class="s-grp'+(g.locked?' is-locked':'')+'">';
       html += '<p class="s-gl"><span>'+g.label+'</span>';
       if(g.note) html += '<em>'+g.note+'</em>';
-      if(g.locked) html += '<span class="lock">NOT KHABIB\'S</span>';
+      if(g.locked) html += '<span class="lock">112MVMNT</span>';
       html += '</p><ul class="s-ex">';
 
       g.ex.forEach(function(e){
