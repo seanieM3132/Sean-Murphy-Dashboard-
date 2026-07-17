@@ -227,6 +227,16 @@ button,a{font-family:inherit;}
   .d-guide{padding-left:34px;}
   .d-foot{flex-direction:column;gap:8px;}
 }
+/* Edit panel */
+.d-edit-row{display:flex;align-items:center;gap:8px;padding:7px 6px;border-bottom:1px solid rgba(74,222,128,.06);transition:opacity .2s;}
+.d-edit-row.is-hidden{opacity:.35;}
+.d-edit-time{background:rgba(10,23,18,.6);border:1px solid var(--line);border-radius:6px;color:var(--ink);font:400 11px var(--mono);padding:5px 6px;width:72px;outline:none;}
+.d-edit-time:focus{border-color:rgba(74,222,128,.4);}
+.d-edit-dot{width:6px;height:6px;border-radius:50%;flex:none;}
+.d-edit-title{flex:1;font:400 11px Inter,sans-serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.d-edit-dur{font:400 9px var(--mono);color:var(--dimmer);flex:none;}
+.d-edit-eye{background:none;border:0;color:var(--dim);font-size:12px;cursor:pointer;padding:2px 4px;transition:color .2s;}
+.d-edit-eye:hover{color:var(--green);}
 @media(prefers-reduced-motion:reduce){*,.k-orb{animation:none!important;transition:none!important;}}
 </style>
 </head>
@@ -272,24 +282,24 @@ var KIND = {
 
 /* ═══ ALL DAYS ═══════════════════════════════════════════════ */
 var AM = function(){
-  return { id:"am", at:420, mins:35, kind:"routine", title:"Morning protocol", sub:"Sunlight \u00b7 hydrate \u00b7 breakfast \u00b7 supps \u00b7 fascia", href:"/health.html", steps:[
-    {t:"Wake 7:00 \u2014 no snooze, no phone 15 min",d:"Avoid reactive dopamine spike. Let natural cortisol clear adenosine"},
-    {t:"Hydrate: ORS + 500ml water",d:"First thing. Rehydrate from overnight fluid loss. ORS 30 min before exercise"},
-    {t:"Sunlight optic flow walk 10 min",d:"Outside within 30 min of waking. Triggers 50% cortisol pulse, sets melatonin timer 16h later (Huberman)"},
-    {t:"EAT BREAKFAST + take morning supplements",d:"3 eggs + toast + fruit OR oats + banana + shake. 30-60g carbs + 20g protein. All MFM morning supps with food"},
-    {t:"Diaphragmatic breathing 2 min",d:"Deep inhale through nose, belly pushes out. Long exhale. Moves lymph from cisterna chyli back to blood (Huberman)"},
-    {t:"Elevated toe curls 3 \u00d7 20s (10s rest)",d:"Daily fascia foundation \u2014 strengthens plantar fascia, foot-to-glute chain (Hyperarch)"},
-    {t:"Lateral Pelvic Tilts \u2014 3 positions \u00d7 30s each side",d:"Side-lying \u2192 half-kneeling \u2192 split squat. Fluid movement patterns for CM agility"},
-    {t:"Caffeine after 9:00 AM, none after 2:00 PM",d:"Delay 90-120 min after waking so cortisol clears adenosine first. No caffeine within 8h of 10pm bedtime"}
+  return { id:"am", at:420, mins:35, kind:"routine", title:"Morning routine", sub:"Wake \u00b7 hydrate \u00b7 sunlight \u00b7 breakfast \u00b7 plan day", href:"/health.html", steps:[
+    {t:"Wake up \u2014 no snooze, no phone 15 min",d:"Avoid reactive dopamine spike. Let natural cortisol clear adenosine"},
+    {t:"Hydrate: ORS + 500ml water",d:"First thing. Rehydrate from overnight fluid loss"},
+    {t:"Sunlight optic flow walk 10 min",d:"Outside within 30 min of waking. Panoramic gaze (Huberman)"},
+    {t:"EAT BREAKFAST + take morning supplements",d:"3 eggs + toast + fruit OR oats + banana + shake. All MFM morning supps with food"},
+    {t:"Check Recovery + Train apps",d:"Review sleep score, readiness, yesterday\u2019s load. Open train tab for today\u2019s session"},
+    {t:"Plan your day",d:"Review dashboard schedule. Set priorities. Know what\u2019s coming"},
+    {t:"Elevated toe curls 3 \u00d7 20s + Lateral Pelvic Tilts",d:"Daily fascia foundation (Hyperarch). Side-lying \u2192 half-kneeling \u2192 split squat"},
+    {t:"Delay caffeine 90-120 min after waking",d:"Let cortisol clear adenosine first. No caffeine within 8h of bedtime"}
   ]};
 };
-var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down", sub:"Screens off \u00b7 massage ball \u00b7 breathe \u00b7 supps \u00b7 lights out 10pm", href:"/health.html", steps:[
-  {t:"8:00 PM \u2014 Phone on FLIGHT MODE, screens off, dim all lights",d:"Blue light stops melatonin production (MFM). Bright light 10pm-4am suppresses dopamine 50% for days (Huberman). Non-negotiable"},
-  {t:"Massage ball rolling 5-10 min (sore spots)",d:"Spikey ball on worst areas. 90s sustained per spot, 6/10 discomfort max. Feet \u2192 calves \u2192 glutes \u2192 hips \u2192 t-spine"},
-  {t:"Diaphragmatic breathing + physiological sighs 3 min",d:"Belly breathing moves lymph. Double inhale nose + long exhale mouth = fastest parasympathetic activation (Huberman)"},
-  {t:"Relaxation tea + take evening supplements",d:"Strong cup of tea as wind-down marker (MFM). All evening supps together"},
-  {t:"9:45 PM \u2014 Nose tape, side sleeping, room cold and dark",d:"Nasal breathing = better O2 exchange. Side sleep = glymphatic clearance. Body must drop 1-3\u00b0F to stay deeply asleep"},
-  {t:"LIGHTS OUT 10:00 PM",d:"9 hours before 7am wake. If you can\u2019t sleep in 20 min, do a 10-min NSDR protocol (YouTube Huberman NSDR)"}
+var PM = { id:"pm", at:1200, mins:60, kind:"routine", title:"Evening wind-down", sub:"Screens off \u00b7 massage ball \u00b7 breathe \u00b7 supps \u00b7 lights out", href:"/health.html", steps:[
+  {t:"Phone on FLIGHT MODE, screens off, dim all lights",d:"Blue light stops melatonin. Bright light suppresses dopamine 50% for days (Huberman)"},
+  {t:"Massage ball rolling 5-10 min (sore spots)",d:"Spikey ball on worst areas. 90s sustained per spot, 6/10 discomfort max"},
+  {t:"Diaphragmatic breathing + physiological sighs 3 min",d:"Belly breathing moves lymph. Double inhale nose + long exhale mouth (Huberman)"},
+  {t:"Relaxation tea + take evening supplements",d:"Tea as wind-down marker. All evening supps together (MFM)"},
+  {t:"Nose tape, side sleeping, room cold and dark",d:"Nasal breathing = better O2. Side sleep = glymphatic clearance"},
+  {t:"LIGHTS OUT",d:"If you can\u2019t sleep in 20 min, do a 10-min NSDR protocol (YouTube Huberman NSDR)"}
 ]};
 
 
@@ -407,8 +417,8 @@ var DAYS = {
     theme:"MATCH DAY",
     mindset:"PERFORM. Everything serves the game.",
     items: [
-      { id:"am", at:450, mins:35, kind:"routine", title:"Match day morning (7:30)", sub:"Extra sleep \u00b7 sunlight \u00b7 breakfast \u00b7 supps \u00b7 light mobility", href:"/health.html", steps:[
-        {t:"Wake 7:30 \u2014 extra 30 min sleep for match day",d:""},{t:"Hydrate: ORS + 500ml water",d:""},{t:"EAT BREAKFAST + take morning supplements",d:"Oats + banana + honey OR toast + eggs. 30-60g carbs + 20g protein"},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""}
+      { id:"am", at:450, mins:35, kind:"routine", title:"Match day morning", sub:"Extra sleep \u00b7 sunlight \u00b7 breakfast \u00b7 supps \u00b7 light mobility", href:"/health.html", steps:[
+        {t:"Wake up \u2014 extra sleep for match day",d:""},{t:"Hydrate: ORS + 500ml water",d:""},{t:"EAT BREAKFAST + take morning supplements",d:"Oats + banana + honey OR toast + eggs. 30-60g carbs + 20g protein"},{t:"Sunlight optic flow walk 10 min",d:"Panoramic vision, calm alertness"},{t:"Diaphragmatic breathing 2 min",d:"Lymphatic clearance + HRV boost"},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""}
       ]},
       { id:"mob", at:540, mins:10, kind:"train", title:"Light 112mvmnt \u2014 Hips & Hammys", sub:"EASY \u2014 just open up, don\u2019t fatigue", href:"/train.html#mvmnt", steps:[
         {t:"Hip Flexor Leg Lifts light (flow)",d:""},{t:"Butterfly light (flow)",d:""},{t:"Couch Stretch 1 min each (flow)",d:""}
@@ -598,6 +608,14 @@ function loadWork() {
   return { days: [], start: '09:00', end: '17:00' };
 }
 
+/* ── Schedule overrides (user-set times + hidden items) ── */
+function loadOverrides() {
+  try { return JSON.parse(localStorage.getItem('dashboard-overrides') || '{}'); } catch(e) { return {}; }
+}
+function saveOverrides(o) {
+  localStorage.setItem('dashboard-overrides', JSON.stringify(o));
+}
+
 /* ── Day type resolver ── */
 function resolveDayType(dateStr) {
   var cfg = loadGameDay();
@@ -779,6 +797,15 @@ function getDayItems(key) {
       }
     });
   }
+  // Apply user overrides (custom times + hidden flags)
+  var overrides = loadOverrides();
+  var dayOv = overrides[type] || {};
+  items.forEach(function(item) {
+    if (dayOv[item.id]) {
+      if (dayOv[item.id].at !== undefined) item.at = dayOv[item.id].at;
+      if (dayOv[item.id].hidden) item.hidden = true;
+    }
+  });
   items.sort(function(a, b) { return a.at - b.at; });
   return items;
 }
@@ -887,7 +914,7 @@ function render() {
   WEEK_DATES = computeWeekDates();
   var NOW = getNow();
   var pend = pending();
-  var live = state.day.filter(function(i){return !i.passive;});
+  var live = state.day.filter(function(i){return !i.passive && !i.hidden;});
   var doneCount = live.filter(function(i){return state.done[i.id];}).length;
   var pct = live.length ? Math.round((doneCount / live.length) * 100) : 0;
   var C = 2 * Math.PI * 28;
@@ -956,9 +983,10 @@ function render() {
   h += '</p><h2>The <em>day</em></h2></div>';
   h += '</header>';
 
-  // All items grouped by period — no time filtering, no "earlier" collapse
+  // All items grouped by period — skip hidden items
+  var visibleItems = allItems.filter(function(i){ return !i.hidden; });
   PERIODS.forEach(function(p) {
-    var items = allItems.filter(function(i){return i.at >= p.from && i.at < p.to;});
+    var items = visibleItems.filter(function(i){return i.at >= p.from && i.at < p.to;});
     if (!items.length) return;
 
     h += '<section class="d-period"><p class="d-plabel">' + p.label + '<i></i></p>';
@@ -976,8 +1004,26 @@ function render() {
   // Sidebar
   h += '<aside class="d-side">';
 
+  // EDIT panel — user sets times + hides items
+  h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 EDIT</p>';
+  h += '<p style="font:400 10px var(--mono);color:var(--dimmer);margin:0 0 10px;letter-spacing:.06em">Set times \u00b7 hide items you don\u2019t need</p>';
+  h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:2px">';
+  allItems.forEach(function(it) {
+    if (it.added) return; // skip injected work/lunch/appt blocks
+    var isHidden = !!it.hidden;
+    var kc = (KIND[it.kind] || KIND.routine).c;
+    h += '<li class="d-edit-row' + (isHidden ? ' is-hidden' : '') + '">';
+    h += '<input type="time" class="d-edit-time" data-timeedit="' + it.id + '" value="' + hhmm(it.at) + '">';
+    h += '<span class="d-edit-dot" style="background:' + kc + '"></span>';
+    h += '<span class="d-edit-title">' + esc(it.title) + '</span>';
+    h += '<span class="d-edit-dur">' + dur(it.mins) + '</span>';
+    h += '<button class="d-edit-eye" data-hidetoggle="' + it.id + '" title="' + (isHidden ? 'Show' : 'Hide') + '">' + (isHidden ? '\u25cb' : '\u25cf') + '</button>';
+    h += '</li>';
+  });
+  h += '</ul></section>';
+
   // TO-DO list
-  h += '<section class="d-block"><p class="d-eyebrow">02 \u00b7 TO-DO</p>';
+  h += '<section class="d-block"><p class="d-eyebrow">03 \u00b7 TO-DO</p>';
   h += '<div class="d-todo-add"><input class="d-todo-in" id="todo-input" placeholder="Add a task..." />';
   h += '<button class="d-todo-btn" id="todo-add-btn">+</button></div>';
   h += '<ul class="d-rem" id="todo-list" style="list-style:none;padding:0">';
@@ -1000,7 +1046,7 @@ function render() {
     try { rlog = JSON.parse(localStorage.getItem('recovery-log') || '[]'); } catch(e){}
     var todayLog = rlog.filter(function(r){ return r.date === TODAY_KEY; });
     if (todayLog.length > 0) {
-      h += '<section class="d-block"><p class="d-eyebrow">03 \u00b7 RECOVERY</p>';
+      h += '<section class="d-block"><p class="d-eyebrow">04 \u00b7 RECOVERY</p>';
       h += '<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">';
       todayLog.forEach(function(r) {
         var c = r.type === 'sauna' ? 'var(--amber)' : 'var(--teal)';
@@ -1102,6 +1148,38 @@ function bindAll() {
   });
   if (todoInput) todoInput.addEventListener('keydown', function(e){
     if (e.key === 'Enter') { if (todoBtn) todoBtn.click(); }
+  });
+
+  // Edit: time change
+  document.querySelectorAll('[data-timeedit]').forEach(function(inp){
+    inp.addEventListener('change', function(){
+      var id = this.dataset.timeedit;
+      var parts = this.value.split(':');
+      var mins = parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+      var type = resolveDayType(state.selDate);
+      var ov = loadOverrides();
+      if (!ov[type]) ov[type] = {};
+      if (!ov[type][id]) ov[type][id] = {};
+      ov[type][id].at = mins;
+      saveOverrides(ov);
+      state.day = getDayItems(state.selDate);
+      render();
+    });
+  });
+
+  // Edit: hide/show toggle
+  document.querySelectorAll('[data-hidetoggle]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = this.dataset.hidetoggle;
+      var type = resolveDayType(state.selDate);
+      var ov = loadOverrides();
+      if (!ov[type]) ov[type] = {};
+      if (!ov[type][id]) ov[type][id] = {};
+      ov[type][id].hidden = !ov[type][id].hidden;
+      saveOverrides(ov);
+      state.day = getDayItems(state.selDate);
+      render();
+    });
   });
 
   // TODO: toggle
