@@ -78,7 +78,11 @@ body{
 </nav>
 
 <div class="t-frame" id="frame">
-  <iframe id="content-frame" src="/gym.html" title="Gym"></iframe>
+  <div id="coming-soon" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 200px);gap:16px;">
+    <span style="font:400 clamp(28px,3.5vw,44px) var(--serif);font-style:italic;color:var(--green);">Coming Soon</span>
+    <span style="font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--dim);">GYM PROGRAM UNDER CONSTRUCTION</span>
+  </div>
+  <iframe id="content-frame" src="" title="Seward" style="display:none;"></iframe>
 </div>
 
 <script>
@@ -87,32 +91,39 @@ body{
 
   var tabs = document.querySelectorAll('[data-tab]');
   var frame = document.getElementById('content-frame');
-  var pages = { gym: '/gym.html', seward: '/seward.html', mvmnt: '/mvmnt.html', soccer: '/soccer.html', recovery: '/recovery.html' };
+  var comingSoon = document.getElementById('coming-soon');
+  var pages = { seward: '/seward.html', mvmnt: '/mvmnt.html', soccer: '/soccer.html', recovery: '/recovery.html' };
   var titles = { gym: 'Gym', seward: 'Seward College Work', mvmnt: '112mvmnt', soccer: 'Soccer', recovery: 'Recovery' };
 
-  // Check URL hash for initial tab
-  var hash = window.location.hash.replace('#', '');
-  if (hash && pages[hash]) {
-    frame.src = pages[hash];
-    frame.title = titles[hash];
+  function showTab(tab) {
     tabs.forEach(function(t) {
-      var isOn = t.dataset.tab === hash;
+      var isOn = t.dataset.tab === tab;
       t.classList.toggle('is-on', isOn);
       t.setAttribute('aria-selected', isOn);
     });
+    if (tab === 'gym') {
+      frame.style.display = 'none';
+      comingSoon.style.display = 'flex';
+    } else {
+      comingSoon.style.display = 'none';
+      frame.style.display = 'block';
+      frame.src = pages[tab];
+      frame.title = titles[tab];
+    }
+    window.location.hash = tab;
+  }
+
+  // Check URL hash for initial tab
+  var hash = window.location.hash.replace('#', '');
+  if (hash && (pages[hash] || hash === 'gym')) {
+    showTab(hash);
+  } else {
+    showTab('gym');
   }
 
   tabs.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      var tab = this.dataset.tab;
-      tabs.forEach(function(t) {
-        var isOn = t.dataset.tab === tab;
-        t.classList.toggle('is-on', isOn);
-        t.setAttribute('aria-selected', isOn);
-      });
-      frame.src = pages[tab];
-      frame.title = titles[tab];
-      window.location.hash = tab;
+      showTab(this.dataset.tab);
     });
   });
 
