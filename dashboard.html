@@ -447,26 +447,20 @@ var DAYS = {
       { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
         {t:"ORS + 500ml water",d:""},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
-      { id:"endurance", at:535, mins:45, kind:"train", title:"Endurance \u2014 Zone 2 + Hard Start Intervals", sub:"30 min Z2 + 400m hard starts \u2014 #1 weakness", href:"/train.html#soccer", steps:[
-        {t:"Dynamic warm-up 5 min",d:""},{t:"Zone 2 run 30 min (continuous)",d:"80% of endurance below the burn threshold"},{t:"Hard Start Interval: 400m sprint \u2192 rest = your run time",d:"Stigler CM conditioning. Track your time"},{t:"Repeat: add 3-10s to previous fastest time each round",d:"Stop at 1.5x your original time"},{t:"Cool-down jog 5 min + stretch 5 min",d:""}
+      { id:"speed", at:535, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 flying 20s", href:"/train.html#soccer", steps:[
+        {t:"A-skips, B-skips, high knees 2\u00d720m each (60s rest)",d:"Sprint mechanics warm-up"},{t:"Sprint Projections: half-kneeling start 3\u00d73 each side (walk-back rest)",d:""},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:""},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 angles at hip, knee, ankle"}
       ]},
-      { id:"break2", at:585, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water", href:"", steps:[
-        {t:"ORS + 500ml water",d:""},{t:"Light snack",d:""}
+      { id:"endurance", at:565, mins:35, kind:"train", title:"Endurance \u2014 Zone 2 Run", sub:"Continuous Z2 + cool-down \u2014 #1 weakness", href:"/train.html#soccer", steps:[
+        {t:"Zone 2 run 25 min (continuous)",d:"80% of endurance below the burn threshold"},{t:"Hard Start Interval: 400m sprint \u2192 rest = your run time \u00d7 2-3 rounds",d:"Stigler CM conditioning"},{t:"Cool-down jog 3 min + stretch 5 min",d:""}
       ]},
-      { id:"speed", at:600, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 flying 20s", href:"/train.html#soccer", steps:[
-        {t:"Sprint Projections: half-kneeling start 3\u00d73 each side (walk-back rest)",d:""},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:""},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 angles at hip, knee, ankle"},{t:"Walk back = rest. Every rep 100% force",d:""}
-      ]},
-      { id:"fascia", at:630, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#mvmnt", steps:[
+      { id:"fascia", at:605, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#mvmnt", steps:[
         {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:""}
       ]},
-      { id:"sauna1", at:645, mins:20, kind:"recover", title:"Sauna 15-20 min + cold plunge", sub:"80-100\u00b0C \u00b7 cold OK \u2014 no heavy lifting today", href:"/train.html#recovery", steps:[
+      { id:"sauna1", at:620, mins:20, kind:"recover", title:"Sauna 15-20 min + cold plunge", sub:"80-100\u00b0C \u00b7 cold OK \u2014 no heavy lifting today", href:"/train.html#recovery", steps:[
         {t:"Sauna 15-20 min @ 80-100\u00b0C",d:""},{t:"Cold plunge 2-3 min if feeling good",d:"No strength work today so cold is fine"}
       ]},
       { id:"ball", at:780, mins:55, kind:"train", title:"Ball work \u2014 Extended Session", sub:"Coerver \u00b7 turns \u00b7 weak foot \u00b7 passing \u00b7 first touch \u00b7 long throws", href:"/train.html#soccer", steps:[
         {t:"Warm-up touches 5 min (Joner style) (flow)",d:""},{t:"Set A: Sole drag inside push, inside-outside cut, Iniesta, V-drag, La Croqueta 4\u00d720s each (flow)",d:""},{t:"Midfielder turns: turning the corner, half-turn receiving, Cruyff turn 5 min (flow)",d:""},{t:"First Touch: wall pass 3\u00d710, back foot reception 3\u00d710, chest control 3\u00d78 (flow)",d:""},{t:"Weak Foot Block 10 min (L foot only)",d:"Bye week = fix gaps"},{t:"Passing: short 3\u00d710, driven 3\u00d78, lofted switch 3\u00d76 (flow)",d:""},{t:"Long Throws: standing \u2192 one-step \u2192 run-up \u2192 max (flow)",d:""},{t:"Stretch: hips + ankles + calves 5 min",d:""}
-      ]},
-      { id:"viz", at:845, mins:10, kind:"routine", title:"Visualization 10 min", sub:"First touch, tackles, passing lanes, long throws", href:"", steps:[
-        {t:"Eyes closed \u2014 run through game scenarios",d:""}
       ]},
       PM
     ]
@@ -722,7 +716,7 @@ function getDayItems(key) {
     // AM routine → before work
     var amItem = null;
     var pmItem = null;
-    var gymBlock = [];   // mobility, seward, gym, core, fascia, plyo, speed
+    var gymBlock = [];   // mobility, seward, fascia, speed, endurance
     var recovery = [];   // sauna, cold
     var pmBlock = [];     // ball work, sprints, endurance, team, film, viz, kit
     overlapping.forEach(function(item) {
@@ -731,7 +725,7 @@ function getDayItems(key) {
       if (item.kind === 'recover' || item.id === 'sauna1' || item.id === 'sauna2' || item.id === 'cold') {
         recovery.push(item); return;
       }
-      if (item.id === 'ball' || item.id === 'sprint' || item.id === 'endurance' || item.id === 'team' || item.id === 'film' || item.id === 'viz' || item.id === 'kit') {
+      if (item.id === 'ball' || item.id === 'team' || item.id === 'film' || item.id === 'viz' || item.id === 'kit') {
         pmBlock.push(item); return;
       }
       gymBlock.push(item);
@@ -742,18 +736,18 @@ function getDayItems(key) {
       beforeWork.push(amItem);
     }
 
-    // After work: lunch (45 min) → gym block → recovery → break → PM block
+    // After work: lunch (45 min) → training block → recovery → break → PM block
     var cursor = wEnd + 5;
     items.push({ id:'lunch', at:cursor, mins:45, kind:'fuel', title:'Lunch', sub:'Protein + carbs \u00b7 recharge before training', href:'', steps:[{t:'Eat a proper meal \u2014 protein + carbs + hydrate',d:'You need fuel before training. Don\u2019t skip this.'}], added:true });
     cursor += 50; // 45 min lunch + 5 min
 
-    // Stack gym block with 10 min gaps
+    // Stack training block with 10 min gaps
     gymBlock.forEach(function(item) {
       item.at = cursor;
       cursor += (item.mins || 30) + 10;
     });
 
-    // Recovery (sauna/cold) after gym, not between training items
+    // Recovery (sauna/cold) after training, not between training items
     recovery.forEach(function(item) {
       item.at = cursor;
       cursor += (item.mins || 15) + 10;
@@ -771,7 +765,7 @@ function getDayItems(key) {
     if (pmItem) { pmItem.at = Math.max(pmItem.at, cursor); }
 
     // Adjust afterWork items if they now conflict
-    var pmIds = ['ball','sprint','endurance','team','film','viz','kit'];
+    var pmIds = ['ball','team','film','viz','kit'];
     afterWork.sort(function(a,b){ return a.at - b.at; });
     afterWork.forEach(function(item) {
       if (item.id === 'pm') { item.at = Math.max(item.at, cursor); return; }
@@ -792,8 +786,8 @@ function getDayTheme(key) { var d = DAYS[resolveDayType(key)]; return d ? d.them
 function getDayMindset(key) { var d = DAYS[resolveDayType(key)]; return d ? d.mindset : ""; }
 
 var PROPOSALS = [
-  { id:"p1", signal:"SEWARD DAY 2", title:"Skip gym activation \u2014 Seward Workout B is enough",
-    apply: function(d){return d.filter(function(x){return x.id!=="activation";})} },
+  { id:"p1", signal:"SEWARD HEAVY DAY", title:"Take extra 10 min break between Seward and speed work",
+    apply: function(d){return d;} },
   { id:"p2", signal:"PROTEIN NOT LOGGED", title:"Start logging meals in Fuel today",
     apply: function(d){return d;} },
   { id:"p3", signal:"ADDUCTORS WATCH", title:"Add 2 min adductor check to dynamic warm-up",
@@ -913,7 +907,7 @@ function render() {
 
   // Day type badge
   var dayType = resolveDayType(state.selDate);
-  var typeLabels = {match:'MATCH DAY',prematch:'PRE-MATCH',recovery:'RECOVERY',bye:'BYE WEEK',heavy_lower:'HEAVY LOWER',heavy_upper:'HEAVY UPPER',team_a:'TEAM TRAINING',team_b:'TEAM TRAINING'};
+  var typeLabels = {match:'MATCH DAY',prematch:'PRE-MATCH',recovery:'RECOVERY',bye:'BYE WEEK',heavy_lower:'SPEED DAY',heavy_upper:'ENDURANCE DAY',team_a:'TEAM TRAINING',team_b:'TEAM TRAINING'};
   var typeColors = {match:'var(--amber)',prematch:'var(--gold)',recovery:'var(--teal)',bye:'var(--teal)',heavy_lower:'var(--green)',heavy_upper:'var(--green)',team_a:'var(--amber)',team_b:'var(--amber)'};
 
   var h = '';
