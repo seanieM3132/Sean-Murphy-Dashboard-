@@ -35,15 +35,6 @@ function HomeIcon() {
   )
 }
 
-function KhabibMark({ size = 26 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 64 64" width={size} height={size} aria-hidden="true">
-      <rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(74,222,128,.05)" stroke="rgba(74,222,128,.24)" />
-      <path d="M24 20 V44 M40 20 L26 32 L41 44" fill="none" stroke="#4ADE80" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 export default function GymPage() {
   const template = FRIDAY_SPEED
   const { sections } = template
@@ -224,7 +215,7 @@ export default function GymPage() {
               <p className="s-gl">
                 <span>{g.label}</span>
                 {g.note && <em>{g.note}</em>}
-                {g.locked && <i>NOT KHABIB&apos;S</i>}
+                {g.locked && <i>LOCKED</i>}
               </p>
 
               <ul className="s-ex">

@@ -26,8 +26,8 @@ ul{list-style:none;}
 
 /* header */
 .s-top{max-width:var(--w);margin:0 auto 24px;}
-.s-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
-.s-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
+.s-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
+.s-back:hover{color:var(--green);}
 .s-title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;font-style:italic;margin:14px 0 8px;letter-spacing:-.01em;}
 .s-title em{color:var(--green);}
 .s-tag{font:500 10px/1 var(--mono);letter-spacing:.22em;color:var(--dimmer);}
@@ -40,16 +40,6 @@ ul{list-style:none;}
 .s-strip b.is-good{color:var(--green);} .s-strip b.is-hot{color:var(--amber);}
 .s-strip b em{font-style:normal;font:400 11px var(--mono);color:var(--dim);margin-left:3px;}
 .s-strip span{display:block;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dim);margin-top:9px;text-transform:uppercase;}
-
-/* coach */
-.s-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 24px;padding:18px 20px;
-  border:1px solid rgba(74,222,128,.14);border-radius:14px;background:rgba(16,36,27,.4);}
-.s-av{width:38px;height:38px;flex:none;border-radius:11px;border:1px solid rgba(74,222,128,.3);
-  display:flex;align-items:center;justify-content:center;background:rgba(74,222,128,.06);}
-.s-av span{font-family:var(--serif);font-size:19px;color:var(--green);}
-.s-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
-.s-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
-.s-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.85;margin-top:8px;max-width:72ch;}
 
 /* rail */
 .s-rail{position:relative;display:flex;justify-content:space-between;max-width:var(--w);margin:0 auto 30px;padding:0 4px;}
@@ -155,7 +145,6 @@ ul{list-style:none;}
 @media (max-width:680px){
   body{padding:24px 16px 48px;}
   .s-strip{grid-template-columns:1fr 1fr;}
-  .s-coach{flex-direction:column;gap:12px;}
   .s-rail{overflow-x:auto;gap:22px;justify-content:flex-start;padding-bottom:4px;}
   .s-rail-line{display:none;} .s-node{flex:none;}
   .s-day-h{flex-direction:column;align-items:flex-start;gap:12px;}
@@ -176,7 +165,6 @@ ul{list-style:none;}
 </header>
 
 <div class="s-strip" id="strip"></div>
-<section class="s-coach" id="coach"></section>
 <nav class="s-rail" aria-label="Program days" id="rail"></nav>
 <main class="s-day" id="day-main"></main>
 <footer class="s-foot"><span>SEWARD COUNTY COMMUNITY COLLEGE &middot; MEN'S SOCCER</span><span>FOLLOW IT EXACTLY AS WRITTEN</span></footer>
@@ -190,51 +178,51 @@ ul{list-style:none;}
 
   var ROUTINES = {
     warmup:{name:'Warm-up',kind:'Before every workout',tone:'warm',items:[
-      {l:'Easy jog or skip',d:'3 min \u00B7 get warm before you stretch'},
-      {l:'Leg swings',d:'10 each way, each leg \u00B7 front-back, then side-side'},
-      {l:'Hip openers',d:'10 each side \u00B7 deep lunge, elbow to instep'},
-      {l:'Ankle rocks',d:'15 each \u00B7 knee over toe, heel down'},
-      {l:'Walking lunge with reach',d:'8 each leg'},
-      {l:'Build-up strides',d:'4 \u00D7 40 m \u00B7 60, 70, 80, 90% effort'}
+      {l:'Easy jog or skip',d:'3 min \u00B7 get warm before you stretch \u00B7 no rest, flow into the next'},
+      {l:'Leg swings',d:'10 each way, each leg \u00B7 front-back, then side-side \u00B7 no rest'},
+      {l:'Hip openers',d:'10 each side \u00B7 deep lunge, elbow to instep \u00B7 no rest'},
+      {l:'Ankle rocks',d:'15 each \u00B7 knee over toe, heel down \u00B7 no rest'},
+      {l:'Walking lunge with reach',d:'8 each leg \u00B7 no rest'},
+      {l:'Build-up strides',d:'4 \u00D7 40 m \u00B7 60, 70, 80, 90% effort \u00B7 walk back = rest (~45 s)'}
     ],note:"History shows the prepared arrive injury-free. Don't start cold."},
     stretch:{name:'Cool-down & stretch',kind:'After every workout',tone:'cool',items:[
-      {l:'Walk it out',d:'2 min \u00B7 nasal breathing'},
-      {l:'Couch stretch',d:'45 s each side',sec:45,sets:2},
-      {l:'Hamstring',d:'30 s each side',sec:30,sets:2},
-      {l:'Adductors',d:'45 s each side \u00B7 your weak link',sec:45,sets:2},
-      {l:'Calves',d:'30 s each side',sec:30,sets:2},
-      {l:'Hip flexors',d:'40 s each side',sec:40,sets:2}
+      {l:'Walk it out',d:'2 min \u00B7 nasal breathing \u00B7 no rest'},
+      {l:'Couch stretch',d:'45 s each side \u00B7 15 s rest between sides',sec:45,sets:2},
+      {l:'Hamstring',d:'30 s each side \u00B7 15 s rest between sides',sec:30,sets:2},
+      {l:'Adductors',d:'45 s each side \u00B7 your weak link \u00B7 15 s rest between sides',sec:45,sets:2},
+      {l:'Calves',d:'30 s each side \u00B7 15 s rest between sides',sec:30,sets:2},
+      {l:'Hip flexors',d:'40 s each side \u00B7 15 s rest between sides',sec:40,sets:2}
     ],note:"Don't skip the stretch."},
     abs1:{name:'Abs 1',kind:'Core',tone:'core',items:[
-      {l:'Slow crunches',d:'25 reps'},{l:'Full sit-ups',d:'25 reps \u00B7 careful with your back'},
-      {l:'6-inch scissors',d:'25 reps \u00B7 legs 6" up, every 4 crosses = 1'},
-      {l:'Superman',d:'3 sets \u00B7 hold 5 s = 1 set',sec:5,sets:3},{l:'Slow crunches',d:'25 reps'}
+      {l:'Slow crunches',d:'25 reps \u00B7 45 s rest'},{l:'Full sit-ups',d:'25 reps \u00B7 careful with your back \u00B7 45 s rest'},
+      {l:'6-inch scissors',d:'25 reps \u00B7 legs 6" up, every 4 crosses = 1 \u00B7 45 s rest'},
+      {l:'Superman',d:'3 sets \u00B7 hold 5 s = 1 set \u00B7 30 s rest between sets',sec:5,sets:3},{l:'Slow crunches',d:'25 reps \u00B7 45 s rest, then go stretch'}
     ]},
     abs2:{name:'Abs 2',kind:'Core',tone:'core',items:[
-      {l:'Front plank',d:'3 \u00D7 1 min',sec:60,sets:3},
-      {l:'Left side plank',d:'3 \u00D7 1 min',sec:60,sets:3},
-      {l:'Right side plank',d:'3 \u00D7 1 min',sec:60,sets:3}
+      {l:'Front plank',d:'3 \u00D7 1 min \u00B7 45 s rest between sets',sec:60,sets:3},
+      {l:'Left side plank',d:'3 \u00D7 1 min \u00B7 45 s rest between sets',sec:60,sets:3},
+      {l:'Right side plank',d:'3 \u00D7 1 min \u00B7 45 s rest between sets',sec:60,sets:3}
     ],note:'When three sets gets easy, add a set.'},
     A:{name:'Workout A',kind:'Bodyweight',tone:'body',items:[
-      {l:'Wide push-ups',d:'4 \u00D7 10 \u00B7 arms as wide as you can'},
-      {l:'Normal push-ups',d:'4 \u00D7 10'},{l:'Burpees',d:'5 \u00D7 10 \u00B7 push-up, knees in, jump high'},
-      {l:'Squats',d:'5 \u00D7 10'},{l:'Knees to chest',d:'3 \u00D7 15'}
+      {l:'Wide push-ups',d:'4 \u00D7 10 \u00B7 arms as wide as you can \u00B7 60 s rest between sets'},
+      {l:'Normal push-ups',d:'4 \u00D7 10 \u00B7 60 s rest between sets'},{l:'Burpees',d:'5 \u00D7 10 \u00B7 push-up, knees in, jump high \u00B7 90 s rest between sets'},
+      {l:'Squats',d:'5 \u00D7 10 \u00B7 60 s rest between sets'},{l:'Knees to chest',d:'3 \u00D7 15 \u00B7 45 s rest between sets'}
     ]},
     B:{name:'Workout B',kind:'Bodyweight',tone:'body',items:[
-      {l:'Walking push-ups',d:'4 \u00D7 7 \u00B7 four push-ups, hands right then left and back = 1'},
-      {l:'Lunges',d:'5 \u00D7 10 each leg \u00B7 knee behind the toes'}
+      {l:'Walking push-ups',d:'4 \u00D7 7 \u00B7 four push-ups, hands right then left and back = 1 \u00B7 75 s rest between sets'},
+      {l:'Lunges',d:'5 \u00D7 10 each leg \u00B7 knee behind the toes \u00B7 60 s rest between sets'}
     ],note:'Too easy, add a set. Too hard, slow down and catch up. Slow is fine. Wrong is not.'},
     C:{name:'Workout C',kind:'Bodyweight',tone:'body',items:[
-      {l:'Clap push-ups',d:'5 \u00D7 15 \u00B7 or whatever you can reach'},
-      {l:'Calf jumps, \u00BC squat',d:'5 \u00D7 30 \u00B7 bounce on the toes'},
-      {l:'Calf jumps',d:'5 \u00D7 15 \u00B7 straight up, as high as you can'}
+      {l:'Clap push-ups',d:'5 \u00D7 15 \u00B7 or whatever you can reach \u00B7 90 s rest between sets'},
+      {l:'Calf jumps, \u00BC squat',d:'5 \u00D7 30 \u00B7 bounce on the toes \u00B7 60 s rest between sets'},
+      {l:'Calf jumps',d:'5 \u00D7 15 \u00B7 straight up, as high as you can \u00B7 90 s rest between sets'}
     ]},
     D:{name:'Workout D',kind:'Bodyweight',tone:'body',items:[
-      {l:'Decline push-ups',d:'5 \u00D7 10 \u00B7 feet on a chair'},
-      {l:'Diamond push-ups',d:'5 \u00D7 11'},
-      {l:'Vertical wall jumps',d:'5 \u00D7 20 \u00B7 higher every jump'},
-      {l:'Single-leg jumps',d:'5 \u00D7 10 each leg'},
-      {l:'Calf raises',d:'10 \u00D7 20 \u00B7 hold 5 s',sec:5,sets:10}
+      {l:'Decline push-ups',d:'5 \u00D7 10 \u00B7 feet on a chair \u00B7 75 s rest between sets'},
+      {l:'Diamond push-ups',d:'5 \u00D7 11 \u00B7 75 s rest between sets'},
+      {l:'Vertical wall jumps',d:'5 \u00D7 20 \u00B7 higher every jump \u00B7 90 s rest between sets'},
+      {l:'Single-leg jumps',d:'5 \u00D7 10 each leg \u00B7 90 s rest between sets'},
+      {l:'Calf raises',d:'10 \u00D7 20 \u00B7 hold 5 s \u00B7 45 s rest between sets',sec:5,sets:10}
     ]},
     jr1:{name:'Jump Rope 1',kind:'Rope',tone:'rope',items:[
       {l:'30 jumps',d:'5 sets \u00B7 30 s rest',sec:30,sets:5}
@@ -248,7 +236,7 @@ ul{list-style:none;}
   function t(l, d, x) { var o = { kind:'task', l:l, d:d }; if (x) { for (var k in x) o[k] = x[k]; } return o; }
 
   var DAYS = [
-    {date:'2026-07-09',items:[t('Run','2 miles'),r('abs1'),t('Push-ups','25'),t('Squats','25')]},
+    {date:'2026-07-09',items:[t('Run','2 miles · steady, no rest'),r('abs1'),t('Push-ups','25 · 60 s rest after'),t('Squats','25 · 60 s rest after')]},
     {date:'2026-07-10',items:[r('B'),r('abs2')]},
     {date:'2026-07-11',items:[r('C'),r('abs1')]},
     {date:'2026-07-12',items:[r('D'),r('abs2')]},
@@ -256,13 +244,13 @@ ul{list-style:none;}
     {date:'2026-07-14',items:[r('B'),r('jr2'),r('abs1')]},
     {date:'2026-07-15',items:[r('A'),r('jr2'),r('abs2')]},
     {date:'2026-07-16',items:[t('100-yard sprints','10 \u00D7 full speed \u00B7 30 s to 1 min recovery'),r('abs1')]},
-    {date:'2026-07-17',items:[t('Mile test','Two timed miles. Match the first.',{tt:true})]},
-    {date:'2026-07-18',items:[t('Run','2 miles'),r('abs1'),r('jr2')]},
+    {date:'2026-07-17',items:[t('Mile test','Two timed miles. Match the first. · 5 min rest between miles',{tt:true})]},
+    {date:'2026-07-18',items:[t('Run','2 miles · steady, no rest'),r('abs1'),r('jr2')]},
     {date:'2026-07-19',items:[r('A'),r('abs2'),r('jr2')]},
     {date:'2026-07-20',items:[t('40-yard sprints','5 sprints = 1 set \u00B7 30 s between \u00B7 5 min between sets \u00B7 5 sets'),r('abs1')]},
     {date:'2026-07-21',items:[r('D'),r('abs2')]},
-    {date:'2026-07-22',items:[r('B'),r('abs1'),t('Run','1 mile, endurance'),t('100-yard sprints','10 \u00D7 \u00B7 30 s recovery')]},
-    {date:'2026-07-23',items:[r('abs1'),r('abs2'),t('Run','1 mile'),r('jr1'),r('jr2')]}
+    {date:'2026-07-22',items:[r('B'),r('abs1'),t('Run','1 mile, endurance \u00B7 steady, no rest'),t('100-yard sprints','10 \u00D7 \u00B7 30 s rest between sprints')]},
+    {date:'2026-07-23',items:[r('abs1'),r('abs2'),t('Run','1 mile \u00B7 steady, no rest'),r('jr1'),r('jr2')]}
   ];
 
   var ARRIVAL = '2026-07-28';
@@ -328,18 +316,6 @@ ul{list-style:none;}
       '<div><b class="is-good">' + complete + '</b><span>Complete</span></div>' +
       '<div><b class="' + (missed ? 'is-hot' : '') + '">' + missed + '</b><span>Missed</span></div>' +
       '<div><b>' + daysTo + '<em>d</em></b><span>To check-in</span></div>';
-  }
-
-  function renderCoach() {
-    var missed = 0;
-    for (var i = 0; i < todayIdx; i++) { if (countDone(DAYS[i]) < totalItems(DAYS[i])) missed++; }
-    document.getElementById('coach').innerHTML =
-      '<div class="s-av"><span>K</span></div><div>' +
-      '<div class="s-cname">KHABIB <em>\u00B7 compliance, not programming</em></div>' +
-      '<p class="s-clead">' + (missed
-        ? missed + ' day' + (missed > 1 ? 's' : '') + ' incomplete. The program is dated for a reason. Catch up, then keep going.'
-        : "I don't touch this program. Seward wrote it, you follow it. My only job is telling you when you didn't.") +
-      '</p></div>';
   }
 
   function renderRail() {
@@ -527,7 +503,6 @@ ul{list-style:none;}
 
   function renderAll() {
     renderStrip();
-    renderCoach();
     renderRail();
     renderDay();
   }

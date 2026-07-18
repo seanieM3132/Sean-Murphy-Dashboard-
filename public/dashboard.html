@@ -24,7 +24,7 @@ body{
 ol,ul{list-style:none;padding:0;}
 button,a{font-family:inherit;}
 
-/* Khabib mark */
+/* mark */
 .k-frame{fill:none;stroke:rgba(74,222,128,.24);stroke-width:1;}
 .k-frame-in{fill:rgba(74,222,128,.05);stroke:none;}
 .k-tick{fill:none;stroke:var(--green);stroke-width:1.4;stroke-linecap:round;opacity:.55;}
@@ -255,7 +255,7 @@ function hhmm(m) { return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String
 function dur(m) { if(m<0)m=0; if(m>=60){var h=Math.floor(m/60),r=m%60; return h+'h'+(r?' '+r+'m':'');} return m+'m'; }
 function esc(s) { var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-/* ═══ KHABIB MARK SVG ════════════════════════════════════════ */
+/* ═══ MARK SVG ═══════════════════════════════════════════════ */
 function kmark(size, live) {
   return '<svg viewBox="0 0 64 64" width="'+size+'" height="'+size+'" aria-hidden="true">' +
     '<defs><linearGradient id="kg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#1F7A57"/></linearGradient></defs>' +
@@ -263,7 +263,7 @@ function kmark(size, live) {
     '<rect x="6" y="6" width="52" height="52" rx="16" class="k-frame"/>' +
     '<path d="M6 20 V16 A10 10 0 0 1 16 6 H20" class="k-tick"/>' +
     '<path d="M58 44 V48 A10 10 0 0 1 48 58 H44" class="k-tick"/>' +
-    '<path d="M24 20 V44 M40 20 L26 32 L41 44" class="k-glyph"/>' +
+    '<path d="M40 25 C40 21 36 19 32 19 C27 19 23 21 23 26 C23 33 41 31 41 38 C41 43 36 45 32 45 C27 45 23 43 23 39" class="k-glyph"/>' +
     '<circle cx="32" cy="32" r="25" class="k-orbit"/>' +
     '<circle cx="32" cy="7" r="2.4" class="k-orb'+(live?' is-live':'')+'" fill="url(#kg)"/>' +
     '</svg>';
@@ -316,9 +316,6 @@ var DAYS = {
       { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:"Rehydrate after Seward"},{t:"Light snack if hungry (banana, toast)",d:""}
-      ]},
       { id:"fascia", at:535, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#mvmnt", steps:[
         {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"ACL prevention"}
       ]},
@@ -350,9 +347,6 @@ var DAYS = {
       { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:"Rehydrate after Seward"},{t:"Light snack if hungry (banana, toast)",d:""}
-      ]},
       { id:"fascia", at:535, mins:10, kind:"train", title:"Fascia + Nordics", sub:"HFT marble swing + gait cycles + nordics", href:"/train.html#mvmnt", steps:[
         {t:"HFT Marble Swing 3\u00d730s each foot (flow)",d:""},{t:"Gait Cycle Drills 5 min (flow)",d:""},{t:"Elevated toe curls 3\u00d720s (10s rest)",d:""},{t:"Nordic Phase 1: 3-4\u00d75-8 banded (90s rest)",d:"ACL prevention"}
       ]},
@@ -383,9 +377,6 @@ var DAYS = {
       ]},
       { id:"seward", at:485, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:"Before every training session"},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
-      ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate", sub:"ORS \u00b7 water", href:"", steps:[
-        {t:"ORS + 500ml water",d:"Rehydrate between sessions"},{t:"Light snack if needed",d:""}
       ]},
       { id:"speed", at:540, mins:30, kind:"train", title:"Speed & Acceleration Session", sub:"Sprint projections \u00b7 slow-to-fast runs \u00b7 soft starts", href:"/train.html#soccer", steps:[
         {t:"A-skips, B-skips, high knees 2\u00d720m each (60s rest)",d:"Sprint mechanics warm-up"},{t:"Sprint Projections: 3-10 reps each side, 1-5 steps (walk-back rest)",d:"Wk 1-2: full kneeling. Wk 3-4: half-kneeling. Wk 5-6: split stance"},{t:"Slow-to-Fast Runs: 20% speed 10yd \u2192 100% speed 40yd \u00d7 4 (walk-back rest)",d:"Explode from sub-max into top speed"},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:""},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 joint angles at hip, knee, ankle"},{t:"Cool-down: jog 3 min + stretch 5 min",d:""}
@@ -454,9 +445,6 @@ var DAYS = {
       { id:"seward", at:480, mins:35, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:""},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:520, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:""},{t:"Light snack if hungry (banana, toast)",d:""}
-      ]},
       { id:"speed", at:535, mins:25, kind:"train", title:"Speed \u2014 Acceleration & Top Speed", sub:"Sprint projections \u00b7 soft starts \u00b7 flying 20s", href:"/train.html#soccer", steps:[
         {t:"A-skips, B-skips, high knees 2\u00d720m each (60s rest)",d:"Sprint mechanics warm-up"},{t:"Sprint Projections: half-kneeling start 3\u00d73 each side (walk-back rest)",d:""},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:""},{t:"Flying 20s \u00d7 4 (90s rest)",d:"90\u00b0 angles at hip, knee, ankle"}
       ]},
@@ -519,9 +507,6 @@ var DAYS = {
       { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:""},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
       ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:""},{t:"Light snack if hungry (banana, toast)",d:""}
-      ]},
       { id:"speed", at:540, mins:30, kind:"train", title:"Speed & Acceleration Session", sub:"Sprint projections \u00b7 slow-to-fast runs \u00b7 soft starts", href:"/train.html#soccer", steps:[
         {t:"A-skips, B-skips, high knees 2\u00d720m each (60s rest)",d:"Sprint mechanics warm-up"},{t:"Sprint Projections: 3-10 reps each side, 1-5 steps (walk-back rest)",d:"Wk 1-2: full kneeling. Wk 3-4: half-kneeling. Wk 5-6: split stance"},{t:"Slow-to-Fast Runs: 20% speed 10yd \u2192 100% speed 40yd \u00d7 4 (walk-back rest)",d:""},{t:"Soft Starts: falling lateral starts into 20m sprint \u00d7 4 (walk-back rest)",d:""},{t:"Flying 20s \u00d7 4 (90s rest)",d:""},{t:"Cool-down: jog 3 min + stretch 5 min",d:""}
       ]},
@@ -549,9 +534,6 @@ var DAYS = {
       ]},
       { id:"seward", at:480, mins:40, kind:"train", title:"Seward \u2014 Workout of the Day", sub:"Dynamic warm-up \u2192 Seward program", href:"/train.html#seward", steps:[
         {t:"Dynamic warm-up: hip circles 60s each, deep squat hold 60s \u00d72, leg swings 60s \u00d72 (5 min)",d:""},{t:"Complete Seward workout as assigned",d:"Check Seward tab for today\u2019s specific exercises"},{t:"Log all reps and times",d:""}
-      ]},
-      { id:"break1", at:525, mins:10, kind:"fuel", title:"Break \u2014 hydrate + refuel", sub:"ORS \u00b7 water \u00b7 light snack", href:"", steps:[
-        {t:"ORS + 500ml water",d:""},{t:"Light snack if hungry (banana, toast)",d:""}
       ]},
       { id:"endurance", at:540, mins:40, kind:"train", title:"Endurance \u2014 Zone 2 + Hard Start Intervals", sub:"30 min Z2 + 400m hard starts \u2014 #1 weakness", href:"/train.html#soccer", steps:[
         {t:"Zone 2 run 30 min (continuous)",d:"80% of endurance below the burn threshold"},{t:"Hard Start Interval: 400m sprint \u2192 rest = your run time",d:"Stigler CM conditioning. Track your time"},{t:"Repeat: add 3-10s to previous fastest time each round",d:"Stop at 1.5x your original time"},{t:"Cool-down jog 5 min + stretch 5 min",d:""}

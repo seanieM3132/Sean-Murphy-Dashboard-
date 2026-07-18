@@ -306,6 +306,59 @@ body {
 
   var CLASSES_COLOR = { vit:'#7DD3C0', min:'#4ADE80', oth:'#D8B24A' };
 
+  /* ── OpenFoodFacts micronutrient mapping ──
+     OFF stores every nutrient in grams. mult converts g -> the unit we track.
+     First key that carries a value wins (no double counting). */
+  var MICRO_MAP = [
+    { k:'Vitamin A',                     off:['vitamin-a'],                    mult:1e6 },
+    { k:'Vitamin B1 (Thiamine)',         off:['vitamin-b1'],                   mult:1e3 },
+    { k:'Vitamin B2 (Riboflavin)',       off:['vitamin-b2'],                   mult:1e3 },
+    { k:'Vitamin B3 (Niacin)',           off:['vitamin-pp','vitamin-b3'],      mult:1e3 },
+    { k:'Vitamin B5 (Pantothenic acid)', off:['pantothenic-acid','vitamin-b5'],mult:1e3 },
+    { k:'Vitamin B6',                    off:['vitamin-b6'],                   mult:1e3 },
+    { k:'Vitamin B9 (Folate)',           off:['vitamin-b9','folates'],         mult:1e6 },
+    { k:'Vitamin B12',                   off:['vitamin-b12'],                  mult:1e6 },
+    { k:'Vitamin C',                     off:['vitamin-c'],                    mult:1e3 },
+    { k:'Vitamin D',                     off:['vitamin-d'],                    mult:1e6 },
+    { k:'Vitamin E',                     off:['vitamin-e'],                    mult:1e3 },
+    { k:'Vitamin K',                     off:['vitamin-k'],                    mult:1e6 },
+    { k:'Calcium',                       off:['calcium'],                      mult:1e3 },
+    { k:'Iron',                          off:['iron'],                         mult:1e3 },
+    { k:'Magnesium',                     off:['magnesium'],                    mult:1e3 },
+    { k:'Zinc',                          off:['zinc'],                         mult:1e3 },
+    { k:'Sodium',                        off:['sodium'],                       mult:1e3 },
+    { k:'Potassium',                     off:['potassium'],                    mult:1e3 },
+    { k:'Phosphorus',                    off:['phosphorus'],                   mult:1e3 },
+    { k:'Selenium',                      off:['selenium'],                     mult:1e6 },
+    { k:'Copper',                        off:['copper'],                       mult:1e3 },
+    { k:'Manganese',                     off:['manganese'],                    mult:1e3 },
+    { k:'Chromium',                      off:['chromium'],                     mult:1e6 },
+    { k:'Iodine',                        off:['iodine'],                       mult:1e6 },
+    { k:'Omega-3 EPA+DHA',               off:['omega-3-fat','dha','epa'],      mult:1   },
+    { k:'Fibre',                         off:['fiber'],                        mult:1   },
+    { k:'Choline',                       off:['choline'],                      mult:1e3 }
+  ];
+
+  /* Pull every micronutrient OFF has for a product. Serving values preferred,
+     falling back to per-100g. Missing nutrients are simply absent. */
+  function offMicros(n) {
+    if (!n) return null;
+    var out = null;
+    MICRO_MAP.forEach(function(m) {
+      for (var i = 0; i < m.off.length; i++) {
+        var v = n[m.off[i] + '_serving'];
+        if (v == null) v = n[m.off[i] + '_100g'];
+        if (v == null) v = n[m.off[i]];
+        if (typeof v === 'number' && !isNaN(v) && v > 0) {
+          if (!out) out = {};
+          out[m.k] = v * m.mult;
+          return;
+        }
+      }
+    });
+    return out;
+  }
+
   /* ── Mock data ── */
   var data = {
     dayType: 'training',
@@ -395,6 +448,7 @@ body {
       .sort(function(a, b) { return (a.v / a.t) - (b.v / b.t); })
       .slice(0, 3);
     var over = data.micros.filter(function(m) { return microState(m) === 'over'; });
+    var hit = data.micros.filter(function(m) { return microState(m) === 'hit'; });
 
     var headline;
     if (over.length) headline = over[0].k.toUpperCase() + ' OVER LIMIT';
@@ -411,6 +465,20 @@ body {
 
     if (wLeft > 800) lines.push((wLeft / 1000).toFixed(1) + 'L short on water and you trained today. Drink before you are thirsty.');
     if (over.length) lines.push(over[0].k + ' is above its upper limit. More is not better.');
+
+    // What micronutrients today's food is actually delivering.
+    if (hit.length) {
+      lines.push('Micros in today: ' + hit.length + ' of ' + data.micros.length + ' targets hit — ' +
+        hit.slice(0, 6).map(function(m) { return m.k + ' ' + fmt(m.v) + m.u; }).join(', ') +
+        (hit.length > 6 ? ' and ' + (hit.length - 6) + ' more.' : '.'));
+    } else {
+      lines.push('No micronutrient target hit yet. Log what you have eaten — barcode and search pull the full vitamin and mineral panel.');
+    }
+    if (short.length) {
+      lines.push('Lowest right now: ' + short.map(function(m) {
+        return m.k + ' at ' + Math.round((m.v / m.t) * 100) + '% of ' + fmt(m.t) + m.u;
+      }).join(', ') + '.');
+    }
 
     if (left > 300) lines.push(left + ' calories left. You are underfeeding a training day. That is how you get slow.');
     else if (left > 0) lines.push(left + ' calories left. Comfortable. Finish clean.');
@@ -560,6 +628,7 @@ body {
           // Check local DB first
           var local = FOOD_DB.find(function(f){return f.barcode===code;});
           if(local){
+            _pendingMicros = null;
             res.innerHTML = renderResult([{name:local.name,grams:0,kcal:local.kcal,p:local.p,c:local.c,f:local.f,conf:1}],'barcode');
             bindResult(res);return;
           }
@@ -576,6 +645,7 @@ body {
               var pro=Math.round((n.proteins_serving||n.proteins_100g||0)*10)/10;
               var carb=Math.round((n.carbohydrates_serving||n.carbohydrates_100g||0)*10)/10;
               var fat=Math.round((n.fat_serving||n.fat_100g||0)*10)/10;
+              _pendingMicros = offMicros(n);
               res.innerHTML=renderResult([{name:name+' ('+serving+')',grams:0,kcal:kcal,p:pro,c:carb,f:fat,conf:1}],'barcode');
               bindResult(res);
             })
@@ -599,6 +669,8 @@ body {
 
     var _searchTimer = null;
     var _lastQuery = '';
+    var _hitCache = [];
+    var _pendingMicros = null;  // micros for the result block currently on screen
 
     function renderSearchHits(q) {
       var el = document.getElementById('search-hits');
@@ -641,7 +713,7 @@ body {
             var pro = Math.round((n.proteins_serving||n.proteins_100g||0)*10)/10;
             var carb = Math.round((n.carbohydrates_serving||n.carbohydrates_100g||0)*10)/10;
             var fat = Math.round((n.fat_serving||n.fat_100g||0)*10)/10;
-            return {name:name, per:serving, kcal:kcal, p:pro, c:carb, f:fat, api:true};
+            return {name:name, per:serving, kcal:kcal, p:pro, c:carb, f:fat, api:true, micros:offMicros(n)};
           }).filter(function(h){return h.kcal>0;}).slice(0,15);
 
           // Merge: local first, then API (dedupe by similar name)
@@ -667,18 +739,25 @@ body {
         el.innerHTML = '<p class="u-empty">No results. Try different words.</p>';
         return;
       }
-      var html = hits.map(function(f) {
+      // Keep the full hit objects so micronutrients survive the round trip to addFood.
+      _hitCache = hits;
+      var html = hits.map(function(f, idx) {
         var badge = f.api ? '<span style="font:500 7px var(--mono,monospace);letter-spacing:.12em;color:var(--teal,#7DD3C0);margin-left:6px">OFF</span>' : '';
-        return '<li><span class="u-hn">' + f.name + badge + '<em>' + f.per + '</em></span>' +
+        var microCount = f.micros ? Object.keys(f.micros).length : 0;
+        var microBadge = microCount
+          ? '<span style="font:500 7px var(--mono,monospace);letter-spacing:.12em;color:var(--green,#4ADE80);margin-left:6px">' + microCount + ' MICROS</span>'
+          : '';
+        return '<li><span class="u-hn">' + f.name + badge + microBadge + '<em>' + f.per + '</em></span>' +
           '<span class="u-hm">' + f.p + 'P \u00B7 ' + f.c + 'C \u00B7 ' + f.f + 'F</span>' +
           '<b>' + f.kcal + '</b>' +
-          '<button data-kcal="' + f.kcal + '" data-p="' + f.p + '" data-c="' + f.c + '" data-f="' + f.f + '" aria-label="Add ' + f.name + '">+</button></li>';
+          '<button data-hit="' + idx + '" aria-label="Add ' + f.name + '">+</button></li>';
       }).join('');
       if (showLoading) html += '<li style="text-align:center;padding:12px;color:var(--dim,#5F786E);font:400 11px monospace">Searching more foods...</li>';
       el.innerHTML = html;
-      el.querySelectorAll('button[data-kcal]').forEach(function(btn) {
+      el.querySelectorAll('button[data-hit]').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          addFood(+this.dataset.kcal, +this.dataset.p, +this.dataset.c, +this.dataset.f);
+          var f = _hitCache[+this.dataset.hit];
+          if (f) addFood(f.kcal, f.p, f.c, f.f, f.micros);
         });
       });
     }
@@ -707,8 +786,9 @@ body {
     function bindResult(container) {
       var addBtn = container.querySelector('.u-add');
       if (addBtn) {
+        var micros = _pendingMicros;
         addBtn.addEventListener('click', function() {
-          addFood(+this.dataset.kcal, +this.dataset.p, +this.dataset.c, +this.dataset.f);
+          addFood(+this.dataset.kcal, +this.dataset.p, +this.dataset.c, +this.dataset.f, micros);
           container.querySelector('.u-result').remove();
         });
       }
@@ -1032,11 +1112,17 @@ body {
   }
 
   /* ── Add food helper ── */
-  function addFood(kcal, p, c, f) {
+  function addFood(kcal, p, c, f, micros) {
     data.consumed.kcal += Math.round(kcal);
     data.consumed.p += Math.round(p);
     data.consumed.c += Math.round(c);
     data.consumed.f += Math.round(f);
+    if (micros) {
+      data.micros.forEach(function(m) {
+        if (micros[m.k] != null) m.v += micros[m.k];
+      });
+      if (micros['Fibre'] != null) data.consumed.fibre += micros['Fibre'];
+    }
     renderAll();
   }
 

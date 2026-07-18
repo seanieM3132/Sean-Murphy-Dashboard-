@@ -1,6 +1,8 @@
 // Proxy to OpenFoodFacts API for barcode lookups.
 // Free, no API key needed. Returns product nutrition data.
 
+const { extractMicros } = require('../lib/off-micros');
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -44,14 +46,8 @@ module.exports = async function handler(req, res) {
         sugar: n.sugars_100g || n.sugars_serving || 0,
         sodium: n.sodium_100g != null ? n.sodium_100g * 1000 : (n.sodium_serving != null ? n.sodium_serving * 1000 : 0),
         saturatedFat: n['saturated-fat_100g'] || n['saturated-fat_serving'] || 0,
-        cholesterol: n.cholesterol_100g != null ? n.cholesterol_100g * 1000 : 0,
-        potassium: n.potassium_100g != null ? n.potassium_100g * 1000 : 0,
-        calcium: n.calcium_100g != null ? n.calcium_100g * 1000 : 0,
-        iron: n.iron_100g != null ? n.iron_100g * 1000 : 0,
-        vitaminA: n['vitamin-a_100g'] != null ? n['vitamin-a_100g'] * 1000000 : 0,
-        vitaminC: n['vitamin-c_100g'] != null ? n['vitamin-c_100g'] * 1000 : 0,
-        vitaminD: n['vitamin-d_100g'] != null ? n['vitamin-d_100g'] * 1000000 : 0,
       },
+      micros: extractMicros(n, per === '100g' ? '100g' : 'serving'),
       per,
       nutriscore: p.nutriscore_grade || null,
     };

@@ -25,8 +25,8 @@ ul{list-style:none;padding:0;}
 button{font-family:inherit;}
 
 .m-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;max-width:var(--w);margin:0 auto 22px;}
-.m-back{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(16,36,27,.35);font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--dim);text-decoration:none;transition:all .2s;}
-.m-back:hover{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.06);transform:translateX(-3px);}
+.m-back{font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--dim);text-decoration:none;}
+.m-back:hover{color:var(--green);}
 .m-title{font-family:var(--serif);font-size:clamp(32px,4.6vw,52px);font-weight:400;margin:14px 0 8px;letter-spacing:-.01em;}
 .m-title em{font-style:italic;color:var(--green);}
 .m-sub{font:500 10px/1 var(--mono);letter-spacing:.22em;color:var(--dimmer);}
@@ -38,15 +38,6 @@ button{font-family:inherit;}
 .m-strip b.is-good{color:var(--green);} .m-strip b.is-hot{color:var(--amber);}
 .m-strip em{font-style:normal;font:400 11px var(--mono);color:var(--dim);margin-left:3px;}
 .m-strip span{display:block;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dim);margin-top:9px;text-transform:uppercase;}
-
-.m-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 24px;padding:18px 20px;
-  border:1px solid rgba(74,222,128,.14);border-radius:14px;background:rgba(16,36,27,.4);}
-.m-av{width:38px;height:38px;flex:none;border-radius:11px;border:1px solid rgba(74,222,128,.3);
-  display:grid;place-items:center;background:rgba(74,222,128,.06);}
-.m-av span{font-family:var(--serif);font-size:19px;color:var(--green);}
-.m-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
-.m-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
-.m-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.85;margin-top:8px;max-width:74ch;}
 
 .m-rail{position:relative;display:flex;justify-content:space-between;max-width:var(--w);margin:0 auto 30px;padding:0 6px;}
 .m-rail-line{position:absolute;left:14px;right:14px;top:5px;height:1px;background:var(--line);}
@@ -133,7 +124,6 @@ button{font-family:inherit;}
   body{padding:24px 16px 48px;}
   .m-top{flex-direction:column;}
   .m-strip{grid-template-columns:1fr 1fr;}
-  .m-coach{flex-direction:column;gap:12px;}
   .m-th,.m-tr{grid-template-columns:1fr 96px;}
   .m-th span:nth-child(3),.m-el{display:none;}
   .m-tag,.m-freq{display:none;}
@@ -155,7 +145,6 @@ button{font-family:inherit;}
 
 <div class="m-strip" id="strip"></div>
 
-<section class="m-coach" id="coach"></section>
 
 <nav class="m-rail" aria-label="Cycle weeks" id="rail"></nav>
 
@@ -373,16 +362,6 @@ function render() {
     '<div><b class="' + (done === target ? 'is-good' : '') + '">' + done + '<em>/' + target + '</em></b><span>Sessions</span></div>' +
     '<div><b>' + ph.p + '</b><span>Nordic phase</span></div>' +
     '<div><b class="' + (deload ? 'is-hot' : 'is-good') + '">' + (deload ? 'DELOAD' : 'BUILD') + '</b><span>Week type</span></div>';
-
-  // Coach
-  var coach = document.getElementById("coach");
-  var coachMsg = deload
-    ? "Deload week. Everything once, holds only, no percentage builds. You don\u2019t grow in the work, you grow after it."
-    : (SIGNALS.reasons[priority] || "Weakest signal takes the priority slot.");
-  coach.innerHTML =
-    '<div class="m-av"><span>K</span></div>' +
-    '<div><div class="m-cname">KHABIB <em>\u00b7 allocates the week, never the exercise</em></div>' +
-    '<p class="m-clead">' + coachMsg + '</p></div>';
 
   // Rail
   var rail = document.getElementById("rail");

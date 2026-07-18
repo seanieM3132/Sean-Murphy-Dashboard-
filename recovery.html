@@ -32,16 +32,6 @@ button,a{font-family:inherit;}
 .r-meta{display:flex;align-items:center;flex-wrap:wrap;font:500 9px var(--mono);letter-spacing:.2em;color:var(--dimmer);}
 .r-meta i{width:3px;height:3px;border-radius:50%;background:currentColor;margin:0 12px;opacity:.5;}
 
-.r-coach{display:flex;gap:16px;max-width:var(--w);margin:0 auto 22px;padding:16px 20px;
-  border-left:2px solid rgba(74,222,128,.4);border-radius:0 12px 12px 0;background:rgba(16,36,27,.35);}
-.r-av{width:36px;height:36px;flex:none;border-radius:10px;border:1px solid rgba(74,222,128,.3);
-  display:grid;place-items:center;background:rgba(74,222,128,.06);}
-.r-av span{font-family:var(--serif);font-size:18px;color:var(--green);}
-.r-cname{font:500 9px var(--mono);letter-spacing:.2em;color:var(--green);}
-.r-cname em{font-style:normal;color:var(--dimmer);letter-spacing:.1em;}
-.r-clead{font:400 13px/1.65 'Inter',sans-serif;color:var(--ink);opacity:.88;margin-top:7px;max-width:78ch;}
-.r-clead.is-hot{color:var(--amber);opacity:1;}
-
 .r-block{max-width:var(--w);margin:0 auto 20px;padding:24px 26px;border:1px solid var(--line);border-radius:18px;
   background:rgba(16,36,27,.3);}
 .r-bh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px;}
@@ -206,7 +196,6 @@ button,a{font-family:inherit;}
 @media(max-width:680px){
   body{padding:24px 16px 48px;}
   .r-block{padding:20px 18px;}
-  .r-coach{flex-direction:column;gap:12px;}
   .r-runner{flex-direction:column;align-items:flex-start;gap:16px;}
   .r-win li{flex-wrap:wrap;}
   .r-wt{width:auto;flex:1;display:flex;gap:12px;align-items:baseline;}
@@ -505,20 +494,6 @@ function buildWindow(s, now){
   ];
 }
 
-/* ═══ khabib ═════════════════════════════════════════════════════ */
-function khabib(sore, now){
-  var cold = SESSION.end + COLD_GATE;
-  var worst = null, worstV = 0;
-  Object.keys(sore).forEach(function(k){ if(sore[k]>=2 && sore[k]>worstV){worst=k;worstV=sore[k];} });
-  if(SESSION.type==='strength' && SESSION.end && now<cold)
-    return {tone:'hot',line:'You lifted '+dur(now-SESSION.end)+' ago. No cold until '+hhmm(cold)+' \u2014 it would cost you the session you just did. Heat or soft tissue instead.'};
-  if(MATCH_IN===1 && worst)
-    return {tone:'hot',line:REGIONS[worst].n+' is '+SORE[worstV].toLowerCase()+' and you play tomorrow. Soft tissue tonight, nothing that leaves you flat.'};
-  if(worst)
-    return {tone:'hot',line:REGIONS[worst].n+' is '+SORE[worstV].toLowerCase()+'. Start there. The rest can wait.'};
-  return {tone:'good',line:'Nothing angry today. Ten minutes of soft tissue and get on with your life.'};
-}
-
 /* ═══ cold lock check ═══════════════════════════════════════════ */
 function isLocked(t, now){
   return (t==='ice'||t==='contrast'||t==='coldshower')&&SESSION.type==='strength'&&SESSION.end&&now<SESSION.end+COLD_GATE;
@@ -626,7 +601,6 @@ function figSvg(view){
 /* ═══ render ═════════════════════════════════════════════════════ */
 function render(){
   var NOW = getNow();
-  var k = khabib(state.sore, NOW);
   var win = buildWindow(SESSION, NOW);
   var coldAt = SESSION.end + COLD_GATE;
   var region = REGIONS[state.sel];
@@ -638,11 +612,6 @@ function render(){
   h += '<p class="r-meta">'+esc(SESSION.name).toUpperCase()+'<i></i>';
   if(SESSION.end) h += 'ENDED '+hhmm(SESSION.end)+'<i></i>';
   h += (MATCH_IN===99 ? 'BYE WEEK' : 'MATCH IN '+MATCH_IN+' DAY') + '</p></header>';
-
-  // Coach
-  h += '<section class="r-coach"><div class="r-av"><span>K</span></div><div>';
-  h += '<div class="r-cname">KHABIB <em>\u00b7 recovery is not a workout</em></div>';
-  h += '<p class="r-clead is-'+k.tone+'">'+esc(k.line)+'</p></div></section>';
 
   // Brain tip (rotates daily)
   var tip = BRAIN[getMelb().getDay()];

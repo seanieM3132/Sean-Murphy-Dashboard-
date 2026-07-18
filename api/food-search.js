@@ -1,6 +1,8 @@
 // Search OpenFoodFacts for food items by name.
 // Free, no API key needed.
 
+const { extractMicros } = require('../lib/off-micros');
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -36,6 +38,7 @@ module.exports = async function handler(req, res) {
           sodium: n.sodium_100g != null ? n.sodium_100g * 1000 : 0,
           saturatedFat: n['saturated-fat_100g'] || 0,
         },
+        micros: extractMicros(n, '100g'),
         nutriscore: p.nutriscore_grade || null,
       };
     });
